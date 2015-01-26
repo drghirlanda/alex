@@ -10,10 +10,9 @@ define Start( par ) {
     test <- 0
   }
 
-  ## Read experiment-specific parameters
   ReadParameters()
 
-  ## Initialize some display elements
+  ## Initialize basic display elements
   fg <- Parameter( "ForegroundColor" )
   bg <- Parameter( "BackgroundColor" )
   gWindow <- MakeWindow( bg )
@@ -55,13 +54,10 @@ define Start( par ) {
 
   ShowCursor( 0 )
 
-  gPosX <- gVideoWidth/2
-  gPosY <- gVideoHeight/2
-
   ## Load smiley face to be used as US
   gSmiley <- MakeImage( "Media/smiley-small.png" )
   AddObject( gSmiley, gWindow )
-  Move( gSmiley, gPosX, gPosY - 100 )
+  Move( gSmiley, gVideoWidth/2, gVideoHeight/2 - 100 )
   Hide( gSmiley )
 
   ## Print datafile header (gDataFile has been opened by
@@ -141,7 +137,6 @@ define ReadSubjectInfo() {
   LockFile( subjectsFile )
   subjects <- ReadCSV( subjectsFile )
   gSubjectHeader <- Nth( subjects, 1 )
-  i <- 2 # 2nd row is the 1st subject (1st row is a header)
   found <- 0
   if( not IsDirectory( "Data" ) ) {
     MakeDirectory( "Data" )
@@ -155,7 +150,7 @@ define ReadSubjectInfo() {
       break
     }
   }
-  ## open file before releasing the lock to prevent race conditions
+  ## Open data file before releasing lock, to prevent race conditions
   if( found ) {
     gSubjectInfo <- s
     gDataFile <- FileOpenWrite( gDataFilename )
@@ -174,15 +169,19 @@ Press 'q' to quit"
 }
 
 define RunPhase( phaseName ) {
+  # Get stimulus settings for this phase. Each line in Phases.csv
+  # contains a stimulus entry for a specific phase. Thus we find all
+  # entries with this phaseName and use their indices to build
+  # stimulus, presentations, and rewards variables for this phase
   idx           <- Match( gPhaseNames, phaseName )
   stimuli       <- Filter( gPhaseStimuli, idx )
   presentations <- Filter( gPhasePresentations, idx )
   rewards       <- Filter( gPhaseRewards, idx )
 
   ## trialStimuli and trialRewards contain stimuli and rewards
-  ## repeated as many times as given in 'presentation'. the order of
-  ## presentation is then randomized by picking from a shuffled list
-  ## 'trialOrder', see end of block
+  ## repeated as many times as given in 'presentations'. The order of
+  ## presentation is then randomized by picking stimuli from a
+  ## shuffled list 'trialOrder', see end of block
   trialStimuli <- []
   trialRewards <- []
   loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
@@ -190,20 +189,22 @@ define RunPhase( phaseName ) {
     PushOnEnd( trialStimuli, Repeat( Nth(stimuli, i), n ) )
     PushOnEnd( trialRewards, Repeat( Nth(rewards, i), n ) )
   }
-  trialStimuli <- Flatten( trialStimuli )
+  trialStimuli <- Flatten( trialStimuli ) # Nesting is undersired
   trialRewards <- Flatten( trialRewards )
   trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
 
   maxTrial <- Length( trialStimuli )
-  trial <- 1
+  trial    <- 1
   while( trial <= maxTrial ) {
+    ## Get stimulus and RewardPr for this trial:
     thisTrial <- Nth(trialOrder, trial)
-    stimulus <- Nth( trialStimuli, thisTrial )
-    rewardPr <- ToNumber( Nth( trialRewards, thisTrial ) )
-    results <- OneTrial( stimulus, rewardPr )
-    times <- Nth(results, 1)
-    rewards <- Nth(results, 2)
-
+    stimulus  <- Nth( trialStimuli, thisTrial )
+    rewardPr  <- ToNumber( Nth( trialRewards, thisTrial ) )
+    ## Run trial and get response times and rewards collected
+    results   <- OneTrial( stimulus, rewardPr )
+    times     <- Nth(results, 1)
+    rewards   <- Nth(results, 2)
+    ## Save all data to file:
     FilePrintCSV_( gDataFile, Flatten( [ gSubjectInfo, 
       gSex, gAge, phaseName, trial, stimulus, rewardPr] ) )
     FilePrint_( gDataFile, "," )
@@ -216,7 +217,7 @@ define RunPhase( phaseName ) {
     } else {
       FilePrint( gDataFile, "0,NA,NA" )
     }
-
+    ## Wait an inter-trial interval and advance to next trial: 
     minITI <- ToNumber( Parameter("MinITI") )
     maxITI <- ToNumber( Parameter("MinITI") )
     Wait( minITI + ( maxITI - minITI )*Random() )
@@ -285,7 +286,7 @@ You will now receive a handout with an explanation of the experiment."
 
 define MakeColorRGBString( color ) {
   ## If 'color' starts with '=', we expect a stimulus name after, and
-  ## we use that stimulus' color
+  ## we use that stimulus' color:
   if( SubString(color,1,1) == "=" ) {
     s <- SubString(color,2,StringLength(color)-1)
     color <- Lookup( s, gStimNames, gStimColors )
@@ -293,10 +294,13 @@ define MakeColorRGBString( color ) {
       SignalFatalError("Can't find stimulus "+s+" in color substitution")
     }
   }
+  ## If 'color' starts with '*', we look up the color in gSubjectInfo:
   if( SubString(color,1,1) == "*" ) {
     stimulus <- SubString(color,2,1) 
     color <- Lookup( stimulus+"Color", gSubjectHeader, gSubjectInfo )
   }
+  ## Now we see whether color is a name or RGB triplet, and act
+  ## accordingly:
   components <- SplitString( color, "," )
   if( Length(components) != 3 ) { ## treat as color name
     c <- MakeColor( color )
@@ -311,24 +315,21 @@ define MakeColorRGBString( color ) {
 
 define ReadStimuli() {
   csv <- ReadCSV( "Design/Stimuli.csv" )
-  n <- Length( csv )
-  header <- Nth( csv, 1 )
   gStimNames <- []
   gStimShapes <- []
   gStimColors <- []
   gStimXOffsets <- []
   gStimYOffsets <- []
-  loop( i, Sequence(2,n,1) ) {
-    s <- Nth( csv, i )
+  loop( s, Rest( csv ) ) {
     PushOnEnd( gStimNames, Nth( s, 1 ) )
     PushOnEnd( gStimShapes, Nth( s, 2 ) )
     PushOnEnd( gStimColors, Nth( s, 3 ) )
     PushOnEnd( gStimXOffsets, Nth( s, 4 ) )
     PushOnEnd( gStimYOffsets, Nth( s, 5 ) )
   }
-
-  ## now we are ready to create the stimulus objects
+  ## Now we are ready to create the stimulus objects
   gStimuli <- []
+  n <- Length( gStimNames )
   loop( i, Sequence(1,n-1,1) ) {
     c <- MakeColorRGBString( Nth( gStimColors, i ) )
     x <- gVideoWidth/2 + ToNumber(Nth( gStimXOffsets, i ))
@@ -349,8 +350,7 @@ define ReadStimuli() {
 
 define ReadPhases() {
   csv <- ReadCSV( "Design/Phases.csv" )
-  n <- Length( csv )
-  gPhaseHeader <- Nth( csv, 1 )
+  gPhaseHeader <- First( csv )
   phaseInfo <- Transpose( Rest( csv ) )
   gPhaseNames <-         Nth( phaseInfo, 1 )
   gPhaseStimuli <-       Nth( phaseInfo, 2 )
