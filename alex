@@ -10,6 +10,9 @@ define Start( par ) {
     test <- 0
   }
 
+  ## Read experiment-specific parameters
+  ReadParameters()
+
   ## Initialize some display elements
   fg <- Parameter( "ForegroundColor" )
   bg <- Parameter( "BackgroundColor" )
@@ -17,10 +20,8 @@ define Start( par ) {
   gBackgroundColor <- MakeColor( bg )
   gColor <- MakeColor( fg )
   gFont <- MakeFont( Parameter("FontName")+".ttf", 0, 
-    Parameter("FontSize"), fg, bg, 1 )
+    ToNumber(Parameter("FontSize")), gColor, gBackgroundColor, 1 )
 
-  ## Read experiment-specific parameters
-  ReadParameters()
   ReadSubjectInfo() # gSubjectsHeader, gSubjectInfo
   ReadPhases() # gPhase + Names, Stimuli, Rewards, Presentations
   ReadStimuli() #  gStim + Names, Shapes, Colors, XOffsets, YOffsets
@@ -97,22 +98,26 @@ define OneTrial( stimulus, rewardProb ) {
     Show( stim )
   }
   Draw()
-  times <- []
-  rewards <- []
-  timeLeft <- Parameter("CSDuration")
-  startTime <- GetTime()
-  while( Length(times)<Parameter("MaxResponses") and timeLeft>1 ) {
+  maxResponses <- ToNumber( Parameter("MaxResponses") )
+  csDuration   <- ToNumber( Parameter("CSDuration") )
+  csusInterval <- ToNumber( Parameter("CSUSInterval") )
+  usDuration   <- ToNumber( Parameter("USDuration") )
+  times        <- []
+  rewards      <- []
+  timeLeft     <- ToNumber( csDuration )
+  startTime    <- GetTime()
+  while( Length(times)<maxResponses and timeLeft>1 ) {
     key <- WaitForListKeyPressWithTimeout([" "], timeLeft, 1 )
     rt <- GetTime() - startTime
-    timeLeft <- Parameter("CSDuration") - rt
+    timeLeft <- csDuration - rt
     if( timeLeft > 1 ) {
       PushOnEnd( times, rt )
       if( Random() < rewardProb ) {
         PushOnEnd( rewards, 1 )
-        Wait( Parameter("CSUSInterval") )
+        Wait( csusInterval )
         Show( gSmiley )
         Draw()
-        Wait( Parameter("USDuration") )
+        Wait( usDuration )
         Hide( gSmiley )
         Draw()
       } else {
@@ -212,8 +217,9 @@ define RunPhase( phaseName ) {
       FilePrint( gDataFile, "0,NA,NA" )
     }
 
-    m <- Parameter("MinITI")
-    Wait( m + ( Parameter("MaxITI") - m )*Random() )
+    minITI <- ToNumber( Parameter("MinITI") )
+    maxITI <- ToNumber( Parameter("MinITI") )
+    Wait( minITI + ( maxITI - minITI )*Random() )
     trial <- trial + 1
   }
 }
@@ -278,6 +284,15 @@ You will now receive a handout with an explanation of the experiment."
 }
 
 define MakeColorRGBString( color ) {
+  ## If 'color' starts with '=', we expect a stimulus name after, and
+  ## we use that stimulus' color
+  if( SubString(color,1,1) == "=" ) {
+    s <- SubString(color,2,StringLength(color)-1)
+    color <- Lookup( s, gStimNames, gStimColors )
+    if( IsList(color) ) {
+      SignalFatalError("Can't find stimulus "+s+" in color substitution")
+    }
+  }
   if( SubString(color,1,1) == "*" ) {
     stimulus <- SubString(color,2,1) 
     color <- Lookup( stimulus+"Color", gSubjectHeader, gSubjectInfo )
@@ -348,10 +363,7 @@ define ReadParameters() {
   gParameterNames <- Nth(csv, 1)
   gParameterValues <- Nth(csv, 2)
   loop( i, Sequence(1,Length(gParameterNames),1) ) {
-   ## Items are read as strings, here ve convert them to numbers:
-   v <- ToNumber( Nth(gParameterValues,i) )
-   SetElement( gParameterValues, i, v ) 
-   Print( Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) )
+    Print( Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) )
   }
 }
 

@@ -5,4 +5,4 @@ B,square,red,60,0
 C,square,blue,60,0
 D,square,"191,0,94",60,0
 E,square,"94,0,191",60,0
-Y,circle,gray,60,0
+Y,circle,=X,60,0
