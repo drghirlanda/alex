@@ -2,7 +2,13 @@
 
 define Start( par ) {
 
-  quick <- 1
+  ## Giving parameter 'test' skips instructions and demographics
+  ## collection
+  if( IsList(par) and Sum( Match( par, "test" ) ) ) {
+    test <- 1
+  } else {
+    test <- 0
+  }
 
   ## Initialize some display elements
   gWindow <- MakeWindow( "gray95" )
@@ -16,13 +22,13 @@ define Start( par ) {
   ReadPhases() # gPhase + Names, Stimuli, Rewards, Presentations
   ReadStimuli() #  gStim + Names, Shapes, Colors, XOffsets, YOffsets
 
-  if( not quick ) {
+  if( not test ) {
     ShowInstructions()
   }
 
-  if( quick ) {
-    gSex <- "M"
-    gAge <- 20
+  if( test ) {
+    gSex <- "NA"
+    gAge <- "NA"
   } else {
     gSex <- GetEasyChoice( "Please select your sex", 
     	 ["Male", "Female"], ["M", "F"], gWindow )
@@ -31,7 +37,7 @@ define Start( par ) {
     gAge <- ToInteger( gAge )
   }
 
-  if( not quick ) {
+  if( not test ) {
     startMsg <- MakeTextBox( "Press the spacebar to start the experiment",
       gFont, .8*gVideoWidth, gVideoHeight/2 )
     AddObject( startMsg, gWindow )
@@ -233,7 +239,7 @@ define ShowInstructions() {
   instrText <- FileReadText("Design/Instructions.txt")
   instrText <- instrText + "Please press the space bar to begin"
   instrFont <- MakeFont("Vera.ttf", 0, 24, gColor, gBackgroundColor, 1 )
-  instrBox  <- MakeTextBox(instructions, instrFont, 
+  instrBox  <- MakeTextBox(instrText, instrFont, 
                  .9*gVideoWidth, .95*gVideoHeight)
   AddObject( instrBox, gWindow )
   Move( instrBox, .05*gVideoWidth, .05*gVideoHeight )
