@@ -1,0 +1,356 @@
+#!/usr/local/bin/pebl-language
+
+define Start( par ) {
+
+  quick <- 1
+
+  ## Initialize some display elements
+  gWindow <- MakeWindow( "gray95" )
+  gBackgroundColor <- MakeColor( "gray95" )
+  gColor <- MakeColor( "black" )
+  gFont <- MakeFont("Vera.ttf", 0, 36, gColor, gBackgroundColor, 1 )
+
+  ## Read experiment-specific parameters
+  ReadParameters()
+  ReadSubjectInfo() # gSubjectsHeader, gSubjectInfo
+  ReadPhases() # gPhase + Names, Stimuli, Rewards, Presentations
+  ReadStimuli() #  gStim + Names, Shapes, Colors, XOffsets, YOffsets
+
+  if( not quick ) {
+    ShowInstructions()
+  }
+
+  if( quick ) {
+    gSex <- "M"
+    gAge <- 20
+  } else {
+    gSex <- GetEasyChoice( "Please select your sex", 
+    	 ["Male", "Female"], ["M", "F"], gWindow )
+    gAge <- GetEasyInput( "Please enter your age in years, then press enter:", 
+         gWindow )
+    gAge <- ToInteger( gAge )
+  }
+
+  if( not quick ) {
+    startMsg <- MakeTextBox( "Press the spacebar to start the experiment",
+      gFont, .8*gVideoWidth, gVideoHeight/2 )
+    AddObject( startMsg, gWindow )
+    Move( startMsg, .2*gVideoWidth, gVideoHeight/2 )
+    Draw()
+    WaitForKeyDown(" ")
+    Hide( startMsg )
+    Draw()
+    Wait( 2000 )
+  }
+
+  ShowCursor( 0 )
+
+  gPosX <- gVideoWidth/2
+  gPosY <- gVideoHeight/2
+
+  ## Load smiley face to be used as US
+  gSmiley <- MakeImage( "Media/smiley-small.png" )
+  AddObject( gSmiley, gWindow )
+  Move( gSmiley, gPosX, gPosY - 100 )
+  Hide( gSmiley )
+
+  ## Print datafile header (gDataFile has been opened by
+  ## ReadSubjectInfo() to avoid race conditions with acquiring and
+  ## releasing the lock to Subjects.csv)
+  loop( field, gSubjectHeader ) {
+    FilePrint_( gDataFile, field + "," )
+  } 
+  FilePrint( gDataFile, 
+    "Sex,Age,Phase,Trial,Stimulus,RewardPr,Responses,RTs,Rewards" )
+
+  loop( p, Levels( gPhaseNames ) ) {
+    RunPhase( p )
+  }
+
+  FileClose( gDataFile )
+  ShowEnd()
+  ShowCursor( 1 )
+}
+
+define OneTrial( stimulus, rewardProb ) {
+  Draw()
+  n <- Length( gStimNames )
+  trialStimuli <- []
+  # The 'stimulus' may actually be a compound, so we split it into
+  # individual letters and we build a list of stimuli for this trial
+  # by looking the stimulus objects up in the gStimuli list.
+  loop( stimName, SplitString(stimulus, "") ) {
+  	i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
+	PushOnEnd( trialStimuli, Nth( gStimuli, i ) )
+  }
+  # Now we show all stimulus objects
+  loop( stim, trialStimuli ) {
+    Show( stim )
+  }
+  Draw()
+  times <- []
+  rewards <- []
+  timeLeft <- Parameter("CSDuration")
+  startTime <- GetTime()
+  while( Length(times)<Parameter("MaxResponses") and timeLeft>1 ) {
+    key <- WaitForListKeyPressWithTimeout([" "], timeLeft, 1 )
+    rt <- GetTime() - startTime
+    timeLeft <- Parameter("CSDuration") - rt
+    if( timeLeft > 1 ) {
+      PushOnEnd( times, rt )
+      if( Random() < rewardProb ) {
+        PushOnEnd( rewards, 1 )
+        Wait( Parameter("CSUSInterval") )
+        Show( gSmiley )
+        Draw()
+        Wait( Parameter("USDuration") )
+        Hide( gSmiley )
+        Draw()
+      } else {
+        PushOnEnd( rewards, 0 )
+      }
+    }
+  }
+  loop( stim, trialStimuli ) {
+    Hide( stim )
+  }
+  Draw()
+  if( not Length(times) ) {
+    times <- "NA"
+    rewards <- "NA"
+  }
+  return [times, rewards]
+}
+
+define ReadSubjectInfo() {
+  subjectsFile <- "Design/Subjects.csv"
+  LockFile( subjectsFile )
+  subjects <- ReadCSV( subjectsFile )
+  gSubjectHeader <- Nth( subjects, 1 )
+  i <- 2 # 2nd row is the 1st subject (1st row is a header)
+  found <- 0
+  if( not IsDirectory( "Data" ) ) {
+    MakeDirectory( "Data" )
+  }
+  loop( s, Rest(subjects) ) {
+    gDataFilename <- "Data/" + Nth(s,1) + ".dat"
+    if( not FileExists( gDataFilename ) ) {
+      found <- 1
+      Print_( "Running subject: " )
+      PrintList( s )
+      break
+    }
+  }
+  ## open file before releasing the lock to prevent race conditions
+  if( found ) {
+    gSubjectInfo <- s
+    gDataFile <- FileOpenWrite( gDataFilename )
+    UnlockFile( subjectsFile )
+  } else {
+    UnlockFile( subjectsFile )
+    text <- "It looks like all subjects have been run!
+
+Press 'q' to quit"
+    box <- MakeTextBox( text, gFont, .8*gVideoWidth, gVideoHeight )
+    AddObject( box, gWindow )
+    Move( box, .1*gVideoWidth, .1*gVideoHeight )
+    Draw()
+    WaitForKeyDown("q")
+  }
+}
+
+define RunPhase( phaseName ) {
+  idx           <- Match( gPhaseNames, phaseName )
+  stimuli       <- Filter( gPhaseStimuli, idx )
+  presentations <- Filter( gPhasePresentations, idx )
+  rewards       <- Filter( gPhaseRewards, idx )
+
+  ## trialStimuli and trialRewards contain stimuli and rewards
+  ## repeated as many times as given in 'presentation'. the order of
+  ## presentation is then randomized by picking from a shuffled list
+  ## 'trialOrder', see end of block
+  trialStimuli <- []
+  trialRewards <- []
+  loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
+    n <- ToNumber( Nth(presentations, i) )
+    PushOnEnd( trialStimuli, Repeat( Nth(stimuli, i), n ) )
+    PushOnEnd( trialRewards, Repeat( Nth(rewards, i), n ) )
+  }
+  trialStimuli <- Flatten( trialStimuli )
+  trialRewards <- Flatten( trialRewards )
+  trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
+
+  maxTrial <- Length( trialStimuli )
+  trial <- 1
+  while( trial <= maxTrial ) {
+    thisTrial <- Nth(trialOrder, trial)
+    stimulus <- Nth( trialStimuli, thisTrial )
+    rewardPr <- ToNumber( Nth( trialRewards, thisTrial ) )
+    results <- OneTrial( stimulus, rewardPr )
+    times <- Nth(results, 1)
+    rewards <- Nth(results, 2)
+
+    FilePrintCSV_( gDataFile, Flatten( [ gSubjectInfo, 
+      gSex, gAge, phaseName, trial, stimulus, rewardPr] ) )
+    FilePrint_( gDataFile, "," )
+    If( IsList(times) ) {
+      FilePrint_( gDataFile, Length(times) + ","+gQuote )
+      FilePrintCSV_( gDataFile, times )
+      FilePrint_( gDataFile, gQuote+","+gQuote )
+      FilePrintCSV_( gDataFile, rewards )
+      FilePrint( gDataFile, gQuote )
+    } else {
+      FilePrint( gDataFile, "0,NA,NA" )
+    }
+
+    m <- Parameter("MinITI")
+    Wait( m + ( Parameter("MaxITI") - m )*Random() )
+    trial <- trial + 1
+  }
+}
+
+define FilePrintCSV_( file, data ) {
+  n <- Length(data)
+  if( n==1 ) {
+    FilePrint_( file, Nth(data,1) )
+  } else {
+    front <- Subset( data, Sequence(1,n-1,1) )
+    loop( d, front ) {
+    	if( FindInString( ToString(d), ",", 0) ) {
+	  d <- gQuote + d + gQuote 
+	}
+        FilePrint_( file, d + "," )
+    }
+    last <- Last(data)
+    if( FindInString( ToString(last), ",", 0) ) {
+      last <- gQuote + last + gQuote 
+    }
+    FilePrint_( file, last )
+  }
+}
+
+define ShowInstructions() {
+  instrText <- FileReadText("Design/Instructions.txt")
+  instrText <- instrText + "Please press the space bar to begin"
+  instrFont <- MakeFont("Vera.ttf", 0, 24, gColor, gBackgroundColor, 1 )
+  instrBox  <- MakeTextBox(instructions, instrFont, 
+                 .9*gVideoWidth, .95*gVideoHeight)
+  AddObject( instrBox, gWindow )
+  Move( instrBox, .05*gVideoWidth, .05*gVideoHeight )
+  Draw()
+  WaitForKeyDown(" ")
+  RemoveObject( instrBox, gWindow )
+  Draw()
+  Wait( 1000 )
+}
+
+define LockFile( file ) {
+  while( FileExists( file+".lck" ) ) {
+    Wait( 250 )
+  }
+  FileOpenOverWrite( file+".lck" ) 
+}
+
+define UnlockFile( file ) {
+  if( FileExists( file+".lck" ) ) {
+    SystemCall( "/bin/rm " + file + ".lck" )
+  }
+}
+
+define ShowEnd() {
+  endText <- "You're done, thanks for your participation!
+
+You will now receive a handout with an explanation of the experiment."
+  endBox <- MakeTextBox( endText, gFont, .8*gVideoWidth, gVideoHeight )
+  AddObject( endBox, gWindow )
+  Move( endBox, .1*gVideoWidth, .1*gVideoHeight )
+  Draw()
+  WaitForKeyDown("q")
+}
+
+define MakeColorRGBString( color ) {
+  if( SubString(color,1,1) == "*" ) {
+    stimulus <- SubString(color,2,1) 
+    color <- Lookup( stimulus+"Color", gSubjectHeader, gSubjectInfo )
+  }
+  components <- SplitString( color, "," )
+  if( Length(components) != 3 ) { ## treat as color name
+    c <- MakeColor( color )
+  } else {
+    cred <- ToNumber( Nth(components, 1) )
+    cgreen <- ToNumber( Nth(components, 2) )
+    cblue <- ToNumber( Nth(components, 3) )
+    c <- MakeColorRGB( cred, cgreen, cblue )
+  }
+  return c
+}
+
+define ReadStimuli() {
+  csv <- ReadCSV( "Design/Stimuli.csv" )
+  n <- Length( csv )
+  header <- Nth( csv, 1 )
+  gStimNames <- []
+  gStimShapes <- []
+  gStimColors <- []
+  gStimXOffsets <- []
+  gStimYOffsets <- []
+  loop( i, Sequence(2,n,1) ) {
+    s <- Nth( csv, i )
+    PushOnEnd( gStimNames, Nth( s, 1 ) )
+    PushOnEnd( gStimShapes, Nth( s, 2 ) )
+    PushOnEnd( gStimColors, Nth( s, 3 ) )
+    PushOnEnd( gStimXOffsets, Nth( s, 4 ) )
+    PushOnEnd( gStimYOffsets, Nth( s, 5 ) )
+  }
+
+  ## now we are ready to create the stimulus objects
+  gStimuli <- []
+  loop( i, Sequence(1,n-1,1) ) {
+    c <- MakeColorRGBString( Nth( gStimColors, i ) )
+    x <- gVideoWidth/2 + ToNumber(Nth( gStimXOffsets, i ))
+    y <- gVideoHeight/2 + ToNumber(Nth( gStimYOffsets, i ))
+    shape <- Nth( gStimShapes, i )
+    if(  shape == "circle" ) {
+       s <- Circle( x, y, 25, c, 1 )
+    } elseif( shape == "square" ) {
+       s <- Square( x, y, 50, c, 1 )
+    } else {
+       SignalFatalError( "Unsupported stimulus shape: "+shape )
+    }
+    PushOnEnd( gStimuli, s )
+    AddObject( s, gWindow )
+    Hide( s )
+  }
+}
+
+define ReadPhases() {
+  csv <- ReadCSV( "Design/Phases.csv" )
+  n <- Length( csv )
+  gPhaseHeader <- Nth( csv, 1 )
+  phaseInfo <- Transpose( Rest( csv ) )
+  gPhaseNames <-         Nth( phaseInfo, 1 )
+  gPhaseStimuli <-       Nth( phaseInfo, 2 )
+  gPhasePresentations <- Nth( phaseInfo, 3 )
+  gPhaseRewards <-       Nth( phaseInfo, 4 )
+}
+
+define ReadParameters() {
+  csv <- Transpose( Rest( ReadCSV( "Design/Parameters.csv" ) ) )
+  gParameterNames <- Nth(csv, 1)
+  gParameterValues <- Nth(csv, 2)
+  loop( i, Sequence(1,Length(gParameterNames),1) ) {
+   ## Items are read as strings, here ve convert them to numbers:
+   v <- ToNumber( Nth(gParameterValues,i) )
+   SetElement( gParameterValues, i, v ) 
+   Print( Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) )
+  }
+}
+
+define Parameter( name ) {
+  n <- Length( gParameterNames )
+  value <- Lookup( name, gParameterNames, gParameterValues )
+  if(  IsList(value) ) {
+    SignalFatalError("Parameter "+name+" not found, or multiply defined")
+  }
+  return value
+}
