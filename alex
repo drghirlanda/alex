@@ -1,18 +1,15 @@
 #!/usr/local/bin/pebl-language
 
 define Start( par ) {
-
-  ## Giving parameter 'test' skips instructions and demographics
-  ## collection
+  ## 'alex -v test' to skips instructions and demographics collection:
   if( IsList(par) and Sum( Match( par, "test" ) ) ) {
     test <- 1
   } else {
     test <- 0
   }
-
+  ## Read Design/Parameters.csv:
   ReadParameters()
-
-  ## Initialize basic display elements
+  ## Initialize basic display elements:
   fg <- Parameter( "ForegroundColor" )
   bg <- Parameter( "BackgroundColor" )
   gWindow <- MakeWindow( bg )
@@ -20,10 +17,10 @@ define Start( par ) {
   gColor <- MakeColor( fg )
   gFont <- MakeFont( Parameter("FontName")+".ttf", 0, 
     ToNumber(Parameter("FontSize")), gColor, gBackgroundColor, 1 )
-
+  ## Read other Design files:
   ReadSubjectInfo() # gSubjectsHeader, gSubjectInfo
-  ReadPhases() # gPhase + Names, Stimuli, Rewards, Presentations
-  ReadStimuli() #  gStim + Names, Shapes, Colors, XOffsets, YOffsets
+  ReadPhases()      # gPhase + Names, Stimuli, Rewards, Presentations
+  ReadStimuli()     #  gStim + Names, Shapes, Colors, XOffsets, YOffsets
 
   if( not test ) {
     ShowInstructions()
@@ -35,13 +32,13 @@ define Start( par ) {
   } else {
     gSex <- GetEasyChoice( "Please select your sex", 
     	 ["Male", "Female"], ["M", "F"], gWindow )
-    gAge <- GetEasyInput( "Please enter your age in years, then press enter:", 
-         gWindow )
+    gAge <- GetEasyInput( "Please enter your age in years, "+
+      "then press enter:", gWindow )
     gAge <- ToInteger( gAge )
   }
 
   if( not test ) {
-    startMsg <- MakeTextBox( "Press the spacebar to start the experiment",
+    startMsg <- MakeTextBox( "Press the spacebar to start",
       gFont, .8*gVideoWidth, gVideoHeight/2 )
     AddObject( startMsg, gWindow )
     Move( startMsg, .2*gVideoWidth, gVideoHeight/2 )
