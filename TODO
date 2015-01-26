@@ -3,9 +3,6 @@
 - write first to temp file, then to final one? complicates a bit the
   above point
 
-- expand color specification language to link stimuli, like "=A" for
-  the same color as A
-
 - check there are no duplicate stimulus names when loading stimulus
   file
 
