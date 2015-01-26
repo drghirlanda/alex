@@ -11,10 +11,13 @@ define Start( par ) {
   }
 
   ## Initialize some display elements
-  gWindow <- MakeWindow( "gray95" )
-  gBackgroundColor <- MakeColor( "gray95" )
-  gColor <- MakeColor( "black" )
-  gFont <- MakeFont("Vera.ttf", 0, 36, gColor, gBackgroundColor, 1 )
+  fg <- Parameter( "ForegroundColor" )
+  bg <- Parameter( "BackgroundColor" )
+  gWindow <- MakeWindow( bg )
+  gBackgroundColor <- MakeColor( bg )
+  gColor <- MakeColor( fg )
+  gFont <- MakeFont( Parameter("FontName")+".ttf", 0, 
+    Parameter("FontSize"), fg, bg, 1 )
 
   ## Read experiment-specific parameters
   ReadParameters()
