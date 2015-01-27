@@ -1,15 +1,4 @@
-- better error handling on datafile clashes / race conditions
-
-- write first to temp file, then to final one? complicates a bit the
-  above point
-
-- check there are no duplicate stimulus names when loading stimulus
-  file
-
-- add possibility to have sound / image files as stimuli
-
-- add possibility to change US to different image / sound 
-
 - add function to show errors full screen
 
+- for CSV config files, lookup entries by column name, not by index
 

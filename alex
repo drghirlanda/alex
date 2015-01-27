@@ -378,6 +378,10 @@ define ReadStimuli() {
     PushOnEnd( gStimXOffsets, Nth( s, 5 ) )
     PushOnEnd( gStimYOffsets, Nth( s, 6 ) )
   }
+  ## Check there are no duplicate stimulus names
+  if( Length(gStimNames) != Length( Levels(gStimNames) ) ) {
+    SignalFatalError("Duplicate in stimulus names: "+gStimNames)
+  }
   ## Now we are ready to create the stimulus objects
   gStimuli <- []
   n <- Length( gStimNames )
