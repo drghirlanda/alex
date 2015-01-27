@@ -28,9 +28,9 @@ define Start( par ) {
   gFont <- MakeFont( Parameter("FontName")+".ttf", 0, 
     ToNumber(Parameter("FontSize")), gColor, gBackgroundColor, 1 )
   ## Read other Design files:
-  ReadSubjectInfo() # gSubjectsHeader, gSubjectInfo
-  ReadPhases()      # gPhase + Names, Stimuli, Rewards, Presentations
-  ReadStimuli()     #  gStim + Names, Shapes, Colors, XOffsets, YOffsets
+  ReadSubjectInfo()
+  ReadPhases()     
+  ReadStimuli()    
 
   if( not test ) {
     ShowInstructions()
@@ -63,7 +63,7 @@ define Start( par ) {
   FilePrint( gDataFile, 
     "Sex,Age,Phase,Trial,Stimulus,RewardPr,Responses,RTs,Rewards" )
 
-  loop( p, Levels( gPhaseNames ) ) {
+  loop( p, Levels(Lookup("Phase",gPhaseHeader,gPhases))  ){
     RunPhase( p )
   }
 
@@ -142,31 +142,46 @@ define OneTrial( stimulus, rewardProb, uss ) {
 #                                                                      #
 ########################################################################
 
+# Helper function to identify what goes into a phase
+define LookupPhase( phaseName, field ) {
+  fields <- Lookup(field, gPhaseHeader,gPhases)
+  if( not Length(fields) ) {
+    result <- []
+  } else {
+    idx <- Match( Lookup("Phase",gPhaseHeader,gPhases), phaseName) 
+    result <- Filter( fields, idx )
+  }
+  return result
+} 
+
 define RunPhase( phaseName ) {
   # Get stimulus settings for this phase. Each line in Phases.csv
-  # contains a stimulus entry for a specific phase. Thus we find all
-  # entries with this phaseName and use their indices to build
-  # stimulus, presentations, rewards, and USs for this phase
-  idx           <- Match( gPhaseNames, phaseName )
-  stimuli       <- Filter( gPhaseStimuli, idx )
-  presentations <- Filter( gPhasePresentations, idx )
-  rewards       <- Filter( gPhaseRewards, idx )
-  uss           <- Filter( gPhaseUSs, idx )
+  # contains a stimulus entry for a specific phase.
+  stimuli   <- LookupPhase(phaseName, "Stimuli")
+  numTrials <- LookupPhase(phaseName, "Trials")
+  rewards   <- LookupPhase(phaseName, "Rewards")
+  uss       <- LookupPhase(phaseName, "USs")
+  ## Stimulus durations are optional. If they are not given, we
+  ## construct them using the value of the CSDuration global parameter:
+  durations <- LookupPhase(phaseName, "Durations")
+  if( not Length(durations) ) {
+    durations <- Repeat( Parameter("CSDuration"), Length(stimuli) )
+  }
 
   ## trialStimuli and trialRewards contain stimuli and rewards
-  ## repeated as many times as given in 'presentations'. The order of
+  ## repeated as many times as given in 'trials'. The order of
   ## presentation is then randomized by picking stimuli from a
   ## shuffled list 'trialOrder', see end of block
   trialStimuli <- []
   trialRewards <- []
   trialUSs     <- []
   loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
-    n <- ToNumber( Nth(presentations, i) )
+    n <- ToNumber( Nth(numTrials, i) )
     PushOnEnd( trialStimuli, Repeat( Nth(stimuli, i), n ) )
     PushOnEnd( trialRewards, Repeat( Nth(rewards, i), n ) )
     PushOnEnd( trialUSs,     Repeat( Nth(uss,     i), n ) )
   }
-  trialStimuli <- Flatten( trialStimuli ) # Nesting is undersired
+  trialStimuli <- Flatten( trialStimuli ) # Nesting is undesired
   trialRewards <- Flatten( trialRewards )
   trialUSs     <- Flatten( trialUSs )
   trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
@@ -180,7 +195,7 @@ define RunPhase( phaseName ) {
     rewardPr  <- ToNumber( Nth( trialRewards, thisTrial ) )
     uss       <- Nth( trialUSs, thisTrial )
     ## Run trial and get response times and rewards collected
-    results   <- OneTrial( stimulus, rewardPr, uss )
+    results   <- OneTrial( stimulus, rewardPr, uss, durations )
     times     <- Nth(results, 1)
     rewards   <- Nth(results, 2)
     ## Save all data to file:
@@ -392,7 +407,9 @@ define ReadStimuli() {
   gStimuli <- []
   n <- Length( gStimNames )
   loop( i, Sequence(1,n,1) ) {
-    c <- MakeColorRGBString( Nth( gStimColors, i ) )
+    if( StringLength( Nth( gStimColors, i ) ) ) {
+      c <- MakeColorRGBString( Nth( gStimColors, i ) )
+    }
     x <- gVideoWidth/2 + ToNumber(Nth( gStimXOffsets, i ))
     y <- gVideoHeight/2 + ToNumber(Nth( gStimYOffsets, i ))
     type <- Nth( gStimShapes, i )
@@ -425,12 +442,7 @@ define ReadStimuli() {
 define ReadPhases() {
   csv <- ReadCSV( "Design/Phases.csv" )
   gPhaseHeader <- First( csv )
-  phaseInfo <- Transpose( Rest( csv ) )
-  gPhaseNames         <- Nth( phaseInfo, 1 )
-  gPhaseStimuli       <- Nth( phaseInfo, 2 )
-  gPhasePresentations <- Nth( phaseInfo, 3 )
-  gPhaseRewards       <- Nth( phaseInfo, 4 )
-  gPhaseUSs           <- Nth( phaseInfo, 5 )
+  gPhases <- Transpose( Rest( csv ) )
 }
 
 define ReadParameters() {
