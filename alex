@@ -352,15 +352,17 @@ define ReadStimuli() {
   csv <- ReadCSV( "Design/Stimuli.csv" )
   gStimNames <- []
   gStimShapes <- []
+  gStimParams <- []
   gStimColors <- []
   gStimXOffsets <- []
   gStimYOffsets <- []
   loop( s, Rest( csv ) ) {
     PushOnEnd( gStimNames, Nth( s, 1 ) )
     PushOnEnd( gStimShapes, Nth( s, 2 ) )
-    PushOnEnd( gStimColors, Nth( s, 3 ) )
-    PushOnEnd( gStimXOffsets, Nth( s, 4 ) )
-    PushOnEnd( gStimYOffsets, Nth( s, 5 ) )
+    PushOnEnd( gStimParams, Nth( s, 3 ) )
+    PushOnEnd( gStimColors, Nth( s, 4 ) )
+    PushOnEnd( gStimXOffsets, Nth( s, 5 ) )
+    PushOnEnd( gStimYOffsets, Nth( s, 6 ) )
   }
   ## Now we are ready to create the stimulus objects
   gStimuli <- []
@@ -372,9 +374,11 @@ define ReadStimuli() {
     shape <- Nth( gStimShapes, i )
     Print( shape )
     if(  shape == "circle" ) {
-       s <- Circle( x, y, 25, c, 1 )
+       r <- ToNumber( Nth(gStimParams,i) )
+       s <- Circle( x, y, r, c, 1 )
     } elseif( shape == "square" ) {
-       s <- Square( x, y, 50, c, 1 )
+       l <- ToNumber( Nth(gStimParams,i) )
+       s <- Square( x, y, l, c, 1 )
     } elseif( shape == "smiley" ) {
        s <- MakeImage( "Media/smiley-small.png" )
        Move( s, x, y )
