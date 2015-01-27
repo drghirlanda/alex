@@ -7,3 +7,4 @@ In this experiment you will see simple colored images. Whenever an image is on t
 Each image will be shown for a few seconds, then experiment will move
 on to the next image.
 
+Press the spacebar to begin.

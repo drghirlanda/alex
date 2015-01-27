@@ -1,5 +1,3 @@
-- add function to show errors full screen
-
 - for CSV config files, lookup entries by column name, not by index
 
 - add other reinforcement schedules

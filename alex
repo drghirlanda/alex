@@ -48,14 +48,7 @@ define Start( par ) {
   }
 
   if( not test ) {
-    startMsg <- MakeTextBox( "Press the spacebar to start",
-      gFont, .8*gVideoWidth, gVideoHeight/2 )
-    AddObject( startMsg, gWindow )
-    Move( startMsg, .2*gVideoWidth, gVideoHeight/2 )
-    Draw()
-    WaitForKeyDown(" ")
-    Hide( startMsg )
-    Draw()
+    Message( "Press the spacebar to start the experiment", 0 )
     Wait( 2000 )
   }
 
@@ -234,7 +227,7 @@ define FilePrintCSV_( file, data ) {
 
 define ShowInstructions() {
   instrText <- FileReadText("Design/Instructions.txt")
-  instrText <- instrText + "Please press the space bar to begin"
+  instrText <- instrText
   instrFont <- MakeFont("Vera.ttf", 0, 24, gColor, gBackgroundColor, 1 )
   instrBox  <- MakeTextBox(instrText, instrFont, 
                  .9*gVideoWidth, .95*gVideoHeight)
@@ -268,7 +261,7 @@ define MakeColorRGBString( color ) {
     s <- SubString(color,2,StringLength(color)-1)
     color <- Lookup( s, gStimNames, gStimColors )
     if( IsList(color) ) {
-      SignalFatalError("Can't find stimulus "+s+" in color substitution")
+      Message("Can't find stimulus "+s+" in color substitution", 1)
     }
   }
   ## If 'color' starts with '*', we look up the color in gSubjectInfo:
@@ -301,6 +294,19 @@ define Display( s ) {
 define Undisplay( s ) {
   if( not IsAudioOut(s) ) {
     Hide( s )
+  }
+}
+
+define Message( text, fatal ) {
+  box <- MakeTextBox( text, gFont, .9*gVideoWidth, .9*gVideoHeight )
+  AddObject( box, gWindow )
+  Move( box, .05*gVideoWidth, .05*gVideoHeight )
+  Draw()
+  WaitForKeyDown(" ")
+  RemoveObject( box, gWindow )
+  Draw()
+  if( fatal ) {
+    SignalFatalError( text )
   }
 }
 
@@ -380,7 +386,7 @@ define ReadStimuli() {
   }
   ## Check there are no duplicate stimulus names
   if( Length(gStimNames) != Length( Levels(gStimNames) ) ) {
-    SignalFatalError("Duplicate in stimulus names: "+gStimNames)
+    Message("Duplicate in stimulus names: "+gStimNames, 1)
   }
   ## Now we are ready to create the stimulus objects
   gStimuli <- []
@@ -408,7 +414,7 @@ define ReadStimuli() {
        f <- Nth(gStimParams,i)
        s <- LoadSound( "Media/" + f )
     } else {
-       SignalFatalError( "Unsupported stimulus type: "+type )
+       Message( "Unsupported stimulus type: "+type, 1 )
     }
     PushOnEnd( gStimuli, s )
     AddObject( s, gWindow )
@@ -440,7 +446,7 @@ define Parameter( name ) {
   n <- Length( gParameterNames )
   value <- Lookup( name, gParameterNames, gParameterValues )
   if(  IsList(value) ) {
-    SignalFatalError("Parameter "+name+" not found, or multiply defined")
+    Message("Parameter "+name+" not found, or multiply defined", 1)
   }
   return value
 }
