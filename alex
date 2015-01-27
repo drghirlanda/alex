@@ -290,6 +290,20 @@ define MakeColorRGBString( color ) {
   return c
 }
 
+define Display( s ) {
+  if( IsSound(s) ) {
+    PlayBackground( s )
+  } else {
+    Show( s )
+  }
+}
+
+define Undisplay( ) {
+  if( not IsSound(s) ) {
+    Hide( s )
+  }
+}
+
 ########################################################################
 #                                                                      #
 # In this section we have functions reading files in the Design        #
@@ -371,16 +385,19 @@ define ReadStimuli() {
     c <- MakeColorRGBString( Nth( gStimColors, i ) )
     x <- gVideoWidth/2 + ToNumber(Nth( gStimXOffsets, i ))
     y <- gVideoHeight/2 + ToNumber(Nth( gStimYOffsets, i ))
-    shape <- Nth( gStimShapes, i )
-    Print( shape )
-    if(  shape == "circle" ) {
+    type <- Nth( gStimShapes, i )
+    if(  type == "circle" ) {
        r <- ToNumber( Nth(gStimParams,i) )
        s <- Circle( x, y, r, c, 1 )
-    } elseif( shape == "square" ) {
+    } elseif( type == "square" ) {
        l <- ToNumber( Nth(gStimParams,i) )
        s <- Square( x, y, l, c, 1 )
-    } elseif( shape == "smiley" ) {
+    } elseif( type == "smiley" ) {
        s <- MakeImage( "Media/smiley-small.png" )
+       Move( s, x, y )
+    } elseif( type == "text" ) {
+       w <- Nth(gStimParams,i)
+       s <- MakeLabel( w, gFont )
        Move( s, x, y )
     } else {
        SignalFatalError( "Unsupported stimulus shape: "+shape )
