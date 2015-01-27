@@ -98,7 +98,7 @@ define OneTrial( stimulus, rewardProb, uss ) {
   }
   # Now we show all stimulus objects
   loop( stim, trialStimuli ) {
-    Show( stim )
+    Display( stim )
   }
   Draw()
   maxResponses <- ToNumber( Parameter("MaxResponses") )
@@ -119,12 +119,12 @@ define OneTrial( stimulus, rewardProb, uss ) {
         PushOnEnd( rewards, 1 )
         Wait( csusInterval )
 	loop( us, SplitString( uss, "," ) ) {
-          Show( Lookup( us, gStimNames, gStimuli ) )
+          Display( Lookup( us, gStimNames, gStimuli ) )
         }
         Draw()
         Wait( usDuration )
 	loop( us, SplitString( uss, "," ) ) {
-          Hide( Lookup( us, gStimNames, gStimuli ) )
+          Undisplay( Lookup( us, gStimNames, gStimuli ) )
         }
         Draw()
       } else {
@@ -133,7 +133,7 @@ define OneTrial( stimulus, rewardProb, uss ) {
     }
   }
   loop( stim, trialStimuli ) {
-    Hide( stim )
+    Undisplay( stim )
   }
   Draw()
   if( not Length(times) ) {
@@ -291,15 +291,15 @@ define MakeColorRGBString( color ) {
 }
 
 define Display( s ) {
-  if( IsSound(s) ) {
+  if( IsAudioOut(s) ) {
     PlayBackground( s )
   } else {
     Show( s )
   }
 }
 
-define Undisplay( ) {
-  if( not IsSound(s) ) {
+define Undisplay( s ) {
+  if( not IsAudioOut(s) ) {
     Hide( s )
   }
 }
@@ -400,7 +400,7 @@ define ReadStimuli() {
        s <- MakeLabel( w, gFont )
        Move( s, x, y )
     } else {
-       SignalFatalError( "Unsupported stimulus shape: "+shape )
+       SignalFatalError( "Unsupported stimulus type: "+type )
     }
     PushOnEnd( gStimuli, s )
     AddObject( s, gWindow )
