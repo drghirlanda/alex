@@ -6,3 +6,4 @@ C,square,blue,60,0
 D,square,"191,0,94",60,0
 E,square,"94,0,191",60,0
 Y,circle,=X,60,0
+S,smiley,,0,-150

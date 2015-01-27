@@ -1,7 +1,17 @@
 #!/usr/local/bin/pebl-language
 
+# Breakdown of the Start function:
+#
+# - Read command-line arguments
+# - Read design parameters from Parameters.csv
+# - Initialize basic display elements
+# - Read Design files Subjects.csv, Phases.csv, Stimuli.csv
+# - Show instructions from Instructions.txt
+# - Get demographics info from subject
+# -  
+
 define Start( par ) {
-  ## 'alex -v test' to skips instructions and demographics collection:
+  ## 'alex -v test' skips instructions and demographics collection:
   if( IsList(par) and Sum( Match( par, "test" ) ) ) {
     test <- 1
   } else {
@@ -51,12 +61,6 @@ define Start( par ) {
 
   ShowCursor( 0 )
 
-  ## Load smiley face to be used as US
-  gSmiley <- MakeImage( "Media/smiley-small.png" )
-  AddObject( gSmiley, gWindow )
-  Move( gSmiley, gVideoWidth/2, gVideoHeight/2 - 100 )
-  Hide( gSmiley )
-
   ## Print datafile header (gDataFile has been opened by
   ## ReadSubjectInfo() to avoid race conditions with acquiring and
   ## releasing the lock to Subjects.csv)
@@ -75,7 +79,13 @@ define Start( par ) {
   ShowCursor( 1 )
 }
 
-define OneTrial( stimulus, rewardProb ) {
+########################################################################
+#                                                                      #
+# This function coordinates the events within a single trial           #
+#                                                                      #
+########################################################################
+
+define OneTrial( stimulus, rewardProb, uss ) {
   Draw()
   n <- Length( gStimNames )
   trialStimuli <- []
@@ -108,10 +118,14 @@ define OneTrial( stimulus, rewardProb ) {
       if( Random() < rewardProb ) {
         PushOnEnd( rewards, 1 )
         Wait( csusInterval )
-        Show( gSmiley )
+	loop( us, SplitString( uss, "," ) ) {
+          Show( Lookup( us, gStimNames, gStimuli ) )
+        }
         Draw()
         Wait( usDuration )
-        Hide( gSmiley )
+	loop( us, SplitString( uss, "," ) ) {
+          Hide( Lookup( us, gStimNames, gStimuli ) )
+        }
         Draw()
       } else {
         PushOnEnd( rewards, 0 )
@@ -129,51 +143,22 @@ define OneTrial( stimulus, rewardProb ) {
   return [times, rewards]
 }
 
-define ReadSubjectInfo() {
-  subjectsFile <- "Design/Subjects.csv"
-  LockFile( subjectsFile )
-  subjects <- ReadCSV( subjectsFile )
-  gSubjectHeader <- Nth( subjects, 1 )
-  found <- 0
-  if( not IsDirectory( "Data" ) ) {
-    MakeDirectory( "Data" )
-  }
-  loop( s, Rest(subjects) ) {
-    gDataFilename <- "Data/" + Nth(s,1) + ".dat"
-    if( not FileExists( gDataFilename ) ) {
-      found <- 1
-      Print_( "Running subject: " )
-      PrintList( s )
-      break
-    }
-  }
-  ## Open data file before releasing lock, to prevent race conditions
-  if( found ) {
-    gSubjectInfo <- s
-    gDataFile <- FileOpenWrite( gDataFilename )
-    UnlockFile( subjectsFile )
-  } else {
-    UnlockFile( subjectsFile )
-    text <- "It looks like all subjects have been run!
-
-Press 'q' to quit"
-    box <- MakeTextBox( text, gFont, .8*gVideoWidth, gVideoHeight )
-    AddObject( box, gWindow )
-    Move( box, .1*gVideoWidth, .1*gVideoHeight )
-    Draw()
-    WaitForKeyDown("q")
-  }
-}
+########################################################################
+#                                                                      #
+# This function coordinates trials within a phase.                     #
+#                                                                      #
+########################################################################
 
 define RunPhase( phaseName ) {
   # Get stimulus settings for this phase. Each line in Phases.csv
   # contains a stimulus entry for a specific phase. Thus we find all
   # entries with this phaseName and use their indices to build
-  # stimulus, presentations, and rewards variables for this phase
+  # stimulus, presentations, rewards, and USs for this phase
   idx           <- Match( gPhaseNames, phaseName )
   stimuli       <- Filter( gPhaseStimuli, idx )
   presentations <- Filter( gPhasePresentations, idx )
   rewards       <- Filter( gPhaseRewards, idx )
+  uss           <- Filter( gPhaseUSs, idx )
 
   ## trialStimuli and trialRewards contain stimuli and rewards
   ## repeated as many times as given in 'presentations'. The order of
@@ -181,13 +166,16 @@ define RunPhase( phaseName ) {
   ## shuffled list 'trialOrder', see end of block
   trialStimuli <- []
   trialRewards <- []
+  trialUSs     <- []
   loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
     n <- ToNumber( Nth(presentations, i) )
     PushOnEnd( trialStimuli, Repeat( Nth(stimuli, i), n ) )
     PushOnEnd( trialRewards, Repeat( Nth(rewards, i), n ) )
+    PushOnEnd( trialUSs,     Repeat( Nth(uss,     i), n ) )
   }
   trialStimuli <- Flatten( trialStimuli ) # Nesting is undersired
   trialRewards <- Flatten( trialRewards )
+  trialUSs     <- Flatten( trialUSs )
   trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
 
   maxTrial <- Length( trialStimuli )
@@ -197,8 +185,9 @@ define RunPhase( phaseName ) {
     thisTrial <- Nth(trialOrder, trial)
     stimulus  <- Nth( trialStimuli, thisTrial )
     rewardPr  <- ToNumber( Nth( trialRewards, thisTrial ) )
+    uss       <- Nth( trialUSs, thisTrial )
     ## Run trial and get response times and rewards collected
-    results   <- OneTrial( stimulus, rewardPr )
+    results   <- OneTrial( stimulus, rewardPr, uss )
     times     <- Nth(results, 1)
     rewards   <- Nth(results, 2)
     ## Save all data to file:
@@ -222,6 +211,7 @@ define RunPhase( phaseName ) {
   }
 }
 
+# Print a list to file in CSF format
 define FilePrintCSV_( file, data ) {
   n <- Length(data)
   if( n==1 ) {
@@ -257,19 +247,6 @@ define ShowInstructions() {
   Wait( 1000 )
 }
 
-define LockFile( file ) {
-  while( FileExists( file+".lck" ) ) {
-    Wait( 250 )
-  }
-  FileOpenOverWrite( file+".lck" ) 
-}
-
-define UnlockFile( file ) {
-  if( FileExists( file+".lck" ) ) {
-    SystemCall( "/bin/rm " + file + ".lck" )
-  }
-}
-
 define ShowEnd() {
   endText <- "You're done, thanks for your participation!
 
@@ -281,6 +258,9 @@ You will now receive a handout with an explanation of the experiment."
   WaitForKeyDown("q")
 }
 
+# Interpret a 'color' string from Stimulus.csv, and return the
+# corresponding PEBL Color object. Read through to see how colors can
+# be specified 
 define MakeColorRGBString( color ) {
   ## If 'color' starts with '=', we expect a stimulus name after, and
   ## we use that stimulus' color:
@@ -310,6 +290,64 @@ define MakeColorRGBString( color ) {
   return c
 }
 
+########################################################################
+#                                                                      #
+# In this section we have functions reading files in the Design        #
+# directory to configure the experiment, and a few accessory functions #
+#                                                                      #
+########################################################################
+
+## The two next functions implement a simple file locking mechanism
+
+define LockFile( file ) {
+  while( FileExists( file+".lck" ) ) {
+    Wait( 250 )
+  }
+  FileOpenOverWrite( file+".lck" ) 
+}
+
+define UnlockFile( file ) {
+  if( FileExists( file+".lck" ) ) {
+    SystemCall( "/bin/rm " + file + ".lck" )
+  }
+}
+
+define ReadSubjectInfo() {
+  subjectsFile <- "Design/Subjects.csv"
+  LockFile( subjectsFile )
+  subjects <- ReadCSV( subjectsFile )
+  gSubjectHeader <- Nth( subjects, 1 )
+  found <- 0
+  if( not IsDirectory( "Data" ) ) {
+    MakeDirectory( "Data" )
+  }
+  loop( s, Rest(subjects) ) {
+    dataFilename <- "Data/" + Nth(s,1) + ".dat"
+    if( not FileExists(dataFilename) ) {
+      found <- 1
+      Print_( "Running subject: " )
+      PrintList( s )
+      break
+    }
+  }
+  ## Open data file before releasing lock, to prevent race conditions
+  if( found ) {
+    gSubjectInfo <- s
+    gDataFile <- FileOpenWrite( dataFilename )
+    UnlockFile( subjectsFile )
+  } else {
+    UnlockFile( subjectsFile )
+    text <- "It looks like all subjects have been run!
+
+Press 'q' to quit"
+    box <- MakeTextBox( text, gFont, .8*gVideoWidth, gVideoHeight )
+    AddObject( box, gWindow )
+    Move( box, .1*gVideoWidth, .1*gVideoHeight )
+    Draw()
+    WaitForKeyDown("q")
+  }
+}
+
 define ReadStimuli() {
   csv <- ReadCSV( "Design/Stimuli.csv" )
   gStimNames <- []
@@ -327,15 +365,19 @@ define ReadStimuli() {
   ## Now we are ready to create the stimulus objects
   gStimuli <- []
   n <- Length( gStimNames )
-  loop( i, Sequence(1,n-1,1) ) {
+  loop( i, Sequence(1,n,1) ) {
     c <- MakeColorRGBString( Nth( gStimColors, i ) )
     x <- gVideoWidth/2 + ToNumber(Nth( gStimXOffsets, i ))
     y <- gVideoHeight/2 + ToNumber(Nth( gStimYOffsets, i ))
     shape <- Nth( gStimShapes, i )
+    Print( shape )
     if(  shape == "circle" ) {
        s <- Circle( x, y, 25, c, 1 )
     } elseif( shape == "square" ) {
        s <- Square( x, y, 50, c, 1 )
+    } elseif( shape == "smiley" ) {
+       s <- MakeImage( "Media/smiley-small.png" )
+       Move( s, x, y )
     } else {
        SignalFatalError( "Unsupported stimulus shape: "+shape )
     }
@@ -349,10 +391,11 @@ define ReadPhases() {
   csv <- ReadCSV( "Design/Phases.csv" )
   gPhaseHeader <- First( csv )
   phaseInfo <- Transpose( Rest( csv ) )
-  gPhaseNames <-         Nth( phaseInfo, 1 )
-  gPhaseStimuli <-       Nth( phaseInfo, 2 )
+  gPhaseNames         <- Nth( phaseInfo, 1 )
+  gPhaseStimuli       <- Nth( phaseInfo, 2 )
   gPhasePresentations <- Nth( phaseInfo, 3 )
-  gPhaseRewards <-       Nth( phaseInfo, 4 )
+  gPhaseRewards       <- Nth( phaseInfo, 4 )
+  gPhaseUSs           <- Nth( phaseInfo, 5 )
 }
 
 define ReadParameters() {
