@@ -392,13 +392,17 @@ define ReadStimuli() {
     } elseif( type == "square" ) {
        l <- ToNumber( Nth(gStimParams,i) )
        s <- Square( x, y, l, c, 1 )
-    } elseif( type == "smiley" ) {
-       s <- MakeImage( "Media/smiley-small.png" )
+    } elseif( type == "image" ) {
+       f <- Nth(gStimParams,i)
+       s <- MakeImage( "Media/" + f )
        Move( s, x, y )
     } elseif( type == "text" ) {
        w <- Nth(gStimParams,i)
        s <- MakeLabel( w, gFont )
        Move( s, x, y )
+    } elseif( type == "sound" ) {
+       f <- Nth(gStimParams,i)
+       s <- LoadSound( "Media/" + f )
     } else {
        SignalFatalError( "Unsupported stimulus type: "+type )
     }
