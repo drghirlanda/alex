@@ -178,5 +178,52 @@ you can do:
         5       255,190,190 50
         6       255,190,190 75
 
+Global parameters
+-----------------
 
-... To be continued ...
+The file Design/Parameters.csv contains some parameters that affect
+the whole experiment. Here is a sample file (as above, the file is in
+CSV format, displayed here as a table for lagibility):
+
+    Parameter       Value
+    CSDuration      4000
+    CSUSInterval    0
+    USDuration      400
+    MinITI          1000
+    MaxITI          3000
+    MaxResponses    100
+    BackgroundColor gray95
+    ForegroundColor black
+    FontName        Vera
+    FontSize        36
+    Test            1
+
+CSDuration is the duration of all the non-US stimuli. All durations
+are in milliseconds. In future versions it will be possible to set
+different durations for different stimuli, and also to present
+sequences of stimuli for each trial, but right now we have only single
+stimuli of a common duration. 
+
+CSUSInterval and USDuration should be self-explanatory.
+
+MinITI and MaxITI are the minimum and maximum values of the
+inter-trial interval. Each inter-trial interval will be drawn between
+these values with uniform distribution.
+
+MaxResponses is the maximum number of response a subject is allowed to
+make in one trial. There are essentially two useful settings. If you
+set this to 1 the trial ends with the first response (the US is
+delivered if appropriate, of course). If you set it to an
+unrealistically large value, say 1000, you can any number of responses
+per trial. Each of these may result in the US being delivered, as
+described above.
+
+The following parameters control the screen background color while the
+experiment is running and the color, font, and size of text used for
+instructions and other messages.
+
+The Test parameter, if set to 1, skips instructions and acquisition of
+demographic information. It is meant to quickly start the experiment
+during development.
+
+  ... To be continued ...
