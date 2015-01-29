@@ -161,12 +161,6 @@ define RunPhase( phaseName ) {
   numTrials <- LookupPhase(phaseName, "Trials")
   rewards   <- LookupPhase(phaseName, "Rewards")
   uss       <- LookupPhase(phaseName, "USs")
-  ## Stimulus durations are optional. If they are not given, we
-  ## construct them using the value of the CSDuration global parameter:
-  durations <- LookupPhase(phaseName, "Durations")
-  if( not Length(durations) ) {
-    durations <- Repeat( Parameter("CSDuration"), Length(stimuli) )
-  }
 
   ## trialStimuli and trialRewards contain stimuli and rewards
   ## repeated as many times as given in 'trials'. The order of
@@ -195,7 +189,7 @@ define RunPhase( phaseName ) {
     rewardPr  <- ToNumber( Nth( trialRewards, thisTrial ) )
     uss       <- Nth( trialUSs, thisTrial )
     ## Run trial and get response times and rewards collected
-    results   <- OneTrial( stimulus, rewardPr, uss, durations )
+    results   <- OneTrial( stimulus, rewardPr, uss )
     times     <- Nth(results, 1)
     rewards   <- Nth(results, 2)
     ## Save all data to file:
