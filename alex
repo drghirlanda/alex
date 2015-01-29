@@ -381,14 +381,14 @@ Press 'q' to quit"
 define ReadStimuli() {
   csv <- ReadCSV( "Design/Stimuli.csv" )
   gStimNames <- []
-  gStimShapes <- []
+  gStimTypes <- []
   gStimParams <- []
   gStimColors <- []
   gStimXOffsets <- []
   gStimYOffsets <- []
   loop( s, Rest( csv ) ) {
     PushOnEnd( gStimNames, Nth( s, 1 ) )
-    PushOnEnd( gStimShapes, Nth( s, 2 ) )
+    PushOnEnd( gStimTypes, Nth( s, 2 ) )
     PushOnEnd( gStimParams, Nth( s, 3 ) )
     PushOnEnd( gStimColors, Nth( s, 4 ) )
     PushOnEnd( gStimXOffsets, Nth( s, 5 ) )
@@ -407,7 +407,7 @@ define ReadStimuli() {
     }
     x <- gVideoWidth/2 + ToNumber(Nth( gStimXOffsets, i ))
     y <- gVideoHeight/2 + ToNumber(Nth( gStimYOffsets, i ))
-    type <- Nth( gStimShapes, i )
+    type <- Nth( gStimTypes, i )
     if(  type == "circle" ) {
        r <- ToNumber( Nth(gStimParams,i) )
        s <- Circle( x, y, r, c, 1 )
