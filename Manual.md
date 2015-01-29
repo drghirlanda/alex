@@ -96,8 +96,9 @@ detail:
 
 - Name: An arbitrary label for the stimulus, so that it can be
   referenced in Phases.csv. It can be anything that does not contain
-  the characters " (double quote), + (plus sign), * (star), and ,
-  (comma).
+  the characters " (double quote), + (plus sign), * (star), : (colon),
+  and , (comma). These characters are reserved for special operations,
+  see below.
 
 - Type: This can be square, circle, image, or sound.
 
@@ -156,6 +157,26 @@ And you would modify the Stimuli.csv file like this:
 
 The special notation *P indicates that the color of stimulus P will be
 looked up, for each subject, in the column PColor of the Subects.csv
-file.
+file. This syntax is available for all stimulus properties. For
+example, if you want to change the size of R square across subjects
+you can do:
+
+* Stimuli.csv:
+
+    Name Type   Parameters Color XOffset YOffset
+    R    square *R         red   0       0
+    W    square 50         white 0       0
+    P    square 50         *P    0       0
+
+* Subjects.csv:
+
+    Subject PColor      RParameters
+    1       255,128,128 25
+    2       255,128,128 50
+    3       255,128,128 75
+    4       255,190,190 25
+    5       255,190,190 50
+    6       255,190,190 75
+
 
 ... To be continued ...
