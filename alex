@@ -14,7 +14,7 @@ define Start( par ) {
 
   ReadParameters()
 
-  test <- Parameter("Test")
+  test <- ToNumber( Parameter("Test") )
   Print( test )
   if( test != 1 ) {
     test <- 0
@@ -261,24 +261,51 @@ You will now receive a handout with an explanation of the experiment."
   WaitForKeyDown("q")
 }
 
+# Helper function to identify characteristics of stimuli. Given a
+# stimulusName and a field, consults the Stimulus.csv information
+# (stored in gStimulusInfo, with header in gStimulusHeader), and
+# returns the value of that field for that stimulus, or "NA" if either
+# the stimulus or the field are not defined.
+define LookupStimulus( sName, field ) {
+  nFields <- Length( gStimulusHeader )
+  fIndex <- Lookup(field, gStimulusHeader, Sequence(1,nFields,1) )
+  if( IsList(fIndex) ) {
+    result <- "NA"
+  } else {
+    nStim <- Length( gStimNames )
+    sIndex <- Lookup( sName, gStimNames, Sequence(1,nStim,1) )
+    if( IsList(sIndex) ) {
+      result <- "NA"
+    } else {
+      result <- Nth( Nth( gStimulusInfo, sIndex ), fIndex )
+    }
+  }
+  return result
+}
+
+# Resolve the value in a stimulus field expressed in :/* syntax. If
+# the value starts with :, the rest is expected to be a stimulus name,
+# and the value of the field for that stimulus named is
+# substituted. If the value start with *, we look up in the subject
+# information for a field of the form 'value+field', and we substitute
+# that value (here 'value' is stripped of the initial *).
+define Resolve( field, value ) {
+  if( SubString(value,1,1) == ":" ) {
+    # This is the stimulus to be looked up:
+    s <- SubString(value,2,StringLength(value)-1)
+    value <- LookupStimulus( s, field )
+  } elseif( Substring(value,1,1) == "*" ) {
+    s <- SubString(value,2,StringLength(value))
+    value <- Lookup( s+field, gSubjectHeader, gSubjectInfo )
+  }
+  return value
+}
+
 # Interpret a 'color' string from Stimulus.csv, and return the
 # corresponding PEBL Color object. Read through to see how colors can
 # be specified 
 define MakeColorRGBString( color ) {
-  ## If 'color' starts with '=', we expect a stimulus name after, and
-  ## we use that stimulus' color:
-  if( SubString(color,1,1) == "=" ) {
-    s <- SubString(color,2,StringLength(color)-1)
-    color <- Lookup( s, gStimNames, gStimColors )
-    if( IsList(color) ) {
-      Message("Can't find stimulus "+s+" in color substitution", 1)
-    }
-  }
-  ## If 'color' starts with '*', we look up the color in gSubjectInfo:
-  if( SubString(color,1,1) == "*" ) {
-    stimulus <- SubString(color,2,1) 
-    color <- Lookup( stimulus+"Color", gSubjectHeader, gSubjectInfo )
-  }
+  color <- Resolve( "Color", color )
   ## Now we see whether color is a name or RGB triplet, and act
   ## accordingly:
   components <- SplitString( color, "," )
@@ -380,13 +407,15 @@ Press 'q' to quit"
 
 define ReadStimuli() {
   csv <- ReadCSV( "Design/Stimuli.csv" )
+  gStimulusHeader <- First( csv )
   gStimNames <- []
   gStimTypes <- []
   gStimParams <- []
   gStimColors <- []
   gStimXOffsets <- []
   gStimYOffsets <- []
-  loop( s, Rest( csv ) ) {
+  gStimulusInfo <- Rest( csv )
+  loop( s, gStimulusInfo ) {
     PushOnEnd( gStimNames, Nth( s, 1 ) )
     PushOnEnd( gStimTypes, Nth( s, 2 ) )
     PushOnEnd( gStimParams, Nth( s, 3 ) )
@@ -409,7 +438,7 @@ define ReadStimuli() {
     y <- gVideoHeight/2 + ToNumber(Nth( gStimYOffsets, i ))
     type <- Nth( gStimTypes, i )
     if(  type == "circle" ) {
-       r <- ToNumber( Nth(gStimParams,i) )
+       r <- ToNumber( Resolve( "Parameters", Nth(gStimParams,i) ) )
        s <- Circle( x, y, r, c, 1 )
     } elseif( type == "square" ) {
        l <- ToNumber( Nth(gStimParams,i) )
