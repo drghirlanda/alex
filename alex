@@ -434,8 +434,10 @@ define ReadStimuli() {
     if( StringLength( Nth( gStimColors, i ) ) ) {
       c <- MakeColorRGBString( Nth( gStimColors, i ) )
     }
-    x <- gVideoWidth/2 + ToNumber(Nth( gStimXOffsets, i ))
-    y <- gVideoHeight/2 + ToNumber(Nth( gStimYOffsets, i ))
+    x <- ToNumber( Resolve( "XOffset", Nth( gStimXOffsets, i ) ) )
+    y <- ToNumber( Resolve( "YOffset", Nth( gStimYOffsets, i ) ) )
+    x <- x + gVideoWidth/2
+    y <- y + gVideoHeight/2
     type <- Nth( gStimTypes, i )
     if(  type == "circle" ) {
        r <- ToNumber( Resolve( "Parameters", Nth(gStimParams,i) ) )
