@@ -305,8 +305,7 @@ define Resolve( field, value ) {
 # corresponding PEBL Color object. Read through to see how colors can
 # be specified 
 define MakeColorRGBString( color ) {
-  color <- Resolve( "Color", color )
-  ## Now we see whether color is a name or RGB triplet, and act
+  ## We see whether color is a name or RGB triplet, and act
   ## accordingly:
   components <- SplitString( color, "," )
   if( Length(components) != 3 ) { ## treat as color name
@@ -432,7 +431,7 @@ define ReadStimuli() {
   n <- Length( gStimNames )
   loop( i, Sequence(1,n,1) ) {
     if( StringLength( Nth( gStimColors, i ) ) ) {
-      c <- MakeColorRGBString( Nth( gStimColors, i ) )
+      c <- MakeColorRGBString( Resolve("Color", Nth(gStimColors, i)) )
     }
     x <- ToNumber( Resolve( "XOffset", Nth( gStimXOffsets, i ) ) )
     y <- ToNumber( Resolve( "YOffset", Nth( gStimYOffsets, i ) ) )
