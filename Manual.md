@@ -163,10 +163,10 @@ you can do:
 
 * Stimuli.csv:
 
-    Name Type   Parameters Color XOffset YOffset
-    R    square *R         red   0       0
-    W    square 50         white 0       0
-    P    square 50         *P    0       0
+        Name Type   Parameters Color XOffset YOffset
+        R    square *R         red   0       0
+        W    square 50         white 0       0
+        P    square 50         *P    0       0
 
 * Subjects.csv:
 
