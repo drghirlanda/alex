@@ -11,14 +11,15 @@
 # -  
 
 define Start( par ) {
-  ## 'alex -v test' skips instructions and demographics collection:
-  if( IsList(par) and Sum( Match( par, "test" ) ) ) {
-    test <- 1
-  } else {
+
+  ReadParameters()
+
+  test <- Parameter("Test")
+  Print( test )
+  if( test != 1 ) {
     test <- 0
   }
-  ## Read Design/Parameters.csv:
-  ReadParameters()
+  
   ## Initialize basic display elements:
   fg <- Parameter( "ForegroundColor" )
   bg <- Parameter( "BackgroundColor" )
@@ -449,10 +450,9 @@ define ReadParameters() {
 }
 
 define Parameter( name ) {
-  n <- Length( gParameterNames )
   value <- Lookup( name, gParameterNames, gParameterValues )
-  if(  IsList(value) ) {
-    Message("Parameter "+name+" not found, or multiply defined", 1)
+  If( IsList(value) ) {
+    value <- "NA"
   }
   return value
 }
