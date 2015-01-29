@@ -1,63 +1,124 @@
+Alex: Associative Learning EXperiment software
+==============================================
 
 
+Introduction
+------------
 
-Usage
-=====
+Alex is a program to run associative learning experiments specified
+through a set of configuration files. This manual describe how to
+configure experiments. Please refer to the README file that comes with
+Alex for installation instructions.
 
-There is no manual yet. What you get is a PEBL program, alex, and the
-following directories that show an example experiment:
 
-Design: Containes files to configure the experiment 
-Media:  Contains a smiley face image to use as reward
-Data:   Contains the data collected (I use it just for testing)
+Workflow
+--------
 
-The Design directory is where all configurations are kept. It contains
-the following files:
+To build and run a new experiment you create a dedicated folder, say,
+MyExperiment, and within it the following sufolders:
 
-- Instructions.txt: Instructions to be displayed at the start of the
-  experiment
+- Design: This folder contains the files that specify experimental
+  design, such as which stimuli to use, the structure of trials, and
+  different treatments for subjects. See [Configuration files] below.
 
-- Parameters.csv: Defines a bunch of parameters such as CS and US
-  durations, inter-trial interval, etc.
+- Media: Here you have any image or sound files you need for your
+  experiment.
 
-- Stimuli.csv: Defines the experimental stimuli used
+- Data: This folder is created by alex if it is not found, and it
+  holds the data collected during experiment runs.
 
-- Subjects.csv: Defines parameters that vary by subject (treatments)
 
-- Phases.csv: Defines how stimulus presentations are organized in
-  different phases of training.
+Configuration files
+-------------------
+
+All configuration files are in the Design folder:
+
+- Instructions.txt contains instructions to be displayed to subjects.
+
+- Phases.csv describe the experimental design proper. I containes one
+  or more experimental phases, each composed of a number of trials in
+  which stimuli are presented, responses recorded, and outcomes
+  delivered.
+
+- Stimuli.csv defines the stimuli that are mentioned Phases.csv. The
+  latter only mentions stimuli by name, while Stimuli.csv informs alex
+  of what the stimuli actually are.
+
+- Subjects.csv defines the number of subjects to be run and possibly
+  different the treatments to which subjects are allocated.
+
+- Parameters.csv defines some global parameters such as screen
+  background color, text color, font, and size, the duration of
+  inter-trial intervals, and so on.
+
 
 Example
 -------
 
 Suppose we want to teach participants to discriminate a red square
 from a white square. We then want to know how subjects respond to,
-say, a pink square. The Phases.csv file might look like this (I am
-displaying it as a table for simplicity, but fields should be comma
-separated):
+say, a pink square. The Phases.csv file might look like this:
 
     Phase Stimulus Presentations Reward
     1     R        20            0.9
     1     W        20            0.1
     2     P        5             0
 
-This means that in pahse we will have 20 presentations of each of
-stimuli R and W (for 'red' and 'white'). R will be rewarded 90% of the
-time, P only 10%. In phase 2, stimulus P ('pink') is presented.
+I am displaying the file as a table, but it should be a
+comma-separated file. You can edit these in any spreadhseet using the
+CSV format for saving. 
+
+**Note:** Alex wants double quotes (when needed) in CSV files. Single
+quotes will result in errors. (This comes from the PEBL function that
+reads CSV files.)
+
+The above file describes an experiment with two phases. Each line
+describes one type of trial that occurs in a phase. There are, for
+example two kinds of trials in phase 1, specifying 20 presentations of
+each of two stimuli, R and W (for 'red' and 'white'). R will be
+rewarded 90% of the time, W only 10%. In phase 2, stimulus P ('pink')
+is presented five times. When the experiment is run, R and W trials
+will be intermixed randomly because they all pertain to phase 1. P
+trials on the other hand, will be performed in phase 2 after all phase
+1 trials have been run.
 
 How does alex know that R, W, and P represent red, white and pink
-square? This information is contained in the Stimuli.csv file, which
+squares? This information is contained in the Stimuli.csv file, which
 might look like this:
 
-    Name Shape  Color       XOffset YOffset
-    R    square red         0       0
-    W    square white       0       0
-    P    square 255,128,128 0       0
+    Name Type   Parameters Color       XOffset YOffset
+    R    square 50         red         0       0
+    W    square 50         white       0       0
+    P    square 50         255,128,128 0       0
 
-Note that the pink color is given as an RGB triplet. As this is itself
-comma-separated, it needs to be double-quoted in the CSV file. XOffset
-and YOffset are offsets from the center of the screen, in pixel. In
-this example, all stimuli are centered.
+The fields should be fairly intuitive, but here is what they mean in
+detail:
+
+- Name: An arbitrary label for the stimulus, so that it can be
+  referenced in Phases.csv. It can be anything that does not contain
+  the characters " (double quote), + (plus sign), * (star), and ,
+  (comma).
+
+- Type: This can be square, circle, image, or sound.
+
+- Parameters: The meaning of parameters varies according to the
+  stimulus type:
+
+  - square: side in pixels
+
+  - circle: radius in pixels
+
+  - image or sound: name of file in the Media folder containing the
+    desired image or sound.
+
+- Color: the color of squares and circles. For images and sounds this
+  field is ignored. Colors can either be named or given as an RGB
+  triplet. As this is itself a comma-separated list, it needs to be
+  double-quoted in the CSV file (spreadhseet software will do this for
+  you). 
+
+- XOffset and YOffset: offsets from the center of the screen, in
+  pixel. In the example, all stimuli are centered.
 
 The Subjects.csv file contains information about the subjects you want
 to run. If all subjects undergo the same treatment, as in the present
@@ -71,11 +132,12 @@ example, you only need to give subject numbers:
     5
     6
 
-This instructs alex that you want to run 6 subjects. It is more common
-however, that different subjects require different treatments. Right
-now, alex can only change the color of stimuli on a per-subject
-basis. If you want to test two shades of pink, for example, you would
-do:
+This instructs alex that you want to run 6 subjects, all subject to
+the same treatment. Often, however, subjects need to be divided in
+different treatment groups. Any of the fields in the Stimuli.csv file
+can be specified on a per-subject bases. If you want to test two
+shades of pink, for example, you would extend the Subjects.csv file
+like this:
 
     Subject PColor
     1       255,128,128
@@ -85,15 +147,15 @@ do:
     5       255,190,190
     6       255,190,190
 
-You also need to modify the Stimuli.csv file like this:
+And you would modify the Stimuli.csv file like this:
 
-    Name Shape  Color       XOffset YOffset
-    R    square red         0       0
-    W    square white       0       0
-    P    square *P          0       0
+    Name Type   Parameters Color XOffset YOffset
+    R    square 50         red   0       0
+    W    square 50         white 0       0
+    P    square 50         *P    0       0
 
 The special notation *P indicates that the color of stimulus P will be
-looked up, for each subject, as the corresponding value in column
-PColor.
+looked up, for each subject, in the column PColor of the Subects.csv
+file.
 
 ... To be continued ...
