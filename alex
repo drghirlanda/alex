@@ -86,7 +86,7 @@ define OneTrial( stimulus, rewardProb, uss ) {
   # The 'stimulus' may actually be a compound, so we split it into
   # individual letters and we build a list of stimuli for this trial
   # by looking the stimulus objects up in the gStimuli list.
-  loop( stimName, SplitString(stimulus, "") ) {
+  loop( stimName, SplitString(stimulus, "+") ) {
   	i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
 	PushOnEnd( trialStimuli, Nth( gStimuli, i ) )
   }
