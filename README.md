@@ -24,9 +24,11 @@ Alex is being developed by Stefano Ghirlanda, <drghirlanda@gmail.com>,
 Scope
 -----
 
-Alex can display squares, circles, arbitrary images, and play
-sounds. All of these can serve as CSs or USs. Multiple CSs and USs can
-be presented at the same time. Alex's biggest current limitations are:
+Alex can display squares, circles, images from files, and play sound
+files. All of these can serve as conditioned stimuli (CSs)
+unconditioned ones (USs), or, in other terms, as cues and
+outcomes. Multiple CSs and USs can be presented at the same
+time. Currently, alex's biggest limitations are:
 
 - There is only one reinforcement schedule, Variable Ratio. That is,
   each response to a CS has a fixed probability of being
@@ -37,6 +39,11 @@ be presented at the same time. Alex's biggest current limitations are:
   for multiple responses like "left" and "right" or, in fact, any
   other response that is not a spacebar press.
 
+- All CSs have the same duration. Although many CSs can be presented
+  in each trial, they are presented simultaneously and there is no
+  possibility of enforcing a given temporal structure.
+
+ 
 These limitations mean that, for example, one cannot present
 *sequences* of CSs before a reward is scheduled, and that choice tasks
 are not possible.
