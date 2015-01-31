@@ -207,7 +207,7 @@ sequences of stimuli for each trial, but right now we have only single
 stimuli of a common duration. **CSUSInterval** and **USDuration**
 should be self-explanatory.
 
-**ResponseTimeMin** and **ResponseTimeMax** define at what times
+**ReactionTimeMin** and **ReactionTimeMax** define at what times
 within a trial subjects can respond. Responses outside this time
 window are registered with a special code (see [Data format] below),
 and no USs are delivered. If not specified, ResponseTimeMin is set to
