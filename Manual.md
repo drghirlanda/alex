@@ -262,25 +262,26 @@ as follows:
    Phases.csv design file).
 
  - Responses: The number of times the subject responded to the
-   stimulus. This includes also responses at invalid times (see
-   ReactionTimeMin and ReactionTimeMax above).
+   stimulus. This includes *all* responses, even those that may have
+   bee registered at invalid times (see ReactionTimeMin and
+   ReactionTimeMax above). See *Rewards* below for how to obtaine
+   detailed information about valid and invalid responses.
 
-  - RTs: Reactions times for all registered responses. This is a
-    comma-separated list.
+ - RTs: Reaction times for *all* registered responses (see
+    *Responses*). This is a comma-separated list.
 
-  - Rewards: A comma-separated list of rewards received for each
-    response. Each element has three possible values:
+ - Rewards: A comma-separated list of rewards received for each
+   response. Each element has three possible values:
     
-    - 1: The response was rewarded (the US was presented)
+   - 1: The response was rewarded (the US was presented)
 
-    - 0: The response was not rewarded
+   - 0: The response was not rewarded (no US presented)
 
-    - -1: The response was invalid, i.e., it fell outside of the
-       window delimited by ReactionTimeMin and ReactionTimeMax, see
-       above.
+   - -1: The response was invalid, i.e., it fell outside of the window
+       delimited by ReactionTimeMin and ReactionTimeMax, see above. No
+       US is presented on such responses.
 
-That's it. We think this information characterizes subject behavior
-competely, but please do let us know if you think details could be
-added.
+We think this information characterizes subject behavior competely,
+but please do let us know if you think details could be added.
 
   ... To be continued ...
