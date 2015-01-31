@@ -95,10 +95,29 @@ define OneTrial( stimulus, rewardProb, uss ) {
     Display( stim )
   }
   Draw()
-  maxResponses <- ToNumber( Parameter("MaxResponses") )
+  # Now we spend some time setting parameters:
+  maxResponses <- Parameter("MaxResponses")
+  if( maxResponses == "NA" ) {
+    maxResponses <- 1
+  } else {
+    maxResponses <- ToNumber( maxResponses )
+  }
   csDuration   <- ToNumber( Parameter("CSDuration") )
   csusInterval <- ToNumber( Parameter("CSUSInterval") )
   usDuration   <- ToNumber( Parameter("USDuration") )
+  rtMin <- Parameter("ReactionTimeMin")
+  if( rtMin == "NA" ) {
+    rtMin <- 0
+  } else {
+    rtMin <- ToNumber( rtMin )
+  }
+  rtMax <- Parameter("ReactionTimeMax")
+  if( rtMax == "NA" ) {
+    rtMax <- csDuration
+  } else {
+    rtMax <- ToNumber( rtMax )
+  }
+
   times        <- []
   rewards      <- []
   timeLeft     <- ToNumber( csDuration )
@@ -109,7 +128,9 @@ define OneTrial( stimulus, rewardProb, uss ) {
     timeLeft <- csDuration - rt
     if( timeLeft > 1 ) {
       PushOnEnd( times, rt )
-      if( Random() < rewardProb ) {
+      if( rt<rtMin or rt>rtMax ) {
+        PushOnEnd( rewards, -1 )
+      } elseif( Random() < rewardProb ) {
         PushOnEnd( rewards, 1 )
         Wait( csusInterval )
 	loop( us, SplitString( uss, "," ) ) {

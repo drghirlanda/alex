@@ -189,6 +189,8 @@ CSV format, displayed here as a table for lagibility):
     CSDuration      4000
     CSUSInterval    0
     USDuration      400
+    ResponseTimeMin 0
+    ResponseTimeMax 4000
     MinITI          1000
     MaxITI          3000
     MaxResponses    100
@@ -198,15 +200,21 @@ CSV format, displayed here as a table for lagibility):
     FontSize        36
     Test            1
 
-CSDuration is the duration of all the non-US stimuli. All durations
-are in milliseconds. In future versions it will be possible to set
-different durations for different stimuli, and also to present
+**CSDuration** is the duration of all the non-US stimuli. All
+durations are in milliseconds. In future versions it will be possible
+to set different durations for different stimuli, and also to present
 sequences of stimuli for each trial, but right now we have only single
-stimuli of a common duration. 
+stimuli of a common duration. **CSUSInterval** and **USDuration**
+should be self-explanatory.
 
-CSUSInterval and USDuration should be self-explanatory.
-
-MinITI and MaxITI are the minimum and maximum values of the
+**ResponseTimeMin** and **ResponseTimeMax** define at what times
+within a trial subjects can respond. Responses outside this time
+window are registered with a special code (see [Data format] below),
+and no USs are delivered. If not specified, ResponseTimeMin is set to
+0 and ResponseTimeMax to CSDuration, thus allowing responses anywhere
+in the trial.
+  
+**MinITI** and **MaxITI** are the minimum and maximum values of the
 inter-trial interval. Each inter-trial interval will be drawn between
 these values with uniform distribution.
 
