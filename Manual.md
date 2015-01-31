@@ -244,16 +244,19 @@ with subject numbers, i.e., Data/1.dat and so on. These files have a
 header followed by one data line per trial. The first columns
 replicate the Subjects.csv line for the particular subject. This is so
 that each line identifies all independent variables it pertains to (so
-called "long format" in statistical software). The other columns are
-as follows:
+called "long format" in statistical software). Another reason for
+including this information is that in this way you don't have to load
+it into your statistical software from other files. 
 
- - Sex: subject sex
+The other columns of the data files are as follows:
 
- - Age: subject sex
+ - Sex: subject sex (collected by alex at the start of experiments).
 
- - Phase: experimental phase the trial belongs to
+ - Age: subject sex (ditto).
 
- - Trial: trial number within the phase
+ - Phase: experimental phase the trial belongs to.
+
+ - Trial: trial number within the phase.
 
  - Stimulus: stimulus presented in the trial (one of those defined in
    the Stimulu.csv design file).
