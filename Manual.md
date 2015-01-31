@@ -234,4 +234,53 @@ The Test parameter, if set to 1, skips instructions and acquisition of
 demographic information. It is meant to quickly start the experiment
 during development.
 
+
+Data Format
+-----------
+
+When you run an experiment with alex, data are saved in the Data
+folder (which alex creates if it does not find) in CSV files named
+with subject numbers, i.e., Data/1.dat and so on. These files have a
+header followed by one data line per trial. The first columns
+replicate the Subjects.csv line for the particular subject. This is so
+that each line identifies all independent variables it pertains to (so
+called "long format" in statistical software). The other columns are
+as follows:
+
+ - Sex: subject sex
+
+ - Age: subject sex
+
+ - Phase: experimental phase the trial belongs to
+
+ - Trial: trial number within the phase
+
+ - Stimulus: stimulus presented in the trial (one of those defined in
+   the Stimulu.csv design file).
+
+ - RewardPr: reward probability assigned to the stimulus (from the
+   Phases.csv design file).
+
+ - Responses: The number of times the subject responded to the
+   stimulus. This includes also responses at invalid times (see
+   ReactionTimeMin and ReactionTimeMax above).
+
+  - RTs: Reactions times for all registered responses. This is a
+    comma-separated list.
+
+  - Rewards: A comma-separated list of rewards received for each
+    response. Each element has three possible values:
+    
+    - 1: The response was rewarded (the US was presented)
+
+    - 0: The response was not rewarded
+
+    - -1: The response was invalid, i.e., it fell outside of the
+       window delimited by ReactionTimeMin and ReactionTimeMax, see
+       above.
+
+That's it. We think this information characterizes subject behavior
+competely, but please do let us know if you think details could be
+added.
+
   ... To be continued ...
