@@ -255,7 +255,7 @@ Global parameters
 
 The file Design/Parameters.csv contains some parameters that affect
 the whole experiment. Here is a sample file (as above, the file is in
-CSV format, displayed here as a table for lagibility):
+CSV format, displayed here as a table for legibility):
 
 - Parameters.csv:
 
@@ -292,10 +292,10 @@ in the trial.
 inter-trial interval. Each inter-trial interval will be drawn between
 these values with uniform distribution.
 
-MaxResponses is the maximum number of response a subject is allowed to
-make in one trial. There are essentially two useful settings. If you
-set this to 1 the trial ends with the first response (the US is
-delivered if appropriate, of course). If you set it to an
+**MaxResponses** is the maximum number of response a subject is
+allowed to make in one trial. There are essentially two useful
+settings. If you set this to 1 the trial ends with the first response
+(the US is delivered if appropriate, of course). If you set it to an
 unrealistically large value, say 1000, you can any number of responses
 per trial. Each of these may result in the US being delivered, as
 described above.
