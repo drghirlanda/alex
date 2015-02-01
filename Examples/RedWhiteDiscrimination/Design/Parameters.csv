@@ -1,0 +1,13 @@
+Parameter,Value
+CSDuration,4000
+CSUSInterval,0
+USDuration,400
+MinITI,1000
+MaxITI,3000
+MaxResponses,100
+BackgroundColor,gray95
+ForegroundColor,black
+FontName,Vera
+FontSize,36
+Test,1
+

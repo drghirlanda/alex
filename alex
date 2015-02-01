@@ -1,22 +1,25 @@
 #!/usr/local/bin/pebl-language
 
-# Breakdown of the Start function:
-#
-# - Read command-line arguments
-# - Read design parameters from Parameters.csv
-# - Initialize basic display elements
-# - Read Design files Subjects.csv, Phases.csv, Stimuli.csv
-# - Show instructions from Instructions.txt
-# - Get demographics info from subject
-# -  
-
 define Start( par ) {
+
+  # Have we been asked to run in a directory other than .?
+  gWD <- Nth(par, 1)
+  if( gWd != 0 ) {
+    gWD <- gWD + "/"
+    if( not IsDirectory( gWD ) ) {
+      SignalFatalError("Command line argument "+gWD+" is not a folder")
+    }
+  } else {
+    gWD <- ""
+  }
 
   ReadParameters()
 
-  test <- ToNumber( Parameter("Test") )
-  Print( test )
-  if( test != 1 ) {
+  # Determine whether to run in test mode or not:
+  test <- Parameter("Test")
+  if( test != "NA" and ToNumber(test) == 1 ) {
+    test <- 1
+  } else {
     test <- 0
   }
   
@@ -28,6 +31,9 @@ define Start( par ) {
   gColor <- MakeColor( fg )
   gFont <- MakeFont( Parameter("FontName")+".ttf", 0, 
     ToNumber(Parameter("FontSize")), gColor, gBackgroundColor, 1 )
+
+  Print( "par: '" + par + "'" )
+
   ## Read other Design files:
   ReadSubjectInfo()
   ReadPhases()     
@@ -35,22 +41,16 @@ define Start( par ) {
 
   if( not test ) {
     ShowInstructions()
-  }
-
-  if( test ) {
-    gSex <- "NA"
-    gAge <- "NA"
-  } else {
     gSex <- GetEasyChoice( "Please select your sex", 
     	 ["Male", "Female"], ["M", "F"], gWindow )
     gAge <- GetEasyInput( "Please enter your age in years, "+
       "then press enter:", gWindow )
     gAge <- ToInteger( gAge )
-  }
-
-  if( not test ) {
     Message( "Press the spacebar to start the experiment", 0 )
     Wait( 2000 )
+  } else {
+    gSex <- "NA"
+    gAge <- "NA"
   }
 
   ShowCursor( 0 )
@@ -377,29 +377,29 @@ define Message( text, fatal ) {
 ## The two next functions implement a simple file locking mechanism
 
 define LockFile( file ) {
-  while( FileExists( file+".lck" ) ) {
+  while( FileExists( file + ".lck" ) ) {
     Wait( 250 )
   }
-  FileOpenOverWrite( file+".lck" ) 
+  FileOpenOverWrite( file + ".lck" ) 
 }
 
 define UnlockFile( file ) {
-  if( FileExists( file+".lck" ) ) {
+  if( FileExists( file + ".lck" ) ) {
     SystemCall( "/bin/rm " + file + ".lck" )
   }
 }
 
 define ReadSubjectInfo() {
-  subjectsFile <- "Design/Subjects.csv"
+  subjectsFile <- gWD + "Design/Subjects.csv"
   LockFile( subjectsFile )
   subjects <- ReadCSV( subjectsFile )
   gSubjectHeader <- Nth( subjects, 1 )
   found <- 0
-  if( not IsDirectory( "Data" ) ) {
-    MakeDirectory( "Data" )
+  if( not IsDirectory( gWD + "Data" ) ) {
+    MakeDirectory( gWD + "Data" )
   }
   loop( s, Rest(subjects) ) {
-    dataFilename <- "Data/" + Nth(s,1) + ".dat"
+    dataFilename <- gWD + "Data/" + Nth(s,1) + ".dat"
     if( not FileExists(dataFilename) ) {
       found <- 1
       Print_( "Running subject: " )
@@ -414,7 +414,7 @@ define ReadSubjectInfo() {
     UnlockFile( subjectsFile )
   } else {
     UnlockFile( subjectsFile )
-    text <- "It looks like all subjects have been run!
+    text <- "It looks like all subjects have been run! 
 
 Press 'q' to quit"
     box <- MakeTextBox( text, gFont, .8*gVideoWidth, gVideoHeight )
@@ -426,7 +426,7 @@ Press 'q' to quit"
 }
 
 define ReadStimuli() {
-  csv <- ReadCSV( "Design/Stimuli.csv" )
+  csv <- ReadCSV( gWD + "Design/Stimuli.csv" )
   gStimulusHeader <- First( csv )
   gStimNames <- []
   gStimTypes <- []
@@ -467,7 +467,7 @@ define ReadStimuli() {
        s <- Square( x, y, l, c, 1 )
     } elseif( type == "image" ) {
        f <- Resolve( "Parameters", Nth(gStimParams,i) )
-       s <- MakeImage( "Media/" + f )
+       s <- MakeImage( gWD + "Media/" + f )
        Move( s, x, y )
     } elseif( type == "text" ) {
        w <- Resolve( "Parameters", Nth(gStimParams,i) )
@@ -475,7 +475,7 @@ define ReadStimuli() {
        Move( s, x, y )
     } elseif( type == "sound" ) {
        f <- Resolve( "Parameters", Nth(gStimParams,i) )
-       s <- LoadSound( "Media/" + f )
+       s <- LoadSound( gWD + "Media/" + f )
     } else {
        Message( "Unsupported stimulus type: "+type, 1 )
     }
@@ -486,13 +486,13 @@ define ReadStimuli() {
 }
 
 define ReadPhases() {
-  csv <- ReadCSV( "Design/Phases.csv" )
+  csv <- ReadCSV( gWD + "Design/Phases.csv" )
   gPhaseHeader <- First( csv )
   gPhases <- Transpose( Rest( csv ) )
 }
 
 define ReadParameters() {
-  csv <- Transpose( Rest( ReadCSV( "Design/Parameters.csv" ) ) )
+  csv <- Transpose( Rest( ReadCSV( gWD + "Design/Parameters.csv" ) ) )
   gParameterNames <- Nth(csv, 1)
   gParameterValues <- Nth(csv, 2)
   loop( i, Sequence(1,Length(gParameterNames),1) ) {

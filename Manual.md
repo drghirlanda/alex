@@ -8,8 +8,8 @@ Introduction
 Alex is a program to run associative learning experiments specified
 through a set of configuration files. This manual describe how to
 configure experiments. Please refer to the README file that comes with
-alex for installation instructions. The README also describes what
-alex can and cannot do.
+alex for installation instructions. The README also describes in brief
+what alex can and cannot do.
 
 
 Workflow
@@ -27,6 +27,18 @@ MyExperiment, and within it the following sufolders:
 
 - Data: This folder is created by alex if it is not found, and it
   holds the data collected during experiment runs.
+
+Running alex
+------------
+
+From the directory where the Design and Media directories are, you can
+just type 'alex'. You can also run experiments in other directories
+using:
+
+    alex -v <Directory>
+
+The <Directory> is then expected to have Design and Media
+subdirectories with appropriate files.
 
 
 Configuration files
@@ -172,14 +184,14 @@ file. This syntax is available for all stimulus properties. For
 example, if you want to change the size of R square across subjects
 you can do:
 
-* Stimuli.csv:
+- Stimuli.csv:
 
         Name Type   Parameters Color XOffset YOffset
         R    square *R         red   0       0
         W    square 50         white 0       0
         P    square 50         *P    0       0
 
-* Subjects.csv:
+- Subjects.csv:
 
         Subject PColor      RParameters
         1       255,128,128 25
@@ -218,7 +230,7 @@ This notation has two advantages: it makes explicit our intention of
 having three squares of equal size, and it reduces the possibility of
 typing errors. In fact, we could go all the way and have:
  
--Stimuli.csv:
+- Stimuli.csv:
 
         Name Type   Parameters Color XOffset YOffset
         R    square 50         red   0       0
@@ -362,8 +374,8 @@ The other columns of the data files are as follows:
 We think this information characterizes subject behavior competely,
 but please do let us know if you think details could be added.
 
-Conclusion
-----------
+Contacts
+--------
 
 Please send suggestions to improve alex or this manual to Stefano
 Ghirlanda, drghirlanda@gmail.com.
