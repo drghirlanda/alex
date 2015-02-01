@@ -1,5 +1,3 @@
-** NOTE: This README file is unfinished **
-
 Alex: Associative Learning EXperiments
 ======================================
 
@@ -43,7 +41,12 @@ time. Currently, alex's biggest limitations are:
   in each trial, they are presented simultaneously and there is no
   possibility of enforcing a given temporal structure.
 
- 
 These limitations mean that, for example, one cannot present
 *sequences* of CSs before a reward is scheduled, and that choice tasks
 are not possible.
+
+Contacts
+--------
+
+Please send bug reports, suggestions for improvement, patches, etc.,
+to Stefano Ghirlanda, drghirlanda@gmail.com.
