@@ -24,7 +24,7 @@ make rewards specific to stimulus/key combinations. Proposed syntax:
 
     Phase Stimulus Trials Rewards USs
     1     A        10     a:1     Smiley
-    1	  B	   10	  l:1     Smiley
+    1     B        10     l:1     Smiley
 
 This would indicate that presses of the 'a' key should be rewarded
 with a smiley when stimulus A is presented, while when B is presented
