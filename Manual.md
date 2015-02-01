@@ -40,6 +40,27 @@ using:
 The <Directory> is then expected to have Design and Media
 subdirectories with appropriate files.
 
+Alex has been designed so that multiple instances of an experiment can
+be run at once. This feature is useful when the experiment folder is
+shared among multiple computers, as it may occur in a lab. All
+instances of alex will read the same design files, and in particular
+the same Subjects.csv file which describes how to run
+subjects. Different instances, however, will run different subjects
+and will not overwrite each other's data files.
+
+The fact that a subject has been run is signaled by the existence of
+the corresponding data file (see [Data format] below). If an instance
+is interrupted before the experiment completes, alex will still
+consider that subject as having been run, and the next instance of
+alex to run will run the following subject. Thus it is up to you to
+check that data files are complete (you can check that they have the
+appropriate number of lines, for example). It is unlikely that this
+situation will change, becaue there is no way for alex to decide
+whether important data would be overwritten by re-running a
+subject. If you decide a data file is worthless, either remove it or
+rename it with something like an 'incomplete-' prefix, and alex will
+automatically re-run that subject.
+
 
 Configuration files
 -------------------
@@ -373,6 +394,33 @@ The other columns of the data files are as follows:
 
 We think this information characterizes subject behavior competely,
 but please do let us know if you think details could be added.
+
+Errors
+------
+
+Presently, alex does a number of error checks at startup, while other
+errors are caught as the experiment run. Always do a few trial runs
+before putting the experiment into production! If you think errors are
+due to bugs in alex, please write us at the address in [Contacts]
+below. Also do contact us if you think that your design files are
+correct but the experiment does not run as you expect.
+
+With a few exceptions, all errors print a hopefully informative
+message both on the standard console output (terminal) and on
+screen. A few errors that may occur before the screen is set up, such
+as not finding parameter files, are reported only on the standard
+output.
+
+There is one error that appears mysterious to the uninitiated: the
+screen remains black and alex hangs forever. The reason is that alex
+uses a lock system on the Subjects.csv file to prevent different
+instances of alex from attempting to run the same subject. The lock is
+held for as little as possible, but if you interrupt alex at a
+critical time, or if alex crashes for any reason before the lock is
+released, subsequent instances of alex will wait forever for the lock
+t be released. In these cases, you can simply delete the lock file,
+which is Subjects.csv.lck in the Design directory.
+
 
 Contacts
 --------
