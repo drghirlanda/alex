@@ -1,7 +1,14 @@
 Roadmap for alex
 ================
 
-This file descirbes some features that are planned for alex.
+This file describes some features that are planned for alex.
+
+Experiment folder
+-----------------
+
+Allow running experiments contained in a folder other than the current
+directory.
+
 
 Stimulus sequences
 ------------------
