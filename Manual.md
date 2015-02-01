@@ -178,6 +178,63 @@ you can do:
         5       255,190,190 50
         6       255,190,190 75
 
+
+Special notation for stimuli
+----------------------------
+
+We mentioned above one bit of special notation in the definition of
+stimuli, namely the construction * (star) + stimulus name (see the end
+of the previous section). There are two more bits of special notation,
+explained next.
+
+Sometimes we want some stimuli to share characteristics. For example,
+they should be of the same color. We can express the fact that we want
+a stimulus characteristic to equal that of another stimulus using a
+colon (:) followed by the stimulus name (we would have liked to use =
+rather than :, but unfortunately some spreadsheet software interprets
+= as introducing a formula). Consider the example above, with three
+squares of the same size as stimuli. We can write the following in
+Stimuli.csv:
+
+    Name Type   Parameters Color XOffset YOffset
+    R    square 50         red   0       0
+    W    square :R         white 0       0
+    P    square :R         *P    0       0
+
+This notation has two advantages: it makes explicit our intention of
+having three squares of equal size, and it reduces the possibility of
+typing errors. In fact, we could go all the way and have:
+ 
+    Name Type   Parameters Color XOffset YOffset
+    R    square 50         red   0       0
+    W    :R     :R         white :R      :R
+    P    :R     :R         *P    :R      :R
+
+which makes explict that we want the three stimuli to differ only in
+color.
+
+Another bit of special notation is + (plus), which is used to present
+stimuli together (compound stimuli). Suppose that, after training a
+discrimination between red and white squares, we want to test the red
+and white squares together. We can use the following files:
+
+**Phases.csv:**
+
+    Phase Stimulus Presentations Reward
+    1     R        20            0.9
+    1     W        20            0.1
+    2     R+W      5             0
+
+**Stimuli:csv:**
+
+    Name Type   Parameters Color XOffset YOffset
+    R    square 50         red   0       0
+    W    :R     :R         white 60      :R
+
+Note that we have now offset the white square, otherwise it would
+overlap with the red one.
+
+
 Global parameters
 -----------------
 

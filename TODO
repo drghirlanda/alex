@@ -1,9 +1,3 @@
-- for CSV config files, lookup entries by column name, not by index
-
-- add other reinforcement schedules
-
 - add trials made of sequences of stimuli
 
 - add multiple responses
-
-- represent trials as simple state machines?
