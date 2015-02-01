@@ -8,7 +8,8 @@ Introduction
 Alex is a program to run associative learning experiments specified
 through a set of configuration files. This manual describe how to
 configure experiments. Please refer to the README file that comes with
-Alex for installation instructions.
+alex for installation instructions. The README also describes what
+alex can and cannot do.
 
 
 Workflow
