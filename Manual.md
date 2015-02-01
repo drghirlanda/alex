@@ -60,10 +60,12 @@ Suppose we want to teach participants to discriminate a red square
 from a white square. We then want to know how subjects respond to,
 say, a pink square. The Phases.csv file might look like this:
 
-    Phase Stimulus Presentations Reward
-    1     R        20            0.9
-    1     W        20            0.1
-    2     P        5             0
+- Phases.csv:
+
+        Phase Stimulus Presentations Reward
+        1     R        20            0.9
+        1     W        20            0.1
+        2     P        5             0
 
 I am displaying the file as a table, but it should be a
 comma-separated file. You can edit these in any spreadhseet using the
@@ -87,23 +89,25 @@ How does alex know that R, W, and P represent red, white and pink
 squares? This information is contained in the Stimuli.csv file, which
 might look like this:
 
-    Name Type   Parameters Color       XOffset YOffset
-    R    square 50         red         0       0
-    W    square 50         white       0       0
-    P    square 50         255,128,128 0       0
+- Stimuli.csv:
+
+        Name Type   Parameters Color       XOffset YOffset
+        R    square 50         red         0       0
+        W    square 50         white       0       0
+        P    square 50         255,128,128 0       0
 
 The fields should be fairly intuitive, but here is what they mean in
 detail:
 
-- Name: An arbitrary label for the stimulus, so that it can be
+- **Name**: An arbitrary label for the stimulus, so that it can be
   referenced in Phases.csv. It can be anything that does not contain
-  the characters " (double quote), + (plus sign), * (star), : (colon),
-  and , (comma). These characters are reserved for special operations,
-  see below.
+  the characters " (double quote), + (plus), * (star), : (colon), and
+  , (comma). These characters are reserved for special operations, see
+  below.
 
-- Type: This can be square, circle, image, or sound.
+- **Type**: This can be square, circle, image, or sound.
 
-- Parameters: The meaning of parameters varies according to the
+- **Parameters**: The meaning of parameters varies according to the
   stimulus type:
 
   - square: side in pixels
@@ -113,26 +117,28 @@ detail:
   - image or sound: name of file in the Media folder containing the
     desired image or sound.
 
-- Color: the color of squares and circles. For images and sounds this
-  field is ignored. Colors can either be named or given as an RGB
-  triplet. As this is itself a comma-separated list, it needs to be
-  double-quoted in the CSV file (spreadhseet software will do this for
-  you). 
+- **Color**: the color of squares and circles. For images and sounds
+  this field is ignored. Colors can either be named or given as an RGB
+  triplet. As the latter are themselves comma-separated lists, they
+  need to be double-quoted in the CSV file (spreadhseet software will
+  do this for you).
 
-- XOffset and YOffset: offsets from the center of the screen, in
+- **XOffset** and **YOffset**: offsets from the center of the screen, in
   pixel. In the example, all stimuli are centered.
 
 The Subjects.csv file contains information about the subjects you want
 to run. If all subjects undergo the same treatment, as in the present
 example, you only need to give subject numbers:
 
-    Subject
-    1
-    2
-    3
-    4
-    5
-    6
+- Subjects.csv:
+
+        Subject
+        1
+        2
+        3
+        4
+        5
+        6
 
 This instructs alex that you want to run 6 subjects, all subject to
 the same treatment. Often, however, subjects need to be divided in
@@ -141,20 +147,24 @@ can be specified on a per-subject bases. If you want to test two
 shades of pink, for example, you would extend the Subjects.csv file
 like this:
 
-    Subject PColor
-    1       255,128,128
-    2       255,128,128
-    3       255,128,128
-    4       255,190,190
-    5       255,190,190
-    6       255,190,190
+- Subjects.csv:
+
+        Subject PColor
+        1       255,128,128
+        2       255,128,128
+        3       255,128,128
+        4       255,190,190
+        5       255,190,190
+        6       255,190,190
 
 And you would modify the Stimuli.csv file like this:
 
-    Name Type   Parameters Color XOffset YOffset
-    R    square 50         red   0       0
-    W    square 50         white 0       0
-    P    square 50         *P    0       0
+- Stimuli.csv:
+
+       Name Type   Parameters Color XOffset YOffset
+       R    square 50         red   0       0
+       W    square 50         white 0       0
+       P    square 50         *P    0       0
 
 The special notation *P indicates that the color of stimulus P will be
 looked up, for each subject, in the column PColor of the Subects.csv
@@ -197,19 +207,23 @@ rather than :, but unfortunately some spreadsheet software interprets
 squares of the same size as stimuli. We can write the following in
 Stimuli.csv:
 
-    Name Type   Parameters Color XOffset YOffset
-    R    square 50         red   0       0
-    W    square :R         white 0       0
-    P    square :R         *P    0       0
+- Stimuli.csv:
+
+        Name Type   Parameters Color XOffset YOffset
+        R    square 50         red   0       0
+        W    square :R         white 0       0
+        P    square :R         *P    0       0
 
 This notation has two advantages: it makes explicit our intention of
 having three squares of equal size, and it reduces the possibility of
 typing errors. In fact, we could go all the way and have:
  
-    Name Type   Parameters Color XOffset YOffset
-    R    square 50         red   0       0
-    W    :R     :R         white :R      :R
-    P    :R     :R         *P    :R      :R
+-Stimuli.csv:
+
+        Name Type   Parameters Color XOffset YOffset
+        R    square 50         red   0       0
+        W    :R     :R         white :R      :R
+        P    :R     :R         *P    :R      :R
 
 which makes explict that we want the three stimuli to differ only in
 color.
@@ -219,18 +233,18 @@ stimuli together (compound stimuli). Suppose that, after training a
 discrimination between red and white squares, we want to test the red
 and white squares together. We can use the following files:
 
-**Phases.csv:**
+- Phases.csv:
 
-    Phase Stimulus Presentations Reward
-    1     R        20            0.9
-    1     W        20            0.1
-    2     R+W      5             0
+        Phase Stimulus Presentations Reward
+        1     R        20            0.9
+        1     W        20            0.1
+        2     R+W      5             0
 
-**Stimuli:csv:**
+- Stimuli:csv:
 
-    Name Type   Parameters Color XOffset YOffset
-    R    square 50         red   0       0
-    W    :R     :R         white 60      :R
+        Name Type   Parameters Color XOffset YOffset
+        R    square 50         red   0       0
+        W    :R     :R         white 60      :R
 
 Note that we have now offset the white square, otherwise it would
 overlap with the red one.
@@ -243,20 +257,22 @@ The file Design/Parameters.csv contains some parameters that affect
 the whole experiment. Here is a sample file (as above, the file is in
 CSV format, displayed here as a table for lagibility):
 
-    Parameter       Value
-    CSDuration      4000
-    CSUSInterval    0
-    USDuration      400
-    ResponseTimeMin 0
-    ResponseTimeMax 4000
-    MinITI          1000
-    MaxITI          3000
-    MaxResponses    100
-    BackgroundColor gray95
-    ForegroundColor black
-    FontName        Vera
-    FontSize        36
-    Test            1
+- Parameters.csv:
+
+        Parameter       Value
+        CSDuration      4000
+        CSUSInterval    0
+        USDuration      400
+        ResponseTimeMin 0
+        ResponseTimeMax 4000
+        MinITI          1000
+        MaxITI          3000
+        MaxResponses    100
+        BackgroundColor gray95
+        ForegroundColor black
+        FontName        Vera
+        FontSize        36
+        Test            1
 
 **CSDuration** is the duration of all the non-US stimuli. All
 durations are in milliseconds. In future versions it will be possible
@@ -288,9 +304,9 @@ The following parameters control the screen background color while the
 experiment is running and the color, font, and size of text used for
 instructions and other messages.
 
-The Test parameter, if set to 1, skips instructions and acquisition of
-demographic information. It is meant to quickly start the experiment
-during development.
+The **Test** parameter, if set to 1, skips instructions and
+acquisition of demographic information. It is meant to quickly start
+the experiment during development.
 
 
 Data Format
@@ -308,30 +324,31 @@ it into your statistical software from other files.
 
 The other columns of the data files are as follows:
 
- - Sex: subject sex (collected by alex at the start of experiments).
+ - **Sex**: subject sex (collected by alex at the start of
+   experiments).
 
- - Age: subject sex (ditto).
+ - **Age**: subject sex (ditto).
 
- - Phase: experimental phase the trial belongs to.
+ - **Phase**: experimental phase the trial belongs to.
 
- - Trial: trial number within the phase.
+ - **Trial**: trial number within the phase.
 
- - Stimulus: stimulus presented in the trial (one of those defined in
-   the Stimulu.csv design file).
+ - **Stimulus**: stimulus presented in the trial (one of those defined
+   in the Stimulu.csv design file).
 
- - RewardPr: reward probability assigned to the stimulus (from the
+ - **RewardPr**: reward probability assigned to the stimulus (from the
    Phases.csv design file).
 
- - Responses: The number of times the subject responded to the
+ - **Responses**: The number of times the subject responded to the
    stimulus. This includes *all* responses, even those that may have
    bee registered at invalid times (see ReactionTimeMin and
    ReactionTimeMax above). See *Rewards* below for how to obtaine
    detailed information about valid and invalid responses.
 
- - RTs: Reaction times for *all* registered responses (see
+ - **RTs**: Reaction times for *all* registered responses (see
     *Responses*). This is a comma-separated list.
 
- - Rewards: A comma-separated list of rewards received for each
+ - **Rewards**: A comma-separated list of rewards received for each
    response. Each element has three possible values:
     
    - 1: The response was rewarded (the US was presented)
@@ -345,4 +362,9 @@ The other columns of the data files are as follows:
 We think this information characterizes subject behavior competely,
 but please do let us know if you think details could be added.
 
-  ... To be continued ...
+Conclusion
+----------
+
+Please send suggestions to improve alex or this manual to Stefano
+Ghirlanda, drghirlanda@gmail.com.
+
