@@ -138,7 +138,7 @@ detail:
   , (comma). These characters are reserved for special operations, see
   below.
 
-- **Type**: This can be square, circle, text, image, or sound.
+- **Type**: This can be square, circle, text, image, sound, or movie.
 
 - **Parameters**: The meaning of parameters varies according to the
   stimulus type:
@@ -151,6 +151,10 @@ detail:
 
   - image or sound: name of file in the Media folder containing the
     desired image or sound.
+
+  - movie: a comma-separated list of three elements: name of movie
+    file in the Media folder, plus width and height in pixels giving
+    the desired movie size.
 
 - **Color**: the color of squares, circles, or text. For images and
   sounds this field is ignored. Colors can either be named or given as
