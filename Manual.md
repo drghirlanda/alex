@@ -138,7 +138,7 @@ detail:
   , (comma). These characters are reserved for special operations, see
   below.
 
-- **Type**: This can be square, circle, image, or sound.
+- **Type**: This can be square, circle, text, image, or sound.
 
 - **Parameters**: The meaning of parameters varies according to the
   stimulus type:
@@ -147,14 +147,16 @@ detail:
 
   - circle: radius in pixels
 
+  - text: the text to be displayed
+
   - image or sound: name of file in the Media folder containing the
     desired image or sound.
 
-- **Color**: the color of squares and circles. For images and sounds
-  this field is ignored. Colors can either be named or given as an RGB
-  triplet. As the latter are themselves comma-separated lists, they
-  need to be double-quoted in the CSV file (spreadhseet software will
-  do this for you).
+- **Color**: the color of squares, circles, or text. For images and
+  sounds this field is ignored. Colors can either be named or given as
+  an RGB triplet. As the latter are themselves comma-separated lists,
+  they need to be double-quoted in the CSV file (spreadhseet software
+  will do this for you).
 
 - **XOffset** and **YOffset**: offsets from the center of the screen, in
   pixel. In the example, all stimuli are centered.

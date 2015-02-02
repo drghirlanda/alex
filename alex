@@ -471,7 +471,10 @@ define ReadStimuli() {
        Move( s, x, y )
     } elseif( type == "text" ) {
        w <- Resolve( "Parameters", Nth(gStimParams,i) )
-       s <- MakeLabel( w, gFont )
+       font <- MakeFont( Parameter("FontName")+".ttf", 0, 
+                         ToNumber(Parameter("FontSize")), 
+			 c, gBackgroundColor, 1 )
+       s <- MakeLabel( w, font )
        Move( s, x, y )
     } elseif( type == "sound" ) {
        f <- Resolve( "Parameters", Nth(gStimParams,i) )
