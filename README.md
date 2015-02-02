@@ -17,10 +17,10 @@ have not tested alex on these systems.
 Scope
 -----
 
-Alex can display squares, circles, images or movies from files, and
-play sound files. All of these can serve as conditioned stimuli (CSs)
-or as unconditioned stimuli (USs), or, in other terms, as cues and
-outcomes. Multiple CSs and USs can be presented at the same
+Alex can display squares, circles, text, images or movies from files,
+and play sound files. All of these can serve as conditioned stimuli
+(CSs) or as unconditioned stimuli (USs), or, in other terms, as cues
+and outcomes. Multiple CSs and USs can be presented at the same
 time. Currently, alex's biggest limitations are:
 
 - There is only one reinforcement schedule, Variable Ratio. That is,
@@ -38,7 +38,10 @@ time. Currently, alex's biggest limitations are:
 
 These limitations mean that, for example, one cannot present
 *sequences* of CSs before a reward is scheduled, and that choice tasks
-are not possible.
+are not possible. Also, judgments such as "How likely do you think it
+is this that outcome will follow this stimulus?" cannot be
+collected. There are plans to address all of these limitations, see
+the Roadmap.md file.
 
 Contacts
 --------

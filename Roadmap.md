@@ -3,13 +3,6 @@ Roadmap for alex
 
 This file describes some features that are planned for alex.
 
-Experiment folder
------------------
-
-Allow running experiments contained in a folder other than the current
-directory.
-
-
 Stimulus sequences
 ------------------
 
@@ -46,3 +39,19 @@ probability when 'b' is pressed. It would also be possible to have
 different USs, such as Smiley and Frown.
 
 
+Collecting judgments
+--------------------
+
+It should be possible to ask subjects for ratings, such as "how likely
+do you think this stimulus will be followd by this outcome?" The
+format could be:
+
+    Phase  Stimulus Trials Rewards USs
+    2      A        1              Rating
+
+When the special "USs" Rating is specified, a special trial is run
+with a rating scale and rating text. The scale and text could be given
+in dedicated configuration files. Or, the "Rewards" field could be
+abused to give the start, end, and step of the rating scale, such as
+"1,7,1" for a 7 point Likert scale, or "0,100,10" for an 11 point
+percentage scale. But we also need a way to specify the scale text.
