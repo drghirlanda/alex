@@ -5,7 +5,7 @@ Alex is a program to help running experiments on associative
 learning. Rather than writing an experiment program, you write a bunch
 a configuration files that describe the experiment. Alex reads these
 files and, if everything goes well, runs the experiment and collects
-data. A Manual.md file is provided with the distribution
+data. A Manual.md file is provided with the distribution. 
 
 Alex is written using PEBL (Psychology Experiment Building Language),
 which you can find at http://pebl.sourceforge.net.
@@ -13,18 +13,12 @@ which you can find at http://pebl.sourceforge.net.
 Alex is tested only on Linux. While PEBL works on Windows an OS X, I
 have not tested alex on these systems.
 
-Author
-------
-
-Alex is being developed by Stefano Ghirlanda, <drghirlanda@gmail.com>,
-<http://drghirlanda.com>. Feedback is welcome.
-
 Scope
 -----
 
-Alex can display squares, circles, images from files, and play sound
-files. All of these can serve as conditioned stimuli (CSs)
-unconditioned ones (USs), or, in other terms, as cues and
+Alex can display squares, circles, images or movies from files, and
+play sound files. All of these can serve as conditioned stimuli (CSs)
+or as unconditioned stimuli (USs), or, in other terms, as cues and
 outcomes. Multiple CSs and USs can be presented at the same
 time. Currently, alex's biggest limitations are:
 
@@ -38,7 +32,7 @@ time. Currently, alex's biggest limitations are:
   other response that is not a spacebar press.
 
 - All CSs have the same duration. Although many CSs can be presented
-  in each trial, they are presented simultaneously and there is no
+  in each trial, they are all presented simultaneously and there is no
   possibility of enforcing a given temporal structure.
 
 These limitations mean that, for example, one cannot present
