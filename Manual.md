@@ -156,7 +156,11 @@ detail:
   sounds this field is ignored. Colors can either be named or given as
   an RGB triplet. As the latter are themselves comma-separated lists,
   they need to be double-quoted in the CSV file (spreadhseet software
-  will do this for you).
+  will do this for you). In the case of text, you can specify the
+  background as well as the foreground color by writing the color in
+  the form Color1+Color2, where Color1 will be foreground and Color2
+  the background. If no foreground or background color is given, the
+  default set in Parameters.csv is used.
 
 - **XOffset** and **YOffset**: offsets from the center of the screen, in
   pixel. In the example, all stimuli are centered.

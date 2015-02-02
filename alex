@@ -451,20 +451,37 @@ define ReadStimuli() {
   gStimuli <- []
   n <- Length( gStimNames )
   loop( i, Sequence(1,n,1) ) {
+    type <- Nth( gStimTypes, i )
     if( StringLength( Nth( gStimColors, i ) ) ) {
-      c <- MakeColorRGBString( Resolve("Color", Nth(gStimColors, i)) )
+      ## Determine colors:
+      colors <- SplitString( Resolve("Color",Nth(gStimColors, i)), "+" )
+      c1name <- Nth( colors, 1 )
+      if( StringLength(c1name) ) {
+        c1 <- MakeColorRGBString( c1name )
+      } else {
+        c1 <- gColor
+      }
+      if( Length(colors) == 2 ) {
+        c2name <- Nth( colors, 2 )
+	if( StringLength( c2name ) ) {
+	  c2 <- MakeColorRGBString( c2name )
+        } else {
+          c2 <- gBackgroundColor
+        }
+      } else {
+        c2 <- gBackgroundColor
+      }    
     }
     x <- ToNumber( Resolve( "XOffset", Nth( gStimXOffsets, i ) ) )
     y <- ToNumber( Resolve( "YOffset", Nth( gStimYOffsets, i ) ) )
     x <- x + gVideoWidth/2
     y <- y + gVideoHeight/2
-    type <- Nth( gStimTypes, i )
     if(  type == "circle" ) {
        r <- ToNumber( Resolve( "Parameters", Nth(gStimParams,i) ) )
-       s <- Circle( x, y, r, c, 1 )
+       s <- Circle( x, y, r, c1, 1 )
     } elseif( type == "square" ) {
        l <- ToNumber( Resolve( "Parameters", Nth(gStimParams,i) ) )
-       s <- Square( x, y, l, c, 1 )
+       s <- Square( x, y, l, c1, 1 )
     } elseif( type == "image" ) {
        f <- Resolve( "Parameters", Nth(gStimParams,i) )
        s <- MakeImage( gWD + "Media/" + f )
@@ -473,7 +490,7 @@ define ReadStimuli() {
        w <- Resolve( "Parameters", Nth(gStimParams,i) )
        font <- MakeFont( Parameter("FontName")+".ttf", 0, 
                          ToNumber(Parameter("FontSize")), 
-			 c, gBackgroundColor, 1 )
+			 c1, c2, 1 )
        s <- MakeLabel( w, font )
        Move( s, x, y )
     } elseif( type == "sound" ) {
