@@ -8,7 +8,8 @@ files and, if everything goes well, runs the experiment and collects
 data. A Manual.md file is provided with the distribution. 
 
 Alex is written using PEBL (Psychology Experiment Building Language),
-which you can find at http://pebl.sourceforge.net.
+which you can find at http://pebl.sourceforge.net. We are indepted to
+Shane Muller, PEBL's creator and maintainer, for making alex possible.
 
 Alex is tested only on Linux. While PEBL works on Windows an OS X, I
 have not tested alex on these systems.
