@@ -37,29 +37,30 @@ using:
 
     alex -v <Directory>
 
-The <Directory> is then expected to have Design and Media
-subdirectories with appropriate files.
+The directory is then expected to have Design and Media subdirectories
+with appropriate files. A Data directory will be create if not
+present.
 
 Alex has been designed so that multiple instances of an experiment can
-be run at once. This feature is useful when the experiment folder is
-shared among multiple computers, as it may occur in a lab. All
-instances of alex will read the same design files, and in particular
-the same Subjects.csv file which describes how to run
+be run simultaneously. This feature is useful when the experiment
+folder is shared among multiple computers, as it may occur in a
+lab. All instances of alex will read the same design files, and in
+particular the same Subjects.csv file which describes how to run
 subjects. Different instances, however, will run different subjects
 and will not overwrite each other's data files.
 
 The fact that a subject has been run is signaled by the existence of
-the corresponding data file (see [Data format] below). If an instance
-is interrupted before the experiment completes, alex will still
-consider that subject as having been run, and the next instance of
-alex to run will run the following subject. Thus it is up to you to
-check that data files are complete (you can check that they have the
-appropriate number of lines, for example). It is unlikely that this
-situation will change, becaue there is no way for alex to decide
-whether important data would be overwritten by re-running a
-subject. If you decide a data file is worthless, either remove it or
-rename it with something like an 'incomplete-' prefix, and alex will
-automatically re-run that subject.
+the corresponding data file (see [Data format] below). If the
+experiment is interrupted before it completes, alex will still
+consider that subject as having been run. It is up to you to check
+that data files are complete (you can check that they have the
+appropriate number of lines, for example). Although this may be
+inconvenient at times, it is hard to improve upon this situation,
+because there is no way for alex to decide whether important data
+would be overwritten by re-running a subject. If you decide a data
+file is worthless, either remove it or rename it with something like
+an 'incomplete-' prefix, and alex will automatically re-run that
+subject.
 
 
 Configuration files
@@ -138,7 +139,7 @@ detail:
   , (comma). These characters are reserved for special operations, see
   below.
 
-- **Type**: This can be square, circle, text, image, sound, or movie.
+- **Type**: This can be square, circle, text, image, or sound.
 
 - **Parameters**: The meaning of parameters varies according to the
   stimulus type:
@@ -151,10 +152,6 @@ detail:
 
   - image or sound: name of file in the Media folder containing the
     desired image or sound.
-
-  - movie: a comma-separated list of three elements: name of movie
-    file in the Media folder, plus width and height in pixels giving
-    the desired movie size.
 
 - **Color**: the color of squares, circles, or text. For images and
   sounds this field is ignored. Colors can either be named or given as
@@ -408,12 +405,13 @@ but please do let us know if you think details could be added.
 Errors
 ------
 
-Presently, alex does a number of error checks at startup, while other
-errors are caught as the experiment run. Always do a few trial runs
-before putting the experiment into production! If you think errors are
-due to bugs in alex, please write us at the address in [Contacts]
-below. Also do contact us if you think that your design files are
-correct but the experiment does not run as you expect.
+Errors may arise if Design phases have incorrect format. Presently,
+alex performs some checks at startup, but some errors are caught only
+as they occur while running the experiment. We advise to always run
+the experiment a few times before putting it into production. If you
+think errors are due to bugs in alex, please write us at the address
+in [Contacts] below. Also do contact us if you think that your design
+files are correct but the experiment does not run as you expect.
 
 With a few exceptions, all errors print a hopefully informative
 message both on the standard console output (terminal) and on

@@ -498,14 +498,18 @@ define ReadStimuli() {
     } elseif( type == "sound" ) {
        f <- Resolve( "Parameters", Nth(gStimParams,i) )
        s <- LoadSound( gWD + "Media/" + f )
-    } elseif( type == "movie" ) {
-      p <- Resolve( "Parameters", Nth(gStimParams,i) )
-      f <- Nth( p, 1 )
-      width <- Nth( p, 2 )
-      height <- Nth( p, 3 )
-      s <- LoadMovie( gWD + "Media/" + f, gWindow, width, height )
-      Move( s, x - width/2, y - height/2 )
-    }
+    # Movies will be supported when PEBL supports them better:
+    # } elseif( type == "movie" ) {
+    #   p <- Resolve( "Parameters", Nth(gStimParams,i) )
+    #   p <- SplitString( p, "," )      
+    #   f <- gWD + "Media/" + Nth( p, 1 )
+    #   width <- Nth( p, 2 )
+    #   height <- Nth( p, 3 )
+    #   s <- LoadMovie( f, gWindow, width, height )
+    #   if( not s ) {
+    #     Message( "Cannot load movie file "+f, 1 )
+    #   }
+    #   Move( s, x - width/2, y - height/2 )
     } else {
        Message( "Unsupported stimulus type: "+type, 1 )
     }
