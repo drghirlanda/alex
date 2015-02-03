@@ -109,19 +109,43 @@ CSV format for saving.
 quotes will result in errors. (This comes from the PEBL function that
 reads CSV files.)
 
-The above file describes an experiment with two phases. Each line
-describes one type of trial that occurs in a phase. There are, for
-example two kinds of trials in phase 1, specifying 20 presentations of
-each of two stimuli, R and W (for 'red' and 'white'). R will be
-rewarded 90% of the time, W only 10%. In phase 2, stimulus P ('pink')
-is presented five times. When the experiment is run, R and W trials
-will be intermixed randomly because they all pertain to phase 1. P
-trials on the other hand, will be performed in phase 2 after all phase
-1 trials have been run.
+The above Phases.csv file describes an experiment with two
+phases. Each line describes one type of trial that occurs in a
+phase. There are, for example two kinds of trials in phase 1,
+specifying 20 presentations of each of two stimuli, R and W (for 'red'
+and 'white'). R will be rewarded 90% of the time, W only 10%. In phase
+2, stimulus P ('pink') is presented five times. When the experiment is
+run, R and W trials will be intermixed randomly because they all
+pertain to phase 1. P trials on the other hand, will be performed in
+phase 2 after all phase 1 trials have been run.
 
-How does alex know that R, W, and P represent red, white and pink
-squares? This information is contained in the Stimuli.csv file, which
-might look like this:
+**Note:** Phases are run in the order they are defined, not in their
+numerical or alphabetical orde (thus you can use descriptive names
+like Training, Testing, etc). To tell the whole truth, phases are run
+in the order in which their *first* stimuli are defined. For example,
+a Phases file containing:
+
+- Phases.csv:
+
+        Phase Stimulus Presentations Reward
+        1     R        20            0.9
+        2     P        5             0
+        1     W        20            0.1
+
+is equivalent to the previous one. However, the file:
+
+- Phases.csv:
+
+        Phase Stimulus Presentations Reward
+        2     P        5             0
+        1     R        20            0.9
+        1     W        20            0.1
+
+would run phase 2 before phase 1. 
+
+In these Phases.csv files, how does alex know that R, W, and P
+represent red, white and pink squares? This information is contained
+in the Stimuli.csv file, which might look like this:
 
 - Stimuli.csv:
 
@@ -130,8 +154,8 @@ might look like this:
         W    square 50         white       0       0
         P    square 50         255,128,128 0       0
 
-The fields should be fairly intuitive, but here is what they mean in
-detail:
+The fields should be fairly intuitive, but here is a detailed
+explanation:
 
 - **Name**: An arbitrary label for the stimulus, so that it can be
   referenced in Phases.csv. It can be anything that does not contain
@@ -150,18 +174,23 @@ detail:
 
   - text: the text to be displayed
 
-  - image or sound: name of file in the Media folder containing the
-    desired image or sound.
+  - image or sound: name of a file in the Media folder that contains
+    the image or sound.
 
-- **Color**: the color of squares, circles, or text. For images and
-  sounds this field is ignored. Colors can either be named or given as
-  an RGB triplet. As the latter are themselves comma-separated lists,
-  they need to be double-quoted in the CSV file (spreadhseet software
-  will do this for you). In the case of text, you can specify the
-  background as well as the foreground color by writing the color in
-  the form Color1+Color2, where Color1 will be foreground and Color2
-  the background. If no foreground or background color is given, the
-  default set in Parameters.csv is used.
+- **Color**: the color of squares, circles, or text. This field is
+  ignored for images and sounds. Colors can either be named or given
+  as an RGB triplet. As the latter are themselves comma-separated
+  lists, they need to be double-quoted in the CSV file (spreadhseet
+  software will do this for you). In the case of text, you can specify
+  the background as well as the foreground color by writing the color
+  in the form Color1+Color2, where Color1 will be foreground and
+  Color2 the background. If no foreground or background color is
+  given, the default set in Parameters.csv is used.
+
+  The PEBL reference manual lists valid color names, which are many
+  hundreds. If you stick to simple stuff like red, blue, cyan, purple,
+  and so on, you can get by without consulting this file. RGB, of
+  course, enables you to define color shades more precisely.
 
 - **XOffset** and **YOffset**: offsets from the center of the screen, in
   pixel. In the example, all stimuli are centered.
