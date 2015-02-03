@@ -186,7 +186,7 @@ define OneTrial( stimulus, rewardProb, uss ) {
 #                                                                      #
 ########################################################################
 
-# Helper function to identify what goes into a phase
+# Helper function to identify which stimuli enter a phase
 define LookupPhase( phaseName, field ) {
   fields <- Lookup(field, gPhaseHeader,gPhases)
   if( not Length(fields) ) {
@@ -200,16 +200,17 @@ define LookupPhase( phaseName, field ) {
 
 define RunPhase( phaseName ) {
   # Get stimulus settings for this phase. Each line in Phases.csv
-  # contains a stimulus entry for a specific phase.
+  # contains a stimulus entry for a specific phase. Using
+  # LookupPhase() we look up which stimuli enter this phase:
   stimuli   <- LookupPhase(phaseName, "Stimuli")
   numTrials <- LookupPhase(phaseName, "Trials")
   rewards   <- LookupPhase(phaseName, "Rewards")
   uss       <- LookupPhase(phaseName, "USs")
 
-  ## trialStimuli and trialRewards contain stimuli and rewards
-  ## repeated as many times as given in 'trials'. The order of
-  ## presentation is then randomized by picking stimuli from a
-  ## shuffled list 'trialOrder', see end of block
+  ## We build lists trialStimuli and trialRewards to contain stimuli
+  ## and rewards repeated as many times as given in 'trials'. The
+  ## order of presentation is then randomized by picking stimuli from
+  ## a shuffled list 'trialOrder', see end of block
   trialStimuli <- []
   trialRewards <- []
   trialUSs     <- []
@@ -224,6 +225,7 @@ define RunPhase( phaseName ) {
   trialUSs     <- Flatten( trialUSs )
   trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
 
+  ## Now we are ready to run all trials:
   maxTrial <- Length( trialStimuli )
   trial    <- 1
   while( trial <= maxTrial ) {
@@ -409,7 +411,7 @@ define LockFile( file ) {
 
 define UnlockFile( file ) {
   if( FileExists( file + ".lck" ) ) {
-    SystemCall( "/bin/rm " + file + ".lck" )
+    DeleteFile( file + ".lck" )
   }
 }
 
