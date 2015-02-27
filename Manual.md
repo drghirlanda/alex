@@ -230,10 +230,10 @@ And you would modify the Stimuli.csv file like this:
 
 - Stimuli.csv:
 
-       Name Type   Parameters Color XOffset YOffset
-       R    square 50         red   0       0
-       W    square 50         white 0       0
-       P    square 50         *P    0       0
+        Name Type   Parameters Color XOffset YOffset
+        R    square 50         red   0       0
+        W    square 50         white 0       0
+        P    square 50         *P    0       0
 
 The special notation *P indicates that the color of stimulus P will be
 looked up, for each subject, in the column PColor of the Subects.csv
