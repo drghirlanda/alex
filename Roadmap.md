@@ -3,6 +3,27 @@ Roadmap for alex
 
 This file describes some features that are planned for alex.
 
+Causal ratings
+--------------
+
+It should be possible to ask subjects to rate causal
+relationships. This needs a scale widget (already there in PEBL? Check
+out GetEasyChoice) and a way to configure the rating question, as well
+as a way to record the rating
+
+Classical conditioning
+----------------------
+
+There should be a way to specify "classical" conditioning trials,
+i.e., trials in which the US is displayed independent of subject
+behavior.
+
+Materials
+---------
+
+The Media folder should be called Materials and also include text
+files.
+
 Stimulus sequences
 ------------------
 
