@@ -167,6 +167,25 @@ define OneTrial( stimulus, rewardProb, uss ) {
     # Update timeLeft again because US display may have used time
     timeLeft <- csDuration - GetTime() + startTime
   }
+  ## We are at the end of the trial. If rewardProb is negative, this
+  ## is meant to be a classical conditioning trial. Thus here we
+  ## display the US, provided the maximum number of responses has
+  ## *not* been met (in that case we have an omission schedule, see
+  ## Manual). FIX: The US display code is duplicated from above, so it
+  ## should be moved to a function at some point...
+  if( Length(times)<maxResponses ) {
+    # Display USs, wait, then hide them:
+    loop( us, SplitString( uss, "," ) ) { # display all USs
+      Display( Lookup( us, gStimNames, gStimuli ) )
+    }
+    Draw()
+    Wait( usDuration )
+    loop( us, SplitString( uss, "," ) ) {
+      Undisplay( Lookup( us, gStimNames, gStimuli ) )
+    }
+    Draw()
+  }
+
   # This should not be necessary, but just in case:
   loop( stim, trialStimuli ) {
     Undisplay( stim )

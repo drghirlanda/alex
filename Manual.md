@@ -18,15 +18,15 @@ Workflow
 To build and run a new experiment you create a dedicated folder, say,
 MyExperiment, and within it the following sufolders:
 
-- Design: This folder contains the files that specify experimental
+- **Design**: This folder contains the files that specify experimental
   design, such as which stimuli to use, the structure of trials, and
   different treatments for subjects. See [Configuration files] below.
 
-- Materials: Here you have any image, sound, or text files you need
+- **Materials**: Here you have any image, sound, or text files you need
   for your experiment, including an Instructions.txt file for the
   initial instructions.
 
-- Data: This folder is created by alex if it is not found, and it
+- **Data**: This folder is created by alex if it is not found, and it
   holds the data collected during experiment runs.
 
 
@@ -39,7 +39,7 @@ directories using:
 
     alex -v <Directory>
 
-The directory is then expected to have Design and Materials
+The Directory is then expected to have Design and Materials
 subdirectories with appropriate files. A Data directory will be create
 if not present.
 
@@ -320,6 +320,37 @@ and white squares together. We can use the following files:
 Note that we have now offset the white square, otherwise it would
 overlap with the red one.
 
+"Instrumental" vs. "classical" trials, and omission training
+------------------------------------------------------------
+
+The experimental trials described in the examples above are
+"instrumental" in that a response is required to get a reward. It is
+also possible to run "classical" trials in which the reward is
+displayed at the end of the trial independent of what the subject
+does. The way to do this is (excuse us if this is obscure), to use a
+*negative* value in the Reward column of Phases.csv. Thus an entry like:
+
+- Phases.csv:
+
+        Phase Stimulus Presentations Reward
+        1     R        20            -1
+
+Specifies that R is to be rewarded 100% of the time *regardless* of
+whether the subject responds or not. Note that subject responses are
+still recorded, and if they exceed the maximum the trial terminates
+without reward. This last feature makes it possible to implement
+omission training, i.e., reward the subject if it abstains from
+responding, but not if it responds. This is controlled by the
+MaxResponses variable in the Parameters.csv file. The default value is
+1, which corresponds precisley to omission training. If you don't want
+the trial to ever terminate before the reward is delivered, you can
+use a value of MaxResponses so high that it cannot be possibly
+reached, such as 1000.
+
+Note also that on "classical" trials, the ResponseTimeMin and
+ResponseTimeMax features are disabled (see [Global
+parameters]). Because the US is delivered only once at the end of the
+trial, it is irrelevant when subjects responds.
 
 Global parameters
 -----------------
