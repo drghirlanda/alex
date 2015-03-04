@@ -18,12 +18,6 @@ There should be a way to specify "classical" conditioning trials,
 i.e., trials in which the US is displayed independent of subject
 behavior.
 
-Materials
----------
-
-The Media folder should be called Materials and also include text
-files.
-
 Stimulus sequences
 ------------------
 

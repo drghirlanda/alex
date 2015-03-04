@@ -281,7 +281,7 @@ define FilePrintCSV_( file, data ) {
 }
 
 define ShowInstructions() {
-  instrText <- FileReadText("Design/Instructions.txt")
+  instrText <- FileReadText("Materials/Instructions.txt")
   instrText <- instrText
   instrFont <- MakeFont("Vera.ttf", 0, 24, gColor, gBackgroundColor, 1 )
   instrBox  <- MakeTextBox(instrText, instrFont, 
@@ -510,7 +510,7 @@ define ReadStimuli() {
        s <- Square( x, y, l, c1, 1 )
     } elseif( type == "image" ) {
        f <- Resolve( "Parameters", Nth(gStimParams,i) )
-       s <- MakeImage( gWD + "Media/" + f )
+       s <- MakeImage( gWD + "Materials/" + f )
        Move( s, x, y )
     } elseif( type == "text" ) {
        w <- Resolve( "Parameters", Nth(gStimParams,i) )
@@ -521,12 +521,12 @@ define ReadStimuli() {
        Move( s, x, y )
     } elseif( type == "sound" ) {
        f <- Resolve( "Parameters", Nth(gStimParams,i) )
-       s <- LoadSound( gWD + "Media/" + f )
+       s <- LoadSound( gWD + "Materials/" + f )
     # Movies will be supported when PEBL supports them better:
     # } elseif( type == "movie" ) {
     #   p <- Resolve( "Parameters", Nth(gStimParams,i) )
     #   p <- SplitString( p, "," )      
-    #   f <- gWD + "Media/" + Nth( p, 1 )
+    #   f <- gWD + "Materials/" + Nth( p, 1 )
     #   width <- Nth( p, 2 )
     #   height <- Nth( p, 3 )
     #   s <- LoadMovie( f, gWindow, width, height )

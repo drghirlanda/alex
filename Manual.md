@@ -22,24 +22,26 @@ MyExperiment, and within it the following sufolders:
   design, such as which stimuli to use, the structure of trials, and
   different treatments for subjects. See [Configuration files] below.
 
-- Media: Here you have any image or sound files you need for your
-  experiment.
+- Materials: Here you have any image, sound, or text files you need
+  for your experiment, including an Instructions.txt file for the
+  initial instructions.
 
 - Data: This folder is created by alex if it is not found, and it
   holds the data collected during experiment runs.
 
+
 Running alex
 ------------
 
-From the directory where the Design and Media directories are, you can
-just type 'alex'. You can also run experiments in other directories
-using:
+From the directory where the Design and Materials directories are, you
+can just type 'alex'. You can also run experiments in other
+directories using:
 
     alex -v <Directory>
 
-The directory is then expected to have Design and Media subdirectories
-with appropriate files. A Data directory will be create if not
-present.
+The directory is then expected to have Design and Materials
+subdirectories with appropriate files. A Data directory will be create
+if not present.
 
 Alex has been designed so that multiple instances of an experiment can
 be run simultaneously. This feature is useful when the experiment
@@ -174,8 +176,8 @@ explanation:
 
   - text: the text to be displayed
 
-  - image or sound: name of a file in the Media folder that contains
-    the image or sound.
+  - image or sound: name of a file in the Materials directory that
+    contains the image or sound.
 
 - **Color**: the color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given
