@@ -152,7 +152,6 @@ define OneTrial( stimulus, rewardProb, uss, response ) {
   } else {
     rtMax <- ToNumber( rtMax )
   }
-  Display( stimulus )
   # Preprocess the response variable to handle the special "space" key
   # and the "*" specification for 'classical' trials:
   classical <- 0
@@ -171,6 +170,7 @@ define OneTrial( stimulus, rewardProb, uss, response ) {
   rewards      <- []
   timeLeft     <- ToNumber( csDuration )
   startTime    <- GetTime()
+  Display( stimulus )
   while( Length(times)<maxResponses and timeLeft>1 ) {
     key <- WaitForListKeyPressWithTimeout( keyList, timeLeft, 1 )
     rt <- GetTime() - startTime
