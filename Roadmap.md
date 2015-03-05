@@ -3,6 +3,20 @@ Roadmap for alex
 
 This file describes some features that are planned for alex.
 
+Text files and messages between phases
+-----------------------
+
+It should be possible to insert messages in between phases and wait
+until the subject presses some key before going ahead. This would be
+automatically possible by implementing to features that are desirable
+in themselves:
+
+- A 'textfile' stimulus type, displaying the text file on screen as a
+  stimulus.
+
+- A blocking trial type requiring a response in order to move on.
+
+
 Causal ratings
 --------------
 
