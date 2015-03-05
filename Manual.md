@@ -2,7 +2,8 @@ Alex: Associative Learning EXperiment software
 ==============================================
 
 
-# Introduction <a name="intro"></a>
+<a name="intro"></a>
+# Introduction
 
 Alex is a program to run associative learning experiments specified
 through a set of configuration files. This manual describe how to
@@ -10,8 +11,8 @@ configure experiments. Please refer to the README file that comes with
 alex for installation instructions. The README also describes in brief
 what alex can and cannot do.
 
-
-# Workflow <a name="workflow"></a>
+<a name="workflow"></a>
+# Workflow
 
 To build and run a new experiment you create a dedicated folder, say,
 MyExperiment, and within it the following sufolders:
@@ -29,7 +30,8 @@ MyExperiment, and within it the following sufolders:
   holds the data collected during experiment runs.
 
 
-# Running alex <a name="running"></a>
+<a name="running"></a>
+# Running alex
 
 From the directory where the Design and Materials directories are, you
 can just type 'alex'. You can also run experiments in other
@@ -63,7 +65,8 @@ an 'incomplete-' prefix, and alex will automatically re-run that
 subject.
 
 
-# Configuration files <a name="configuration-files"></a>
+<a name="configuration-files"></a>
+# Configuration files 
 
 All configuration files are in the Design folder:
 
@@ -88,7 +91,8 @@ All configuration files are in the Design folder:
   used for responses.
 
 
-# Example <a name="example"></a>
+<a name="example"></a>
+# Example 
 
 Suppose we want to teach participants to discriminate a red square
 from a white square. We then want to know how subjects respond to,
@@ -268,7 +272,8 @@ across subjects you can do:
         6       255,190,190 75
 
 
-# Special notation for stimuli <a name="notation"></a>
+<a name="notation"></a>
+# Special notation for stimuli 
 
 We mentioned above one bit of special notation in the definition of
 stimuli, namely the construction * (star) + stimulus name (see the end
@@ -330,7 +335,8 @@ Note that we have now offset the white square, otherwise it would
 overlap with the red one.
 
 
-# Global parameters <a name="global"></a>
+<a name="global"></a>
+# Global parameters 
 
 The file Design/Parameters.csv contains some parameters that affect
 the whole experiment. Here is a sample file (as above, the file is in
@@ -393,7 +399,8 @@ acquisition of demographic information. It is meant to quickly start
 the experiment during development.
 
 
-# Responses and classical vs. instrumental trials <a name="responses"></a>
+<a name="responses"></a>
+# Responses and classical vs. instrumental trials 
 
 If we wish to record only one kind of response, e.g., space bar
 presses, the Response key can be specified in the Parameters.csv
@@ -448,7 +455,8 @@ US (if any), is delivered only once at the end of the trial, it is
 irrelevant when subjects responds.
 
 
-# Data Format <a name="data-format"></a>
+<a name="data-format"></a>
+# Data Format 
 
 When you run an experiment with alex, data are saved in the Data
 folder (which alex creates if it does not find) in CSV files named
@@ -507,7 +515,8 @@ We think this information characterizes subject behavior competely,
 but please do let us know if you think details could be added.
 
 
-# Errors <a name="errors"></a>
+<a name="errors"></a>
+# Errors 
 
 Errors may arise if Design phases have incorrect format. Presently,
 alex performs some checks at startup, but some errors are caught only
@@ -535,7 +544,8 @@ t be released. In these cases, you can simply delete the lock file,
 which is Subjects.csv.lck in the Design directory.
 
 
-# Contacts <a name="contacts"></a>
+<a name="contacts"></a>
+# Contacts 
 
 Please send suggestions to improve alex or this manual to Stefano
 Ghirlanda, drghirlanda@gmail.com.
