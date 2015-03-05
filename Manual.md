@@ -29,7 +29,7 @@ MyExperiment, and within it the following sufolders:
   holds the data collected during experiment runs.
 
 
-# Running alex <a name="running></a>
+# Running alex <a name="running"></a>
 
 From the directory where the Design and Materials directories are, you
 can just type 'alex'. You can also run experiments in other
