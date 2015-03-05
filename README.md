@@ -8,11 +8,11 @@ files and, if everything goes well, runs the experiment and collects
 data. A Manual.md file is provided with the distribution. 
 
 Alex is written using PEBL (Psychology Experiment Building Language),
-which you can find at http://pebl.sourceforge.net. We are indepted to
+which you can find at http://pebl.sourceforge.net. We are indebted to
 Shane Muller, PEBL's creator and maintainer, for making alex possible.
 
-Alex is tested only on Linux. While PEBL works on Windows an OS X, we
-have not tested alex on these systems.
+So far, alex is tested only on Linux. While PEBL works on Windows an OS
+X, we have not tested alex on these systems.
 
 Scope
 -----
@@ -28,20 +28,15 @@ time. Currently, alex's biggest limitations are:
   reinforced. Of course, probability of 0 is extinction, and
   probability of 1 full reinforcement, or a Fixed Ratio 1 schedule.
 
-- Only spacebar presses count as "responses." There is no provision
-  for multiple responses like "left" and "right" or, in fact, any
-  other response that is not a spacebar press.
-
 - All CSs have the same duration. Although many CSs can be presented
   in each trial, they are all presented simultaneously and there is no
   possibility of enforcing a given temporal structure.
 
 These limitations mean that, for example, one cannot present
-*sequences* of CSs before a reward is scheduled, and that choice tasks
-are not possible. Also, judgments such as "How likely do you think it
-is this that outcome will follow this stimulus?" cannot be
-collected. There are plans to address all of these limitations, see
-the Roadmap.md file.
+*sequences* of CSs before a reward is scheduled. Also, judgments such
+as "How likely do you think it is this that outcome will follow this
+stimulus?" cannot be collected. There are plans to address all of
+these limitations, see the Roadmap.md file.
 
 Contacts
 --------
