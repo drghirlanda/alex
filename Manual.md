@@ -2,8 +2,7 @@ Alex: Associative Learning EXperiment software
 ==============================================
 
 
-Introduction
-------------
+# Introduction <a name="intro"></a>
 
 Alex is a program to run associative learning experiments specified
 through a set of configuration files. This manual describe how to
@@ -12,15 +11,15 @@ alex for installation instructions. The README also describes in brief
 what alex can and cannot do.
 
 
-Workflow
---------
+# Workflow <a name="workflow"></a>
 
 To build and run a new experiment you create a dedicated folder, say,
 MyExperiment, and within it the following sufolders:
 
 - **Design**: This folder contains the files that specify experimental
   design, such as which stimuli to use, the structure of trials, and
-  different treatments for subjects. See [Configuration files][].
+  different treatments for subjects. See [Configuration
+  files](#configuration-files).
 
 - **Materials**: Here you have any image, sound, or text files you need
   for your experiment, including an Instructions.txt file for the
@@ -30,8 +29,7 @@ MyExperiment, and within it the following sufolders:
   holds the data collected during experiment runs.
 
 
-Running alex
-------------
+# Running alex <a name="running></a>
 
 From the directory where the Design and Materials directories are, you
 can just type 'alex'. You can also run experiments in other
@@ -52,7 +50,7 @@ subjects. Different instances, however, will run different subjects
 and will not overwrite each other's data files.
 
 The fact that a subject has been run is signaled by the existence of
-the corresponding data file (see [Data format][]). If the
+the corresponding data file (see [Data format](#data-format)). If the
 experiment is interrupted before it completes, alex will still
 consider that subject as having been run. It is up to you to check
 that data files are complete (you can check that they have the
@@ -65,8 +63,7 @@ an 'incomplete-' prefix, and alex will automatically re-run that
 subject.
 
 
-Configuration files
--------------------
+# Configuration files <a name="configuration-files"></a>
 
 All configuration files are in the Design folder:
 
@@ -90,8 +87,8 @@ All configuration files are in the Design folder:
   parameters that are the same for all stimuli, such as which key is
   used for responses.
 
-Example
--------
+
+# Example <a name="example"></a>
 
 Suppose we want to teach participants to discriminate a red square
 from a white square. We then want to know how subjects respond to,
@@ -271,8 +268,7 @@ across subjects you can do:
         6       255,190,190 75
 
 
-Special notation for stimuli
-----------------------------
+# Special notation for stimuli <a name="notation"></a>
 
 We mentioned above one bit of special notation in the definition of
 stimuli, namely the construction * (star) + stimulus name (see the end
@@ -334,10 +330,7 @@ Note that we have now offset the white square, otherwise it would
 overlap with the red one.
 
 
-
-
-Global parameters
------------------
+# Global parameters <a name="global"></a>
 
 The file Design/Parameters.csv contains some parameters that affect
 the whole experiment. Here is a sample file (as above, the file is in
@@ -370,10 +363,10 @@ should be self-explanatory.
 
 **ReactionTimeMin** and **ReactionTimeMax** define at what times
 within a trial subjects can respond. Responses outside this time
-window are registered with a special code (see [Data format][]) no USs
-are delivered. If not specified, ResponseTimeMin is set to 0 and
-ResponseTimeMax to CSDuration, thus allowing responses anywhere in the
-trial.
+window are registered with a special code (see [Data
+format](#data-format)) no USs are delivered. If not specified,
+ResponseTimeMin is set to 0 and ResponseTimeMax to CSDuration, thus
+allowing responses anywhere in the trial.
   
 **MinITI** and **MaxITI** are the minimum and maximum values of the
 inter-trial interval. Each inter-trial interval will be drawn between
@@ -381,7 +374,7 @@ these values with uniform distribution.
 
 **Response** is the key subjects are instructed to press if they want
 to respond. Note that this can also be set on a per-stimulus basis,
-see [Responses and classical vs. instrumental trials][].
+see [here](#responses).
 
 **MaxResponses** is the maximum number of response a subject is
 allowed to make in one trial. There are essentially two useful
@@ -400,8 +393,7 @@ acquisition of demographic information. It is meant to quickly start
 the experiment during development.
 
 
-Responses and classical vs. instrumental trials
------------------------------------------------
+# Responses and classical vs. instrumental trials <a name="responses"></a>
 
 If we wish to record only one kind of response, e.g., space bar
 presses, the Response key can be specified in the Parameters.csv
@@ -451,13 +443,12 @@ of MaxResponses so high that it cannot be possibly reached, such as
 1000.
 
 Note also that on "*" trials, the ResponseTimeMin and ResponseTimeMax
-features are disabled (see [Global parameters][]). Because the US (if
-any), is delivered only once at the end of the trial, it is irrelevant
-when subjects responds.
+features are disabled (see [Global parameters](#global)). Because the
+US (if any), is delivered only once at the end of the trial, it is
+irrelevant when subjects responds.
 
 
-Data Format
------------
+Data Format <a name="data-format"></a>
 
 When you run an experiment with alex, data are saved in the Data
 folder (which alex creates if it does not find) in CSV files named
@@ -490,8 +481,7 @@ The other columns of the data files are as follows:
  - **Response**: which key was monitored on that trial. Recall that
      "space" is a special code for the space bar and that the key may
      be prepended by "*" (asterisk) if the trial was a 'classical
-     conditioning' one (see [Responses and classical vs. instrumental
-     trials][]).
+     conditioning' one (see [here](#responses)).
 
  - **Responses**: The number of times the subject responded to the
    stimulus. This includes *all* responses, even those that may have
@@ -517,16 +507,16 @@ We think this information characterizes subject behavior competely,
 but please do let us know if you think details could be added.
 
 
-Errors
-------
+# Errors <a name="errors"></a>
 
 Errors may arise if Design phases have incorrect format. Presently,
 alex performs some checks at startup, but some errors are caught only
 as they occur while running the experiment. We advise to always run
 the experiment a few times before putting it into production. If you
 think errors are due to bugs in alex, please write us at the address
-in [Contacts][]. Also do contact us if you think that your design
-files are correct but the experiment does not run as you expect.
+in [Contacts](#contacts). Also do contact us if you think that your
+design files are correct but the experiment does not run as you
+expect.
 
 With a few exceptions, all errors print a hopefully informative
 message both on the standard console output (terminal) and on
@@ -545,8 +535,7 @@ t be released. In these cases, you can simply delete the lock file,
 which is Subjects.csv.lck in the Design directory.
 
 
-Contacts
---------
+# Contacts <a name="contacts"></a>
 
 Please send suggestions to improve alex or this manual to Stefano
 Ghirlanda, drghirlanda@gmail.com.
