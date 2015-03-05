@@ -85,26 +85,52 @@ define Start( par ) {
 
 ########################################################################
 #                                                                      #
+# Display and Undisplay are two utility functions that can show and    #
+# hide multiple visual stimuli, and also start and pause the playback  #
+# of audio stimuli.                                                    #
+#                                                                      #
+########################################################################
+
+define Display( stimulus ) {
+  # The 'stimulus' may actually be a compound, like "A+B", so we split
+  # it into individual stimuli and then display each of them. We look
+  # up the stimulus objects in the gStimuli list.
+  n <- Length( gStimNames )
+  loop( stimName, SplitString(stimulus, "+") ) {
+    i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
+    s <- Nth( gStimuli, i )
+    if( IsAudioOut(s) ) {
+      StartPlayback( s )
+    } else {
+      Show( s )
+    }
+  }
+  Draw()
+}
+
+define Undisplay( stimulus ) {
+  n <- Length( gStimNames )
+  loop( stimName, SplitString(stimulus, "+") ) {
+    i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
+    s <- Nth( gStimuli, i )
+    if( IsAudioOut(s) ) {
+      PausePlayback( s )
+    } else {
+      Hide( s )
+    }
+  }
+  Draw()
+}
+
+########################################################################
+#                                                                      #
 # This function coordinates the events within a single trial           #
 #                                                                      #
 ########################################################################
 
 define OneTrial( stimulus, rewardProb, uss, response ) {
   Draw()
-  # Decide which stimuli to present. The 'stimulus' we are passed may
-  # actually be a compound, like "A+B", so we split it into individual
-  # stimuli and we build a list of stimuli for this trial by looking
-  # up the stimulus objects in the gStimuli list.
-  n <- Length( gStimNames )
-  trialStimuli <- []
-  loop( stimName, SplitString(stimulus, "+") ) {
-    i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
-    PushOnEnd( trialStimuli, Nth( gStimuli, i ) )
-  }
-  if( Length( trialStimuli ) == 0 ) {
-    Message( "Empty stimulus list: " + stimulus, 1 )
-  }
-  # Now we set some parameters:
+  # Set some parameters:
   maxResponses <- Parameter("MaxResponses")
   if( maxResponses == "NA" ) {
     maxResponses <- 1
@@ -126,11 +152,7 @@ define OneTrial( stimulus, rewardProb, uss, response ) {
   } else {
     rtMax <- ToNumber( rtMax )
   }
-  ## Now we display all stimuli:
-  loop( stim, trialStimuli ) {
-    Display( stim )
-  }
-  Draw()
+  Display( stimulus )
   # Preprocess the response variable to handle the special "space" key
   # and the "*" specification for 'classical' trials:
   classical <- 0
@@ -164,16 +186,9 @@ define OneTrial( stimulus, rewardProb, uss, response ) {
         } elseif( Random() < rewardProb and classical == 0 ) {
           PushOnEnd( rewards, 1 )
           Wait( csusInterval )
-	  # Display USs, wait, then hide them:
-	  loop( us, SplitString( uss, "+" ) ) { # display all USs
-            Display( Lookup( us, gStimNames, gStimuli ) )
-          }
-          Draw()
+	  Display( uss )
           Wait( usDuration )
-	  loop( us, SplitString( uss, "+" ) ) {
-            Undisplay( Lookup( us, gStimNames, gStimuli ) )
-          }
-          Draw()
+	  Undisplay( uss )
         # If responses is valid but unrewarded, reward is 0:
         } else {
           PushOnEnd( rewards, 0 )
@@ -185,26 +200,15 @@ define OneTrial( stimulus, rewardProb, uss, response ) {
     # Update timeLeft again because US display may have used time
     timeLeft <- csDuration - GetTime() + startTime
   }
-  # This should not be necessary, but just in case:
-  loop( stim, trialStimuli ) {
-    Undisplay( stim )
-  }
+  Undisplay( stimulus )
   Draw()
-  ## This happens at the end of a 'classical conditioning' trial. FIX
-  ## The loops to display and undisplay USs is copied from above so
-  ## they should go in a function.
+  ## This happens at the end of a 'classical conditioning' trial. 
   if( classical == 1 and Random() < rewardProb) {
     PushOnEnd( rewards, 1 )
     PushOnEnd( times, ToNumber(csDuration) )
-    loop( us, SplitString( uss, "+" ) ) { # display all USs
-      Display( Lookup( us, gStimNames, gStimuli ) )
-    }
-    Draw()
+    Display( uss )
     Wait( usDuration )
-    loop( us, SplitString( uss, "+" ) ) {
-      Undisplay( Lookup( us, gStimNames, gStimuli ) )
-    }
-    Draw()
+    Undisplay( uss )
   }
   # Set times and responses to NA if no response recorded:
   if( not Length(times) ) {
@@ -414,22 +418,6 @@ define MakeColorRGBString( color ) {
     c <- MakeColorRGB( cred, cgreen, cblue )
   }
   return c
-}
-
-define Display( s ) {
-  if( IsAudioOut(s) ) {
-    StartPlayback( s )
-  } else {
-    Show( s )
-  }
-}
-
-define Undisplay( s ) {
-  if( IsAudioOut(s) ) {
-    PausePlayback( s )
-  } else {
-    Hide( s )
-  }
 }
 
 define Message( text, fatal ) {
