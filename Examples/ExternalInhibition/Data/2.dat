@@ -1,0 +1,7 @@
+Subject,Sex,Age,Phase,Trial,Stimulus,RewardPr,Response,Responses,RTs,Rewards
+2,NA,NA,1,1,B,0,space,1,"760","0"
+2,NA,NA,1,2,A,1,space,3,"413,699,953","1,1,1"
+2,NA,NA,1,3,B,0,space,1,"597","0"
+2,NA,NA,1,4,A,1,space,3,"229,482,768","1,1,1"
+2,NA,NA,2,1,A+B,0,space,1,"534","0"
+2,NA,NA,2,2,A+B,0,space,2,"369,687","0,0"

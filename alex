@@ -1,4 +1,4 @@
-#!/usr/local/bin/pebl-language
+#!/usr/bin/pebl-language
 
 define Start( par ) {
 
@@ -61,8 +61,7 @@ define Start( par ) {
   loop( field, gSubjectHeader ) {
     FilePrint_( gDataFile, field + "," )
   } 
-  FilePrint( gDataFile, 
-    "Sex,Age,Phase,Trial,Stimulus,RewardPr,Responses,RTs,Rewards" )
+  FilePrint( gDataFile, "Sex,Age,Phase,Trial,Stimulus,RewardPr,Response,Responses,RTs,Rewards" )
 
   ## Run experimental phases. We loop through all elements of the
   ## Phase column in Phases.csv. Phase p is run with RunPhase( p ),
@@ -90,7 +89,7 @@ define Start( par ) {
 #                                                                      #
 ########################################################################
 
-define OneTrial( stimulus, rewardProb, uss ) {
+define OneTrial( stimulus, rewardProb, uss, response ) {
   Draw()
   # Decide which stimuli to present. The 'stimulus' we are passed may
   # actually be a compound, like "A+B", so we split it into individual
@@ -99,8 +98,11 @@ define OneTrial( stimulus, rewardProb, uss ) {
   n <- Length( gStimNames )
   trialStimuli <- []
   loop( stimName, SplitString(stimulus, "+") ) {
-  	i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
-	PushOnEnd( trialStimuli, Nth( gStimuli, i ) )
+    i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
+    PushOnEnd( trialStimuli, Nth( gStimuli, i ) )
+  }
+  if( Length( trialStimuli ) == 0 ) {
+    Message( "Empty stimulus list: " + stimulus, 1 )
   }
   # Now we set some parameters:
   maxResponses <- Parameter("MaxResponses")
@@ -129,37 +131,53 @@ define OneTrial( stimulus, rewardProb, uss ) {
     Display( stim )
   }
   Draw()
+  # Preprocess the response variable to handle the special "space" key
+  # and the "*" specification for 'classical' trials:
+  classical <- 0
+  if( response == "space" ) {
+    keyList <- [" "]
+  } elseif( SubString(response,1,1) == "*" ) {
+    classical <- 1
+    keyList <- [ SubString(response,2,StringLength(response)-1) ]
+  } else {
+    keyList <- [response]
+  }
   # We are ready to run the trial loop. The trial continues until
-  # either time runs out or we reach the maximum number of responses.
+  # either time runs out or we reach the maximum number of (valid)
+  # responses.
   times        <- []
   rewards      <- []
   timeLeft     <- ToNumber( csDuration )
   startTime    <- GetTime()
   while( Length(times)<maxResponses and timeLeft>1 ) {
-    key <- WaitForListKeyPressWithTimeout([" "], timeLeft, 1 )
+    key <- WaitForListKeyPressWithTimeout( keyList, timeLeft, 1 )
     rt <- GetTime() - startTime
     timeLeft <- csDuration - rt
     # If we did not time out we have to process the response:
     if( timeLeft > 1 ) {
       PushOnEnd( times, rt )
-      # If response is invalid, reward is -1:
-      if( rt<rtMin or rt>rtMax ) {
-        PushOnEnd( rewards, -1 )
-      # If responses is valid and rewarded, reward is 1:
-      } elseif( Random() < rewardProb ) {
-        PushOnEnd( rewards, 1 )
-        Wait( csusInterval )
-	# Display USs, wait, then hide them:
-	loop( us, SplitString( uss, "," ) ) { # display all USs
-          Display( Lookup( us, gStimNames, gStimuli ) )
+      if( classical == 0 ) {
+        # If response is invalid, reward is -1:
+        if( rt<rtMin or rt>rtMax ) {
+          PushOnEnd( rewards, -1 )
+        # If responses is valid and rewarded, reward is 1:
+        } elseif( Random() < rewardProb and classical == 0 ) {
+          PushOnEnd( rewards, 1 )
+          Wait( csusInterval )
+	  # Display USs, wait, then hide them:
+	  loop( us, SplitString( uss, "," ) ) { # display all USs
+            Display( Lookup( us, gStimNames, gStimuli ) )
+          }
+          Draw()
+          Wait( usDuration )
+	  loop( us, SplitString( uss, "," ) ) {
+            Undisplay( Lookup( us, gStimNames, gStimuli ) )
+          }
+          Draw()
+        # If responses is valid but unrewarded, reward is 0:
+        } else {
+          PushOnEnd( rewards, 0 )
         }
-        Draw()
-        Wait( usDuration )
-	loop( us, SplitString( uss, "," ) ) {
-          Undisplay( Lookup( us, gStimNames, gStimuli ) )
-        }
-        Draw()
-      # If responses is valid but unrewarded, reward is 0:
       } else {
         PushOnEnd( rewards, 0 )
       }
@@ -167,14 +185,17 @@ define OneTrial( stimulus, rewardProb, uss ) {
     # Update timeLeft again because US display may have used time
     timeLeft <- csDuration - GetTime() + startTime
   }
-  ## We are at the end of the trial. If rewardProb is negative, this
-  ## is meant to be a classical conditioning trial. Thus here we
-  ## display the US, provided the maximum number of responses has
-  ## *not* been met (in that case we have an omission schedule, see
-  ## Manual). FIX: The US display code is duplicated from above, so it
-  ## should be moved to a function at some point...
-  if( Length(times)<maxResponses ) {
-    # Display USs, wait, then hide them:
+  # This should not be necessary, but just in case:
+  loop( stim, trialStimuli ) {
+    Undisplay( stim )
+  }
+  Draw()
+  ## This happens at the end of a 'classical conditioning' trial. FIX
+  ## The loops to display and undisplay USs is copied from above so
+  ## they should go in a function.
+  if( classical == 1 and Random() < rewardProb) {
+    PushOnEnd( rewards, 1 )
+    PushOnEnd( times, ToNumber(csDuration) )
     loop( us, SplitString( uss, "," ) ) { # display all USs
       Display( Lookup( us, gStimNames, gStimuli ) )
     }
@@ -185,12 +206,6 @@ define OneTrial( stimulus, rewardProb, uss ) {
     }
     Draw()
   }
-
-  # This should not be necessary, but just in case:
-  loop( stim, trialStimuli ) {
-    Undisplay( stim )
-  }
-  Draw()
   # Set times and responses to NA if no response recorded:
   if( not Length(times) ) {
     times <- "NA"
@@ -199,23 +214,36 @@ define OneTrial( stimulus, rewardProb, uss ) {
   return [times, rewards]
 }
 
+# Helper function to identify what enters a phase. 
+define LookupPhase( phaseName, field ) {
+  fields <- Lookup(field, gPhaseHeader, gPhases)
+  if( not Length(fields) ) {
+    result <- []
+  } else {
+    idx <- Match( Lookup("Phase", gPhaseHeader, gPhases), phaseName) 
+    result <- Filter( fields, idx )
+  }
+  ## If we did not find anything in Phases, we try to look up a global
+  ## parameter and repeat it as many times as there are stimuli in the
+  ## phase.
+  if( not Length(result) ) {
+    stimuli   <- LookupPhase(phaseName, "Stimuli")
+    p <- Parameter( field )
+    if( p == "NA" ) {
+        result <- []
+    } else {
+      result <- Repeat( p, Length(stimuli) )
+    }    
+  }
+
+  return result
+} 
+
 ########################################################################
 #                                                                      #
 # This function coordinates trials within a phase.                     #
 #                                                                      #
 ########################################################################
-
-# Helper function to identify which stimuli enter a phase
-define LookupPhase( phaseName, field ) {
-  fields <- Lookup(field, gPhaseHeader,gPhases)
-  if( not Length(fields) ) {
-    result <- []
-  } else {
-    idx <- Match( Lookup("Phase",gPhaseHeader,gPhases), phaseName) 
-    result <- Filter( fields, idx )
-  }
-  return result
-} 
 
 define RunPhase( phaseName ) {
   # Get stimulus settings for this phase. Each line in Phases.csv
@@ -223,25 +251,29 @@ define RunPhase( phaseName ) {
   # LookupPhase() we look up which stimuli enter this phase:
   stimuli   <- LookupPhase(phaseName, "Stimuli")
   numTrials <- LookupPhase(phaseName, "Trials")
-  rewards   <- LookupPhase(phaseName, "Rewards")
-  uss       <- LookupPhase(phaseName, "USs")
+  rewards   <- LookupPhase(phaseName, "Reward")
+  uss       <- LookupPhase(phaseName, "US")
+  responses <- LookupPhase(phaseName, "Response")
 
   ## We build lists trialStimuli and trialRewards to contain stimuli
   ## and rewards repeated as many times as given in 'trials'. The
   ## order of presentation is then randomized by picking stimuli from
   ## a shuffled list 'trialOrder', see end of block
-  trialStimuli <- []
-  trialRewards <- []
-  trialUSs     <- []
+  trialStimuli   <- []
+  trialRewards   <- []
+  trialUSs       <- []
+  trialResponses <- []
   loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
     n <- ToNumber( Nth(numTrials, i) )
-    PushOnEnd( trialStimuli, Repeat( Nth(stimuli, i), n ) )
-    PushOnEnd( trialRewards, Repeat( Nth(rewards, i), n ) )
-    PushOnEnd( trialUSs,     Repeat( Nth(uss,     i), n ) )
+    PushOnEnd( trialStimuli,   Repeat( Nth(stimuli,   i), n ) )
+    PushOnEnd( trialRewards,   Repeat( Nth(rewards,   i), n ) )
+    PushOnEnd( trialUSs,       Repeat( Nth(uss,       i), n ) )
+    PushOnEnd( trialResponses, Repeat( Nth(responses, i), n ) )
   }
-  trialStimuli <- Flatten( trialStimuli ) # Nesting is undesired
-  trialRewards <- Flatten( trialRewards )
-  trialUSs     <- Flatten( trialUSs )
+  trialStimuli   <- Flatten( trialStimuli ) # Nesting is undesired
+  trialRewards   <- Flatten( trialRewards )
+  trialUSs       <- Flatten( trialUSs )
+  trialResponses <- Flatten( trialResponses )
   trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
 
   ## Now we are ready to run all trials:
@@ -253,13 +285,14 @@ define RunPhase( phaseName ) {
     stimulus  <- Nth( trialStimuli, thisTrial )
     rewardPr  <- ToNumber( Nth( trialRewards, thisTrial ) )
     uss       <- Nth( trialUSs, thisTrial )
+    response  <- Nth( trialResponses, thisTrial )
     ## Run trial and get response times and rewards collected
-    results   <- OneTrial( stimulus, rewardPr, uss )
+    results   <- OneTrial( stimulus, rewardPr, uss, response )
     times     <- Nth(results, 1)
     rewards   <- Nth(results, 2)
     ## Save all data to file:
     FilePrintCSV_( gDataFile, Flatten( [ gSubjectInfo, 
-      gSex, gAge, phaseName, trial, stimulus, rewardPr] ) )
+      gSex, gAge, phaseName, trial, stimulus, rewardPr, response] ) )
     FilePrint_( gDataFile, "," )
     If( IsList(times) ) {
       FilePrint_( gDataFile, Length(times) + ","+gQuote )
@@ -300,7 +333,7 @@ define FilePrintCSV_( file, data ) {
 }
 
 define ShowInstructions() {
-  instrText <- FileReadText("Materials/Instructions.txt")
+  instrText <- FileReadText( gWD + "Materials/Instructions.txt" )
   instrText <- instrText
   instrFont <- MakeFont("Vera.ttf", 0, 24, gColor, gBackgroundColor, 1 )
   instrBox  <- MakeTextBox(instrText, instrFont, 

@@ -1,4 +1,4 @@
-Phase,Stimuli,Trials,Rewards,USs
+Phase,Stimuli,Trials,Reward,US
 1,A,2,0.9,Smiley
 1,X,2,0.1,Smiley
 2,A,1,0,

@@ -1,0 +1,5 @@
+Subject,Sex,Age,Phase,Trial,Stimulus,RewardPr,Response,Responses,RTs,Rewards
+1,NA,NA,1,1,A,1,space,1,"645","1"
+1,NA,NA,1,2,B,0,space,1,"385","0"
+1,NA,NA,1,3,A,1,space,1,"508","1"
+1,NA,NA,1,4,B,0,space,2,"463,789","0,0"

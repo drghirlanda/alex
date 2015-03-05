@@ -20,7 +20,7 @@ MyExperiment, and within it the following sufolders:
 
 - **Design**: This folder contains the files that specify experimental
   design, such as which stimuli to use, the structure of trials, and
-  different treatments for subjects. See [Configuration files] below.
+  different treatments for subjects. See [Configuration files][].
 
 - **Materials**: Here you have any image, sound, or text files you need
   for your experiment, including an Instructions.txt file for the
@@ -52,7 +52,7 @@ subjects. Different instances, however, will run different subjects
 and will not overwrite each other's data files.
 
 The fact that a subject has been run is signaled by the existence of
-the corresponding data file (see [Data format] below). If the
+the corresponding data file (see [Data format][]). If the
 experiment is interrupted before it completes, alex will still
 consider that subject as having been run. It is up to you to check
 that data files are complete (you can check that they have the
@@ -86,8 +86,9 @@ All configuration files are in the Design folder:
 
 - Parameters.csv defines some global parameters such as screen
   background color, text color, font, and size, the duration of
-  inter-trial intervals, and so on.
-
+  inter-trial intervals, and so on. Can also be used to define
+  parameters that are the same for all stimuli, such as which key is
+  used for responses.
 
 Example
 -------
@@ -98,63 +99,68 @@ say, a pink square. The Phases.csv file might look like this:
 
 - Phases.csv:
 
-        Phase Stimulus Presentations Reward
-        1     R        20            0.9
-        1     W        20            0.1
-        2     P        5             0
+        Phase Stimulus Presentations Reward US
+        1     Red      20            0.9    Smiley
+        1     White    20            0.1    Smiley
+        2     Pink     5             0
 
-I am displaying the file as a table, but it should be a
-comma-separated file. You can edit these in any spreadhseet using the
-CSV format for saving. 
+The US field can be left empty if the Reward probability is 0.
 
-**Note:** Alex wants double quotes (when needed) in CSV files. Single
-quotes will result in errors. (This comes from the PEBL function that
-reads CSV files.)
+**Note:** The file above is displayed as a table for readability, but
+it should be a comma-separated values (CSV) file. You can edit CSV
+files in any spreadhseet using the CSV format for saving. Alex wants
+double quotes (if needed) in CSV files. Single quotes will result in
+errors. (This comes from the PEBL function that reads CSV files.) Most
+spreadhseet software uses double quotes by default, but do check in
+case alex cannot read your CSV files.
 
 The above Phases.csv file describes an experiment with two
 phases. Each line describes one type of trial that occurs in a
 phase. There are, for example two kinds of trials in phase 1,
-specifying 20 presentations of each of two stimuli, R and W (for 'red'
-and 'white'). R will be rewarded 90% of the time, W only 10%. In phase
-2, stimulus P ('pink') is presented five times. When the experiment is
-run, R and W trials will be intermixed randomly because they all
-pertain to phase 1. P trials on the other hand, will be performed in
-phase 2 after all phase 1 trials have been run.
+specifying 20 presentations of each of two stimuli, called Red and
+White. Red will be rewarded 90% of the time, White only 10%. On reward
+trials, stimulus Smiley will be displayed as the reward. In phase 2,
+stimulus Pink is presented five times. When the experiment is run, Red
+and White trials will be intermixed randomly because they all pertain
+to phase 1. Pink trials on the other hand, will be performed in phase
+2 after all phase 1 trials have been run.
 
 **Note:** Phases are run in the order they are defined, not in their
-numerical or alphabetical orde (thus you can use descriptive names
+numerical or alphabetical order (thus you can use descriptive names
 like Training, Testing, etc). To tell the whole truth, phases are run
 in the order in which their *first* stimuli are defined. For example,
 a Phases file containing:
 
 - Phases.csv:
 
-        Phase Stimulus Presentations Reward
-        1     R        20            0.9
-        2     P        5             0
-        1     W        20            0.1
+        Phase Stimulus Presentations Reward US
+        1     Red      20            0.9    Smiley
+        2     Pink     5             0      
+        1     White    20            0.1    Smiley
 
 is equivalent to the previous one. However, the file:
 
 - Phases.csv:
 
-        Phase Stimulus Presentations Reward
-        2     P        5             0
-        1     R        20            0.9
-        1     W        20            0.1
+        Phase Stimulus Presentations Reward US
+        2     Pink     5             0      
+        1     Red      20            0.9    Smiley
+        1     White    20            0.1    Smiley
 
 would run phase 2 before phase 1. 
 
-In these Phases.csv files, how does alex know that R, W, and P
-represent red, white and pink squares? This information is contained
-in the Stimuli.csv file, which might look like this:
+In these Phases.csv files, how does alex know that Red, White, and
+Pink represent red, white and pink squares, and that Smiley is a
+smiley face? This information is contained in the Stimuli.csv file,
+which might look like this:
 
 - Stimuli.csv:
 
-        Name Type   Parameters Color       XOffset YOffset
-        R    square 50         red         0       0
-        W    square 50         white       0       0
-        P    square 50         255,128,128 0       0
+        Name   Type   Parameters Color       XOffset YOffset
+        Red    square 50         red         0       0
+        White  square 50         white       0       0
+        Pink   square 50         255,128,128 0       0
+        Smiley image  smiley.png             0       -150
 
 The fields should be fairly intuitive, but here is a detailed
 explanation:
@@ -194,8 +200,10 @@ explanation:
   and so on, you can get by without consulting this file. RGB, of
   course, enables you to define color shades more precisely.
 
-- **XOffset** and **YOffset**: offsets from the center of the screen, in
-  pixel. In the example, all stimuli are centered.
+- **XOffset** and **YOffset**: offsets from the center of the screen,
+  in pixel. In the example, all stimuli are centered but the reward
+  stimulus Smiley, which is displayed 150 pixels above center ("above"
+  is negative Y values).
 
 The Subjects.csv file contains information about the subjects you want
 to run. If all subjects undergo the same treatment, as in the present
@@ -220,7 +228,7 @@ like this:
 
 - Subjects.csv:
 
-        Subject PColor
+        Subject PinkColor
         1       255,128,128
         2       255,128,128
         3       255,128,128
@@ -232,27 +240,29 @@ And you would modify the Stimuli.csv file like this:
 
 - Stimuli.csv:
 
-        Name Type   Parameters Color XOffset YOffset
-        R    square 50         red   0       0
-        W    square 50         white 0       0
-        P    square 50         *P    0       0
+        Name   Type   Parameters Color XOffset YOffset
+        Red    square 50         red   0       0
+        White  square 50         white 0       0
+        Pink   square 50         *Pink 0       0
+        Smiley image  smiley.png       0       150
 
-The special notation *P indicates that the color of stimulus P will be
-looked up, for each subject, in the column PColor of the Subects.csv
-file. This syntax is available for all stimulus properties. For
-example, if you want to change the size of R square across subjects
-you can do:
+The special notation *Pink indicates that the color of stimulus Pink
+will be looked up, for each subject, in the column PinkColor of the
+Subects.csv file. This syntax is available for all stimulus
+properties. For example, if you want to change the size of Red square
+across subjects you can do:
 
 - Stimuli.csv:
 
-        Name Type   Parameters Color XOffset YOffset
-        R    square *R         red   0       0
-        W    square 50         white 0       0
-        P    square 50         *P    0       0
+        Name   Type   Parameters Color XOffset YOffset
+        Red    square *Red       red   0       0
+        White  square 50         white 0       0
+        Pink   square 50         *Pink 0       0
+        Smiley image  smiley.png       0       150
 
 - Subjects.csv:
 
-        Subject PColor      RParameters
+        Subject PinColor    RedParameters
         1       255,128,128 25
         2       255,128,128 50
         3       255,128,128 75
@@ -280,10 +290,11 @@ Stimuli.csv:
 
 - Stimuli.csv:
 
-        Name Type   Parameters Color XOffset YOffset
-        R    square 50         red   0       0
-        W    square :R         white 0       0
-        P    square :R         *P    0       0
+        Name   Type   Parameters Color XOffset YOffset
+        Red    square 50         red   0       0
+        White  square :Red       white 0       0
+        Pink   square :Red       *Pink 0       0
+        Smiley image  smiley.png       0       150
 
 This notation has two advantages: it makes explicit our intention of
 having three squares of equal size, and it reduces the possibility of
@@ -291,10 +302,11 @@ typing errors. In fact, we could go all the way and have:
  
 - Stimuli.csv:
 
-        Name Type   Parameters Color XOffset YOffset
-        R    square 50         red   0       0
-        W    :R     :R         white :R      :R
-        P    :R     :R         *P    :R      :R
+        Name   Type   Parameters Color XOffset YOffset
+        Red    square 50         red   0       0
+        White  :R     :Red       white :Red    :Red
+        Pink   :R     :Red       *Pink :Red    :Red
+        Smiley image  smiley.png       0       150
 
 which makes explict that we want the three stimuli to differ only in
 color.
@@ -306,51 +318,23 @@ and white squares together. We can use the following files:
 
 - Phases.csv:
 
-        Phase Stimulus Presentations Reward
-        1     R        20            0.9
-        1     W        20            0.1
-        2     R+W      5             0
+        Phase Stimulus  Presentations Reward US
+        1     Red       20            0.9    Smiley
+        1     White     20            0.1    Smiley
+        2     Red+White 5             0
 
 - Stimuli:csv:
 
-        Name Type   Parameters Color XOffset YOffset
-        R    square 50         red   0       0
-        W    :R     :R         white 60      :R
+        Name   Type   Parameters Color XOffset YOffset
+        Red    square 50         red   0       0
+        White  :Red   :Red       white 60      :Red
+        Smiley image  smiley.png       0       150
 
 Note that we have now offset the white square, otherwise it would
 overlap with the red one.
 
-"Instrumental" vs. "classical" trials, and omission training
-------------------------------------------------------------
 
-The experimental trials described in the examples above are
-"instrumental" in that a response is required to get a reward. It is
-also possible to run "classical" trials in which the reward is
-displayed at the end of the trial independent of what the subject
-does. The way to do this is (excuse us if this is obscure), to use a
-*negative* value in the Reward column of Phases.csv. Thus an entry like:
 
-- Phases.csv:
-
-        Phase Stimulus Presentations Reward
-        1     R        20            -1
-
-Specifies that R is to be rewarded 100% of the time *regardless* of
-whether the subject responds or not. Note that subject responses are
-still recorded, and if they exceed the maximum the trial terminates
-without reward. This last feature makes it possible to implement
-omission training, i.e., reward the subject if it abstains from
-responding, but not if it responds. This is controlled by the
-MaxResponses variable in the Parameters.csv file. The default value is
-1, which corresponds precisley to omission training. If you don't want
-the trial to ever terminate before the reward is delivered, you can
-use a value of MaxResponses so high that it cannot be possibly
-reached, such as 1000.
-
-Note also that on "classical" trials, the ResponseTimeMin and
-ResponseTimeMax features are disabled (see [Global
-parameters]). Because the US is delivered only once at the end of the
-trial, it is irrelevant when subjects responds.
 
 Global parameters
 -----------------
@@ -365,6 +349,7 @@ CSV format, displayed here as a table for legibility):
         CSDuration      4000
         CSUSInterval    0
         USDuration      400
+	Response        space
         ResponseTimeMin 0
         ResponseTimeMax 4000
         MinITI          1000
@@ -385,14 +370,18 @@ should be self-explanatory.
 
 **ReactionTimeMin** and **ReactionTimeMax** define at what times
 within a trial subjects can respond. Responses outside this time
-window are registered with a special code (see [Data format] below),
-and no USs are delivered. If not specified, ResponseTimeMin is set to
-0 and ResponseTimeMax to CSDuration, thus allowing responses anywhere
-in the trial.
+window are registered with a special code (see [Data format][]) no USs
+are delivered. If not specified, ResponseTimeMin is set to 0 and
+ResponseTimeMax to CSDuration, thus allowing responses anywhere in the
+trial.
   
 **MinITI** and **MaxITI** are the minimum and maximum values of the
 inter-trial interval. Each inter-trial interval will be drawn between
 these values with uniform distribution.
+
+**Response** is the key subjects are instructed to press if they want
+to respond. Note that this can also be set on a per-stimulus basis,
+see [Responses and classical vs. instrumental trials][].
 
 **MaxResponses** is the maximum number of response a subject is
 allowed to make in one trial. There are essentially two useful
@@ -411,6 +400,62 @@ acquisition of demographic information. It is meant to quickly start
 the experiment during development.
 
 
+Responses and classical vs. instrumental trials
+-----------------------------------------------
+
+If we wish to record only one kind of response, e.g., space bar
+presses, the Response key can be specified in the Parameters.csv
+file. We can also, however, specify different responses for different
+stimuli by adding a Response column to the Phases.csv file. For
+example, to specify that the left arrow key is the correct response
+for stimulus Red, but the right arrow is correct for White, you would
+write:
+
+- Phases.csv:
+
+        Phase Stimulus Trials Reward US     Response
+        1     Red      20     1      Smiley <left>
+        1     White    20     1      Smiley <right>
+
+Here <left> and <right> are special codes that denote the left and
+right arrow key. You can look up the codes for different special keys
+in the "Keyboard Entry" section of the PEBL manual. If you only want
+to use letter and number keys, you simply can write the letter or
+number as a Response.
+
+There are two special response codes. One is "space," indicating a
+space bar press. We made this special because the space would be hard
+to see when editing the CSV file. 
+
+The other special response code is obtained by prefixing the response
+with a "*" (asterisk). This means that the US will be displayed *only*
+at the end of the trial (with the appropriate Reward probability)
+*regardless* of what the subject does during the trial, as in
+classical conditioning or causal rating studies. Thus an entry like:
+
+- Phases.csv:
+
+        Phase Stimulus Trials Reward US     Response
+        1     Red      20     .9     Smiley *space
+
+Specifies that Red is to be rewarded 90% of the time *regardless* of
+whether the subject responds or not. Note that subject responses are
+still recorded, and if they exceed the allowed maximum the trial
+terminates without reward. This last feature makes it possible to
+implement omission training, i.e., reward subjects only when they
+abstain from responding. This is controlled by the MaxResponses
+variable in the Parameters.csv file. The default value is 1, which
+corresponds precisley to omission training. If you don't want the
+trial to ever terminate before the allotted time, you can use a value
+of MaxResponses so high that it cannot be possibly reached, such as
+1000.
+
+Note also that on "*" trials, the ResponseTimeMin and ResponseTimeMax
+features are disabled (see [Global parameters][]). Because the US (if
+any), is delivered only once at the end of the trial, it is irrelevant
+when subjects responds.
+
+
 Data Format
 -----------
 
@@ -422,7 +467,8 @@ replicate the Subjects.csv line for the particular subject. This is so
 that each line identifies all independent variables it pertains to (so
 called "long format" in statistical software). Another reason for
 including this information is that in this way you don't have to load
-it into your statistical software from other files. 
+it into your statistical software from other files and then merge the
+data.
 
 The other columns of the data files are as follows:
 
@@ -440,6 +486,12 @@ The other columns of the data files are as follows:
 
  - **RewardPr**: reward probability assigned to the stimulus (from the
    Phases.csv design file).
+
+ - **Response**: which key was monitored on that trial. Recall that
+     "space" is a special code for the space bar and that the key may
+     be prepended by "*" (asterisk) if the trial was a 'classical
+     conditioning' one (see [Responses and classical vs. instrumental
+     trials][]).
 
  - **Responses**: The number of times the subject responded to the
    stimulus. This includes *all* responses, even those that may have
@@ -464,6 +516,7 @@ The other columns of the data files are as follows:
 We think this information characterizes subject behavior competely,
 but please do let us know if you think details could be added.
 
+
 Errors
 ------
 
@@ -472,7 +525,7 @@ alex performs some checks at startup, but some errors are caught only
 as they occur while running the experiment. We advise to always run
 the experiment a few times before putting it into production. If you
 think errors are due to bugs in alex, please write us at the address
-in [Contacts] below. Also do contact us if you think that your design
+in [Contacts][]. Also do contact us if you think that your design
 files are correct but the experiment does not run as you expect.
 
 With a few exceptions, all errors print a hopefully informative
