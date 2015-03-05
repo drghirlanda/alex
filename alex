@@ -165,12 +165,12 @@ define OneTrial( stimulus, rewardProb, uss, response ) {
           PushOnEnd( rewards, 1 )
           Wait( csusInterval )
 	  # Display USs, wait, then hide them:
-	  loop( us, SplitString( uss, "," ) ) { # display all USs
+	  loop( us, SplitString( uss, "+" ) ) { # display all USs
             Display( Lookup( us, gStimNames, gStimuli ) )
           }
           Draw()
           Wait( usDuration )
-	  loop( us, SplitString( uss, "," ) ) {
+	  loop( us, SplitString( uss, "+" ) ) {
             Undisplay( Lookup( us, gStimNames, gStimuli ) )
           }
           Draw()
@@ -196,12 +196,12 @@ define OneTrial( stimulus, rewardProb, uss, response ) {
   if( classical == 1 and Random() < rewardProb) {
     PushOnEnd( rewards, 1 )
     PushOnEnd( times, ToNumber(csDuration) )
-    loop( us, SplitString( uss, "," ) ) { # display all USs
+    loop( us, SplitString( uss, "+" ) ) { # display all USs
       Display( Lookup( us, gStimNames, gStimuli ) )
     }
     Draw()
     Wait( usDuration )
-    loop( us, SplitString( uss, "," ) ) {
+    loop( us, SplitString( uss, "+" ) ) {
       Undisplay( Lookup( us, gStimNames, gStimuli ) )
     }
     Draw()

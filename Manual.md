@@ -304,8 +304,8 @@ typing errors. In fact, we could go all the way and have:
 
         Name   Type   Parameters Color XOffset YOffset
         Red    square 50         red   0       0
-        White  :R     :Red       white :Red    :Red
-        Pink   :R     :Red       *Pink :Red    :Red
+        White  :Red   :Red       white :Red    :Red
+        Pink   :Red   :Red       *Pink :Red    :Red
         Smiley image  smiley.png       0       150
 
 which makes explict that we want the three stimuli to differ only in
@@ -332,6 +332,14 @@ and white squares together. We can use the following files:
 
 Note that we have now offset the white square, otherwise it would
 overlap with the red one.
+
+**NOTE** The "+" notation is also valid for USs. This can be used to
+implement USs of different "magnitude." For example, one can instruct
+subjects that each smiley face represents a point earned, and have
+multiple smileys appear for more valuable stimuli (this requires
+defining several smiley stimuli offset from each other, so that they
+do not overlap when displayed simultaneously). Compounding of USs may
+also be used to present a combination of a visual and auditory US.
 
 
 <a name="global"></a>
@@ -363,8 +371,9 @@ CSV format, displayed here as a table for legibility):
 durations are in milliseconds. In future versions it will be possible
 to set different durations for different stimuli, and also to present
 sequences of stimuli for each trial, but right now we have only single
-stimuli of a common duration. **CSUSInterval** and **USDuration**
-should be self-explanatory.
+stimuli of a common duration. 
+
+**CSUSInterval** and **USDuration** should be self-explanatory.
 
 **ReactionTimeMin** and **ReactionTimeMax** define at what times
 within a trial subjects can respond. Responses outside this time
@@ -389,7 +398,7 @@ unrealistically large value, say 1000, you can any number of responses
 per trial. Each of these may result in the US being delivered, as
 described above.
 
-The following parameters control the screen background color while the
+The next few parameters control the screen background color while the
 experiment is running and the color, font, and size of text used for
 instructions and other messages.
 
