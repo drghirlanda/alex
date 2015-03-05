@@ -448,7 +448,7 @@ US (if any), is delivered only once at the end of the trial, it is
 irrelevant when subjects responds.
 
 
-Data Format <a name="data-format"></a>
+# Data Format <a name="data-format"></a>
 
 When you run an experiment with alex, data are saved in the Data
 folder (which alex creates if it does not find) in CSV files named
