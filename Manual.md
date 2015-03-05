@@ -33,14 +33,14 @@ MyExperiment, and within it the following sufolders:
 <a name="running"></a>
 # Running alex
 
-From the directory where the Design and Materials directories are, you
+From the folder where the Design and Materials directories are, you
 can just type 'alex'. You can also run experiments in other
 directories using:
 
-    alex -v <Directory>
+    alex -v <Folder>
 
-The Directory is then expected to have Design and Materials
-subdirectories with appropriate files. A Data directory will be create
+The Folder is then expected to have Design and Materials
+subdirectories with appropriate files. A Data folder will be create
 if not present.
 
 Alex has been designed so that multiple instances of an experiment can
@@ -100,10 +100,10 @@ say, a pink square. The Phases.csv file might look like this:
 
 - Phases.csv:
 
-        Phase Stimulus Presentations Reward US
-        1     Red      20            0.9    Smiley
-        1     White    20            0.1    Smiley
-        2     Pink     5             0
+        Phase Stimulus Trials Reward US
+        1     Red      20     0.9    Smiley
+        1     White    20     0.1    Smiley
+        2     Pink     5      0
 
 The US field can be left empty if the Reward probability is 0.
 
@@ -134,19 +134,19 @@ a Phases file containing:
 
 - Phases.csv:
 
-        Phase Stimulus Presentations Reward US
-        1     Red      20            0.9    Smiley
-        2     Pink     5             0      
-        1     White    20            0.1    Smiley
+        Phase Stimulus Trials Reward US
+        1     Red      20     0.9    Smiley
+        2     Pink     5      0      
+        1     White    20     0.1    Smiley
 
 is equivalent to the previous one. However, the file:
 
 - Phases.csv:
 
-        Phase Stimulus Presentations Reward US
-        2     Pink     5             0      
-        1     Red      20            0.9    Smiley
-        1     White    20            0.1    Smiley
+        Phase Stimulus Trials Reward US
+        2     Pink     5      0      
+        1     Red      20     0.9    Smiley
+        1     White    20     0.1    Smiley
 
 would run phase 2 before phase 1. 
 
@@ -183,7 +183,7 @@ explanation:
 
   - text: the text to be displayed
 
-  - image or sound: name of a file in the Materials directory that
+  - image or sound: name of a file in the Materials folder that
     contains the image or sound.
 
 - **Color**: the color of squares, circles, or text. This field is
@@ -319,10 +319,10 @@ and white squares together. We can use the following files:
 
 - Phases.csv:
 
-        Phase Stimulus  Presentations Reward US
-        1     Red       20            0.9    Smiley
-        1     White     20            0.1    Smiley
-        2     Red+White 5             0
+        Phase Stimulus  Trials Reward US
+        1     Red       20     0.9    Smiley
+        1     White     20     0.1    Smiley
+        2     Red+White 5      0
 
 - Stimuli:csv:
 
@@ -541,7 +541,7 @@ held for as little as possible, but if you interrupt alex at a
 critical time, or if alex crashes for any reason before the lock is
 released, subsequent instances of alex will wait forever for the lock
 t be released. In these cases, you can simply delete the lock file,
-which is Subjects.csv.lck in the Design directory.
+which is Subjects.csv.lck in the Design folder.
 
 
 <a name="contacts"></a>
