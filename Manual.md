@@ -15,7 +15,7 @@ what alex can and cannot do.
 # Workflow
 
 To build and run a new experiment you create a dedicated folder, say,
-MyExperiment, and within it the following sufolders:
+MyExperiment, and within it the following subfolders:
 
 - **Design**: This folder contains the files that specify experimental
   design, such as which stimuli to use, the structure of trials, and
@@ -33,15 +33,14 @@ MyExperiment, and within it the following sufolders:
 <a name="running"></a>
 # Running alex
 
-From the folder where the Design and Materials directories are, you
+From the folder where the Design and Materials folders are, you
 can just type 'alex'. You can also run experiments in other
-directories using:
+folders using:
 
     alex -v <Folder>
 
-The Folder is then expected to have Design and Materials
-subdirectories with appropriate files. A Data folder will be create
-if not present.
+The Folder is then expected to have Design and Materials subfolders
+with appropriate files. A Data folder will be create if not present.
 
 Alex has been designed so that multiple instances of an experiment can
 be run simultaneously. This feature is useful when the experiment
