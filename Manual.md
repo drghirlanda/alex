@@ -171,16 +171,19 @@ explanation:
   , (comma). These characters are reserved for special operations, see
   below.
 
-- **Type**: This can be square, circle, text, image, or sound.
+- **Type**: This can be square, circle, text, textfile, image, or sound.
 
 - **Parameters**: The meaning of parameters varies according to the
   stimulus type:
 
-  - square: side in pixels
+  - square: side in pixels.
 
-  - circle: radius in pixels
+  - circle: radius in pixels.
 
-  - text: the text to be displayed
+  - text: the text to be displayed.
+
+  - textfile: name of a file in the Materials folder where the desired
+    text is stored.
 
   - image or sound: name of a file in the Materials folder that
     contains the image or sound.
@@ -462,6 +465,33 @@ features are disabled (see [Global parameters](#global)). Because the
 US (if any), is delivered only once at the end of the trial, it is
 irrelevant when subjects responds.
 
+
+<a name="textfiles"></a>
+# Instructions and other text displays
+
+Instructions or other longish text can be displayed with the textfile
+stimulus type. For example, to include both a start and an end message
+(say a 'thank you' or similar) you can use something like:
+
+- Phases.csv:
+
+        Phase Stimulus  Trials
+        Start StartText 1     
+	...
+ 	End   EndText   1     
+
+- Stimuli:csv:
+
+        Name      Type     Parameters Color XOffset YOffset Duration
+        StartText textfile Start.txt                        600000 
+        EndText   textfile End.txt                          600000
+        ...
+
+As you see, the display of instructions is construed simply as a
+stimulus that stays on for a long time (here 10 minutes), unless the
+subject performs the required response (which, recall, is by default
+the space bar). The Start.txt and End.txt files will be looked for in
+the Materials folder of the experiment.
 
 <a name="data-format"></a>
 # Data Format 
