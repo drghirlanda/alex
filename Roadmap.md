@@ -16,6 +16,22 @@ in themselves:
 
 - A blocking trial type requiring a response in order to move on.
 
+This would be useful as we could display instructions and end messages 
+
+Init script
+-----------
+
+We should have an alex-init script that initializes an experiment with
+the correct folder structure, and default files and parameter values
+when possible, and comments in Parameters.csv to briefly explain the
+meaning of parameters. The alex installation would store these files
+somewhere, and alex-init would just copy them in a new folder with a
+name provided by the user.
+
+Because we can copy files in PEBL using AppendFile, it makes sense to
+write alex-init in PEBL so that users do not need to install something
+just to run alex-init.
+
 
 Causal ratings
 --------------
