@@ -14,39 +14,8 @@ for Windows.
 Media files
 -----------
 
-We need some media files: big and small frowny and smiley face
-(ideally we would be able to scale a single file, but it doesn't look
-like PEBL has this capability yet).
+We need scalable frowny and smiley faces in the same style, black and white. 
 
-
-Per-stimulus durations
-----------------------
-
-If Stimuli.csv has a Duration column, that value should be used,
-falling back on the global values if no specific value is given. Note:
-the global value will be different between CS and US, so that should
-be taken into account.
-
-
-Text files and messages between phases
---------------------------------------
-
-It should be possible to insert messages in between phases and wait
-until the subject presses some key before going ahead. This would be
-automatically possible by implementing to features that are desirable
-in themselves:
-
-- A 'textfile' stimulus type, displaying the text file on screen as a
-  stimulus.
-
-- A blocking trial type requiring a response in order to move on. For
-  starters, 'blocking' could be a parameter of 'textfile'
-
-This would be useful as we could display instructions and end messages
-in the same way we display files, no special cases.
-
-Also, if we have 'rating' and 'demographics' stimulus types, these
-things could also be in the Phases.csv file. 
 
 Init script
 -----------
@@ -70,6 +39,7 @@ It should be possible to ask subjects to rate causal
 relationships. This needs a scale widget (already there in PEBL? Check
 out GetEasyChoice) and a way to configure the rating question, as well
 as a way to record the rating
+
 
 Stimulus sequences
 ------------------
@@ -105,21 +75,3 @@ as:
 Indicating a 100% probability of reward when 'a' is pressed and a 50%
 probability when 'b' is pressed. It would also be possible to have
 different USs, such as Smiley and Frown.
-
-
-Collecting judgments
---------------------
-
-It should be possible to ask subjects for ratings, such as "how likely
-do you think this stimulus will be followd by this outcome?" The
-format could be:
-
-    Phase  Stimulus Trials Rewards USs
-    2      A        1              Rating
-
-When the special "USs" Rating is specified, a special trial is run
-with a rating scale and rating text. The scale and text could be given
-in dedicated configuration files. Or, the "Rewards" field could be
-abused to give the start, end, and step of the rating scale, such as
-"1,7,1" for a 7 point Likert scale, or "0,100,10" for an 11 point
-percentage scale. But we also need a way to specify the scale text.

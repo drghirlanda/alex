@@ -156,11 +156,11 @@ which might look like this:
 
 - Stimuli.csv:
 
-        Name   Type   Parameters Color       XOffset YOffset
-        Red    square 50         red         0       0
-        White  square 50         white       0       0
-        Pink   square 50         255,128,128 0       0
-        Smiley image  smiley.png             0       -150
+        Name   Type   Parameters       Color       XOffset YOffset
+        Red    square 50               red         0       0
+        White  square 50               white       0       0
+        Pink   square 50               255,128,128 0       0
+        Smiley image  smiley-small.png             0       -150
 
 The fields should be fairly intuitive, but here is a detailed
 explanation:
@@ -186,7 +186,8 @@ explanation:
     text is stored.
 
   - image or sound: name of a file in the Materials folder that
-    contains the image or sound.
+    contains the image or sound. An optional zoom factor can be provided,
+    separated from the filename by a "+" sign.
 
 - **Color**: the color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given

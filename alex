@@ -361,7 +361,7 @@ define LookupStimulus( sName, field ) {
   nStim <- Length( gStimNames )
   sIndex <- Lookup( sName, gStimNames, Sequence(1,nStim,1) )
   if( IsList(sIndex) ) {
-    Message( "Cannot look up '"+field+"' for undefined stimulus "+sName )
+    Message( "Cannot look up '"+field+"' for undefined stimulus "+sName, 1 )
   }  
   nFields <- Length( gStimulusHeader )
   fIndex <- Lookup(field, gStimulusHeader, Sequence(1,nFields,1) )
@@ -384,17 +384,25 @@ define LookupStimulus( sName, field ) {
 # that value (here 'value' is stripped of the initial *). If nothing
 # is found, try to lookup something in the global parameters.
 define Resolve( field, value ) {
-  if( SubString(value,1,1) == ":" ) {
-    # This is the stimulus to be looked up:
-    s <- SubString(value,2,StringLength(value)-1)
-    result <- LookupStimulus( s, field )
-  } elseif( Substring(value,1,1) == "*" ) {
-    s <- SubString(value,2,StringLength(value))
-    result <- Lookup( s+field, gSubjectHeader, gSubjectInfo )
-  } else {
-    result <- value
+  values <- SplitString( value, "+" )
+  results <- []
+  loop( i, Sequence(1,Length(values),1) ) {
+    value <- Nth( values, i )
+    if( SubString(value,1,1) == ":" ) {
+      # This is the stimulus to be looked up:
+      s <- SubString(value,2,StringLength(value)-1)
+      PushOnEnd( results, LookupStimulus( s, field ) )
+    } elseif( Substring(value,1,1) == "*" ) {
+      s <- SubString(value,2,StringLength(value))
+      PushOnEnd( results, Lookup( s+field, gSubjectHeader, gSubjectInfo ) )
+    } else {
+      PushOnEnd( results, value )
+    }
   }
-  return result
+  if( Length(results)==1 ) {
+    results <- First( results )
+  }
+  return results
 }
 
 # Interpret a 'color' string from Stimulus.csv, and return the
@@ -550,8 +558,21 @@ define ReadStimuli() {
       l <- ToNumber( Resolve( "Parameters", Nth(gStimParams,i) ) )
       s <- Square( x, y, l, c1, 1 )
     } elseif( type == "image" ) {
-      f <- Resolve( "Parameters", Nth(gStimParams,i) )
-      s <- MakeImage( gWD + "Materials/" + f )
+      p <- Resolve( "Parameters", Nth(gStimParams,i) )
+      if( IsList(p) ) { # More than one parameter
+        file <- First(p)
+	zoom <- Nth(p, 2)
+      }  else {
+        file <- p
+	zoom <- 1
+      }
+      if( FileExists( gWD + "Materials/" + file ) ) {
+        s <- MakeImage( gWD + "Materials/" + file )
+      } else {
+        s <- MakeImage( file )
+      }
+      s.ZOOMX <- zoom
+      s.ZOOMY <- zoom
       Move( s, x, y )
     } elseif( type == "text" ) {
       w <- Resolve( "Parameters", Nth(gStimParams,i) )
@@ -568,7 +589,7 @@ define ReadStimuli() {
     # Movies will be supported when PEBL supports them better:
     # } elseif( type == "movie" ) {
     #   p <- Resolve( "Parameters", Nth(gStimParams,i) )
-    #   p <- SplitString( p, "," )      
+    #   p <- SplitString( p, "+" )      
     #   f <- gWD + "Materials/" + Nth( p, 1 )
     #   width <- Nth( p, 2 )
     #   height <- Nth( p, 3 )
