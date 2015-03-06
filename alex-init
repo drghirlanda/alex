@@ -1,0 +1,38 @@
+#!/usr/bin/pebl-language
+
+define Start( par ) {
+
+  # Installation folder:
+  gAlexDir <- "/usr/share/alex/template"
+
+  # Experiment name:
+  gExpDir <- Nth(par, 1)
+  if( IsDirectory( gExpDir ) ) {
+    SignalFatalError( "Folder "+gExpDir+" already exists, stopping" )
+  }
+  gExpDir <- gExpDir + "/"
+
+  MakeDirectory( gExpDir )
+  folders <- ['Design', 'Data', 'Materials']
+  loop( f, folders ) {
+    MakeDirectory( gExpDir + f )
+  }
+
+  designFiles <- ["Phases.csv", "Stimuli.csv", "Parameters.csv"]
+  loop( f, designFiles ) {
+    source <- FileOpen( gAlexDir + "Design/" + f )
+    destination <- FileOpenWrite( gExpDir + "Design/" + f )
+    FileAppend( source, destination )
+    FileClose( destination )
+    FileClose( source )
+  }
+
+  materialsFiles <- ["smiley.png", "Start.txt", "End.txt"]
+  loop( f, materialsFiles ) {
+    source <- FileOpen( gAlexDir + "Design/" + f )
+    destination <- FileOpenWrite( gExpDir + "Design/" + f )
+    FileAppend( source, destination )
+    FileClose( destination )
+    FileClose( source )
+  }
+}

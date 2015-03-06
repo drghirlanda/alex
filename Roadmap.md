@@ -3,8 +3,26 @@ Roadmap for alex
 
 This file describes some features that are planned for alex.
 
+Media files and default design files
+--------------------------------
+
+We need some media files: big and small frowny and smiley face
+(ideally we would be able to scale a single file, but it doesn't look
+like PEBL has this capability yet).
+
+We also need default design files alex-init.
+
+
+Per-stimulus durations
+----------------------
+
+If Phases.csv has CSDuration and/or USDuration columns, these values
+should be used, falling back on the global values if no specific value
+is given.
+
+
 Text files and messages between phases
------------------------
+--------------------------------------
 
 It should be possible to insert messages in between phases and wait
 until the subject presses some key before going ahead. This would be
@@ -14,9 +32,14 @@ in themselves:
 - A 'textfile' stimulus type, displaying the text file on screen as a
   stimulus.
 
-- A blocking trial type requiring a response in order to move on.
+- A blocking trial type requiring a response in order to move on. For
+  starters, 'blocking' could be a parameter of 'textfile'
 
-This would be useful as we could display instructions and end messages 
+This would be useful as we could display instructions and end messages
+in the same way we display files, no special cases.
+
+Also, if we have 'rating' and 'demographics' stimulus types, these
+things could also be in the Phases.csv file. 
 
 Init script
 -----------
