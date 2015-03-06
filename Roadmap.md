@@ -3,22 +3,29 @@ Roadmap for alex
 
 This file describes some features that are planned for alex.
 
-Media files and default design files
---------------------------------
+Installation scripts
+--------------------
+
+Ideally we should have installation scripts for all systems supported
+by PEBL. Linux and OS X can use the same bash script. Research needed
+for Windows.
+
+
+Media files
+-----------
 
 We need some media files: big and small frowny and smiley face
 (ideally we would be able to scale a single file, but it doesn't look
 like PEBL has this capability yet).
 
-We also need default design files alex-init.
-
 
 Per-stimulus durations
 ----------------------
 
-If Phases.csv has CSDuration and/or USDuration columns, these values
-should be used, falling back on the global values if no specific value
-is given.
+If Stimuli.csv has a Duration column, that value should be used,
+falling back on the global values if no specific value is given. Note:
+the global value will be different between CS and US, so that should
+be taken into account.
 
 
 Text files and messages between phases
