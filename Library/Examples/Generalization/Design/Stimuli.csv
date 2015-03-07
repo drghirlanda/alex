@@ -1,0 +1,14 @@
+Name,Shape,Parameters,Color,XOffset,YOffset
+X,circle,25,gray,0,0
+S,square,60,red,0,0
+L1,square,60,red,-15,0
+L2,square,60,red,-30,0
+L3,square,60,red,-45,0
+L4,square,60,red,-60,0
+L5,square,60,red,-75,0
+R1,square,60,red,15,0
+R2,square,60,red,30,0
+R3,square,60,red,45,0
+R4,square,60,red,60,0
+R5,square,60,red,75,0
+Smiley,image,smiley-small.png,,0,-150

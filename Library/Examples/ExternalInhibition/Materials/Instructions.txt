@@ -1,0 +1,10 @@
+PLEASE READ THE FOLLOWING INSTRUCTIONS CAREFULLY
+
+The data collected in this experiment will not be linked to your name or other identifying information. If you would like to terminate the experiment at any time, you may do so without penalty.
+
+In this experiment you will see simple colored images. Whenever an image is on the screen, you have the option of doing nothing or pressing the spacebar one or more times. Sometimes pressing the spacebar will cause a smiley face to appear. At other times, however, no smiley face will appear. You have to learn when to press the spacebar so that the smiley face appears as much as possible. Initially, of course, you will not know when to press the spacebar, so you may make mistakes. This is fine, but try to press the spacebar only if you think that doing so will make the smiley face appear.
+
+Each image will be shown for a few seconds, then experiment will move
+on to the next image.
+
+Press the spacebar to begin.
