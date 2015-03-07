@@ -207,8 +207,8 @@ explanation:
     - frown.png: a sad face
 
     These images have been taken from [Font
-    Awesome][http://fortawesome.github.io/Font-Awesome], via [this
-    project][https://github.com/encharm/Font-Awesome-SVG-PNG]. They
+    Awesome](http://fortawesome.github.io/Font-Awesome), via [this
+    project](https://github.com/encharm/Font-Awesome-SVG-PNG). They
     are 256x256 pixels in size to look OK even at high resolution. If
     they are too big for you, yu can zoom them as indicated above. The
     images listed above are black over a transparent background. You
