@@ -3,6 +3,16 @@ Roadmap for alex
 
 This file describes some features that are planned for alex.
 
+Rearrange Manual
+----------------
+
+The explanation of Stimuli.csv and Phases.csv should be more
+systematic, with sections "The Stimuli.csv file" and "The Phases.csv"
+coming after a brief introductory example. Right now the example is
+probably too long and it introduces too many features in a somewhat
+unclear order.
+
+
 Installation scripts
 --------------------
 
@@ -14,25 +24,11 @@ for Windows.
 Media files
 -----------
 
-We need scalable frowny and smiley faces in the same style, black and white. 
+We need scalable frowny and smiley faces in the same style, black and
+white.
 
 
-Init script
------------
-
-We should have an alex-init script that initializes an experiment with
-the correct folder structure, and default files and parameter values
-when possible, and comments in Parameters.csv to briefly explain the
-meaning of parameters. The alex installation would store these files
-somewhere, and alex-init would just copy them in a new folder with a
-name provided by the user.
-
-Because we can copy files in PEBL using AppendFile, it makes sense to
-write alex-init in PEBL so that users do not need to install something
-just to run alex-init.
-
-
-Causal ratings
+Causal ratings 
 --------------
 
 It should be possible to ask subjects to rate causal

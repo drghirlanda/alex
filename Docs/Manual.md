@@ -29,6 +29,14 @@ MyExperiment, and within it the following subfolders:
 - **Data**: This folder is created by alex if it is not found, and it
   holds the data collected during experiment runs.
 
+The program alex-init generates a bare-bones experiment so that at
+least you know what files you need. It is run like this:
+
+    alex-init -v <experiment name>
+
+This creates folder <experiment name> with the above mentioned
+subfolders and skeleton configuration files.
+
 
 <a name="running"></a>
 # Running alex
@@ -37,9 +45,9 @@ From the folder where the Design and Materials folders are, you
 can just type 'alex'. You can also run experiments in other
 folders using:
 
-    alex -v <Folder>
+    alex -v <folder>
 
-The Folder is then expected to have Design and Materials subfolders
+The <folder> is then expected to have Design and Materials subfolders
 with appropriate files. A Data folder will be create if not present.
 
 Alex has been designed so that multiple instances of an experiment can
@@ -69,8 +77,6 @@ subject.
 
 All configuration files are in the Design folder:
 
-- Instructions.txt contains instructions to be displayed to subjects.
-
 - Phases.csv describe the experimental design proper. I containes one
   or more experimental phases, each composed of a number of trials in
   which stimuli are presented, responses recorded, and outcomes
@@ -88,6 +94,9 @@ All configuration files are in the Design folder:
   inter-trial intervals, and so on. Can also be used to define
   parameters that are the same for all stimuli, such as which key is
   used for responses.
+
+In addition, instruction files can be in Materials, see the
+[section on text files](#textfiles).
 
 
 <a name="example"></a>
@@ -160,7 +169,7 @@ which might look like this:
         Red    square 50               red         0       0
         White  square 50               white       0       0
         Pink   square 50               255,128,128 0       0
-        Smiley image  smiley-small.png             0       -150
+        Smiley image  smile-o.png                  0       -150
 
 The fields should be fairly intuitive, but here is a detailed
 explanation:
@@ -186,8 +195,22 @@ explanation:
     text is stored.
 
   - image or sound: name of a file in the Materials folder that
-    contains the image or sound. An optional zoom factor can be provided,
-    separated from the filename by a "+" sign.
+    contains the image or sound. An optional zoom factor can be
+    provided, separated from the filename by a "+" sign.  The
+    following stylized faces (smileys) come with alex and need not be
+    in the Materials folder:
+
+    - smile-o.png: a happy face, as used above
+
+    - meh-o.png: a neutral face 
+
+    - frown.png: a sad face
+
+    These images have been taken from [Font
+    Awesome][http://fortawesome.github.io/Font-Awesome], via [this
+    project][https://github.com/encharm/Font-Awesome-SVG-PNG]. They
+    are 256x256 pixels in size to look OK even at high resolution. If
+    they are too big for you, yu can zoom them as indicated above.
 
 - **Color**: the color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given
@@ -371,11 +394,11 @@ CSV format, displayed here as a table for legibility):
         FontSize        36
         Test            1
 
-**CSDuration** is the duration of all the non-US stimuli. All
-durations are in milliseconds. In future versions it will be possible
-to set different durations for different stimuli, and also to present
-sequences of stimuli for each trial, but right now we have only single
-stimuli of a common duration. 
+**CSDuration** is the default duration of all the non-US stimuli,
+while **USDuration** is the default duration of all US stimuli. All
+durations are in milliseconds. Note that you can set different
+durations for different stimuli by including a Duration column in the
+Stimuli.csv file.
 
 **CSUSInterval** and **USDuration** should be self-explanatory.
 
