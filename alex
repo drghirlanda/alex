@@ -2,6 +2,9 @@
 
 define Start( par ) {
 
+  # This will have to be changed when installing: 
+  gAlexDir <- "Library/Materials/"
+
   # Have we been asked to run in a directory other than .?
   gWD <- Nth(par, 1)
   if( gWd != 0 ) {
@@ -128,15 +131,19 @@ define Undisplay( stimulus ) {
 
 define ResolveDuration( stimulus, role ) {
   s <- First( SplitString(stimulus, "+") )
-  d <- LookupStimulus( s, "Duration" )
-  d <- Resolve( "Duration", d )
-  if( d == "NA" ) { # We did not find a CS-specific duration
-    d <- Parameter( role + "Duration")
-  }
-  if( d == "NA" ) { # Still nothing found...
-    Message( "Cannot determine duration of stimulus "+s )
+  if( StringLength( s ) ) {
+    d <- LookupStimulus( s, "Duration" )
+    d <- Resolve( "Duration", d )
+    if( d == "NA" ) { # We did not find a CS-specific duration
+      d <- Parameter( role + "Duration")
+    }
+    if( d == "NA" ) { # Still nothing found...
+      Message( "Cannot determine duration of stimulus "+s )
+    } else {
+      d <- ToNumber( d )
+    }
   } else {
-    d <- ToNumber( d )
+    d <- "NA"
   }
   Print( "CSDuration = " + d + " for " + s )
   return d
@@ -566,8 +573,14 @@ define ReadStimuli() {
         file <- p
 	zoom <- 1
       }
-      if( FileExists( gWD + "Materials/" + file ) ) {
-        s <- MakeImage( gWD + "Materials/" + file )
+      fileLocal <- gWD + "Materials/" + file
+      fileAlex <- gAlexDir + file
+      Print( fileLocal )
+      Print( fileAlex )
+      if( FileExists( fileLocal ) ) {
+        s <- MakeImage( fileLocal )
+      } elseif( FileExists( fileAlex ) ) {
+        s <- MakeImage( fileAlex )
       } else {
         s <- MakeImage( file )
       }

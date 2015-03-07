@@ -5,4 +5,5 @@ A2,square,60,blue,65,0
 B2,square,60,yellow,65,0
 C,square,60,green,65,0
 D,square,60,red,65,0
-Smiley,image,smiley-small.png,,0,-150
+Smiley,image,smile-o.png+.33,,0,-150
+Frown,image,frown-o.png+.33,,0,-150
