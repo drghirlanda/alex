@@ -3,32 +3,59 @@ Roadmap for alex
 
 This file describes some features that are planned for alex.
 
-Rearrange Manual
-----------------
+Toward a release
+================
 
-The explanation of Stimuli.csv and Phases.csv should be more
-systematic, with sections "The Stimuli.csv file" and "The Phases.csv"
-coming after a brief introductory example. Right now the example is
-probably too long and it introduces too many features in a somewhat
-unclear order.
+- Rearrange Manual. The explanation of Stimuli.csv and Phases.csv
+should be more systematic, with sections "The Stimuli.csv file" and
+"The Phases.csv" coming after a brief introductory example. Right now
+the example is probably too long and it introduces too many features
+in a somewhat unclear order.
 
+- Example suite. Include also "cognitive" tasks like a categorization
+  task with test stimuli for prototype effect and peak-shift. Other
+  tasks: simple discrimination, generalization, peak shift, replicate
+  some famous experiments.
 
-Installation scripts
---------------------
+- A paper describing alex.
 
-Ideally we should have installation scripts for all systems supported
-by PEBL. Linux and OS X can use the same bash script. Research needed
-for Windows.
+- Installation scripts. We should have installation scripts for all
+  systems supported by PEBL. Linux and OS X can use the same bash
+  script but will probably have to install into different
+  folders. Research needed for Windows.
+
+- R package. Minimum requirements: a way to read in alex data into
+  data.frames, descriptive stats for response time distributions and
+  response count distributions to the different stimuli. It is also
+  possible to figure out which independent variables were manipulated
+  between and within subjects, present the experimental design in a
+  table, etc.
 
 
 Causal ratings 
 --------------
 
 It should be possible to ask subjects to rate causal
-relationships. This needs a scale widget (already there in PEBL? Check
-out GetEasyChoice) and a way to configure the rating question, as well
-as a way to record the rating
+relationships. This needs a scale widget and a way to configure the
+rating question, as well as a way to record the rating. The plan could
+be:
 
+- GetEasyChoice for rating scale. 
+
+- Response type can be "rating." To configure the scale we could use
+  global parameters RatingMin, RatingMax, RatingStep, or have
+  parameters in the Response column, like "rating+1+10+1" for a 10
+  point scale with 1-point increments.
+
+- We will probably have to change the OneTrial function a bit so that
+  for rating trials the "Responses" data field is the rating rather
+  than the number of responses.
+
+- Other things?
+
+
+Future
+======
 
 Stimulus sequences
 ------------------

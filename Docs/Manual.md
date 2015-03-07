@@ -39,7 +39,7 @@ subfolders and skeleton configuration files.
 
 
 <a name="running"></a>
-# Running alex
+# Running and stopping alex
 
 From the folder where the Design and Materials folders are, you
 can just type 'alex'. You can also run experiments in other
@@ -70,6 +70,10 @@ would be overwritten by re-running a subject. If you decide a data
 file is worthless, either remove it or rename it with something like
 an 'incomplete-' prefix, and alex will automatically re-run that
 subject.
+
+If you want to interrupt a running experiment, you can use Ctrl + Alt
++ Shift + \ (Backslash), which is the standard interrupt key
+comination for PEBL.
 
 
 <a name="configuration-files"></a>
