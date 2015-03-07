@@ -3,36 +3,35 @@
 define Start( par ) {
 
   # Installation folder:
-  gAlexDir <- "/usr/share/alex/template"
+  #gAlexDir <- "/usr/share/alex/Library/Init/"
+  gAlexDir <- "Library/Init/"
 
   # Experiment name:
   gExpDir <- Nth(par, 1)
   if( IsDirectory( gExpDir ) ) {
     SignalFatalError( "Folder "+gExpDir+" already exists, stopping" )
-  }
+  } 
   gExpDir <- gExpDir + "/"
 
+  Print( "Creating experiment in " + gExpDir )
   MakeDirectory( gExpDir )
-  folders <- ['Design', 'Data', 'Materials']
-  loop( f, folders ) {
+  loop( f, GetDirectoryListing( gAlexDir ) ) {
     MakeDirectory( gExpDir + f )
   }
 
-  designFiles <- ["Phases.csv", "Stimuli.csv", "Parameters.csv"]
-  loop( f, designFiles ) {
-    source <- FileOpen( gAlexDir + "Design/" + f )
-    destination <- FileOpenWrite( gExpDir + "Design/" + f )
-    FileAppend( source, destination )
-    FileClose( destination )
-    FileClose( source )
+  loop( f, GetDirectoryListing( gAlexDir + "Design" ) ) {
+    if( f != "." and f != ".." ) {
+      source <- gAlexDir + "Design/" + f
+      destination <- gExpDir + "Design/" + f
+      AppendFile( destination, source )
+    }
   }
 
-  materialsFiles <- ["smiley.png", "Start.txt", "End.txt"]
-  loop( f, materialsFiles ) {
-    source <- FileOpen( gAlexDir + "Design/" + f )
-    destination <- FileOpenWrite( gExpDir + "Design/" + f )
-    FileAppend( source, destination )
-    FileClose( destination )
-    FileClose( source )
+  loop( f, GetDirectoryListing( gAlexDir + "Materials" ) ) {
+    if( f != "." and f != ".." ) {
+      source <- gAlexDir + "Materials/" + f
+      destination <- gExpDir + "Materials/" + f
+      AppendFile( destination, source )
+    }
   }
 }
