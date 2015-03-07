@@ -21,13 +21,6 @@ by PEBL. Linux and OS X can use the same bash script. Research needed
 for Windows.
 
 
-Media files
------------
-
-We need scalable frowny and smiley faces in the same style, black and
-white.
-
-
 Causal ratings 
 --------------
 

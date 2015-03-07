@@ -210,7 +210,10 @@ explanation:
     Awesome][http://fortawesome.github.io/Font-Awesome], via [this
     project][https://github.com/encharm/Font-Awesome-SVG-PNG]. They
     are 256x256 pixels in size to look OK even at high resolution. If
-    they are too big for you, yu can zoom them as indicated above.
+    they are too big for you, yu can zoom them as indicated above. The
+    images listed above are black over a transparent background. You
+    can also use smile-o-white.png, etc., which are white on
+    transparent background.
 
 - **Color**: the color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given
