@@ -123,31 +123,38 @@ define Undisplay( stimulus ) {
   Draw()
 }
 
+# Helper function to determine the duration of stimuli. 
+define ResolveDuration( stimulus, role ) {
+  s <- First( SplitString(stimulus,"+") )
+  durations <- []
+  loop( s, SplitString(stimulus,"+") ) {
+    d <- Resolve( "Duration", LookupStimulus( s, "Duration" ) )
+    if( d == "NA" ) { # We did not find a CS-specific duration
+      d <- Parameter( role + "Duration")
+    }
+    d <- ToNumber( d ) # NA becomes 0
+    PushOnEnd( durations, d )
+  }
+  ## If any duration is 0 (could not be determined), we have an error:
+  if( Sum( Match( durations, 0 ) ) ) {
+    Message( "Could not determine duration of " + stimulus, 1 )
+  }
+  ## The duration information is valid if all durations are equal
+  d <- First( durations )
+  loop( d2, Rest( durations ) ) {
+    if( d != d2 ) {
+      Message( "Some stimuli have different durations in "+stimulus, 1 )
+    }
+  } 
+  return d
+}
+
 ########################################################################
 #                                                                      #
 # This function coordinates the events within a single trial           #
 #                                                                      #
 ########################################################################
 
-define ResolveDuration( stimulus, role ) {
-  s <- First( SplitString(stimulus, "+") )
-  if( StringLength( s ) ) {
-    d <- LookupStimulus( s, "Duration" )
-    d <- Resolve( "Duration", d )
-    if( d == "NA" ) { # We did not find a CS-specific duration
-      d <- Parameter( role + "Duration")
-    }
-    if( d == "NA" ) { # Still nothing found...
-      Message( "Cannot determine duration of stimulus "+s )
-    } else {
-      d <- ToNumber( d )
-    }
-  } else {
-    d <- "NA"
-  }
-  Print( "CSDuration = " + d + " for " + s )
-  return d
-}
 
 define OneTrial( stimulus, rewardProb, uss, response ) {
   Draw()

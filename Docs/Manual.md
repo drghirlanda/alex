@@ -405,7 +405,8 @@ CSV format, displayed here as a table for legibility):
 while **USDuration** is the default duration of all US stimuli. All
 durations are in milliseconds. Note that you can set different
 durations for different stimuli by including a Duration column in the
-Stimuli.csv file.
+Stimuli.csv file. When using compound stimuli, all components must
+have the same duration.
 
 **CSUSInterval** and **USDuration** should be self-explanatory.
 

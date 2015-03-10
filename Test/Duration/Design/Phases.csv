@@ -2,3 +2,4 @@ Phase,Stimuli,Trials,Reward,US
 1,A,1,1,CircleUS
 2,B,1,1,CircleUS
 3,C,1,1,CircleUS
+4,A+B,1,1,CircleUS
