@@ -1,10 +1,29 @@
-#!/usr/bin/pebl-language
+#!/usr/bin/pebl
 
 define Start( par ) {
 
-  # Installation folder:
-  #gAlexDir <- "/usr/share/alex/Library/Init/"
+  ## This is the folder where we look for support files:
   gAlexDir <- "Library/Init/"
+  ## It can itself be in a number of places:
+  dirs <- [ "",                # Current folder takes precedence
+            "/usr/share/alex/" # Linux
+	    # ADD OS X AND WINDOWS
+	  ]
+  ## Here we find out where:
+  found <- 0
+  loop( d, dirs ) {
+    if( IsDirectory( d + gAlexDir ) ) {
+      gAlexDir <- d + gAlexDir
+      found <- 1
+      Print( d + gAlexDir + " found!" )
+      break
+    } else {
+      Print( d + gAlexDir + " not found, moving on" )
+    }
+  }
+  if( not found ) {
+    SignalFatalError( "Cannot find "+gAlexDir+" anywhere" )
+  }
 
   # Experiment name:
   gExpDir <- Nth(par, 1)

@@ -1,5 +1,5 @@
 Parameter,Value,Description
-CSDuration,2500,"Duration of CSs, unless specified in Stimuli.csv"
+CSDuration,1000,"Duration of CSs, unless specified in Stimuli.csv"
 CSUSInterval,0,Interval between CS offset and US onset
 USDuration,250,"Duration of Uss, unless specified in Stimuli.csv"
 MinITI,1000,Minimum intertrial interval

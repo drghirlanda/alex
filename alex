@@ -1,9 +1,23 @@
-#!/usr/bin/pebl-language
+#!/usr/bin/pebl
 
 define Start( par ) {
 
-  # This will have to be changed when installing: 
+  ## This is the folder where we look for support files. In contrast
+  ## to alex-inint, we might not need these files, so not finding
+  ## anything is not an error.
   gAlexDir <- "Library/Materials/"
+  ## It can itself be in a number of places:
+  dirs <- [ "",                # Current folder takes precedence
+            "/usr/share/alex/" # Linux
+	    # ADD OS X AND WINDOWS
+	  ]
+  ## Here we find out where (if anywhere):
+  loop( d, dirs ) {
+    if( IsDirectory( d ) ) {
+      gAlexDir <- d + gAlexDir
+      break
+    }
+  }
 
   # Have we been asked to run in a directory other than .?
   gWD <- Nth(par, 1)
@@ -40,6 +54,7 @@ define Start( par ) {
   ReadPhases()     
   ReadStimuli()    
 
+  ## Subject information is only asked when not running in test mode
   if( not test ) {
     gSex <- GetEasyChoice( "Please select your sex", 
     	 ["Male", "Female"], ["M", "F"], gWindow )
@@ -123,31 +138,38 @@ define Undisplay( stimulus ) {
   Draw()
 }
 
+# Helper function to determine the duration of stimuli. 
+define ResolveDuration( stimulus, role ) {
+  s <- First( SplitString(stimulus,"+") )
+  durations <- []
+  loop( s, SplitString(stimulus,"+") ) {
+    d <- Resolve( "Duration", LookupStimulus( s, "Duration" ) )
+    if( d == "NA" ) { # We did not find a CS-specific duration
+      d <- Parameter( role + "Duration")
+    }
+    d <- ToNumber( d ) # NA becomes 0
+    PushOnEnd( durations, d )
+  }
+  ## If any duration is 0 (could not be determined), we have an error:
+  if( Sum( Match( durations, 0 ) ) ) {
+    Message( "Could not determine duration of " + stimulus, 1 )
+  }
+  ## The duration information is valid if all durations are equal
+  d <- First( durations )
+  loop( d2, Rest( durations ) ) {
+    if( d != d2 ) {
+      Message( "Some stimuli have different durations in "+stimulus, 1 )
+    }
+  } 
+  return d
+}
+
 ########################################################################
 #                                                                      #
 # This function coordinates the events within a single trial           #
 #                                                                      #
 ########################################################################
 
-define ResolveDuration( stimulus, role ) {
-  s <- First( SplitString(stimulus, "+") )
-  if( StringLength( s ) ) {
-    d <- LookupStimulus( s, "Duration" )
-    d <- Resolve( "Duration", d )
-    if( d == "NA" ) { # We did not find a CS-specific duration
-      d <- Parameter( role + "Duration")
-    }
-    if( d == "NA" ) { # Still nothing found...
-      Message( "Cannot determine duration of stimulus "+s )
-    } else {
-      d <- ToNumber( d )
-    }
-  } else {
-    d <- "NA"
-  }
-  Print( "CSDuration = " + d + " for " + s )
-  return d
-}
 
 define OneTrial( stimulus, rewardProb, uss, response ) {
   Draw()
@@ -575,14 +597,14 @@ define ReadStimuli() {
       }
       fileLocal <- gWD + "Materials/" + file
       fileAlex <- gAlexDir + file
-      Print( fileLocal )
-      Print( fileAlex )
       if( FileExists( fileLocal ) ) {
         s <- MakeImage( fileLocal )
       } elseif( FileExists( fileAlex ) ) {
         s <- MakeImage( fileAlex )
-      } else {
+      } elseif( FileExists( file ) ) {
         s <- MakeImage( file )
+      } else {
+        Message( "Cannot find file " + file, 1 )
       }
       s.ZOOMX <- zoom
       s.ZOOMY <- zoom

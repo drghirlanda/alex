@@ -1,5 +1,5 @@
 Name,Type,Parameters,Color,XOffset,YOffset,Duration
 A,square,60,red,0,0,1000
-B,square,60,green,0,0,5000
-C,square,60,blue,0,0,
+B,square,60,green,65,0,
+C,square,60,blue,0,0,3000
 CircleUS,circle,25,yellow,0,-150,250
