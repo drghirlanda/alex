@@ -1,9 +1,19 @@
-#!/usr/bin/pebl-language
+#!/usr/bin/pebl
 
 define Start( par ) {
 
-  # This will have to be changed when installing: 
-  gAlexDir <- "Library/Materials/"
+  # gAlexDir is the location of a system-wide directory to store
+  # various files that ship with alex. Since all of these files are,
+  # in fact, optional, we start with the empty path, meaning alex will
+  # look for files in the current directory. Then we see whether we
+  # can find a system-wide directory.
+  gAlexDir <- ""
+
+  if( IsDirectory( "/usr/share/alex/" ) ) {
+    gAlexDir <- "/usr/share/alex/"
+  }
+  # FIX this if clause should continue looking for folder that are
+  # valid on OS X and Windows
 
   # Have we been asked to run in a directory other than .?
   gWD <- Nth(par, 1)
@@ -40,6 +50,7 @@ define Start( par ) {
   ReadPhases()     
   ReadStimuli()    
 
+  ## Subject information is only asked when not running in test mode
   if( not test ) {
     gSex <- GetEasyChoice( "Please select your sex", 
     	 ["Male", "Female"], ["M", "F"], gWindow )
@@ -581,15 +592,15 @@ define ReadStimuli() {
 	zoom <- 1
       }
       fileLocal <- gWD + "Materials/" + file
-      fileAlex <- gAlexDir + file
-      Print( fileLocal )
-      Print( fileAlex )
+      fileAlex <- gAlexDir + "Library/Materials/" + file
       if( FileExists( fileLocal ) ) {
         s <- MakeImage( fileLocal )
       } elseif( FileExists( fileAlex ) ) {
         s <- MakeImage( fileAlex )
-      } else {
+      } elseif( FileExists( file ) {
         s <- MakeImage( file )
+      } else {
+        Message( "Cannot find file " + file, 1 )
       }
       s.ZOOMX <- zoom
       s.ZOOMY <- zoom
