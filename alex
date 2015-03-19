@@ -2,18 +2,22 @@
 
 define Start( par ) {
 
-  # gAlexDir is the location of a system-wide directory to store
-  # various files that ship with alex. Since all of these files are,
-  # in fact, optional, we start with the empty path, meaning alex will
-  # look for files in the current directory. Then we see whether we
-  # can find a system-wide directory.
-  gAlexDir <- ""
-
-  if( IsDirectory( "/usr/share/alex/" ) ) {
-    gAlexDir <- "/usr/share/alex/"
+  ## This is the folder where we look for support files. In contrast
+  ## to alex-inint, we might not need these files, so not finding
+  ## anything is not an error.
+  gAlexDir <- "Library/Materials/"
+  ## It can itself be in a number of places:
+  dirs <- [ "",                # Current folder takes precedence
+            "/usr/share/alex/" # Linux
+	    # ADD OS X AND WINDOWS
+	  ]
+  ## Here we find out where (if anywhere):
+  loop( d, dirs ) {
+    if( IsDirectory( d ) ) {
+      gAlexDir <- d + gAlexDir
+      break
+    }
   }
-  # FIX this if clause should continue looking for folder that are
-  # valid on OS X and Windows
 
   # Have we been asked to run in a directory other than .?
   gWD <- Nth(par, 1)
@@ -592,12 +596,12 @@ define ReadStimuli() {
 	zoom <- 1
       }
       fileLocal <- gWD + "Materials/" + file
-      fileAlex <- gAlexDir + "Library/Materials/" + file
+      fileAlex <- gAlexDir + file
       if( FileExists( fileLocal ) ) {
         s <- MakeImage( fileLocal )
       } elseif( FileExists( fileAlex ) ) {
         s <- MakeImage( fileAlex )
-      } elseif( FileExists( file ) {
+      } elseif( FileExists( file ) ) {
         s <- MakeImage( file )
       } else {
         Message( "Cannot find file " + file, 1 )
