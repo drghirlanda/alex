@@ -466,7 +466,7 @@ write:
         1     Red      20     1      Smiley <left>
         1     White    20     1      Smiley <right>
 
-Here <left> and <right> are special codes that denote the left and
+Here `<left>` and `<right>` are special codes that denote the left and
 right arrow key. You can look up the codes for different special keys
 in the "Keyboard Entry" section of the PEBL manual. If you only want
 to use letter and number keys, you simply can write the letter or
