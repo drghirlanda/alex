@@ -3,17 +3,16 @@
 define Start( par ) {
 
   ## This is the folder where we look for support files. In contrast
-  ## to alex-inint, we might not need these files, so not finding
-  ## anything is not an error.
+  ## to alex-init, we might not need these files, so not finding
+  ## anything is not an error. We look through a number of likely
+  ## system directories anyway, stopping as soon as we find one.
   gAlexDir <- "Library/Materials/"
-  ## It can itself be in a number of places:
   dirs <- [ "",                # Current folder takes precedence
             "/usr/share/alex/" # Linux
 	    # ADD OS X AND WINDOWS
 	  ]
-  ## Here we find out where (if anywhere):
   loop( d, dirs ) {
-    if( IsDirectory( d ) ) {
+    if( IsDirectory( d + gAlexDir ) ) {
       gAlexDir <- d + gAlexDir
       break
     }
@@ -42,7 +41,13 @@ define Start( par ) {
   
   ## Initialize basic display elements:
   fg <- Parameter( "ForegroundColor" )
+  if( fg == "NA" ) {
+    fg <- "white"
+  }
   bg <- Parameter( "BackgroundColor" )
+  if( bg == "NA" ) {
+    bg <- "black"
+  }
   gWindow <- MakeWindow( bg )
   gBackgroundColor <- MakeColor( bg )
   gColor <- MakeColor( fg )
