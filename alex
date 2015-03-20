@@ -51,8 +51,16 @@ define Start( par ) {
   gWindow <- MakeWindow( bg )
   gBackgroundColor <- MakeColor( bg )
   gColor <- MakeColor( fg )
-  gFont <- MakeFont( Parameter("FontName")+".ttf", 0, 
-    ToNumber(Parameter("FontSize")), gColor, gBackgroundColor, 1 )
+  fontname <- Parameter("FontName")
+  if( fontname == "NA" ) {
+    fontname <- "Vera"
+  }
+  if( fontsize == "NA" ) {
+    fontsize <- 24
+  }
+  fontsize <- Parameter("FontSize")
+  gFont <- MakeFont( fontname+".ttf", 0, 
+    ToNumber(fontsize), gColor, gBackgroundColor, 1 )
 
   ## Read other Design files:
   ReadSubject()
