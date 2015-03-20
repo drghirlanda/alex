@@ -55,10 +55,10 @@ define Start( par ) {
   if( fontname == "NA" ) {
     fontname <- "Vera"
   }
+  fontsize <- Parameter("FontSize")
   if( fontsize == "NA" ) {
     fontsize <- 24
   }
-  fontsize <- Parameter("FontSize")
   gFont <- MakeFont( fontname+".ttf", 0, 
     ToNumber(fontsize), gColor, gBackgroundColor, 1 )
 
