@@ -211,13 +211,14 @@ explanation:
 
     - frown-o.png: a sad face
 
-    Thes same images are drawn in black, the equivalent white images
-    are available as smile-o-white.png, etc. These images have been
-    taken from [Font
-    Awesome](http://fortawesome.github.io/Font-Awesome), via [this
-    project](https://github.com/encharm/Font-Awesome-SVG-PNG). They
-    are 256x256 pixels in size to look OK even at high resolution. If
-    they are too big for you, yu can zoom them as indicated above. 
+    These images are drawn in black over a transparent background;
+    equivalent white images are available as smile-o-white.png,
+    etc. All images have been taken from
+    [Font Awesome](http://fortawesome.github.io/Font-Awesome), via
+    [this project](https://github.com/encharm/Font-Awesome-SVG-PNG). They
+    are 256x256 pixels in size to look OK even on high resolution
+    monitors. If that is too big for you, yu can zoom them as
+    indicated above.
 
 - **Color**: the color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given
