@@ -390,7 +390,7 @@ CSV format, displayed here as a table for legibility):
         CSDuration      4000
         CSUSInterval    0
         USDuration      400
-	Response        space
+	    Response        space
         ResponseTimeMin 0
         ResponseTimeMax 4000
         MinITI          1000
