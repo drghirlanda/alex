@@ -200,24 +200,24 @@ explanation:
 
   - image or sound: name of a file in the Materials folder that
     contains the image or sound. An optional zoom factor can be
-    provided, separated from the filename by a "+" sign.  The
-    following stylized faces (smileys) come with alex and need not be
-    in the Materials folder:
+    provided to scale the image to a desired size. It should be
+    separated from the filename by a "+" sign.  The following stylized
+    faces (smileys) come with alex and you can use them without having
+    them in the Materials folder:
 
     - smile-o.png: a happy face, as used above
 
     - meh-o.png: a neutral face 
 
-    - frown.png: a sad face
+    - frown-o.png: a sad face
 
-    These images have been taken from [Font
+    Thes same images are drawn in black, the equivalent white images
+    are available as smile-o-white.png, etc. These images have been
+    taken from [Font
     Awesome](http://fortawesome.github.io/Font-Awesome), via [this
     project](https://github.com/encharm/Font-Awesome-SVG-PNG). They
     are 256x256 pixels in size to look OK even at high resolution. If
-    they are too big for you, yu can zoom them as indicated above. The
-    images listed above are black over a transparent background. You
-    can also use smile-o-white.png, etc., which are white on
-    transparent background.
+    they are too big for you, yu can zoom them as indicated above. 
 
 - **Color**: the color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given
@@ -429,9 +429,15 @@ see [here](#responses).
 allowed to make in one trial. There are essentially two useful
 settings. If you set this to 1 the trial ends with the first response
 (the US is delivered if appropriate, of course). If you set it to an
-unrealistically large value, say 1000, you can any number of responses
-per trial. Each of these may result in the US being delivered, as
-described above.
+unrealistically large value, say 1000, you can record any number of
+responses per trial. Each of these may result in the US being
+delivered, as described above. Note that you can set MaxReponses to a
+different value for different trial types, by including a MaxResponses
+column in Phases.csv (see the [section on text files](#textfiles) for
+an example). If a MaxResponses column exists, but the value is empty
+for some stimuli, the MaxResponses value in Parameters.csv will be
+looked up. If MaxResponses is not set there, it is given a default
+value of 1.
 
 The next few parameters control the screen background color while the
 experiment is running and the color, font, and size of text used for
@@ -507,10 +513,10 @@ stimulus type. For example, to include both a start and an end message
 
 - Phases.csv:
 
-        Phase Stimulus  Trials
-        Start StartText 1     
+        Phase Stimulus  Trials MaxResponses
+        Start StartText 1      1
 	...
- 	End   EndText   1     
+ 	End   EndText   1      1
 
 - Stimuli:csv:
 
@@ -523,7 +529,10 @@ As you see, the display of instructions is construed simply as a
 stimulus that stays on for a long time (here 10 minutes), unless the
 subject performs the required response (which, recall, is by default
 the space bar). The Start.txt and End.txt files will be looked for in
-the Materials folder of the experiment.
+the Materials folder of the experiment. Note the column MaxResponses
+in Phases.csv, which makes sure the user has to press the space bar
+(the default response) only once to move on, even if a larger number
+of responses is allowed for actual experimental trials.
 
 <a name="data-format"></a>
 # Data Format 
