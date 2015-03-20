@@ -13,11 +13,11 @@ if [ ! -d ${SHARE_DIR}/alex ]; then
     mkdir -p ${SHARE_DIR}/alex
 fi
 
-# copy files to SHARE_DIR:
+# copy files to SHARE_DIR and set their permissions:
 for FILE in README.md Docs Examples Library; do
     cp -r ${FILE} ${SHARE_DIR}/alex
-    chmod 0644 ${FILE}
-    chown ${USER}.${GROUP} ${FILE}
+    chmod 0644 ${SHARE_DIR}/alex/${FILE}
+    chown ${USER}.${GROUP} ${SHARE_DIR}/alex/${FILE}
 done
 
 # set ownership and permissions on all directories in SHARE_DIR:
