@@ -426,6 +426,7 @@ these values with uniform distribution.
 to respond. Note that this can also be set on a per-stimulus basis,
 see [here](#responses).
 
+<name "maxresponses"></a>
 **MaxResponses** is the maximum number of response a subject is
 allowed to make in one trial. There are essentially two useful
 settings. If you set this to 1 the trial ends with the first response
@@ -492,8 +493,8 @@ whether the subject responds or not. Note that subject responses are
 still recorded, and if they exceed the allowed maximum the trial
 terminates without reward. This last feature makes it possible to
 implement omission training, i.e., reward subjects only when they
-abstain from responding. This is controlled by the MaxResponses
-variable in the Parameters.csv file. The default value is 1, which
+abstain from responding. This is controlled by the
+[MaxResponses](#maxresponses) parameter. The default value is 1, which
 corresponds precisley to omission training. If you don't want the
 trial to ever terminate before the allotted time, you can use a value
 of MaxResponses so high that it cannot be possibly reached, such as
