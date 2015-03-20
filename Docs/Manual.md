@@ -180,9 +180,9 @@ explanation:
 
 - **Name**: An arbitrary label for the stimulus, so that it can be
   referenced in Phases.csv. It can be anything that does not contain
-  the characters " (double quote), + (plus), * (star), : (colon), and
-  , (comma). These characters are reserved for special operations, see
-  below.
+  the characters `"` (double quote), `+` (plus), `*` (asterisk), `:`
+  (colon), and `,` (comma). These characters are reserved for special
+  operations, see below.
 
 - **Type**: This can be square, circle, text, textfile, image, or sound.
 
@@ -201,7 +201,7 @@ explanation:
   - image or sound: name of a file in the Materials folder that
     contains the image or sound. An optional zoom factor can be
     provided to scale the image to a desired size. It should be
-    separated from the filename by a "+" sign.  The following stylized
+    separated from the filename by a `+` sign.  The following stylized
     faces (smileys) come with alex and you can use them without having
     them in the Materials folder:
 
@@ -368,7 +368,7 @@ and white squares together. We can use the following files:
 Note that we have now offset the white square, otherwise it would
 overlap with the red one.
 
-**NOTE** The "+" notation is also valid for USs. This can be used to
+**NOTE** The `+` notation is also valid for USs. This can be used to
 implement USs of different "magnitude." For example, one can instruct
 subjects that each smiley face represents a point earned, and have
 multiple smileys appear for more valuable stimuli (this requires
@@ -472,12 +472,12 @@ in the "Keyboard Entry" section of the PEBL manual. If you only want
 to use letter and number keys, you simply can write the letter or
 number as a Response.
 
-There are two special response codes. One is "space," indicating a
+There are two special response codes. One is `space`, indicating a
 space bar press. We made this special because the space would be hard
-to see when editing the CSV file. 
+to see when editing the CSV file.
 
 The other special response code is obtained by prefixing the response
-with a "*" (asterisk). This means that the US will be displayed *only*
+with a `*` (asterisk). This means that the US will be displayed *only*
 at the end of the trial (with the appropriate Reward probability)
 *regardless* of what the subject does during the trial, as in
 classical conditioning or causal rating studies. Thus an entry like:
@@ -499,7 +499,7 @@ trial to ever terminate before the allotted time, you can use a value
 of MaxResponses so high that it cannot be possibly reached, such as
 1000.
 
-Note also that on "*" trials, the ResponseTimeMin and ResponseTimeMax
+Note also that on `*` trials, the ResponseTimeMin and ResponseTimeMax
 features are disabled (see [Global parameters](#global)). Because the
 US (if any), is delivered only once at the end of the trial, it is
 irrelevant when subjects responds.
@@ -567,9 +567,9 @@ The other columns of the data files are as follows:
    Phases.csv design file).
 
  - **Response**: which key was monitored on that trial. Recall that
-     "space" is a special code for the space bar and that the key may
-     be prepended by "*" (asterisk) if the trial was a 'classical
-     conditioning' one (see [here](#responses)).
+     `space` is a special code for the space bar and that the key may
+     be prepended by `*` (asterisk) if the trial was a "classical
+     conditioning" one (see [here](#responses)).
 
  - **Responses**: The number of times the subject responded to the
    stimulus. This includes *all* responses, even those that may have
