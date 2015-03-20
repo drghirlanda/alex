@@ -138,13 +138,19 @@ define Undisplay( stimulus ) {
   Draw()
 }
 
-# Helper function to determine the duration of stimuli. 
+# Helper function to determine the duration of stimuli. Note: the way
+# we can get "NA" below is the following: if LookupStimulus() does not
+# find anyting specific, it calls Parameters(). If this does not find
+# anything, it returns "NA", which is returned back by
+# LookupStimulus(). Because Resolve() does not modify "NA", we can get
+# it back and detect that no specific stimulus duration has been
+# specified, so we can look up CSDuration or USDuration (as specifice
+# dby 'role'). Sorry for the complication.
 define ResolveDuration( stimulus, role ) {
-  s <- First( SplitString(stimulus,"+") )
   durations <- []
   loop( s, SplitString(stimulus,"+") ) {
-    d <- Resolve( "Duration", LookupStimulus( s, "Duration" ) )
-    if( d == "NA" ) { # We did not find a CS-specific duration
+    d <- First(Resolve( "Duration", LookupStimulus( s, "Duration" ) ))
+    if( d == "NA" ) { # See Note above
       d <- Parameter( role + "Duration")
     }
     d <- ToNumber( d ) # NA becomes 0
@@ -171,18 +177,18 @@ define ResolveDuration( stimulus, role ) {
 ########################################################################
 
 
-define OneTrial( stimulus, rewardProb, uss, response ) {
+define OneTrial( stimulus, rewardProb, uss, response, maxResponses ) {
+  Print_( "Trial: " )
+  PrintList( [stimulus, rewardProb, uss, response, maxResponses] )
   Draw()
   # Determine CS and US duration:
-  csDuration <- ResolveDuration( stimulus, "CS" )
-  usDuration <- ResolveDuration( uss, "US" )
-  # Determine other parameters:
-  maxResponses <- Parameter("MaxResponses")
-  if( maxResponses == "NA" ) {
-    maxResponses <- 1
+  csDuration <- ToNumber( ResolveDuration( stimulus, "CS" ) )
+  if( rewardProb>0 ) {
+    usDuration <- ToNumber( ResolveDuration( uss, "US" ) )
   } else {
-    maxResponses <- ToNumber( maxResponses )
+    usDuration <- "NA"
   }
+  # Determine some other parameters:
   csusInterval <- ToNumber( Parameter("CSUSInterval") )
   rtMin <- Parameter("ReactionTimeMin")
   if( rtMin == "NA" ) {
@@ -262,28 +268,28 @@ define OneTrial( stimulus, rewardProb, uss, response ) {
   return [times, rewards]
 }
 
-# Helper function to identify what enters a phase. 
+# Helper function to identify what enters a phase. If we don't find a
+# field in the phase header, we try to see whether it is defined as a
+# global parameter (if that fails, we get NAs and we return those).
 define LookupPhase( phaseName, field ) {
+  Print( "LookupPhase: "+phaseName+" "+field )
   fields <- Lookup(field, gPhaseHeader, gPhases)
-  if( not Length(fields) ) {
-    result <- []
+  Print_( "Fields ("+Length(fields)+"): " )
+  PrintList( fields )
+  if( not Length(fields) ) { 
+    stimuli <- LookupPhase( phaseName, "Stimuli" )
+    result <- Repeat( Parameter(field), Length(stimuli) )
   } else {
     idx <- Match( Lookup("Phase", gPhaseHeader, gPhases), phaseName) 
-    result <- Filter( fields, idx )
+    tempResult <- Filter( fields, idx )
+    result <- []
+    loop( r, tempResult ) {
+      if( not StringLength(r) ) {
+        r <- Parameter(field)
+      }
+      PushOnEnd( result, r )
+    }
   }
-  ## If we did not find anything in Phases, we try to look up a global
-  ## parameter and repeat it as many times as there are stimuli in the
-  ## phase.
-  if( not Length(result) ) {
-    stimuli   <- LookupPhase(phaseName, "Stimuli")
-    p <- Parameter( field )
-    if( p == "NA" ) {
-        result <- []
-    } else {
-      result <- Repeat( p, Length(stimuli) )
-    }    
-  }
-
   return result
 } 
 
@@ -297,31 +303,35 @@ define RunPhase( phaseName ) {
   # Get stimulus settings for this phase. Each line in Phases.csv
   # contains a stimulus entry for a specific phase. Using
   # LookupPhase() we look up which stimuli enter this phase:
-  stimuli   <- LookupPhase(phaseName, "Stimuli")
-  numTrials <- LookupPhase(phaseName, "Trials")
-  rewards   <- LookupPhase(phaseName, "Reward")
-  uss       <- LookupPhase(phaseName, "US")
-  responses <- LookupPhase(phaseName, "Response")
+  stimuli      <- LookupPhase(phaseName, "Stimuli")
+  numTrials    <- LookupPhase(phaseName, "Trials")
+  rewards      <- LookupPhase(phaseName, "Reward")
+  uss          <- LookupPhase(phaseName, "US")
+  responses    <- LookupPhase(phaseName, "Response")
+  maxResponses <- LookupPhase(phaseName, "MaxResponses")
 
   ## We build lists trialStimuli and trialRewards to contain stimuli
   ## and rewards repeated as many times as given in 'trials'. The
   ## order of presentation is then randomized by picking stimuli from
   ## a shuffled list 'trialOrder', see end of block
-  trialStimuli   <- []
-  trialRewards   <- []
-  trialUSs       <- []
-  trialResponses <- []
+  trialStimuli      <- []
+  trialRewards      <- []
+  trialUSs          <- []
+  trialResponses    <- []
+  trialMaxResponses <- []
   loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
     n <- ToNumber( Nth(numTrials, i) )
-    PushOnEnd( trialStimuli,   Repeat( Nth(stimuli,   i), n ) )
-    PushOnEnd( trialRewards,   Repeat( Nth(rewards,   i), n ) )
-    PushOnEnd( trialUSs,       Repeat( Nth(uss,       i), n ) )
-    PushOnEnd( trialResponses, Repeat( Nth(responses, i), n ) )
+    PushOnEnd( trialStimuli,      Repeat( Nth(stimuli,      i), n ) )
+    PushOnEnd( trialRewards,      Repeat( Nth(rewards,      i), n ) )
+    PushOnEnd( trialUSs,          Repeat( Nth(uss,          i), n ) )
+    PushOnEnd( trialResponses,    Repeat( Nth(responses,    i), n ) )
+    PushOnEnd( trialMaxResponses, Repeat( Nth(maxResponses, i), n ) )
   }
-  trialStimuli   <- Flatten( trialStimuli ) # Nesting is undesired
-  trialRewards   <- Flatten( trialRewards )
-  trialUSs       <- Flatten( trialUSs )
-  trialResponses <- Flatten( trialResponses )
+  trialStimuli      <- Flatten( trialStimuli ) # Nesting is undesired
+  trialRewards      <- Flatten( trialRewards )
+  trialUSs          <- Flatten( trialUSs )
+  trialResponses    <- Flatten( trialResponses )
+  trialMaxResponses <- Flatten( trialMaxResponses )
   trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
 
   ## Now we are ready to run all trials:
@@ -329,15 +339,19 @@ define RunPhase( phaseName ) {
   trial    <- 1
   while( trial <= maxTrial ) {
     ## Get stimulus and RewardPr for this trial:
-    thisTrial <- Nth(trialOrder, trial)
-    stimulus  <- Nth( trialStimuli, thisTrial )
-    rewardPr  <- ToNumber( Nth( trialRewards, thisTrial ) )
-    uss       <- Nth( trialUSs, thisTrial )
-    response  <- Nth( trialResponses, thisTrial )
+    thisTrial    <- Nth(trialOrder, trial)
+    stimulus     <- Nth( trialStimuli, thisTrial )
+    rewardPr     <- ToNumber( Nth( trialRewards, thisTrial ) )
+    uss          <- Nth( trialUSs, thisTrial )
+    response     <- Nth( trialResponses, thisTrial )
+    maxResponses <- ToNumber( Nth( trialMaxResponses, thisTrial ) )
+    if( maxResponses <= 0 ) {
+      maxResponses <- 1
+    }
     ## Run trial and get response times and rewards collected
-    results   <- OneTrial( stimulus, rewardPr, uss, response )
-    times     <- Nth(results, 1)
-    rewards   <- Nth(results, 2)
+    results <- OneTrial( stimulus, rewardPr, uss, response, maxResponses )
+    times   <- Nth(results, 1)
+    rewards <- Nth(results, 2)
     ## Save all data to file:
     FilePrintCSV_( gDataFile, Flatten( [ gSubjectInfo, 
       gSex, gAge, phaseName, trial, stimulus, rewardPr, response] ) )
@@ -385,7 +399,8 @@ define FilePrintCSV_( file, data ) {
 # (stored in gStimulusInfo, with header in gStimulusHeader), and
 # returns the value of that field for that stimulus. If nothing is
 # found, the global parameters are consulted. If nothing is found
-# there, "NA" is returned.
+# there, Parameters() returns "NA", which ends up being our return
+# value.
 define LookupStimulus( sName, field ) {
   nStim <- Length( gStimNames )
   sIndex <- Lookup( sName, gStimNames, Sequence(1,nStim,1) )
@@ -410,26 +425,27 @@ define LookupStimulus( sName, field ) {
 # and the value of the field for that stimulus named is
 # substituted. If the value start with *, we look up in the subject
 # information for a field of the form 'value+field', and we substitute
-# that value (here 'value' is stripped of the initial *). If nothing
-# is found, try to lookup something in the global parameters.
+# that value (here 'value' is stripped of the initial *). NOTE:
+# Because 'value' can be multiple things separated by '+', we split it
+# and return a list of resolved values (even if there is just one, for
+# consistency).
 define Resolve( field, value ) {
-  values <- SplitString( value, "+" )
   results <- []
-  loop( i, Sequence(1,Length(values),1) ) {
-    value <- Nth( values, i )
-    if( SubString(value,1,1) == ":" ) {
+  loop( v, SplitString( value, "+" ) ) {
+    if( SubString(v,1,1) == ":" ) {
       # This is the stimulus to be looked up:
-      s <- SubString(value,2,StringLength(value)-1)
+      s <- SubString( v, 2, StringLength(v)-1 )
       PushOnEnd( results, LookupStimulus( s, field ) )
-    } elseif( Substring(value,1,1) == "*" ) {
-      s <- SubString(value,2,StringLength(value))
-      PushOnEnd( results, Lookup( s+field, gSubjectHeader, gSubjectInfo ) )
+    } elseif( Substring(v,1,1) == "*" ) {
+      s <- SubString( v, 2, StringLength(v)-1 )
+      r <- Lookup( s+field,gSubjectHeader,gSubjectInfo )
+      if( IsList(r) ) { # Nothing found
+        Message( "Cannot find "+s+field+" in Subjects.csv", 1 )
+      } 
+      PushOnEnd( results, r )
     } else {
-      PushOnEnd( results, value )
+      PushOnEnd( results, v )
     }
-  }
-  if( Length(results)==1 ) {
-    results <- First( results )
   }
   return results
 }
@@ -453,7 +469,8 @@ define MakeColorRGBString( color ) {
 }
 
 define Message( text, fatal ) {
-  box <- MakeTextBox( text, gFont, .9*gVideoWidth, .9*gVideoHeight )
+  box <- MakeTextBox( text + " (press space to quit)", 
+    gFont, .9*gVideoWidth, .9*gVideoHeight )
   AddObject( box, gWindow )
   Move( box, .05*gVideoWidth, .05*gVideoHeight )
   Draw()
@@ -552,15 +569,15 @@ define ReadStimuli() {
     type <- Nth( gStimTypes, i )
     if( StringLength( Nth( gStimColors, i ) ) ) {
       ## Determine colors:
-      colors <- SplitString( Resolve("Color",Nth(gStimColors, i)), "+" )
-      c1name <- Nth( colors, 1 )
+      colors <- Resolve( "Color", Nth(gStimColors, i) )
+      c1name <- First( colors )
       if( StringLength(c1name) ) {
         c1 <- MakeColorRGBString( c1name )
       } else {
         c1 <- gColor
       }
       if( Length(colors) == 2 ) {
-        c2name <- Nth( colors, 2 )
+        c2name <- Rest( colors )
 	if( StringLength( c2name ) ) {
 	  c2 <- MakeColorRGBString( c2name )
         } else {
@@ -576,25 +593,28 @@ define ReadStimuli() {
     ## Create a font for text stimuli    
     font <- MakeFont( Parameter("FontName")+".ttf", 0, 
                       ToNumber(Parameter("FontSize")), c1, c2, 1 )
-    x <- ToNumber( Resolve( "XOffset", Nth( gStimXOffsets, i ) ) )
-    y <- ToNumber( Resolve( "YOffset", Nth( gStimYOffsets, i ) ) )
+    x <- ToNumber( First(Resolve( "XOffset", Nth( gStimXOffsets, i ) )) )
+    y <- ToNumber( First(Resolve( "YOffset", Nth( gStimYOffsets, i ) )) )
     x <- x + gVideoWidth/2
     y <- y + gVideoHeight/2
     if(  type == "circle" ) {
-      r <- ToNumber( Resolve( "Parameters", Nth(gStimParams,i) ) )
+      r <- ToNumber( First(Resolve( "Parameters", Nth(gStimParams,i) )) )
       s <- Circle( x, y, r, c1, 1 )
     } elseif( type == "square" ) {
-      l <- ToNumber( Resolve( "Parameters", Nth(gStimParams,i) ) )
+      l <- ToNumber( First(Resolve( "Parameters", Nth(gStimParams,i) )) )
       s <- Square( x, y, l, c1, 1 )
     } elseif( type == "image" ) {
       p <- Resolve( "Parameters", Nth(gStimParams,i) )
-      if( IsList(p) ) { # More than one parameter
-        file <- First(p)
-	zoom <- Nth(p, 2)
-      }  else {
-        file <- p
+      file <- First( p )
+      if( Length(p) == 2 ) { # Optional 2nd parameter is zoom factor
+	zoom <- ToNumber( Nth( p, 2 ) )
+      } else {
 	zoom <- 1
       }
+      # We look up the file in 4 dirs: this experiment's Materials,
+      # the system-wide Materials, PEBL's image files, and the current
+      # directory (the latter is undocumented, that's just how PEBL's
+      # MakeImage works).
       fileLocal <- gWD + "Materials/" + file
       fileAlex <- gAlexDir + file
       if( FileExists( fileLocal ) ) {
@@ -604,42 +624,29 @@ define ReadStimuli() {
       } elseif( FileExists( file ) ) {
         s <- MakeImage( file )
       } else {
-        Message( "Cannot find file " + file, 1 )
+        Message( "Cannot find image file " + file, 1 )
       }
       s.ZOOMX <- zoom
       s.ZOOMY <- zoom
       Move( s, x, y )
-    } elseif( type == "text" ) {
-      w <- Resolve( "Parameters", Nth(gStimParams,i) )
+   } elseif( type == "text" ) {
+      w <- First( Resolve( "Parameters", Nth(gStimParams,i) ) )
       s <- MakeLabel( w, font )
       Move( s, x, y )
     } elseif( type == "textfile" ) {
-      fileName <- Resolve( "Parameters", Nth(gStimParams,i) )
+      fileName <- First( Resolve( "Parameters", Nth(gStimParams,i) ) )
       text <- FileReadText( gWD + "Materials/" + fileName )
       s <- MakeTextBox( text, font, .9*gVideoWidth, .9*gVideoHeight )
       Move( s, .05*gVideoWidth, .05*gVideoHeight )
     } elseif( type == "sound" ) {
-       f <- Resolve( "Parameters", Nth(gStimParams,i) )
+       f <- First( Resolve( "Parameters", Nth(gStimParams,i) ) )
        s <- LoadSound( gWD + "Materials/" + f )
-    # Movies will be supported when PEBL supports them better:
-    # } elseif( type == "movie" ) {
-    #   p <- Resolve( "Parameters", Nth(gStimParams,i) )
-    #   p <- SplitString( p, "+" )      
-    #   f <- gWD + "Materials/" + Nth( p, 1 )
-    #   width <- Nth( p, 2 )
-    #   height <- Nth( p, 3 )
-    #   s <- LoadMovie( f, gWindow, width, height )
-    #   if( not s ) {
-    #     Message( "Cannot load movie file "+f, 1 )
-    #   }
-    #   Move( s, x - width/2, y - height/2 )
     } else {
        Message( "Unsupported stimulus type: "+type, 1 )
     }
     PushOnEnd( gStimuli, s )
     AddObject( s, gWindow )
     Hide( s )
-    #Print_( "Read stimulus: " + s )
   }
 }
 
