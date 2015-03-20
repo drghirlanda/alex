@@ -153,7 +153,7 @@ define Undisplay( stimulus ) {
 
 # Helper function to determine the duration of stimuli. Note: the way
 # we can get "NA" below is the following: if LookupStimulus() does not
-# find anyting specific, it calls Parameters(). If this does not find
+# find anyting specific, it calls Parameter(). If this does not find
 # anything, it returns "NA", which is returned back by
 # LookupStimulus(). Because Resolve() does not modify "NA", we can get
 # it back and detect that no specific stimulus duration has been
@@ -202,7 +202,12 @@ define OneTrial( stimulus, rewardProb, uss, response, maxResponses ) {
     usDuration <- "NA"
   }
   # Determine some other parameters:
-  csusInterval <- ToNumber( Parameter("CSUSInterval") )
+  csusInterval <- Parameter("CSUSInterval")
+  if( csusInterval == "NA" ) {
+    csusInterval <- 0
+  } else {
+    csusInterval <- ToNumber( csusInterval )
+  }
   rtMin <- Parameter("ReactionTimeMin")
   if( rtMin == "NA" ) {
     rtMin <- 0
