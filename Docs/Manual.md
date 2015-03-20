@@ -426,7 +426,7 @@ these values with uniform distribution.
 to respond. Note that this can also be set on a per-stimulus basis,
 see [here](#responses).
 
-<name "maxresponses"></a>
+<a name="maxresponses"></a>
 **MaxResponses** is the maximum number of response a subject is
 allowed to make in one trial. There are essentially two useful
 settings. If you set this to 1 the trial ends with the first response
