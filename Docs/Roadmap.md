@@ -12,6 +12,9 @@ should be more systematic, with sections "The Stimuli.csv file" and
 the example is probably too long and it introduces too many features
 in a somewhat unclear order.
 
+- Write caption in the last three Tables in the Manual, and refer to
+  them with `\ref` in the text.
+
 - Example suite. Include also "cognitive" tasks like a categorization
   task with test stimuli for prototype effect and peak-shift. Other
   tasks: simple discrimination, generalization, peak shift, replicate
@@ -31,6 +34,12 @@ in a somewhat unclear order.
   between and within subjects, present the experimental design in a
   table, etc.
 
+- The Subjects.csv file should really be a Groups.csv file. That would
+  make things easier for users! Each Group would have a name and
+  number of subjects. We would need to rewrite the code that decides
+  which subject to run. It would probably pick the group with fewer
+  subjects already run. The data files could be in the form `<group
+  name>-<subject number>.dat`.
 
 Causal ratings 
 --------------

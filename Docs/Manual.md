@@ -1,8 +1,9 @@
-Alex: Associative Learning EXperiment software
-==============================================
+%Alex: Associative Learning EXperiments
+%Stefano Ghirlanda
 
 
 <a name="intro"></a>
+
 # Introduction
 
 Alex is a program to run associative learning experiments specified
@@ -11,7 +12,13 @@ configure experiments. Please refer to the README file that comes with
 alex for installation instructions. The README also describes in brief
 what alex can and cannot do.
 
+**Acknowledgments:** Alex is written using Shane Mueller's
+[Psychology Experiment Building Language](http://pebl.sourceforge.net)
+(PEBL). Many thanks to Shane for sharing PEBL!
+
+
 <a name="workflow"></a>
+
 # Workflow
 
 To build and run a new experiment you create a dedicated folder, say,
@@ -39,6 +46,7 @@ subfolders and skeleton configuration files.
 
 
 <a name="running"></a>
+
 # Running and stopping alex
 
 From the folder where the Design and Materials folders are, you
@@ -54,7 +62,7 @@ Alex has been designed so that multiple instances of an experiment can
 be run simultaneously. This feature is useful when the experiment
 folder is shared among multiple computers, as it may occur in a
 lab. All instances of alex will read the same design files, and in
-particular the same Subjects.csv file which describes how to run
+particular the same `Subjects.csv` file which describes how to run
 subjects. Different instances, however, will run different subjects
 and will not overwrite each other's data files.
 
@@ -71,29 +79,29 @@ file is worthless, either remove it or rename it with something like
 an 'incomplete-' prefix, and alex will automatically re-run that
 subject.
 
-If you want to interrupt a running experiment, you can use Ctrl + Alt
-+ Shift + \ (Backslash), which is the standard interrupt key
-comination for PEBL.
+If you want to interrupt a running experiment, you can use the
+standard interrupt key comination for PEBL: `Ctrl+Alt+Shift+\`.
 
 
 <a name="configuration-files"></a>
+
 # Configuration files 
 
 All configuration files are in the Design folder:
 
-- Phases.csv describe the experimental design proper. I containes one
+- `Phases.csv` describe the experimental design proper. I containes one
   or more experimental phases, each composed of a number of trials in
   which stimuli are presented, responses recorded, and outcomes
   delivered.
 
-- Stimuli.csv defines the stimuli that are mentioned Phases.csv. The
-  latter only mentions stimuli by name, while Stimuli.csv informs alex
-  of what the stimuli actually are.
+- `Stimuli.csv` defines the stimuli that are mentioned
+  `Phases.csv`. The latter only mentions stimuli by name, while
+  `Stimuli.csv` informs alex of what the stimuli actually are.
 
-- Subjects.csv defines the number of subjects to be run and possibly
+- `Subjects.csv` defines the number of subjects to be run and possibly
   different the treatments to which subjects are allocated.
 
-- Parameters.csv defines some global parameters such as screen
+- `Parameters.csv` defines some global parameters such as screen
   background color, text color, font, and size, the duration of
   inter-trial intervals, and so on. Can also be used to define
   parameters that are the same for all stimuli, such as which key is
@@ -104,85 +112,102 @@ In addition, instruction files can be in Materials, see the
 
 
 <a name="example"></a>
+
 # Example 
+
+## The `Phases.csv` file
 
 Suppose we want to teach participants to discriminate a red square
 from a white square. We then want to know how subjects respond to,
-say, a pink square. The Phases.csv file might look like this:
-
-- Phases.csv:
-
-        Phase Stimulus Trials Reward US
-        1     Red      20     0.9    Smiley
-        1     White    20     0.1    Smiley
-        2     Pink     5      0
-
-The US field can be left empty if the Reward probability is 0.
-
-**Note:** The file above is displayed as a table for readability, but
-it should be a comma-separated values (CSV) file. You can edit CSV
-files in any spreadhseet using the CSV format for saving. Alex wants
-double quotes (if needed) in CSV files. Single quotes will result in
-errors. (This comes from the PEBL function that reads CSV files.) Most
-spreadhseet software uses double quotes by default, but do check in
-case alex cannot read your CSV files.
-
-The above Phases.csv file describes an experiment with two
-phases. Each line describes one type of trial that occurs in a
-phase. There are, for example two kinds of trials in phase 1,
-specifying 20 presentations of each of two stimuli, called Red and
+say, a pink square. Table \ref{phases} shows how a suitable
+`Phases.csv` file might look like.[^1] The file describes an
+experiment with two phases. Each line describes one type of trial that
+occurs in a phase. There are, for example two kinds of trials in phase
+1, specifying 20 presentations of each of two stimuli, called Red and
 White. Red will be rewarded 90% of the time, White only 10%. On reward
-trials, stimulus Smiley will be displayed as the reward. In phase 2,
-stimulus Pink is presented five times. When the experiment is run, Red
-and White trials will be intermixed randomly because they all pertain
-to phase 1. Pink trials on the other hand, will be performed in phase
-2 after all phase 1 trials have been run.
+trials, stimulus Smiley will be displayed as the reward (US). In phase
+2, stimulus Pink is presented five times. When the experiment is run,
+Red and White trials will be intermixed randomly because they all
+pertain to phase 1. Pink trials on the other hand, will be performed
+in phase 2 after all phase 1 trials have been run.
+
+
+Phase Stimulus Trials Reward US
+----- -------- ------ ------ -----
+1     Red      20     0.9    Smiley
+1     White    20     0.1    Smiley
+2     Pink     5      0
+
+Table: A simple `Phases.csv` to teach a discrimination between stimuli
+Red and White, and then testing responding to Pink. Note that the US
+field can be left empty if the Reward probability is 0. \label{phases}
+
+[^1]: In this manual, we use tables to display design files in a
+readable form. These files, however, are actually
+comma-separated-values (CSV) files. You can edit CSV files in any
+spreadhseet using the CSV format for saving. Alex wants double quotes
+(if needed) in CSV files. Single quotes will result in errors. (This
+comes from the PEBL function that reads CSV files.) Most spreadhseet
+software uses double quotes by default, but do check in case alex
+cannot read your CSV files.
 
 **Note:** Phases are run in the order they are defined, not in their
 numerical or alphabetical order (thus you can use descriptive names
-like Training, Testing, etc). To tell the whole truth, phases are run
-in the order in which their *first* stimuli are defined. For example,
-a Phases file containing:
+like Training, Testing, etc). To be more precise, phases are run in
+the order in which their *first* stimuli are defined. For example, the
+phases file in Tables \ref{phases} and \ref{phases-order1} are
+equivalent, but the file in Table \ref{phases-order2} runs phase 2
+before phase 1.
 
-- Phases.csv:
 
-        Phase Stimulus Trials Reward US
-        1     Red      20     0.9    Smiley
-        2     Pink     5      0      
-        1     White    20     0.1    Smiley
+Phase Stimulus Trials Reward US
+----- -------- ------ ------ --
+1     Red      20     0.9    Smiley
+2     Pink     5      0 
+1     White    20     0.1    Smiley
 
-is equivalent to the previous one. However, the file:
+Table: With this `Phases.csv` file, alex will run phase 1 before phase
+2 (cf. Table \ref{phases-order2}. \label{phases-order1}
 
-- Phases.csv:
 
-        Phase Stimulus Trials Reward US
-        2     Pink     5      0      
-        1     Red      20     0.9    Smiley
-        1     White    20     0.1    Smiley
+Phase Stimulus Trials Reward US
+----- -------- ------ ------ --
+2     Pink     5      0
+1     Red      20     0.9    Smiley
+1     White    20     0.1    Smiley
 
-would run phase 2 before phase 1. 
+Table: With this `Phases.csv` file, alex will run phase 2 before phase
+1 (cf. Table \ref{phases-order1}. \label{phases-order2}
 
-In these Phases.csv files, how does alex know that Red, White, and
-Pink represent red, white and pink squares, and that Smiley is a
-smiley face? This information is contained in the Stimuli.csv file,
-which might look like this:
 
-- Stimuli.csv:
+## The `Stimuli.csv` file
 
-        Name   Type   Parameters       Color       XOffset YOffset
-        Red    square 50               red         0       0
-        White  square 50               white       0       0
-        Pink   square 50               255,128,128 0       0
-        Smiley image  smile-o.png                  0       -150
+In the `Phases.csv` files in Tables \ref{phases}--\ref{phases-order2},
+how does alex know that Red, White, and Pink represent red, white and
+pink squares, and that Smiley is a smiley face? This information is
+contained in the `Stimuli.csv` file, see Table \ref{stimuli}.
 
-The fields should be fairly intuitive, but here is a detailed
-explanation:
+
+Name   Type   Parameters        Color       XOffset YOffset
+----   ----   ----------        -----       ------- -------
+Red    square 50                red         0       0
+White  square 50                white       0       0
+Pink   square 50                255,128,128 0       0
+Smiley image  smile-o-white.png             0       -150
+
+Table: A `Stimuli.csv` file instructing alex that stimuli Red, White,
+and Pink are colored squares 50 pixels in side, and with different
+colors, and that Smiley is an image contained in file
+`smile-o-white.png`. \label{stimuli}
+
+The fields in Table \ref{stimuli} should be fairly intuitive, but here
+is a detailed explanation:
 
 - **Name**: An arbitrary label for the stimulus, so that it can be
-  referenced in Phases.csv. It can be anything that does not contain
-  the characters `"` (double quote), `+` (plus), `*` (asterisk), `:`
-  (colon), and `,` (comma). These characters are reserved for special
-  operations, see below.
+  referenced in `Phases.csv`. It can be anything that does not contain
+  the characters " (double quote), + (plus), * (asterisk), :
+  (colon), and , (comma). These characters are reserved for special
+  operations described below.
 
 - **Type**: This can be square, circle, text, textfile, image, or sound.
 
@@ -205,15 +230,15 @@ explanation:
     faces (smileys) come with alex and you can use them without having
     them in the Materials folder:
 
-    - smile-o.png: a happy face, as used above
+    - smile-o-white.png: a happy face, as used above
 
-    - meh-o.png: a neutral face 
+    - meh-o-white.png: a neutral face 
 
-    - frown-o.png: a sad face
+    - frown-o-white.png: a sad face
 
-    These images are drawn in black over a transparent background;
-    equivalent white images are available as smile-o-white.png,
-    etc. All images have been taken from
+    These images are drawn in white over a transparent background;
+    equivalent white images are available as smile-o.png, etc. All
+    images have been taken from
     [Font Awesome](http://fortawesome.github.io/Font-Awesome), via
     [this project](https://github.com/encharm/Font-Awesome-SVG-PNG). They
     are 256x256 pixels in size to look OK even on high resolution
@@ -228,7 +253,7 @@ explanation:
   the background as well as the foreground color by writing the color
   in the form Color1+Color2, where Color1 will be foreground and
   Color2 the background. If no foreground or background color is
-  given, the default set in Parameters.csv is used.
+  given, the default set in `Parameters.csv` is used.
 
   The PEBL reference manual lists valid color names, which are many
   hundreds. If you stick to simple stuff like red, blue, cyan, purple,
@@ -240,73 +265,97 @@ explanation:
   stimulus Smiley, which is displayed 150 pixels above center ("above"
   is negative Y values).
 
-The Subjects.csv file contains information about the subjects you want
-to run. If all subjects undergo the same treatment, as in the present
-example, you only need to give subject numbers:
 
-- Subjects.csv:
+## The `Subjects.csv` file
 
-        Subject
-        1
-        2
-        3
-        4
-        5
-        6
-
-This instructs alex that you want to run 6 subjects, all subject to
-the same treatment. Often, however, subjects need to be divided in
-different treatment groups. Any of the fields in the Stimuli.csv file
-can be specified on a per-subject bases. If you want to test two
-shades of pink, for example, you would extend the Subjects.csv file
-like this:
-
-- Subjects.csv:
-
-        Subject PinkColor
-        1       255,128,128
-        2       255,128,128
-        3       255,128,128
-        4       255,190,190
-        5       255,190,190
-        6       255,190,190
-
-And you would modify the Stimuli.csv file like this:
-
-- Stimuli.csv:
-
-        Name   Type   Parameters Color XOffset YOffset
-        Red    square 50         red   0       0
-        White  square 50         white 0       0
-        Pink   square 50         *Pink 0       0
-        Smiley image  smiley.png       0       150
-
-The special notation *Pink indicates that the color of stimulus Pink
+The `Subjects.csv` file contains information about the subjects you
+want to run. If all subjects undergo the same treatment, as in the
+present example, you only need to give subject numbers. The file in
+Table \ref{subjects}, for example, instructs alex to run 6 subjects,
+all receiving the same treatment. Often, however, subjects need to be
+divided in different treatment groups. Any of the fields in the
+`Stimuli.csv` file can be specified on a per-subject bases. If you
+want to test two shades of pink, for example, you would extend the
+`Stimuli.csv` file in Table \ref{stimuli-color}. The special notation
+*Pink demonstrated there indicates that the color of stimulus Pink
 will be looked up, for each subject, in the column PinkColor of the
-Subects.csv file. This syntax is available for all stimulus
-properties. For example, if you want to change the size of Red square
-across subjects you can do:
+`Subjects.csv` file (Table \ref{subjects-color}). This syntax is
+available for all stimulus properties. For example, to change the size
+of Red square across subjects you would use the `Subjects.csv` and
+`Stimuli.csv` files in Tables \ref{subjects-color-parameters} and
+\ref{stimuli-color-parameters}.
 
-- Stimuli.csv:
 
-        Name   Type   Parameters Color XOffset YOffset
-        Red    square *Red       red   0       0
-        White  square 50         white 0       0
-        Pink   square 50         *Pink 0       0
-        Smiley image  smiley.png       0       150
+Subject
+------- -
+1
+2
+3
+4
+5
+6
 
-- Subjects.csv:
 
-        Subject PinColor    RedParameters
-        1       255,128,128 25
-        2       255,128,128 50
-        3       255,128,128 75
-        4       255,190,190 25
-        5       255,190,190 50
-        6       255,190,190 75
+Table: A `Subjects.csv` file instructing alex to run 6
+subjects. \label{subjects}
+
+
+Name   Type   Parameters         Color XOffset YOffset
+----   ----   ----------         ----- ------- -------
+Red    square 50                 red   0       0
+White  square 50                 white 0       0
+Pink   square 50                 *Pink 0       0
+Smiley image  smiley-o-white.png       0       150
+
+Table: A `Stimuli.csv` file instructing alex to look up the Color of
+the Pink stimulus in the `Subjects.csv` file. \label{stimuli-color}
+
+
+Subject PinkColor
+------- ---------
+1       255,128,128
+2       255,128,128
+3       255,128,128
+4       255,190,190
+5       255,190,190
+6       255,190,190
+
+Table: A `Subjects.csv` file instructing alex to run 6 subjects split
+in two treatment groups with different Color attributes for the Pink
+stimulus (see Table \ref{stimuli-color}). \label{subjects-color}
+
+
+Name   Type   Parameters         Color XOffset YOffset
+----   ----   ----------         ----- ------- -------
+Red    square *Red               red   0       0
+White  square 50                 white 0       0
+Pink   square 50                 *Pink 0       0
+Smiley image  smiley-o-white.png       0       150
+
+Table: A `Stimuli.csv` file instructing alex to run look up in the
+`subjects.csv` file both the Color of stimulus Pink and the Parameters
+of stimulus Red (see Table
+\ref{subjects-color-parameters}). \label{stimuli-color-parameters}
+
+
+Subject PinkColor    RedParameters
+------- ---------    -------------
+1       255,128,128   25
+2       255,128,128   50
+3       255,128,128   75
+4       255,190,190   25
+5       255,190,190   50
+6       255,190,190   75
+
+Table: A `Subjects.csv` file instructing alex to run 6 participants in
+6 experimental groups (of course, in real life you will have more
+participants per group!). Each group is given by a unique combination
+of PinkColor and RedParameters (see Table
+\ref{stimuli-color-parameters}). \label{subjects-color-parameters}
 
 
 <a name="notation"></a>
+
 # Special notation for stimuli 
 
 We mentioned above one bit of special notation in the definition of
@@ -318,57 +367,52 @@ Sometimes we want some stimuli to share characteristics. For example,
 they should be of the same color. We can express the fact that we want
 a stimulus characteristic to equal that of another stimulus using a
 colon (:) followed by the stimulus name (we would have liked to use =
-rather than :, but unfortunately some spreadsheet software interprets
-= as introducing a formula). Consider the example above, with three
-squares of the same size as stimuli. We can write the following in
-Stimuli.csv:
+rather than :, but unfortunately spreadsheet software stubbornly
+interprets = as introducing a formula). Consider the example above,
+with three squares of the same size as stimuli. The file in Table
+\ref{stimuli-special} is equivalent but uses colon notation for the
+Parameters field. This has two advantages: it makes explicit our
+intention of having three squares of equal size, and it reduces the
+possibility of typing errors.
 
-- Stimuli.csv:
+Name   Type   Parameters         Color XOffset YOffset
+----   ----   ----------         ----- ------- -------
+Red    square 50                 red   0       0
+White  square :Red               white 0       0
+Pink   square :Red               *Pink 0       0
+Smiley image  smiley-o-white.png       0       150
 
-        Name   Type   Parameters Color XOffset YOffset
-        Red    square 50         red   0       0
-        White  square :Red       white 0       0
-        Pink   square :Red       *Pink 0       0
-        Smiley image  smiley.png       0       150
-
-This notation has two advantages: it makes explicit our intention of
-having three squares of equal size, and it reduces the possibility of
-typing errors. In fact, we could go all the way and have:
- 
-- Stimuli.csv:
-
-        Name   Type   Parameters Color XOffset YOffset
-        Red    square 50         red   0       0
-        White  :Red   :Red       white :Red    :Red
-        Pink   :Red   :Red       *Pink :Red    :Red
-        Smiley image  smiley.png       0       150
-
-which makes explict that we want the three stimuli to differ only in
-color.
+Table: A `Stimuli.csv` file demonstrating the * and : special
+notations for stimuli. \label{stimuli-special}
 
 Another bit of special notation is + (plus), which is used to present
 stimuli together (compound stimuli). Suppose that, after training a
 discrimination between red and white squares, we want to test the red
-and white squares together. We can use the following files:
+and white squares together. We would then use the files in Tables
+\ref{phases-plus} and \ref{stimuli-plus}.
 
-- Phases.csv:
+Phase Stimulus  Trials Reward US
+----- --------  ------ ------ --
+1     Red       20     0.9    Smiley
+1     White     20     0.1    Smiley
+2     Red+White 5      0
 
-        Phase Stimulus  Trials Reward US
-        1     Red       20     0.9    Smiley
-        1     White     20     0.1    Smiley
-        2     Red+White 5      0
+Table: A `Phases.csv` file with a compound stimulus in
+phase 2. \label{phases-plus}
 
-- Stimuli:csv:
 
-        Name   Type   Parameters Color XOffset YOffset
-        Red    square 50         red   0       0
-        White  :Red   :Red       white 60      :Red
-        Smiley image  smiley.png       0       150
+Name   Type   Parameters         Color XOffset YOffset
+----   ----   ----------         ----- ------- -------
+Red    square 50                 red   0       0
+White  :Red   :Red               white 60      :Red
+Smiley image  smiley-o-white.png       0       150
 
-Note that we have now offset the white square, otherwise it would
-overlap with the red one.
+Table: A `Stimuli.csv` file to go with the `Phases.csv` file in Table
+\ref{phases-plus}. Note that we need to offset the white square,
+otherwise it would overlap with the red one when the two are presented
+together. \label{stimuli-plus}
 
-**NOTE** The `+` notation is also valid for USs. This can be used to
+**Note:** The + notation is also valid for USs. This can be used to
 implement USs of different "magnitude." For example, one can instruct
 subjects that each smiley face represents a point earned, and have
 multiple smileys appear for more valuable stimuli (this requires
@@ -378,35 +422,38 @@ also be used to present a combination of a visual and auditory US.
 
 
 <a name="global"></a>
+
 # Global parameters 
 
-The file Design/Parameters.csv contains some parameters that affect
+The file `Design/Parameters.csv` contains some parameters that affect
 the whole experiment. Here is a sample file (as above, the file is in
 CSV format, displayed here as a table for legibility):
 
-- Parameters.csv:
+Parameter       Value
+---------       -----
+CSDuration      4000
+CSUSInterval    0
+USDuration      400
+Response        space
+ResponseTimeMin 0
+ResponseTimeMax 4000
+MinITI          1000
+MaxITI          3000
+MaxResponses    100
+BackgroundColor gray95
+ForegroundColor black
+FontName        Vera
+FontSize        36
+Test            0
 
-        Parameter       Value
-        CSDuration      4000
-        CSUSInterval    0
-        USDuration      400
-	    Response        space
-        ResponseTimeMin 0
-        ResponseTimeMax 4000
-        MinITI          1000
-        MaxITI          3000
-        MaxResponses    100
-        BackgroundColor gray95
-        ForegroundColor black
-        FontName        Vera
-        FontSize        36
-        Test            1
+Table: Sample `Parameters.csv` file with default values for
+parameters.
 
 **CSDuration** is the default duration of all the non-US stimuli,
 while **USDuration** is the default duration of all US stimuli. All
 durations are in milliseconds. Note that you can set different
 durations for different stimuli by including a Duration column in the
-Stimuli.csv file. When using compound stimuli, all components must
+`Stimuli.csv` file. When using compound stimuli, all components must
 have the same duration.
 
 **CSUSInterval** and **USDuration** should be self-explanatory.
@@ -427,6 +474,7 @@ to respond. Note that this can also be set on a per-stimulus basis,
 see [here](#responses).
 
 <a name="maxresponses"></a>
+
 **MaxResponses** is the maximum number of response a subject is
 allowed to make in one trial. There are essentially two useful
 settings. If you set this to 1 the trial ends with the first response
@@ -435,10 +483,10 @@ unrealistically large value, say 1000, you can record any number of
 responses per trial. Each of these may result in the US being
 delivered, as described above. Note that you can set MaxReponses to a
 different value for different trial types, by including a MaxResponses
-column in Phases.csv (see the [section on text files](#textfiles) for
-an example). If a MaxResponses column exists, but the value is empty
-for some stimuli, the MaxResponses value in Parameters.csv will be
-looked up. If MaxResponses is not set there, it is given a default
+column in `Phases.csv` (see the [section on text files](#textfiles)
+for an example). If a MaxResponses column exists, but the value is
+empty for some stimuli, the MaxResponses value in `Parameters.csv` will
+be looked up. If MaxResponses is not set there, it is given a default
 value of 1.
 
 The next few parameters control the screen background color while the
@@ -451,21 +499,24 @@ the experiment during development.
 
 
 <a name="responses"></a>
+
 # Responses and classical vs. instrumental trials 
 
 If we wish to record only one kind of response, e.g., space bar
-presses, the Response key can be specified in the Parameters.csv
+presses, the Response key can be specified in the `Parameters.csv`
 file. We can also, however, specify different responses for different
-stimuli by adding a Response column to the Phases.csv file. For
+stimuli by adding a Response column to the `Phases.csv` file. For
 example, to specify that the left arrow key is the correct response
 for stimulus Red, but the right arrow is correct for White, you would
-write:
+write as in Table \ref{responses}.
 
-- Phases.csv:
+Phase Stimulus Trials Reward US     Response
+----- -------- ------ ------ --     --------
+1     Red      20     1      Smiley <left>
+1     White    20     1      Smiley <right>
 
-        Phase Stimulus Trials Reward US     Response
-        1     Red      20     1      Smiley <left>
-        1     White    20     1      Smiley <right>
+Table: A `Phases.csv` specifying different responses for stimuli Red
+and White. \label{responses}
 
 Here `<left>` and `<right>` are special codes that denote the left and
 right arrow key. You can look up the codes for different special keys
@@ -483,17 +534,18 @@ at the end of the trial (with the appropriate Reward probability)
 *regardless* of what the subject does during the trial, as in
 classical conditioning or causal rating studies. Thus an entry like:
 
-- Phases.csv:
+Phase Stimulus Trials Reward US     Response
+----- -------- ------ ------ --     --------
+1     Red      20     .9     Smiley *space
 
-        Phase Stimulus Trials Reward US     Response
-        1     Red      20     .9     Smiley *space
+Table: Sample `Phases.csv` file.
 
-Specifies that Red is to be rewarded 90% of the time *regardless* of
-whether the subject responds or not. Note that subject responses are
-still recorded, and if they exceed the allowed maximum the trial
-terminates without reward. This last feature makes it possible to
-implement omission training, i.e., reward subjects only when they
-abstain from responding. This is controlled by the
+Specifies that Red is to be rewarded 90% of the time at the end of a
+trial, *regardless* of whether the subject responds or not. Note that
+subject responses are still recorded, and if they exceed the allowed
+maximum the trial terminates without reward. This last feature makes
+it possible to implement omission training, i.e., reward subjects only
+when they abstain from responding. This is controlled by the
 [MaxResponses](#maxresponses) parameter. The default value is 1, which
 corresponds precisley to omission training. If you don't want the
 trial to ever terminate before the allotted time, you can use a value
@@ -507,43 +559,46 @@ irrelevant when subjects responds.
 
 
 <a name="textfiles"></a>
+
 # Instructions and other text displays
 
 Instructions or other longish text can be displayed with the textfile
 stimulus type. For example, to include both a start and an end message
 (say a 'thank you' or similar) you can use something like:
 
-- Phases.csv:
+Phase Stimulus  Trials MaxResponses
+----- --------- ------ ------------
+Start StartText 1      1
+End   EndText   1      1
 
-        Phase Stimulus  Trials MaxResponses
-        Start StartText 1      1
-	...
- 	End   EndText   1      1
+Table: Sample `Phases.csv` file.
 
-- Stimuli:csv:
 
-        Name      Type     Parameters Color XOffset YOffset Duration
-        StartText textfile Start.txt                        600000 
-        EndText   textfile End.txt                          600000
-        ...
+Name      Type     Parameters Color XOffset YOffset Duration
+----      ----     ---------- ----- ------- ------- --------
+StartText textfile Start.txt                        600000 
+EndText   textfile End.txt                          600000
+
+Table: Sample `Stimuli.csv` file.
 
 As you see, the display of instructions is construed simply as a
 stimulus that stays on for a long time (here 10 minutes), unless the
 subject performs the required response (which, recall, is by default
 the space bar). The Start.txt and End.txt files will be looked for in
 the Materials folder of the experiment. Note the column MaxResponses
-in Phases.csv, which makes sure the user has to press the space bar
+in `Phases.csv`, which makes sure the user has to press the space bar
 (the default response) only once to move on, even if a larger number
 of responses is allowed for actual experimental trials.
 
 <a name="data-format"></a>
+
 # Data Format 
 
 When you run an experiment with alex, data are saved in the Data
 folder (which alex creates if it does not find) in CSV files named
 with subject numbers, i.e., Data/1.dat and so on. These files have a
 header followed by one data line per trial. The first columns
-replicate the Subjects.csv line for the particular subject. This is so
+replicate the `Subjects.csv` line for the particular subject. This is so
 that each line identifies all independent variables it pertains to (so
 called "long format" in statistical software). Another reason for
 including this information is that in this way you don't have to load
@@ -562,10 +617,10 @@ The other columns of the data files are as follows:
  - **Trial**: trial number within the phase.
 
  - **Stimulus**: stimulus presented in the trial (one of those defined
-   in the Stimulu.csv design file).
+   in the `Stimuli.csv` design file).
 
  - **RewardPr**: reward probability assigned to the stimulus (from the
-   Phases.csv design file).
+   `Phases.csv` design file).
 
  - **Response**: which key was monitored on that trial. Recall that
      `space` is a special code for the space bar and that the key may
@@ -597,35 +652,38 @@ but please do let us know if you think details could be added.
 
 
 <a name="errors"></a>
-# Errors 
 
-Errors may arise if Design phases have incorrect format. Presently,
-alex performs some checks at startup, but some errors are caught only
-as they occur while running the experiment. We advise to always run
-the experiment a few times before putting it into production. If you
-think errors are due to bugs in alex, please write us at the address
-in [Contacts](#contacts). Also do contact us if you think that your
-design files are correct but the experiment does not run as you
-expect.
+# Troubleshooting 
+
+Errors may arise if Design files have incorrect or incomplete
+information. Presently, alex performs some checks at startup, but some
+errors are caught only as they occur while running the experiment. We
+advise to always run the experiment a few times before putting it into
+production. If you think errors are due to bugs in alex, please write
+us at the address in [Contacts](#contacts). Also do contact us if you
+think that your design files are correct but the experiment does not
+run as you expect.
 
 With a few exceptions, all errors print a hopefully informative
 message both on the standard console output (terminal) and on
 screen. A few errors that may occur before the screen is set up, such
-as not finding parameter files, are reported only on the standard
-output.
+as not finding necessary files, are reported only on the standard
+output. On Windows, these messages will appear in files `stdout.txt`
+and `stderr.txt`, which PEBL creates in the folder where alex is run.
 
 There is one error that appears mysterious to the uninitiated: the
 screen remains black and alex hangs forever. The reason is that alex
-uses a lock system on the Subjects.csv file to prevent different
-instances of alex from attempting to run the same subject. The lock is
-held for as little as possible, but if you interrupt alex at a
-critical time, or if alex crashes for any reason before the lock is
-released, subsequent instances of alex will wait forever for the lock
-t be released. In these cases, you can simply delete the lock file,
-which is Subjects.csv.lck in the Design folder.
+uses a lock system on the `Subjects.csv` file to prevent concurrent
+instances of alex from running the same subject. The lock is held for
+as little as possible, but if you interrupt alex at a critical time,
+or if alex crashes for any reason before the lock is released,
+subsequent instances of alex will wait forever for the lock to be
+released. In these cases, you can simply delete the lock file, which
+is `Subjects.csv.lck` in the Design folder.
 
 
 <a name="contacts"></a>
+
 # Contacts 
 
 Please send suggestions to improve alex or this manual to Stefano
