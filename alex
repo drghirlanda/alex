@@ -417,7 +417,7 @@ define FilePrintCSV_( file, data ) {
 # (stored in gStimulusInfo, with header in gStimulusHeader), and
 # returns the value of that field for that stimulus. If nothing is
 # found, the global parameters are consulted. If nothing is found
-# there, Parameters() returns "NA", which ends up being our return
+# there, Parameter() returns "NA", which ends up being our return
 # value.
 define LookupStimulus( sName, field ) {
   nStim <- Length( gStimNames )
