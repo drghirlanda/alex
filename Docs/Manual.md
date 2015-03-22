@@ -1,6 +1,7 @@
 %Alex: Associative Learning EXperiments
 %Stefano Ghirlanda
 
+\pagebreak
 
 <a name="intro"></a>
 
@@ -109,11 +110,6 @@ All configuration files are in the Design folder:
 
 In addition, instruction files can be in Materials, see the
 [section on text files](#textfiles).
-
-
-<a name="example"></a>
-
-# Example 
 
 ## The `Phases.csv` file
 
@@ -354,80 +350,14 @@ of PinkColor and RedParameters (see Table
 \ref{stimuli-color-parameters}). \label{subjects-color-parameters}
 
 
-<a name="notation"></a>
-
-# Special notation for stimuli 
-
-We mentioned above one bit of special notation in the definition of
-stimuli, namely the construction * (star) + stimulus name (see the end
-of the previous section). There are two more bits of special notation,
-explained next.
-
-Sometimes we want some stimuli to share characteristics. For example,
-they should be of the same color. We can express the fact that we want
-a stimulus characteristic to equal that of another stimulus using a
-colon (:) followed by the stimulus name (we would have liked to use =
-rather than :, but unfortunately spreadsheet software stubbornly
-interprets = as introducing a formula). Consider the example above,
-with three squares of the same size as stimuli. The file in Table
-\ref{stimuli-special} is equivalent but uses colon notation for the
-Parameters field. This has two advantages: it makes explicit our
-intention of having three squares of equal size, and it reduces the
-possibility of typing errors.
-
-Name   Type   Parameters         Color XOffset YOffset
-----   ----   ----------         ----- ------- -------
-Red    square 50                 red   0       0
-White  square :Red               white 0       0
-Pink   square :Red               *Pink 0       0
-Smiley image  smiley-o-white.png       0       150
-
-Table: A `Stimuli.csv` file demonstrating the * and : special
-notations for stimuli. \label{stimuli-special}
-
-Another bit of special notation is + (plus), which is used to present
-stimuli together (compound stimuli). Suppose that, after training a
-discrimination between red and white squares, we want to test the red
-and white squares together. We would then use the files in Tables
-\ref{phases-plus} and \ref{stimuli-plus}.
-
-Phase Stimulus  Trials Reward US
------ --------  ------ ------ --
-1     Red       20     0.9    Smiley
-1     White     20     0.1    Smiley
-2     Red+White 5      0
-
-Table: A `Phases.csv` file with a compound stimulus in
-phase 2. \label{phases-plus}
-
-
-Name   Type   Parameters         Color XOffset YOffset
-----   ----   ----------         ----- ------- -------
-Red    square 50                 red   0       0
-White  :Red   :Red               white 60      :Red
-Smiley image  smiley-o-white.png       0       150
-
-Table: A `Stimuli.csv` file to go with the `Phases.csv` file in Table
-\ref{phases-plus}. Note that we need to offset the white square,
-otherwise it would overlap with the red one when the two are presented
-together. \label{stimuli-plus}
-
-**Note:** The + notation is also valid for USs. This can be used to
-implement USs of different "magnitude." For example, one can instruct
-subjects that each smiley face represents a point earned, and have
-multiple smileys appear for more valuable stimuli (this requires
-defining several smiley stimuli offset from each other, so that they
-do not overlap when displayed simultaneously). Compounding of USs may
-also be used to present a combination of a visual and auditory US.
-
 
 <a name="global"></a>
 
-# Global parameters 
+## The `Parameters.csv` file 
 
-The file `Design/Parameters.csv` contains some parameters that affect
-the whole experiment. Here is a sample file (as above, the file is in
-CSV format, displayed here as a table for legibility):
+The `Parameters.csv` file contains some parameters that affect the
+whole experiment. Here is a sample file (as above, the file is in CSV
+format, displayed here as a table for legibility):
 
 Parameter       Value
 ---------       -----
@@ -498,6 +428,72 @@ acquisition of demographic information. It is meant to quickly start
 the experiment during development.
 
 
+<a name="notation"></a>
+
+# Special notation for stimuli 
+
+We mentioned above one bit of special notation in the definition of
+stimuli, namely the construction * (star) + stimulus name (see the end
+of the previous section). There are two more bits of special notation,
+explained next.
+
+Sometimes we want some stimuli to share characteristics. For example,
+they should be of the same color. We can express the fact that we want
+a stimulus characteristic to equal that of another stimulus using a
+colon (:) followed by the stimulus name (we would have liked to use =
+rather than :, but unfortunately spreadsheet software stubbornly
+interprets = as introducing a formula). Consider the example above,
+with three squares of the same size as stimuli. The file in Table
+\ref{stimuli-special} is equivalent but uses colon notation for the
+Parameters field. This has two advantages: it makes explicit our
+intention of having three squares of equal size, and it reduces the
+possibility of typing errors.
+
+Name   Type   Parameters         Color XOffset YOffset
+----   ----   ----------         ----- ------- -------
+Red    square 50                 red   0       0
+White  square :Red               white 0       0
+Pink   square :Red               *Pink 0       0
+Smiley image  smiley-o-white.png       0       150
+
+Table: A `Stimuli.csv` file demonstrating the * and : special
+notations for stimuli. \label{stimuli-special}
+
+Another bit of special notation is + (plus), which is used to present
+stimuli together (compound stimuli). Suppose that, after training a
+discrimination between red and white squares, we want to test the red
+and white squares together. We would then use the files in Tables
+\ref{phases-plus} and \ref{stimuli-plus}.
+
+Phase Stimulus  Trials Reward US
+----- --------  ------ ------ --
+1     Red       20     0.9    Smiley
+1     White     20     0.1    Smiley
+2     Red+White 5      0
+
+Table: A `Phases.csv` file with a compound stimulus in
+phase 2. \label{phases-plus}
+
+
+Name   Type   Parameters         Color XOffset YOffset
+----   ----   ----------         ----- ------- -------
+Red    square 50                 red   0       0
+White  :Red   :Red               white 60      :Red
+Smiley image  smiley-o-white.png       0       150
+
+Table: A `Stimuli.csv` file to go with the `Phases.csv` file in Table
+\ref{phases-plus}. Note that we need to offset the white square,
+otherwise it would overlap with the red one when the two are presented
+together. \label{stimuli-plus}
+
+**Note:** The + notation is also valid for USs. This can be used to
+implement USs of different "magnitude." For example, one can instruct
+subjects that each smiley face represents a point earned, and have
+multiple smileys appear for more valuable stimuli (this requires
+defining several smiley stimuli offset from each other, so that they
+do not overlap when displayed simultaneously). Compounding of USs may
+also be used to present a combination of a visual and auditory US.
+
 <a name="responses"></a>
 
 # Responses and classical vs. instrumental trials 
@@ -532,25 +528,28 @@ The other special response code is obtained by prefixing the response
 with a `*` (asterisk). This means that the US will be displayed *only*
 at the end of the trial (with the appropriate Reward probability)
 *regardless* of what the subject does during the trial, as in
-classical conditioning or causal rating studies. Thus an entry like:
+classical conditioning or causal rating studies. Thus the `Phases.csv`
+file in Table \ref{classical} specifies that Red is to be rewarded 90%
+of the time at the end of a trial, *regardless* of whether the subject
+responds or not. Note that subject responses are still recorded, and
+if they exceed the allowed maximum the trial terminates without
+reward. This last feature makes it possible to implement omission
+training, i.e., reward subjects only when they abstain from
+responding. This is controlled by the [MaxResponses](#maxresponses)
+parameter. The default value is 1, which corresponds precisley to
+omission training. If you don't want the trial to ever terminate
+before the allotted time, you can use a value of MaxResponses so high
+that it cannot be possibly reached, such as
+1000.
 
 Phase Stimulus Trials Reward US     Response
 ----- -------- ------ ------ --     --------
 1     Red      20     .9     Smiley *space
 
-Table: Sample `Phases.csv` file.
-
-Specifies that Red is to be rewarded 90% of the time at the end of a
-trial, *regardless* of whether the subject responds or not. Note that
-subject responses are still recorded, and if they exceed the allowed
-maximum the trial terminates without reward. This last feature makes
-it possible to implement omission training, i.e., reward subjects only
-when they abstain from responding. This is controlled by the
-[MaxResponses](#maxresponses) parameter. The default value is 1, which
-corresponds precisley to omission training. If you don't want the
-trial to ever terminate before the allotted time, you can use a value
-of MaxResponses so high that it cannot be possibly reached, such as
-1000.
+Table: A `Phases.csv` file using the Response notation *space to
+indicate a classical conditioning trial in which the US is delivered
+at the end of the trial regardless of subject
+behavior. \label{classical}
 
 Note also that on `*` trials, the ResponseTimeMin and ResponseTimeMax
 features are disabled (see [Global parameters](#global)). Because the
@@ -564,14 +563,27 @@ irrelevant when subjects responds.
 
 Instructions or other longish text can be displayed with the textfile
 stimulus type. For example, to include both a start and an end message
-(say a 'thank you' or similar) you can use something like:
+(say a 'thank you' or similar) you can use `Phases.csv` and
+`Stimuli.csv` file like those in Tables \ref{phases-instructions} and
+\ref{stimuli-instructions} to include the presentation of text files
+that are displayed until the subject responds once. As you see in
+these Tables, the display of instructions is construed simply as a
+stimulus that stays on for a long time (here 10 minutes), unless the
+subject performs the required response (which, by default, is the
+space bar). The Start.txt and End.txt files will be looked for in the
+Materials folder of the experiment. Note the column MaxResponses in
+`Phases.csv`, which makes sure the user has to press the space bar
+(the default response) only once to move on, even if a larger number
+of responses is allowed for actual experimental trials.
+
 
 Phase Stimulus  Trials MaxResponses
 ----- --------- ------ ------------
 Start StartText 1      1
 End   EndText   1      1
 
-Table: Sample `Phases.csv` file.
+Table: A `Phases.csv` file for displaying to subjects instructions and
+a final message (see also Table \ref{stimuli-instructions}.
 
 
 Name      Type     Parameters Color XOffset YOffset Duration
@@ -579,16 +591,9 @@ Name      Type     Parameters Color XOffset YOffset Duration
 StartText textfile Start.txt                        600000 
 EndText   textfile End.txt                          600000
 
-Table: Sample `Stimuli.csv` file.
+Table: A `Stimuli.csv` file for displaying to subjects instructions
+and a final message (see also Table \ref{phases-instructions}.
 
-As you see, the display of instructions is construed simply as a
-stimulus that stays on for a long time (here 10 minutes), unless the
-subject performs the required response (which, recall, is by default
-the space bar). The Start.txt and End.txt files will be looked for in
-the Materials folder of the experiment. Note the column MaxResponses
-in `Phases.csv`, which makes sure the user has to press the space bar
-(the default response) only once to move on, even if a larger number
-of responses is allowed for actual experimental trials.
 
 <a name="data-format"></a>
 
