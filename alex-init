@@ -15,10 +15,10 @@ define Start( par ) {
     if( IsDirectory( d + gAlexDir ) ) {
       gAlexDir <- d + gAlexDir
       found <- 1
-      Print( d + gAlexDir + " found!" )
+      Print( gAlexDir + " found!" )
       break
     } else {
-      Print( d + gAlexDir + " not found, moving on" )
+      Print( gAlexDir + " not found, moving on" )
     }
   }
   if( not found ) {
