@@ -7,13 +7,15 @@
 
 # Introduction
 
-Alex is a program to run associative learning experiments specified
-through a set of configuration files. This manual describe how to
-configure experiments. Please refer to the README file that comes with
-alex for installation instructions. The README also describes in brief
-what alex can and cannot do.
+Alex is a program to run associative learning experiments described in
+configuration files. This manual describe how to configure
+experiments. Please refer to the README file that comes with alex for
+installation instructions. The README also describes in brief what
+alex can and cannot do.
 
-**Acknowledgments:** Alex is written using Shane Mueller's
+## Acknowledgments
+
+Alex is written using Shane Mueller's
 [Psychology Experiment Building Language](http://pebl.sourceforge.net)
 (PEBL). Many thanks to Shane for sharing PEBL!
 
@@ -37,8 +39,8 @@ MyExperiment, and within it the following subfolders:
 - **Data**: This folder is created by alex if it is not found, and it
   holds the data collected during experiment runs.
 
-The program alex-init generates a bare-bones experiment so that at
-least you know what files you need. It is run like this:
+The program `alex-init` generates a bare-bones experiment so that you
+know what files you need. It is run like this:
 
     alex-init -v <experiment name>
 
@@ -48,7 +50,7 @@ subfolders and skeleton configuration files.
 
 <a name="running"></a>
 
-# Running and stopping alex
+# Starting and stopping alex
 
 From the folder where the Design and Materials folders are, you
 can just type 'alex'. You can also run experiments in other
@@ -56,14 +58,14 @@ folders using:
 
     alex -v <folder>
 
-The <folder> is then expected to have Design and Materials subfolders
+The `<folder>` is then expected to have Design and Materials subfolders
 with appropriate files. A Data folder will be create if not present.
 
 Alex has been designed so that multiple instances of an experiment can
 be run simultaneously. This feature is useful when the experiment
 folder is shared among multiple computers, as it may occur in a
 lab. All instances of alex will read the same design files, and in
-particular the same `Subjects.csv` file which describes how to run
+particular the same `Groups.csv` file which describes how to run
 subjects. Different instances, however, will run different subjects
 and will not overwrite each other's data files.
 
@@ -99,8 +101,8 @@ All configuration files are in the Design folder:
   `Phases.csv`. The latter only mentions stimuli by name, while
   `Stimuli.csv` informs alex of what the stimuli actually are.
 
-- `Subjects.csv` defines the number of subjects to be run and possibly
-  different the treatments to which subjects are allocated.
+- `Groups.csv` defines the number of experimental groups and the
+   treatments to which subjects in each group are allocated.
 
 - `Parameters.csv` defines some global parameters such as screen
   background color, text color, font, and size, the duration of
@@ -262,37 +264,32 @@ is a detailed explanation:
   is negative Y values).
 
 
-## The `Subjects.csv` file
+## The `Groups.csv` file
 
-The `Subjects.csv` file contains information about the subjects you
-want to run. If all subjects undergo the same treatment, as in the
-present example, you only need to give subject numbers. The file in
-Table \ref{subjects}, for example, instructs alex to run 6 subjects,
-all receiving the same treatment. Often, however, subjects need to be
-divided in different treatment groups. Any of the fields in the
-`Stimuli.csv` file can be specified on a per-subject bases. If you
-want to test two shades of pink, for example, you would extend the
-`Stimuli.csv` file in Table \ref{stimuli-color}. The special notation
-*Pink demonstrated there indicates that the color of stimulus Pink
-will be looked up, for each subject, in the column PinkColor of the
-`Subjects.csv` file (Table \ref{subjects-color}). This syntax is
-available for all stimulus properties. For example, to change the size
-of Red square across subjects you would use the `Subjects.csv` and
-`Stimuli.csv` files in Tables \ref{subjects-color-parameters} and
+The `Groups.csv` file contains information about the experimental
+groups you want to run. If all subjects undergo the same treatment,
+you only to specify one group and its size. The file in Table
+\ref{subjects}, for example, instructs alex to run a single groups of
+10 subjects (groups can be numbered or named, as is most convenient to
+you). Often, however, subjects need to be divided in different
+treatment groups. Any of the fields in the `Stimuli.csv` file can be
+specified on a per-subject bases. If you want to test two shades of
+pink, for example, you would extend the `Stimuli.csv` file in Table
+\ref{stimuli-color}. The special notation *Pink demonstrated there
+indicates that the color of stimulus Pink will be looked up, for each
+subject, in the column PinkColor of the `Groups.csv` file (Table
+\ref{subjects-color}). This syntax is available for all stimulus
+properties. For example, to change the size of Red square across
+subjects you would use the `Groups.csv` and `Stimuli.csv` files in
+Tables \ref{subjects-color-parameters} and
 \ref{stimuli-color-parameters}.
 
 
-Subject
-------- -
-1
-2
-3
-4
-5
-6
+Group   Size
+------- ----
+1       10
 
-
-Table: A `Subjects.csv` file instructing alex to run 6
+Table: A `Groups.csv` file instructing alex to run 6
 subjects. \label{subjects}
 
 
@@ -304,19 +301,15 @@ Pink   square 50                 *Pink 0       0
 Smiley image  smiley-o-white.png       0       150
 
 Table: A `Stimuli.csv` file instructing alex to look up the Color of
-the Pink stimulus in the `Subjects.csv` file. \label{stimuli-color}
+the Pink stimulus in the `Groups.csv` file. \label{stimuli-color}
 
 
-Subject PinkColor
-------- ---------
-1       255,128,128
-2       255,128,128
-3       255,128,128
-4       255,190,190
-5       255,190,190
-6       255,190,190
+Group Size PinkColor
+----- ---- ---------
+1     10   255,128,128
+2     10   255,190,190
 
-Table: A `Subjects.csv` file instructing alex to run 6 subjects split
+Table: A `Groups.csv` file instructing alex to run 6 subjects split
 in two treatment groups with different Color attributes for the Pink
 stimulus (see Table \ref{stimuli-color}). \label{subjects-color}
 
@@ -329,24 +322,21 @@ Pink   square 50                 *Pink 0       0
 Smiley image  smiley-o-white.png       0       150
 
 Table: A `Stimuli.csv` file instructing alex to run look up in the
-`subjects.csv` file both the Color of stimulus Pink and the Parameters
+`Groups.csv` file both the Color of stimulus Pink and the Parameters
 of stimulus Red (see Table
 \ref{subjects-color-parameters}). \label{stimuli-color-parameters}
 
 
-Subject PinkColor    RedParameters
-------- ---------    -------------
-1       255,128,128   25
-2       255,128,128   50
-3       255,128,128   75
-4       255,190,190   25
-5       255,190,190   50
-6       255,190,190   75
+Group Size PinkColor   RedParameters
+----- ---- ---------   -------------
+1     10   255,128,128 25
+2     10   255,128,128 50
+3     10   255,190,190 50
+4     10   255,190,190 75
 
-Table: A `Subjects.csv` file instructing alex to run 6 participants in
-6 experimental groups (of course, in real life you will have more
-participants per group!). Each group is given by a unique combination
-of PinkColor and RedParameters (see Table
+Table: A `Groups.csv` file instructing alex to run 4 experimental
+groups. Each group receives a unique combination of PinkColor and
+RedParameters (see Table
 \ref{stimuli-color-parameters}). \label{subjects-color-parameters}
 
 
@@ -525,7 +515,7 @@ space bar press. We made this special because the space would be hard
 to see when editing the CSV file.
 
 The other special response code is obtained by prefixing the response
-with a `*` (asterisk). This means that the US will be displayed *only*
+with a * (asterisk). This means that the US will be displayed *only*
 at the end of the trial (with the appropriate Reward probability)
 *regardless* of what the subject does during the trial, as in
 classical conditioning or causal rating studies. Thus the `Phases.csv`
@@ -551,7 +541,7 @@ indicate a classical conditioning trial in which the US is delivered
 at the end of the trial regardless of subject
 behavior. \label{classical}
 
-Note also that on `*` trials, the ResponseTimeMin and ResponseTimeMax
+Note also that on * trials, the ResponseTimeMin and ResponseTimeMax
 features are disabled (see [Global parameters](#global)). Because the
 US (if any), is delivered only once at the end of the trial, it is
 irrelevant when subjects responds.
@@ -603,7 +593,7 @@ When you run an experiment with alex, data are saved in the Data
 folder (which alex creates if it does not find) in CSV files named
 with subject numbers, i.e., Data/1.dat and so on. These files have a
 header followed by one data line per trial. The first columns
-replicate the `Subjects.csv` line for the particular subject. This is so
+replicate the `Groups.csv` line for the particular subject. This is so
 that each line identifies all independent variables it pertains to (so
 called "long format" in statistical software). Another reason for
 including this information is that in this way you don't have to load
@@ -629,7 +619,7 @@ The other columns of the data files are as follows:
 
  - **Response**: which key was monitored on that trial. Recall that
      `space` is a special code for the space bar and that the key may
-     be prepended by `*` (asterisk) if the trial was a "classical
+     be prepended by * (asterisk) if the trial was a "classical
      conditioning" one (see [here](#responses)).
 
  - **Responses**: The number of times the subject responded to the
@@ -678,13 +668,13 @@ and `stderr.txt`, which PEBL creates in the folder where alex is run.
 
 There is one error that appears mysterious to the uninitiated: the
 screen remains black and alex hangs forever. The reason is that alex
-uses a lock system on the `Subjects.csv` file to prevent concurrent
+uses a lock system on the `Groups.csv` file to prevent concurrent
 instances of alex from running the same subject. The lock is held for
 as little as possible, but if you interrupt alex at a critical time,
 or if alex crashes for any reason before the lock is released,
 subsequent instances of alex will wait forever for the lock to be
 released. In these cases, you can simply delete the lock file, which
-is `Subjects.csv.lck` in the Design folder.
+is `Groups.csv.lck` in the Design folder.
 
 
 <a name="contacts"></a>
