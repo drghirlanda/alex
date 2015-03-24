@@ -1,8 +1,6 @@
 %Alex: Associative Learning EXperiments
 %Stefano Ghirlanda
 
-\pagebreak
-
 <a name="intro"></a>
 
 # Introduction
@@ -13,16 +11,9 @@ experiments. Please refer to the README file that comes with alex for
 installation instructions. The README also describes in brief what
 alex can and cannot do.
 
-## Acknowledgments
-
-Alex is written using Shane Mueller's
-[Psychology Experiment Building Language](http://pebl.sourceforge.net)
-(PEBL). Many thanks to Shane for sharing PEBL!
-
-
 <a name="workflow"></a>
 
-# Workflow
+## Workflow
 
 To build and run a new experiment you create a dedicated folder, say,
 MyExperiment, and within it the following subfolders:
@@ -46,6 +37,14 @@ know what files you need. It is run like this:
 
 This creates folder <experiment name> with the above mentioned
 subfolders and skeleton configuration files.
+
+## Acknowledgments
+
+Alex is written using Shane Mueller's
+[Psychology Experiment Building Language](http://pebl.sourceforge.net)
+(PEBL). Many thanks to Shane for sharing PEBL!
+
+
 
 
 <a name="running"></a>

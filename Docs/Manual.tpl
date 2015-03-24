@@ -1,6 +1,9 @@
 \documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$lang$,$endif$$if(papersize)$$papersize$,$endif$]{$documentclass$}
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
+\usepackage{helvet}
+\usepackage{setspace}
+\usepackage[compact]{titlesec}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
@@ -140,8 +143,11 @@ $if(toc)$
 {
 \hypersetup{linkcolor=black}
 \setcounter{tocdepth}{$toc-depth$}
-\small
+\begin{spacing}{0}
+\footnotesize
 \tableofcontents
+\end{spacing}
+\clearpage
 }
 $endif$
 $body$
