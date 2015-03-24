@@ -1,41 +1,12 @@
-\documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$lang$,$endif$$if(papersize)$$papersize$,$endif$]{$documentclass$}
+\documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$lang$,$endif$$if(papersize)$$papersize$,$endif$]{article}
 \usepackage[T1]{fontenc}
-\usepackage{mathptmx}
-\usepackage{helvet}
-\usepackage{setspace}
-\usepackage[compact]{titlesec}
+\usepackage{mathptmx,setspace}
+\renewcommand{\medskip}{}
+\usepackage{hyperref}
 \usepackage{amssymb,amsmath}
-\usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
-% use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[utf8]{inputenc}
-$if(euro)$
-  \usepackage{eurosym}
-$endif$
-\else % if luatex or xelatex
-  \usepackage{fontspec}
-  \ifxetex
-    \usepackage{xltxtra,xunicode}
-  \fi
-  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{€}
-$if(mainfont)$
-    \setmainfont{$mainfont$}
-$endif$
-$if(sansfont)$
-    \setsansfont{$sansfont$}
-$endif$
-$if(monofont)$
-    \setmonofont{$monofont$}
-$endif$
-$if(mathfont)$
-    \setmathfont{$mathfont$}
-$endif$
-\fi
-% use microtype if available
-\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage[utf8]{inputenc}
+\usepackage[shrink=30,stretch=0]{microtype}
+\usepackage[compact]{titlesec}
 $if(geometry)$
 \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
 $endif$
@@ -62,7 +33,7 @@ $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
 $if(tables)$
-\usepackage{longtable}
+% nothing, we use table rather than longtable
 $endif$
 $if(graphics)$
 \usepackage{graphicx}
@@ -76,13 +47,6 @@ $if(graphics)$
 \let\Oldincludegraphics\includegraphics
 \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=\maxwidth]{#1}}
 $endif$
-\ifxetex
-  \usepackage[setpagesize=false, % page size defined by xetex
-              unicode=false, % unicode breaks when used with xetex
-              xetex]{hyperref}
-\else
-  \usepackage[unicode=true]{hyperref}
-\fi
 \hypersetup{breaklinks=true,
             bookmarks=true,
             pdfauthor={$author-meta$},
@@ -113,12 +77,6 @@ $if(verbatim-in-note)$
 \VerbatimFootnotes % allows verbatim text in footnotes
 $endif$
 $if(lang)$
-\ifxetex
-  \usepackage{polyglossia}
-  \setmainlanguage{$mainlang$}
-\else
-  \usepackage[$lang$]{babel}
-\fi
 $endif$
 $for(header-includes)$
 $header-includes$
@@ -144,7 +102,7 @@ $if(toc)$
 \hypersetup{linkcolor=black}
 \setcounter{tocdepth}{$toc-depth$}
 \begin{spacing}{0}
-\footnotesize
+\small
 \tableofcontents
 \end{spacing}
 \clearpage
