@@ -13,14 +13,11 @@
 <h1 class="title">Alex: Associative Learning EXperiments</h1>
 <h2 class="author">Stefano Ghirlanda</h2>
 </div>
-<p></p>
 <p><a name="intro"></a></p>
 <h1 id="introduction">Introduction</h1>
 <p>Alex is a program to run associative learning experiments described in configuration files. This manual describe how to configure experiments. Please refer to the README file that comes with alex for installation instructions. The README also describes in brief what alex can and cannot do.</p>
-<h2 id="acknowledgments">Acknowledgments</h2>
-<p>Alex is written using Shane Mueller's <a href="http://pebl.sourceforge.net">Psychology Experiment Building Language</a> (PEBL). Many thanks to Shane for sharing PEBL!</p>
 <p><a name="workflow"></a></p>
-<h1 id="workflow">Workflow</h1>
+<h2 id="workflow">Workflow</h2>
 <p>To build and run a new experiment you create a dedicated folder, say, MyExperiment, and within it the following subfolders:</p>
 <ul>
 <li><p><strong>Design</strong>: This folder contains the files that specify experimental design, such as which stimuli to use, the structure of trials, and different treatments for subjects. See <a href="#configuration-files">Configuration files</a>.</p></li>
@@ -30,6 +27,8 @@
 <p>The program <code>alex-init</code> generates a bare-bones experiment so that you know what files you need. It is run like this:</p>
 <pre><code>alex-init -v &lt;experiment name&gt;</code></pre>
 <p>This creates folder <experiment name> with the above mentioned subfolders and skeleton configuration files.</p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Alex is written using Shane Mueller's <a href="http://pebl.sourceforge.net">Psychology Experiment Building Language</a> (PEBL). Many thanks to Shane for sharing PEBL!</p>
 <p><a name="running"></a></p>
 <h1 id="starting-and-stopping-alex">Starting and stopping alex</h1>
 <p>From the folder where the Design and Materials folders are, you can just type 'alex'. You can also run experiments in other folders using:</p>
