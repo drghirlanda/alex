@@ -9,8 +9,8 @@ define Start( par ) {
   gAlexDir <- "Library/Materials/"
   dirs <- [ "",                # Current folder takes precedence
             "/usr/share/alex/" # Linux
-	    # ADD OS X AND WINDOWS
-	  ]
+      # ADD OS X AND WINDOWS
+    ]
   loop( d, dirs ) {
     if( IsDirectory( d + gAlexDir ) ) {
       gAlexDir <- d + gAlexDir
@@ -70,7 +70,7 @@ define Start( par ) {
   ## Subject information is only asked when not running in test mode
   if( not test ) {
     gSex <- GetEasyChoice( "Please select your sex", 
-    	 ["Male", "Female"], ["M", "F"], gWindow )
+       ["Male", "Female"], ["M", "F"], gWindow )
     gAge <- GetEasyInput( "Please enter your age in years, "+
       "then press enter:", gWindow )
     gAge <- ToInteger( gAge )
@@ -85,12 +85,12 @@ define Start( par ) {
 
   ## Print data file header. gDataFile has been opened by
   ## ReadSubject() to avoid race conditions with acquiring and
-  ## releasing the lock to Subjects.csv). We first print whatever
-  ## fields are defined in Subjects.csv (stored in gSubjectHeader),
+  ## releasing the lock to Groups.csv. We first print whatever
+  ## fields are defined in Groups.csv (stored in gSubjectHeader),
   ## then fields for other data:
   loop( field, gSubjectHeader ) {
     FilePrint_( gDataFile, field + "," )
-  } 
+  }
   FilePrint( gDataFile, "Sex,Age,Phase,Trial,Stimulus,RewardPr,Response,Responses,RTs,Rewards" )
 
   ## Run experimental phases. We loop through all elements of the
@@ -254,9 +254,9 @@ define OneTrial( stimulus, rewardProb, uss, response, maxResponses ) {
         } elseif( Random() < rewardProb and classical == 0 ) {
           PushOnEnd( rewards, 1 )
           Wait( csusInterval )
-	  Display( uss )
+    Display( uss )
           Wait( usDuration )
-	  Undisplay( uss )
+    Undisplay( uss )
         # If responses is valid but unrewarded, reward is 0:
         } else {
           PushOnEnd( rewards, 0 )
@@ -399,9 +399,9 @@ define FilePrintCSV_( file, data ) {
   } else {
     front <- Subset( data, Sequence(1,n-1,1) )
     loop( d, front ) {
-    	if( FindInString( ToString(d), ",", 0) ) {
-	  d <- gQuote + d + gQuote 
-	}
+      if( FindInString( ToString(d), ",", 0) ) {
+    d <- gQuote + d + gQuote 
+  }
         FilePrint_( file, d + "," )
     }
     last <- Last(data)
@@ -458,7 +458,7 @@ define Resolve( field, value ) {
       s <- SubString( v, 2, StringLength(v)-1 )
       r <- Lookup( s+field,gSubjectHeader,gSubjectInfo )
       if( IsList(r) ) { # Nothing found
-        Message( "Cannot find "+s+field+" in Subjects.csv", 1 )
+        Message( "Cannot find "+s+field+" in Groups.csv", 1 )
       } 
       PushOnEnd( results, r )
     } else {
@@ -523,26 +523,34 @@ define UnlockFile( file ) {
 }
 
 define ReadSubject() {
-  subjectsFile <- gWD + "Design/Subjects.csv"
+  subjectsFile <- gWD + "Design/Groups.csv"
   LockFile( subjectsFile )
   subjects <- ReadCSV( subjectsFile )
   gSubjectHeader <- Nth( subjects, 1 )
+  SetElement( gSubjectHeader, 2, "Subject")
   found <- 0
   if( not IsDirectory( gWD + "Data" ) ) {
     MakeDirectory( gWD + "Data" )
   }
-  loop( s, Rest(subjects) ) {
-    dataFilename <- gWD + "Data/" + Nth(s,1) + ".dat"
-    if( not FileExists(dataFilename) ) {
-      found <- 1
-      Print_( "Running subject: " )
-      PrintList( s )
+  ## From a random group, pick a subject that has not yet been run
+  loop( e, Shuffle( Rest(subjects) ) ) {
+    loop( s, Sequence(1, ToNumber(Nth(e,2)), 1) ) {
+      dataFilename <- gWD + "Data/" + Nth(e,1) + "-" + s + ".dat"
+      if( not FileExists(dataFilename) ) {
+        found <- 1
+        SetElement( e, 2, s )
+        Print_( "Running subject: " )
+        PrintList( e )
+        break
+      }
+    }
+    if( found ) {
       break
     }
   }
   ## Open data file before releasing lock, to prevent race conditions
   if( found ) {
-    gSubjectInfo <- s
+    gSubjectInfo <- e
     gDataFile <- FileOpenWrite( dataFilename )
     UnlockFile( subjectsFile )
   } else {
@@ -596,8 +604,8 @@ define ReadStimuli() {
       }
       if( Length(colors) == 2 ) {
         c2name <- Rest( colors )
-	if( StringLength( c2name ) ) {
-	  c2 <- MakeColorRGBString( c2name )
+  if( StringLength( c2name ) ) {
+    c2 <- MakeColorRGBString( c2name )
         } else {
           c2 <- gBackgroundColor
         }
@@ -625,9 +633,9 @@ define ReadStimuli() {
       p <- Resolve( "Parameters", Nth(gStimParams,i) )
       file <- First( p )
       if( Length(p) == 2 ) { # Optional 2nd parameter is zoom factor
-	zoom <- ToNumber( Nth( p, 2 ) )
+  zoom <- ToNumber( Nth( p, 2 ) )
       } else {
-	zoom <- 1
+  zoom <- 1
       }
       # We look up the file in 4 dirs: this experiment's Materials,
       # the system-wide Materials, PEBL's image files, and the current

@@ -1,3 +1,3 @@
 Name,Type,Parameters,Color,XOffset,YOffset,Duration
 StartText,textfile,"Start.txt,blocking",,,,
-Endtext,textfile,"End.txt,blocking",,,,
+EndText,textfile,"End.txt,blocking",,,,
