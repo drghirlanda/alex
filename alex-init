@@ -18,7 +18,7 @@ define Start( par ) {
       Print( gAlexDir + " found!" )
       break
     } else {
-      Print( gAlexDir + " not found, moving on" )
+      Print( d + gAlexDir + " not found, moving on" )
     }
   }
   if( not found ) {
