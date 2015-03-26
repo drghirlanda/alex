@@ -4,16 +4,13 @@ Roadmap for alex
 This file describes some features that are planned for alex.
 
 Toward a release
-================
+----------------
 
-- Rearrange Manual. The explanation of Stimuli.csv and Phases.csv
-should be more systematic, with sections "The Stimuli.csv file" and
-"The Phases.csv" coming after a brief introductory example. Right now
-the example is probably too long and it introduces too many features
-in a somewhat unclear order.
+- ReadStimuli() relies on the fields being in the correct order. we
+  can be more lenient and determine the order of fields from the
+  header line of Stimuli.csv (as is done in other Read*() functions).
 
-- Write caption in the last three Tables in the Manual, and refer to
-  them with `\ref` in the text.
+- Check Manual.
 
 - Example suite. Include also "cognitive" tasks like a categorization
   task with test stimuli for prototype effect and peak-shift. Other
@@ -34,33 +31,26 @@ in a somewhat unclear order.
   between and within subjects, present the experimental design in a
   table, etc.
 
-- The Subjects.csv file should really be a Groups.csv file. That would
-  make things easier for users! Each Group would have a name and
-  number of subjects. We would need to rewrite the code that decides
-  which subject to run. It would probably pick the group with fewer
-  subjects already run. The data files could be in the form `<group
-  name>-<subject number>.dat`.
+- Causal ratings: It should be possible to ask subjects to rate causal
+  relationships. This needs a scale widget and a way to configure the
+  rating question, as well as a way to record the rating. The plan
+  could be:
 
-Causal ratings 
---------------
+  - GetEasyChoice for rating scale. We need a version that honors the
+    background color, we can grab the code from the pebl
+    implementation.
 
-It should be possible to ask subjects to rate causal
-relationships. This needs a scale widget and a way to configure the
-rating question, as well as a way to record the rating. The plan could
-be:
+  - Response type can be "rating." To configure the scale we could use
+    global parameters RatingMin, RatingMax, RatingStep, or have
+    parameters in the Response column, like "rating+1+10+1" for a 10
+    point scale with 1-point increments. Alternatively, could Rating
+    be a US?
 
-- GetEasyChoice for rating scale. 
+  - We will probably have to change the OneTrial function a bit so
+    that for rating trials the "Responses" data field is the rating
+    rather than the number of responses.
 
-- Response type can be "rating." To configure the scale we could use
-  global parameters RatingMin, RatingMax, RatingStep, or have
-  parameters in the Response column, like "rating+1+10+1" for a 10
-  point scale with 1-point increments.
-
-- We will probably have to change the OneTrial function a bit so that
-  for rating trials the "Responses" data field is the rating rather
-  than the number of responses.
-
-- Other things?
+  - What else?
 
 
 Future
