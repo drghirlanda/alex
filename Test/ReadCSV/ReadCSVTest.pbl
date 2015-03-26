@@ -1,0 +1,66 @@
+## These functions modify pebl's stock ReadCSV to handle CSV files
+## whose last line does not terminate in a newline (this happens when
+## saving CSV in some spreadsheet software)
+
+define Start( par ) {
+  filename <- "CSVTest.csv"
+  Print( "Reading " + filename + ":" )
+  table <- ReadCSV( filename )
+  i <- 1
+  loop( line, table ) {
+    Print_( i + ": " )
+    PrintList( line )
+    i <- i + 1
+  }
+}
+
+## This function does the heavy lifting and works based on the fact
+## that pebl's FileReadLine() returns also incomplete lines. The
+## algorithm to parse a CSV line with quotes is copied from pebl's
+## ReadCSV function.
+define ReadCSVLine( file ) {
+  parsedLine <- [] # List of tokens parsed from the CSV line
+  token <- ""      # The token being currently parsed 
+  inquote <- 0     # 1 if we are inside a quoted token, 0 otherwise
+
+  ## Read a line and loop over all characters, but ignore empty lines
+  rawLine <- FileReadLine( file )  
+  if( StringLength(rawline) ) {
+    loop( char, SplitString( rawLine, "" ) ) {
+      if( char == gQuote and (not inquote) ) { # Entering quoted token
+        inquote <- 1
+        token <- token + char
+      } elseif( char == gQuote and inquote ) { # Exiting quoted token
+        inquote <- 0
+        token <- token + char
+      } elseif( char == "," and (not inquote) ) { # Token is ready
+        PushOnEnd( parsedLine, StripQuotes( StripSpace( token ) ) )
+        token <- ""
+      } else {
+        token <- token + char
+      }
+    }
+    PushOnEnd( parsedLine, StripQuotes( StripSpace( token ) ) )
+  }
+  return parsedLine
+}
+
+define ReadCSV(filename)
+{
+  if( not FileExists( filename ) ) {
+    SignalFatalError( "Cannot find file: "+ filename )
+  }
+
+  file <- FileOpenRead(filename)
+  table <- [] 
+
+  while( not EndOfFile(file) ) { 
+    line <- ReadCSVLine( file )
+    if( Length( line ) ) {
+      PushOnEnd( table, line )
+    }
+  }
+
+  return table
+}
+
