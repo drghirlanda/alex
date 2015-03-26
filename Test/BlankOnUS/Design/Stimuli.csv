@@ -1,0 +1,4 @@
+Name,Type,Parameters,Color,XOffset,YOffset
+Red,square,50,red,0,0
+Black,square,50,black,0,0
+Smiley,image,smile-o-white.png+.33.png,,0,-150
