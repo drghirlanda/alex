@@ -1,0 +1,13 @@
+Parameter,Value,Description
+CSDuration,2000,"Duration of CSs, unless specified in Stimuli.csv"
+CSUSInterval,0,Interval between CS offset and US onset
+USDuration,500,"Duration of Uss, unless specified in Stimuli.csv"
+MinITI,1000,Minimum intertrial interval
+MaxITI,2000,Maximum intertrial interval
+MaxResponses,1,Maximum number of responses allowed in a trial
+BackgroundColor,black,Background screen color
+ForegroundColor,white,"Color of text, unless specified in Stimuli.csv"
+FontName,Vera,Text font
+FontSize,24,Text size
+Test,1,Demographics questions are skipped if this is 1
+Response,space,"What key constitutes a 'response,' unless specified in Phases.csv"

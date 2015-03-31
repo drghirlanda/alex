@@ -10,7 +10,16 @@ Toward a release
   can be more lenient and determine the order of fields from the
   header line of Stimuli.csv (as is done in other Read*() functions).
 
-- Check Manual.
+- Add a Log folder alongside data where we log information about all
+  runs.
+
+- Handling of multiple responses should be changed. Right now if an
+  experiment defines many responses, each trial only registers the one
+  associated with the CS. We should register all responses and log the
+  key that has been pressed. we need to change the OneTrial function a
+  bit as well as the data file format.
+
+- Check Manual for styles and typos.
 
 - Example suite. Include also "cognitive" tasks like a categorization
   task with test stimuli for prototype effect and peak-shift. Other
