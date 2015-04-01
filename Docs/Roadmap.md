@@ -19,6 +19,9 @@ Toward a release
   key that has been pressed. we need to change the OneTrial function a
   bit as well as the data file format.
 
+- Again on last point, we should probably write *one line for
+  response* in the data files.
+
 - Check Manual for styles and typos.
 
 - Example suite. Include also "cognitive" tasks like a categorization
