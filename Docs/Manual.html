@@ -727,24 +727,25 @@
 </table>
 <p><a name="data-format"></a></p>
 <h1 id="data-format">Data Format</h1>
-<p>When you run an experiment with alex, data are saved in the Data folder (which alex creates if it does not find) in CSV files named with subject numbers, i.e., Data/1.dat and so on. These files have a header followed by one data line per trial. The first columns replicate the <code>Groups.csv</code> line for the particular subject. This is so that each line identifies all independent variables it pertains to (so called &quot;long format&quot; in statistical software). Another reason for including this information is that in this way you don't have to load it into your statistical software from other files and then merge the data.</p>
-<p>The other columns of the data files are as follows:</p>
+<p>When you run an experiment with alex, data are saved in the Data folder (which alex creates if it does not find) in CSV files named with group names and subject numbers, e.g., <code>Data/Training-1.dat</code> for the first subject of group Training. These files have a header followed by one data line per response. This is so that each line identifies all variables it pertains to (so called &quot;long format&quot; in statistical software) and can be loaded easily into statistical software without having to manually add data.</p>
+<p>The first few columns of each data line replicate the <code>Groups.csv</code> line for the particular subject. The remaining columns are as follows:</p>
 <ul>
 <li><p><strong>Sex</strong>: subject sex (collected by alex at the start of experiments).</p></li>
 <li><p><strong>Age</strong>: subject sex (ditto).</p></li>
 <li><p><strong>Phase</strong>: experimental phase the trial belongs to.</p></li>
 <li><p><strong>Trial</strong>: trial number within the phase.</p></li>
 <li><p><strong>Stimulus</strong>: stimulus presented in the trial (one of those defined in the <code>Stimuli.csv</code> design file).</p></li>
-<li><p><strong>RewardPr</strong>: reward probability assigned to the stimulus (from the <code>Phases.csv</code> design file).</p></li>
-<li><p><strong>Response</strong>: which key was monitored on that trial. Recall that <code>space</code> is a special code for the space bar and that the key may be prepended by * (asterisk) if the trial was a &quot;classical conditioning&quot; one (see <a href="#responses">here</a>).</p></li>
-<li><p><strong>Responses</strong>: The number of times the subject responded to the stimulus. This includes <em>all</em> responses, even those that may have bee registered at invalid times (see ReactionTimeMin and ReactionTimeMax above). See <em>Rewards</em> below for how to obtaine detailed information about valid and invalid responses.</p></li>
-<li><p><strong>RTs</strong>: Reaction times for <em>all</em> registered responses (see <em>Responses</em>). This is a comma-separated list.</p></li>
-<li><p><strong>Rewards</strong>: A comma-separated list of rewards received for each response. Each element has three possible values:</p></li>
+<li><p><strong>Response</strong>: which key was designated as the correct response. Recall that <code>space</code> is a special code for the space bar and that the key may be prepended by * (asterisk) if the trial was a &quot;classical conditioning&quot; one (see <a href="#responses">here</a>).</p></li>
+<li><p><strong>RewardPr</strong>: reward probability assigned to the stimulus, in case of a correct response (from the <code>Phases.csv</code> design file).</p></li>
+<li><p><strong>Key</strong>: Which key the subject actually pressed. This can be the correct key, or any other key that the subject may have pressed (the goal is to have a faithful record of everything the subject does).</p></li>
+<li><p><strong>RT</strong>: Reaction time for this response.</p></li>
+<li><p><strong>ResponseCount</strong>: The number of responses in this trial, up to the current response.</p></li>
+<li><p><strong>Reward</strong>: The reward received for the response, using the following code:</p></li>
 <li><p>1: The response was rewarded (the US was presented)</p></li>
 <li><p>0: The response was not rewarded (no US presented)</p></li>
 <li><p>-1: The response was invalid, i.e., it fell outside of the window delimited by ReactionTimeMin and ReactionTimeMax, see above. No US is presented on such responses.</p></li>
 </ul>
-<p>We think this information characterizes subject behavior competely, but please do let us know if you think details could be added.</p>
+<p>We believe this information characterizes subject behavior competely, but please do let us know if you think details could be added.</p>
 <p><a name="errors"></a></p>
 <h1 id="troubleshooting">Troubleshooting</h1>
 <p>Errors may arise if Design files have incorrect or incomplete information. Presently, alex performs some checks at startup, but some errors are caught only as they occur while running the experiment. We advise to always run the experiment a few times before putting it into production. If you think errors are due to bugs in alex, please write us at the address in <a href="#contacts">Contacts</a>. Also do contact us if you think that your design files are correct but the experiment does not run as you expect.</p>

@@ -9,8 +9,8 @@ define Start( par ) {
   gAlexDir <- "Library/Materials/"
   dirs <- [ "",                # Current folder takes precedence
             "/usr/share/alex/" # Linux
-      # ADD OS X AND WINDOWS
-    ]
+            # ADD OS X AND WINDOWS
+          ]
   loop( d, dirs ) {
     if( IsDirectory( d + gAlexDir ) ) {
       gAlexDir <- d + gAlexDir
@@ -90,10 +90,9 @@ define Start( par ) {
   ## releasing the lock to Groups.csv. We first print whatever
   ## fields are defined in Groups.csv (stored in gSubjectHeader),
   ## then fields for other data:
-  loop( field, gSubjectHeader ) {
-    FilePrint_( gDataFile, field + "," )
-  }
-  FilePrint( gDataFile, "Sex,Age,Phase,Trial,Stimulus,RewardPr,Response,Responses,RTs,Rewards" )
+  FilePrintCSV( gDataFile, Flatten( [gSubjectHeader, 
+    "Sex","Age","Phase","Trial","Stimulus","Response","RewardPr",
+     "Key","RT","ResponseCount","Reward"] ) )
 
   ## Run experimental phases. We loop through all elements of the
   ## Phase column in Phases.csv. Phase p is run with RunPhase( p ),
@@ -191,10 +190,10 @@ define ResolveDuration( stimulus, role ) {
 #                                                                      #
 ########################################################################
 
-
-define OneTrial( stimulus, rewardProb, uss, response, maxResponses ) {
-  Print_( "Trial: " )
-  PrintList( [stimulus, rewardProb, uss, response, maxResponses] )
+define RunTrial( phase, trial, stimulus, rewardProb, uss, response, 
+                 maxResponses ) {
+  PrintList( [phase, trial, stimulus, rewardProb, uss, response, 
+    maxResponses] )
   Draw()
   # Determine CS and US duration:
   csDuration <- ToNumber( ResolveDuration( stimulus, "CS" ) )
@@ -236,39 +235,44 @@ define OneTrial( stimulus, rewardProb, uss, response, maxResponses ) {
   # We are ready to run the trial loop. The trial continues until
   # either time runs out or we reach the maximum number of (valid)
   # responses.
-  times        <- []
-  rewards      <- []
   timeLeft     <- ToNumber( csDuration )
   startTime    <- GetTime()
+  responseCount <- 0
+  reward <- 0
   Display( stimulus )
-  while( Length(times)<maxResponses and timeLeft>1 ) {
+  while( responseCount<maxResponses and timeLeft>1 ) {
     key <- WaitForListKeyPressWithTimeout( keyList, timeLeft, 1 )
     rt <- GetTime() - startTime
     timeLeft <- csDuration - rt
     # If we did not time out we have to process the response:
     if( timeLeft > 1 ) {
-      PushOnEnd( times, rt )
+      responseCount <- responseCount + 1
       if( classical == 0 ) {
         # If response is invalid, reward is -1:
         if( rt<rtMin or rt>rtMax ) {
-          PushOnEnd( rewards, -1 )
+	  reward <- -1
         # If responses is valid and rewarded, reward is 1:
         } elseif( Random() < rewardProb and classical == 0 ) {
-          PushOnEnd( rewards, 1 )
+          reward <- 1
           Wait( csusInterval )
-    Display( uss )
+          Display( uss )
           Wait( usDuration )
-    Undisplay( uss )
+          Undisplay( uss )
         # If responses is valid but unrewarded, reward is 0:
         } else {
-          PushOnEnd( rewards, 0 )
+          reward <- 0
         }
       } else {
-        PushOnEnd( rewards, 0 )
+          reward <- 0
       }
     }
     # Update timeLeft again because US display may have used time
     timeLeft <- csDuration - GetTime() + startTime
+
+    ## Save data line to file:
+    FilePrintCSV( gDataFile, Flatten( [ gSubjectInfo, 
+      gSex, gAge, phase, trial, stimulus, response, 
+      rewardProb, key, rt, responseCount, reward ] ) )
   }
   Undisplay( stimulus )
   Draw()
@@ -280,22 +284,16 @@ define OneTrial( stimulus, rewardProb, uss, response, maxResponses ) {
     Wait( usDuration )
     Undisplay( uss )
   }
-  # Set times and responses to NA if no response recorded:
-  if( not Length(times) ) {
-    times <- "NA"
-    rewards <- "NA"
-  }
-  return [times, rewards]
 }
 
 # Helper function to identify what enters a phase. If we don't find a
 # field in the phase header, we try to see whether it is defined as a
 # global parameter (if that fails, we get NAs and we return those).
 define LookupPhase( phaseName, field ) {
-  Print( "LookupPhase: "+phaseName+" "+field )
+#  Print( "LookupPhase: "+phaseName+" "+field )
   fields <- Lookup(field, gPhaseHeader, gPhases)
-  Print_( "Fields ("+Length(fields)+"): " )
-  PrintList( fields )
+#  Print_( "Fields ("+Length(fields)+"): " )
+#  PrintList( fields )
   if( not Length(fields) ) { 
     stimuli <- LookupPhase( phaseName, "Stimuli" )
     result <- Repeat( Parameter(field), Length(stimuli) )
@@ -369,22 +367,8 @@ define RunPhase( phaseName ) {
       maxResponses <- 1
     }
     ## Run trial and get response times and rewards collected
-    results <- OneTrial( stimulus, rewardPr, uss, response, maxResponses )
-    times   <- Nth(results, 1)
-    rewards <- Nth(results, 2)
-    ## Save all data to file:
-    FilePrintCSV_( gDataFile, Flatten( [ gSubjectInfo, 
-      gSex, gAge, phaseName, trial, stimulus, rewardPr, response] ) )
-    FilePrint_( gDataFile, "," )
-    If( IsList(times) ) {
-      FilePrint_( gDataFile, Length(times) + ","+gQuote )
-      FilePrintCSV_( gDataFile, times )
-      FilePrint_( gDataFile, gQuote+","+gQuote )
-      FilePrintCSV_( gDataFile, rewards )
-      FilePrint( gDataFile, gQuote )
-    } else {
-      FilePrint( gDataFile, "0,NA,NA" )
-    }
+    RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
+              maxResponses )
     ## Wait an inter-trial interval and advance to next trial: 
     minITI <- ToNumber( Parameter("MinITI") )
     maxITI <- ToNumber( Parameter("MinITI") )
@@ -394,7 +378,7 @@ define RunPhase( phaseName ) {
 }
 
 # Print a list to file in CSF format
-define FilePrintCSV_( file, data ) {
+define FilePrintCSV( file, data ) {
   n <- Length(data)
   if( n==1 ) {
     FilePrint_( file, Nth(data,1) )
@@ -410,7 +394,7 @@ define FilePrintCSV_( file, data ) {
     if( FindInString( ToString(last), ",", 0) ) {
       last <- gQuote + last + gQuote 
     }
-    FilePrint_( file, last )
+    FilePrint( file, last )
   }
 }
 

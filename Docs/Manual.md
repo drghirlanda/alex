@@ -590,16 +590,15 @@ and a final message (see also Table \ref{phases-instructions}.
 
 When you run an experiment with alex, data are saved in the Data
 folder (which alex creates if it does not find) in CSV files named
-with subject numbers, i.e., Data/1.dat and so on. These files have a
-header followed by one data line per trial. The first columns
-replicate the `Groups.csv` line for the particular subject. This is so
-that each line identifies all independent variables it pertains to (so
-called "long format" in statistical software). Another reason for
-including this information is that in this way you don't have to load
-it into your statistical software from other files and then merge the
-data.
+with group names and subject numbers, e.g., `Data/Training-1.dat` for
+the first subject of group Training. These files have a header
+followed by one data line per response. This is so that each line
+identifies all variables it pertains to (so called "long format" in
+statistical software) and can be loaded easily into statistical
+software without having to manually add data.
 
-The other columns of the data files are as follows:
+The first few columns of each data line replicate the `Groups.csv`
+line for the particular subject. The remaining columns are as follows:
 
  - **Sex**: subject sex (collected by alex at the start of
    experiments).
@@ -613,35 +612,36 @@ The other columns of the data files are as follows:
  - **Stimulus**: stimulus presented in the trial (one of those defined
    in the `Stimuli.csv` design file).
 
- - **RewardPr**: reward probability assigned to the stimulus (from the
-   `Phases.csv` design file).
+ - **Response**: which key was designated as the correct
+     response. Recall that `space` is a special code for the space bar
+     and that the key may be prepended by * (asterisk) if the trial
+     was a "classical conditioning" one (see [here](#responses)).
 
- - **Response**: which key was monitored on that trial. Recall that
-     `space` is a special code for the space bar and that the key may
-     be prepended by * (asterisk) if the trial was a "classical
-     conditioning" one (see [here](#responses)).
+- **RewardPr**: reward probability assigned to the stimulus, in case
+   of a correct response (from the `Phases.csv` design file).
 
- - **Responses**: The number of times the subject responded to the
-   stimulus. This includes *all* responses, even those that may have
-   bee registered at invalid times (see ReactionTimeMin and
-   ReactionTimeMax above). See *Rewards* below for how to obtaine
-   detailed information about valid and invalid responses.
+- **Key**: Which key the subject actually pressed. This can be the
+  correct key, or any other key that the subject may have pressed (the
+  goal is to have a faithful record of everything the subject
+  does).
+  
+- **RT**: Reaction time for this response.
 
- - **RTs**: Reaction times for *all* registered responses (see
-    *Responses*). This is a comma-separated list.
+- **ResponseCount**: The number of responses in this trial, up to the
+  current response.
 
- - **Rewards**: A comma-separated list of rewards received for each
-   response. Each element has three possible values:
+- **Reward**: The reward received for the response, using the
+  following code:
     
-   - 1: The response was rewarded (the US was presented)
+  - 1: The response was rewarded (the US was presented)
 
-   - 0: The response was not rewarded (no US presented)
+  - 0: The response was not rewarded (no US presented)
 
-   - -1: The response was invalid, i.e., it fell outside of the window
-       delimited by ReactionTimeMin and ReactionTimeMax, see above. No
-       US is presented on such responses.
+  - -1: The response was invalid, i.e., it fell outside of the window
+        delimited by ReactionTimeMin and ReactionTimeMax, see
+        above. No US is presented on such responses.
 
-We think this information characterizes subject behavior competely,
+We believe this information characterizes subject behavior competely,
 but please do let us know if you think details could be added.
 
 
