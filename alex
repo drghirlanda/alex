@@ -242,6 +242,9 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   Display( stimulus )
   while( responseCount<maxResponses and timeLeft>1 ) {
     key <- WaitForListKeyPressWithTimeout( keyList, timeLeft, 1 )
+    if( key == "<timeout>" ) { # PEBL -> R translation
+      key <- "NA"
+    }
     rt <- GetTime() - startTime
     timeLeft <- csDuration - rt
     # If we did not time out we have to process the response:
