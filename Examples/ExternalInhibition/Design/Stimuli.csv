@@ -3,4 +3,4 @@ A,square,60,blue,0,0,
 B,square,60,yellow,65,0,
 X,circle,25,white,0,0,
 Smiley,image,smile-o-white.png+.33,,0,-150,
-Instructions,textfile,Instructions.txt,,,,600
+Instructions,textfile,Instructions.txt,,,,600000
