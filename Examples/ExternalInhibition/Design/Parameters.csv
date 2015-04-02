@@ -5,8 +5,8 @@ USDuration,250
 MinITI,1000
 MaxITI,2000
 MaxResponses,100
-BackgroundColor,gray95
-ForegroundColor,black
+BackgroundColor,black
+ForegroundColor,white
 FontName,Vera
 FontSize,36
 Test,1
