@@ -14,11 +14,19 @@ if [ ! -d ${SHARE_DIR}/alex ]; then
 fi
 
 # copy files to SHARE_DIR and set their permissions:
-for FILE in README.md Docs Examples Library; do
+for FILE in README.md Examples Library; do
     cp -r ${FILE} ${SHARE_DIR}/alex
     chmod 0644 ${SHARE_DIR}/alex/${FILE}
     chown ${USER}.${GROUP} ${SHARE_DIR}/alex/${FILE}
 done
+
+cd Docs
+for FILE in AlexManual.pdf AlexManual.html Roadmap.md; do
+    cp -r ${FILE} ${SHARE_DIR}/alex
+    chmod 0644 ${SHARE_DIR}/alex/${FILE}
+    chown ${USER}.${GROUP} ${SHARE_DIR}/alex/${FILE}
+done
+cd -
 
 # set ownership and permissions on all directories in SHARE_DIR:
 for DIR in $(find ${SHARE_DIR}/alex -type d); do
