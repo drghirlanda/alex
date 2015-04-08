@@ -94,6 +94,16 @@ define Start( par ) {
     "Sex","Age","Phase","Trial","Stimulus","Response","RewardPr",
      "Key","RT","ResponseCount","Reward"] ) )
 
+  ## Create a global list of possible keys
+  gKeys <- []
+  kc <- [8,9,12,13,27]
+  PushOnEnd( kc, Sequence(32,64,1) )
+  PushOnEnd( kc, Sequence(91,127,1) )
+  PushOnEnd( kc, Sequence(256,310,1) )
+  loop( c, Flatten(kc) ) {
+    PushOnEnd( gKeys, TranslateKeyCode(c) )
+  }
+
   ## Run experimental phases. We loop through all elements of the
   ## Phase column in Phases.csv. Phase p is run with RunPhase( p ),
   ## and we keep track of the phases already run in the alreadyRun
@@ -225,12 +235,12 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   # and the "*" specification for 'classical' trials:
   classical <- 0
   if( response == "space" ) {
-    keyList <- [" "]
+    correct <- " "
   } elseif( SubString(response,1,1) == "*" ) {
     classical <- 1
-    keyList <- [ SubString(response,2,StringLength(response)-1) ]
+    correct <- SubString(response,2,StringLength(response)-1)
   } else {
-    keyList <- [response]
+    correct <- response
   }
   # We are ready to run the trial loop. The trial continues until
   # either time runs out or we reach the maximum number of (valid)
@@ -241,7 +251,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   reward <- 0
   Display( stimulus )
   while( responseCount<maxResponses and timeLeft>1 ) {
-    key <- WaitForListKeyPressWithTimeout( keyList, timeLeft, 1 )
+    key <- WaitForListKeyPressWithTimeout( gKeys, timeLeft, 1 )
     rt <- GetTime() - startTime
     timeLeft <- csDuration - rt
     # If we did not time out we have to process the response:
@@ -250,21 +260,25 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
       if( classical == 0 ) {
         # If response is invalid, reward is -1:
         if( rt<rtMin or rt>rtMax ) {
-	  reward <- -1
-        # If responses is valid and rewarded, reward is 1:
-        } elseif( Random() < rewardProb and classical == 0 ) {
+          reward <- -1
+        # If response is valid and rewarded, reward is 1:
+        } elseif( Random() < rewardProb and key == correct ) {
           reward <- 1
           Wait( csusInterval )
           Display( uss )
           Wait( usDuration )
           Undisplay( uss )
-        # If responses is valid but unrewarded, reward is 0:
+        # If response is valid but unrewarded, reward is 0:
         } else {
           reward <- 0
         }
-      } else {
-          reward <- 0
+      } elseif( Random() < rewardProb ) {
+        reward <- 1
       }
+    # If response timed out, count and reward are NA
+    } else {
+      responseCount <- "NA"
+      reward <- "NA"
     }
     # Update timeLeft again because US display may have used time
     timeLeft <- csDuration - GetTime() + startTime
@@ -277,9 +291,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   Undisplay( stimulus )
   Draw()
   ## This happens at the end of a 'classical conditioning' trial. 
-  if( classical == 1 and Random() < rewardProb) {
-    PushOnEnd( rewards, 1 )
-    PushOnEnd( times, ToNumber(csDuration) )
+  if( classical == 1 and reward == 1 ) {
     Display( uss )
     Wait( usDuration )
     Undisplay( uss )
