@@ -10,9 +10,6 @@ Toward a release
   can be more lenient and determine the order of fields from the
   header line of Stimuli.csv (as is done in other Read*() functions).
 
-- Add a Log folder alongside data where we log information about all
-  runs.
-
 - Register also responses during ITI, perhaps with NA as
   stimulus. Whatever stimulus code is chose, note in the Manual that
   it is not allowed for regular stimuli.

@@ -34,7 +34,6 @@ define Start( par ) {
 
   # Determine whether to run in test mode or not:
   test <- Parameter("Test")
-  Print( "Test = " + test )
   if( test != "NA" and ToNumber(test) == 1 ) {
     test <- 1
   } else {
@@ -202,8 +201,6 @@ define ResolveDuration( stimulus, role ) {
 
 define RunTrial( phase, trial, stimulus, rewardProb, uss, response, 
                  maxResponses ) {
-  PrintList( [phase, trial, stimulus, rewardProb, uss, response, 
-    maxResponses] )
   Draw()
   # Determine CS and US duration:
   csDuration <- ToNumber( ResolveDuration( stimulus, "CS" ) )
@@ -302,10 +299,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
 # field in the phase header, we try to see whether it is defined as a
 # global parameter (if that fails, we get NAs and we return those).
 define LookupPhase( phaseName, field ) {
-#  Print( "LookupPhase: "+phaseName+" "+field )
   fields <- Lookup(field, gPhaseHeader, gPhases)
-#  Print_( "Fields ("+Length(fields)+"): " )
-#  PrintList( fields )
   if( not Length(fields) ) { 
     stimuli <- LookupPhase( phaseName, "Stimuli" )
     result <- Repeat( Parameter(field), Length(stimuli) )
@@ -537,8 +531,6 @@ define ReadSubject() {
       if( not FileExists(dataFilename) ) {
         found <- 1
         SetElement( e, 2, s )
-        Print_( "Running subject: " )
-        PrintList( e )
         break
       }
     }
@@ -677,9 +669,6 @@ define ReadParameters() {
   csv <- Transpose( Rest( ReadCSV( gWD + "Design/Parameters.csv" ) ) )
   gParameterNames <- Nth(csv, 1)
   gParameterValues <- Nth(csv, 2)
-  loop( i, Sequence(1,Length(gParameterNames),1) ) {
-    Print( Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) )
-  }
 }
 
 define Parameter( name ) {
