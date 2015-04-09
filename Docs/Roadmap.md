@@ -13,11 +13,9 @@ Toward a release
 - Add a Log folder alongside data where we log information about all
   runs.
 
-- Handling of multiple responses should be changed. Right now if an
-  experiment defines many responses, each trial only registers the one
-  associated with the CS. We should register all responses and log the
-  key that has been pressed. we need to change the OneTrial function a
-  bit as well as the data file format.
+- Register also responses during ITI, perhaps with NA as
+  stimulus. Whatever stimulus code is chose, note in the Manual that
+  it is not allowed for regular stimuli.
 
 - Check Manual for styles and typos.
 
