@@ -21,7 +21,7 @@ define Start( par ) {
 
   # Have we been asked to run in a directory other than .?
   gWD <- Nth(par, 1)
-  if( gWd != 0 ) {
+  if( gWD != 0 ) {
     gWD <- gWD + "/"
     if( not IsDirectory( gWD ) ) {
       SignalFatalError("alex: Command line argument "+gWD+" is not a folder")
@@ -29,6 +29,15 @@ define Start( par ) {
   } else {
     gWD <- ""
   }
+
+  # Get hostname for recording in data lines
+  if( not IsDirectory( gWD + "Data" ) ) {
+    MakeDirectory( gWD + "Data" )
+  }
+  SystemCall( "hostname > "+gWD+"Data/temp.txt" )
+  tmp <- FileOpenRead( gWD+"Data/temp.txt" )
+  gHostname <- FileReadLine( tmp )
+  FileClose( tmp )
 
   ReadParameters()
 
@@ -89,7 +98,7 @@ define Start( par ) {
   ## releasing the lock to Groups.csv. We first print whatever
   ## fields are defined in Groups.csv (stored in gSubjectHeader),
   ## then fields for other data:
-  FilePrintCSV( gDataFile, Flatten( [gSubjectHeader, 
+  FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
     "Sex","Age","Phase","Trial","Stimulus","Response","RewardPr",
      "Key","RT","ResponseCount","Reward"] ) )
 
@@ -269,7 +278,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
         } else {
           reward <- 0
         }
-      } elseif( Random() < rewardProb ) {
+      } elseif( Random() < rewardProb and reward == 0 ) {
         reward <- 1
       }
     # If response timed out, count and reward are NA
@@ -281,7 +290,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
     timeLeft <- csDuration - GetTime() + startTime
 
     ## Save data line to file:
-    FilePrintCSV( gDataFile, Flatten( [ gSubjectInfo, 
+    FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
       gSex, gAge, phase, trial, stimulus, response, 
       rewardProb, key, rt, responseCount, reward ] ) )
   }
@@ -521,9 +530,6 @@ define ReadSubject() {
   gSubjectHeader <- Nth( subjects, 1 )
   SetElement( gSubjectHeader, 2, "Subject")
   found <- 0
-  if( not IsDirectory( gWD + "Data" ) ) {
-    MakeDirectory( gWD + "Data" )
-  }
   ## From a random group, pick a subject that has not yet been run
   loop( e, Shuffle( Rest(subjects) ) ) {
     loop( s, Sequence(1, ToNumber(Nth(e,2)), 1) ) {
