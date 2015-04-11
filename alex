@@ -95,9 +95,9 @@ define Start( par ) {
 
   ## Print data file header. gDataFile has been opened by
   ## ReadSubject() to avoid race conditions with acquiring and
-  ## releasing the lock to Groups.csv. We first print whatever
-  ## fields are defined in Groups.csv (stored in gSubjectHeader),
-  ## then fields for other data:
+  ## releasing the lock to Groups.csv. We first print the hostname,
+  ## followed by whatever fields are defined in Groups.csv (stored in
+  ## gSubjectHeader), then fields for other data:
   FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
     "Sex","Age","Phase","Trial","Stimulus","Response","RewardPr",
      "Key","RT","ResponseCount","Reward"] ) )
