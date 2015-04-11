@@ -34,10 +34,12 @@ define Start( par ) {
   if( not IsDirectory( gWD + "Data" ) ) {
     MakeDirectory( gWD + "Data" )
   }
-  SystemCall( "hostname > "+gWD+"Data/temp.txt" )
-  tmp <- FileOpenRead( gWD+"Data/temp.txt" )
-  gHostname <- FileReadLine( tmp )
-  FileClose( tmp )
+  hostxt <- gWD + "Data/hostname.txt"
+  LockFile( hostxt )
+  SystemCall( "hostname > "+hostxt )
+  gHostname <- FileReadLine( FileOpenRead( hostxt ) )
+  DeleteFile( hostxt )
+  UnlockFile( hostxt )
 
   ReadParameters()
 
