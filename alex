@@ -513,10 +513,22 @@ define Message( text, fatal ) {
 ## The two next functions implement a simple file locking mechanism
 
 define LockFile( file ) {
-  while( FileExists( file + ".lck" ) ) {
-    Wait( 250 )
+  while( 1 ) {
+    while( FileExists( file + ".lck" ) ) {
+      Wait( 50 )
+    }
+    stream <- FileOpenOverWrite( file + ".lck" ) 
+    check <- RandomNormal( 0, 1 )
+    FilePrint( stream, check )
+    FileClose( stream )
+    Wait( 500 ) # This should be enough for other waiting processes
+    stream <- FileOpenRead( file + ".lck" )
+    check2 <- ToNumber( FileReadWord( stream ) )
+    FileClose( stream )
+    if( check == check2 ) {
+      break
+    }
   }
-  FileOpenOverWrite( file + ".lck" ) 
 }
 
 define UnlockFile( file ) {
