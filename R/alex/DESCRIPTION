@@ -1,5 +1,5 @@
 Package: alex
-Title: Read data files from the Associative Learning EXperiment software
+Title: Data analysis for the Associative Learning EXperiment software
 Date: 2015-02-02
 Version: 0.1
 Authors@R: c(person("Stefano", "Ghirlanda", role = c("aut","cre"),

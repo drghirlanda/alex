@@ -36,6 +36,7 @@ alex.read <- function( data.dir="." ) {
     ## correct sex factor (R reads F as "FALSE")
     data$Sex[ data$Sex != "M" ] <- "F"
     data$Sex <- factor( data$Sex, ordered=FALSE )
+    ## add presentation variable
     data$Presentation <- alex.presentation( data )
     data
 }
