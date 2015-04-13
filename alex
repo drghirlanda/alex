@@ -521,7 +521,7 @@ define LockFile( file ) {
     check <- RandomNormal( 0, 1 )
     FilePrint( stream, check )
     FileClose( stream )
-    Wait( 500 ) # This should be enough for other waiting processes
+    Wait( 500 ) # This should be enough to wait for others...
     stream <- FileOpenRead( file + ".lck" )
     check2 <- ToNumber( FileReadWord( stream ) )
     FileClose( stream )
