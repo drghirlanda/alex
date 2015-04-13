@@ -6,20 +6,18 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
-- ReadStimuli() relies on the fields being in the correct order. we
+- Decide whether to rename alex to alex.pbl
+
+- ReadStimuli() relies on the fields being in the correct order. We
   can be more lenient and determine the order of fields from the
   header line of Stimuli.csv (as is done in other Read*() functions).
-
-- Register also responses during ITI, perhaps with NA as
-  stimulus. Whatever stimulus code is chose, note in the Manual that
-  it is not allowed for regular stimuli.
 
 - Check Manual for styles and typos.
 
 - Example suite. Include also "cognitive" tasks like a categorization
-  task with test stimuli for prototype effect and peak-shift. Other
-  tasks: simple discrimination, generalization, peak shift, replicate
-  some famous experiments.
+  task with test stimuli for prototype effect-shift. Other tasks:
+  simple discrimination, generalization, peak shift, replicate some
+  famous experiments, reaction times to bright or faint stimuli.
 
 - A paper describing alex.
 
@@ -50,15 +48,22 @@ Toward a release
     point scale with 1-point increments. Alternatively, could Rating
     be a US?
 
-  - We will probably have to change the OneTrial function a bit so
-    that for rating trials the "Responses" data field is the rating
-    rather than the number of responses.
-
   - What else?
 
 
 Future
 ======
+
+ITI
+---
+
+We should also register responses during ITI. This is perhaps best
+done by introducing an ITI stimulus (nothing by default, but allows
+configuration by user), which could also be set differently for each
+phase. The Duration field could be in the form min+max to specify
+range. Then RunPhase would insert a RunTrial call with the ITI
+stimulus after each trial.
+
 
 Stimulus sequences
 ------------------
