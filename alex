@@ -386,10 +386,29 @@ define RunPhase( phaseName ) {
     ## Run trial and get response times and rewards collected
     RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
               maxResponses )
-    ## Wait an inter-trial interval and advance to next trial: 
+    ## Register responses during inter-trial interval: 
     minITI <- ToNumber( Parameter("MinITI") )
-    maxITI <- ToNumber( Parameter("MinITI") )
-    Wait( minITI + ( maxITI - minITI )*Random() )
+    maxITI <- ToNumber( Parameter("MaxITI") )
+    thisITI <- ( minITI + ( maxITI - minITI )*Random() )
+    itiLeft <- thisITI
+    startTime <- GetTime()
+    respCount <- 0
+    while( itiLeft > 1 ) {
+      key <- WaitForListKeyPressWithTimeout( gKeys, itiLeft, 1 )
+      rt <- GetTime() - startTime
+      itiLeft <- thisITI - rt
+      if( itiLeft > 1 ) {
+        respCount <- respCount + 1
+      } else {
+        respCount <- "NA"
+      }
+
+      ## Save data line with stimulus "ITI" and reward details = "NA"
+      FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
+        gSex, gAge, phaseName, ToNumber(trial+".5"), "ITI", "NA", 
+        "NA", key, rt, respCount, "NA" ] ) )
+    }
+    ## Advance to next trial
     trial <- trial + 1
   }
 }
@@ -513,20 +532,21 @@ define Message( text, fatal ) {
 ## The two next functions implement a simple file locking mechanism
 
 define LockFile( file ) {
-  while( 1 ) {
+  unsafe <- 1
+  while( unsafe ) {
     while( FileExists( file + ".lck" ) ) {
       Wait( 50 )
     }
     stream <- FileOpenOverWrite( file + ".lck" ) 
-    check <- RandomNormal( 0, 1 )
+    check <- RandomDiscrete(999) +"."+ RandomDiscrete(999)
     FilePrint( stream, check )
     FileClose( stream )
     Wait( 500 ) # This should be enough to wait for others...
     stream <- FileOpenRead( file + ".lck" )
     check2 <- ToNumber( FileReadWord( stream ) )
     FileClose( stream )
-    if( check == check2 ) {
-      break
+    if( ToNumber(check) == check2 ) {
+      unsafe <- 0
     }
   }
 }
