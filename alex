@@ -101,7 +101,7 @@ define Start( par ) {
   ## followed by whatever fields are defined in Groups.csv (stored in
   ## gSubjectHeader), then fields for other data:
   FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
-    "Sex","Age","Phase","Trial","Stimulus","Response","RewardPr",
+    "Sex","Age","Phase","Trial","Stimulus","Duration","Response","RewardPr",
      "Key","RT","ResponseCount","Reward"] ) )
 
   ## Create a global list of possible keys
@@ -293,7 +293,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
 
     ## Save data line to file:
     FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-      gSex, gAge, phase, trial, stimulus, response, 
+      gSex, gAge, phase, trial, stimulus, csDuration, response, 
       rewardProb, key, rt, responseCount, reward ] ) )
   }
   Undisplay( stimulus )
@@ -383,10 +383,7 @@ define RunPhase( phaseName ) {
     if( maxResponses <= 0 ) {
       maxResponses <- 1
     }
-    ## Run trial and get response times and rewards collected
-    RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
-              maxResponses )
-    ## Register responses during inter-trial interval: 
+    ## Register responses during pre-trial ITI: 
     minITI <- ToNumber( Parameter("MinITI") )
     maxITI <- ToNumber( Parameter("MaxITI") )
     thisITI <- ( minITI + ( maxITI - minITI )*Random() )
@@ -402,12 +399,14 @@ define RunPhase( phaseName ) {
       } else {
         respCount <- "NA"
       }
-
-      ## Save data line with stimulus "ITI" and reward details = "NA"
+      ## Save data line for stimulus "ITI" with reward details = "NA"
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gSex, gAge, phaseName, ToNumber(trial+".5"), "ITI", "NA", 
-        "NA", key, rt, respCount, "NA" ] ) )
+        gSex, gAge, phaseName, trial, "ITI", thisITI, "NA", "NA", key, rt,
+        respCount, "NA" ] ) )
     }
+    ## Run trial and get response times and rewards collected:
+    RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
+              maxResponses )
     ## Advance to next trial
     trial <- trial + 1
   }
