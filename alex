@@ -335,6 +335,7 @@ define LookupPhase( phaseName, field ) {
 ########################################################################
 
 define RunPhase( phaseName ) {
+  DisplayBackground( phaseName )
   # Get stimulus settings for this phase. Each line in Phases.csv
   # contains a stimulus entry for a specific phase. Using
   # LookupPhase() we look up which stimuli enter this phase:
@@ -367,7 +368,15 @@ define RunPhase( phaseName ) {
   trialUSs          <- Flatten( trialUSs )
   trialResponses    <- Flatten( trialResponses )
   trialMaxResponses <- Flatten( trialMaxResponses )
-  trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
+
+  ## We define a random order for the trials, taking into account that
+  ## the number of trials could be zero (in some experimental designs
+  ## some phases might be excluded for some groups of subjects).
+  if( Length(trialStimuli) ) {
+    trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
+  } else {
+    trialOrder <- []
+  }
 
   ## Now we are ready to run all trials:
   maxTrial <- Length( trialStimuli )
@@ -410,6 +419,7 @@ define RunPhase( phaseName ) {
     ## Advance to next trial
     trial <- trial + 1
   }
+  UndisplayBackground( phaseName )
 }
 
 # Print a list to file in CSF format
@@ -716,4 +726,26 @@ define Parameter( name ) {
     value <- "NA"
   }
   return value
+}
+
+define FindBackground( phaseName ) {
+  bg <- Lookup( "Background"+phaseName, gStimNames, gStimNames )
+  if( IsList(bg) ) {
+    bg <- Lookup( "Background", gStimNames, gStimNames )
+  }
+  return bg
+}
+
+define DisplayBackground( phaseName ) {
+  bg <- FindBackground( phaseName )
+  if( not IsList(bg) ) {
+    Display( bg )
+  }
+}
+
+define UndisplayBackground( phaseName ) {
+  bg <- FindBackground( phaseName )
+  if( not IsList(bg) ) {
+    Undisplay( bg )
+  }
 }

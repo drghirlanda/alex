@@ -483,6 +483,27 @@ defining several smiley stimuli offset from each other, so that they
 do not overlap when displayed simultaneously). Compounding of USs may
 also be used to present a combination of a visual and auditory US.
 
+<a name="background-stimuli"></a>
+
+# Background stimuli
+
+It is sometimes desirable to have a particular stimulus present at all
+times during one or more experimental phases, for example as a
+background on which others are superimposed. A stimulus with the name
+"Background" followed by the name of a phase (from `Phases.csv`) will
+be displayed for the entire duration of that phase. Different phases
+can have different backgrounds. In the `Stimuli.csv` file, a
+background stimulus must be defined **before** the stimuli one wants
+to superimpose on the background, otherwise the background will
+actually be displayed on top of other stimuli, potentially obscuring
+the,.
+
+Note that, despite their name, background stimuli do not need to cover
+the whole screen or even be large. They can be any stimulus one wishes
+to display throughout a particular experimental phase, including
+sounds and texts.
+
+
 <a name="responses"></a>
 
 # Responses and classical vs. instrumental trials 

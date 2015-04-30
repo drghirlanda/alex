@@ -602,6 +602,10 @@
 </tbody>
 </table>
 <p><strong>Note:</strong> The + notation is also valid for USs. This can be used to implement USs of different &quot;magnitude.&quot; For example, one can instruct subjects that each smiley face represents a point earned, and have multiple smileys appear for more valuable stimuli (this requires defining several smiley stimuli offset from each other, so that they do not overlap when displayed simultaneously). Compounding of USs may also be used to present a combination of a visual and auditory US.</p>
+<p><a name="background-stimuli"></a></p>
+<h1 id="background-stimuli">Background stimuli</h1>
+<p>It is sometimes desirable to have a particular stimulus present at all times during one or more experimental phases, for example as a background on which others are superimposed. A stimulus with the name &quot;Background&quot; followed by the name of a phase (from <code>Phases.csv</code>) will be displayed for the entire duration of that phase. Different phases can have different backgrounds. In the <code>Stimuli.csv</code> file, a background stimulus must be defined <strong>before</strong> the stimuli one wants to superimpose on the background, otherwise the background will actually be displayed on top of other stimuli, potentially obscuring the,.</p>
+<p>Note that, despite their name, background stimuli do not need to cover the whole screen or even be large. They can be any stimulus one wishes to display throughout a particular experimental phase, including sounds and texts.</p>
 <p><a name="responses"></a></p>
 <h1 id="responses-and-classical-vs.-instrumental-trials">Responses and classical vs. instrumental trials</h1>
 <p>If we wish to record only one kind of response, e.g., space bar presses, the Response key can be specified in the <code>Parameters.csv</code> file. We can also, however, specify different responses for different stimuli by adding a Response column to the <code>Phases.csv</code> file. For example, to specify that the left arrow key is the correct response for stimulus Red, but the right arrow is correct for White, you would write as in Table .</p>
