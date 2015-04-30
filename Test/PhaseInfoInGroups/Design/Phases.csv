@@ -1,0 +1,3 @@
+Phase,Stimuli,Trials,Reward,US,Response
+Phase1,A,*,1,B,
+Phase2,A+B,*,0,,

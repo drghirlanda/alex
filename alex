@@ -181,12 +181,12 @@ define Undisplay( stimulus ) {
 # anything, it returns "NA", which is returned back by
 # LookupStimulus(). Because Resolve() does not modify "NA", we can get
 # it back and detect that no specific stimulus duration has been
-# specified, so we can look up CSDuration or USDuration (as specifice
-# dby 'role'). Sorry for the complication.
+# specified, so we can look up CSDuration or USDuration (as specified
+# by 'role'). Sorry for the complication.
 define ResolveDuration( stimulus, role ) {
   durations <- []
   loop( s, SplitString(stimulus,"+") ) {
-    d <- First(Resolve( "Duration", LookupStimulus( s, "Duration" ) ))
+    d <- First(Resolve( s, "Duration", LookupStimulus( s, "Duration" ) ))
     if( d == "NA" ) { # See Note above
       d <- Parameter( role + "Duration")
     }
@@ -349,6 +349,9 @@ define RunPhase( phaseName ) {
   responses    <- LookupPhase(phaseName, "Response")
   maxResponses <- LookupPhase(phaseName, "MaxResponses")
 
+  Print( "Running phase:" )
+  PrintList( [phaseName, stimuli, numTrials, rewards, uss, responses, maxResponses] )
+
   ## We build lists trialStimuli and trialRewards to contain stimuli
   ## and rewards repeated as many times as given in 'trials'. The
   ## order of presentation is then randomized by picking stimuli from
@@ -481,18 +484,17 @@ define LookupStimulus( sName, field ) {
 # Because 'value' can be multiple things separated by '+', we split it
 # and return a list of resolved values (even if there is just one, for
 # consistency).
-define Resolve( field, value ) {
+define Resolve( stimulus, field, value ) {
   results <- []
   loop( v, SplitString( value, "+" ) ) {
     if( SubString(v,1,1) == ":" ) {
       # This is the stimulus to be looked up:
       s <- SubString( v, 2, StringLength(v)-1 )
       PushOnEnd( results, LookupStimulus( s, field ) )
-    } elseif( Substring(v,1,1) == "*" ) {
-      s <- SubString( v, 2, StringLength(v)-1 )
-      r <- Lookup( s+field,gSubjectHeader,gSubjectInfo )
+    } elseif( v == "*" ) {
+      r <- Lookup( stimulus+field,gSubjectHeader,gSubjectInfo )
       if( IsList(r) ) { # Nothing found
-        Message( "Cannot find "+s+field+" in Groups.csv", 1 )
+        Message( "Cannot find "+stimulus+field+" in Groups.csv", 1 )
       } 
       PushOnEnd( results, r )
     } else {
@@ -500,6 +502,24 @@ define Resolve( field, value ) {
     }
   }
   return results
+}
+
+# Similar to Resolve(), but for phases. Does not support + notation, only : and *.
+define ResolvePhase( phase, stimulus, field, value ) {
+  if( SubString( value, 1, 1 ) == ":" ) {
+    # This is the phase to be looked up:
+    p <- SubString( value, 2, StringLength(value)-1 )
+    result <- ResolvePhase( p, stimulus, field, value )
+  } elseif( value == "*" ) {
+    result <- Lookup( phase+stimulus+field,gSubjectHeader,gSubjectInfo )
+    if( IsList(result) ) { # Nothing found
+      Message( "Cannot find "+phase+stimulus+field+" in Groups.csv", 1 )
+    } 
+  } else {
+    result <- value
+  }
+  Print( "Resolved "+value+" to "+result )
+  return result
 }
 
 # Interpret a 'color' string from Stimulus.csv, and return the
@@ -627,10 +647,11 @@ define ReadStimuli() {
   gStimuli <- []
   n <- Length( gStimNames )
   loop( i, Sequence(1,n,1) ) {
+    stimulus <- Nth( gStimNames, i )
     type <- Nth( gStimTypes, i )
     if( StringLength( Nth( gStimColors, i ) ) ) {
       ## Determine colors:
-      colors <- Resolve( "Color", Nth(gStimColors, i) )
+      colors <- Resolve( stimulus, "Color", Nth(gStimColors, i) )
       c1name <- First( colors )
       if( StringLength(c1name) ) {
         c1 <- MakeColorRGBString( c1name )
@@ -639,8 +660,8 @@ define ReadStimuli() {
       }
       if( Length(colors) == 2 ) {
         c2name <- Rest( colors )
-  if( StringLength( c2name ) ) {
-    c2 <- MakeColorRGBString( c2name )
+        if( StringLength( c2name ) ) {
+          c2 <- MakeColorRGBString( c2name )
         } else {
           c2 <- gBackgroundColor
         }
@@ -654,18 +675,18 @@ define ReadStimuli() {
     ## Create a font for text stimuli    
     font <- MakeFont( Parameter("FontName")+".ttf", 0, 
                       ToNumber(Parameter("FontSize")), c1, c2, 1 )
-    x <- ToNumber( First(Resolve( "XOffset", Nth( gStimXOffsets, i ) )) )
-    y <- ToNumber( First(Resolve( "YOffset", Nth( gStimYOffsets, i ) )) )
+    x <- ToNumber( First(Resolve( stimulus, "XOffset", Nth( gStimXOffsets, i ) )) )
+    y <- ToNumber( First(Resolve( stimulus, "YOffset", Nth( gStimYOffsets, i ) )) )
     x <- x + gVideoWidth/2
     y <- y + gVideoHeight/2
     if(  type == "circle" ) {
-      r <- ToNumber( First(Resolve( "Parameters", Nth(gStimParams,i) )) )
+      r <- ToNumber( First(Resolve( stimulus, "Parameters", Nth(gStimParams,i) )) )
       s <- Circle( x, y, r, c1, 1 )
     } elseif( type == "square" ) {
-      l <- ToNumber( First(Resolve( "Parameters", Nth(gStimParams,i) )) )
+      l <- ToNumber( First(Resolve( stimulus, "Parameters", Nth(gStimParams,i) )) )
       s <- Square( x, y, l, c1, 1 )
     } elseif( type == "image" ) {
-      p <- Resolve( "Parameters", Nth(gStimParams,i) )
+      p <- Resolve( stimulus, "Parameters", Nth(gStimParams,i) )
       file <- First( p )
       if( Length(p) == 2 ) { # Optional 2nd parameter is zoom factor
   zoom <- ToNumber( Nth( p, 2 ) )
@@ -691,16 +712,16 @@ define ReadStimuli() {
       s.ZOOMY <- zoom
       Move( s, x, y )
    } elseif( type == "text" ) {
-      w <- First( Resolve( "Parameters", Nth(gStimParams,i) ) )
+      w <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
       s <- MakeLabel( w, font )
       Move( s, x, y )
     } elseif( type == "textfile" ) {
-      fileName <- First( Resolve( "Parameters", Nth(gStimParams,i) ) )
+      fileName <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
       text <- FileReadText( gWD + "Materials/" + fileName )
       s <- MakeTextBox( text, font, .9*gVideoWidth, .9*gVideoHeight )
       Move( s, .05*gVideoWidth, .05*gVideoHeight )
     } elseif( type == "sound" ) {
-       f <- First( Resolve( "Parameters", Nth(gStimParams,i) ) )
+       f <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
        s <- LoadSound( gWD + "Materials/" + f )
     } else {
        Message( "Unsupported stimulus type: "+type, 1 )
@@ -714,7 +735,27 @@ define ReadStimuli() {
 define ReadPhases() {
   csv <- ReadCSV( gWD + "Design/Phases.csv" )
   gPhaseHeader <- First( csv )
-  gPhases <- Transpose( Rest( csv ) )
+  gPhases <- Rest( csv )
+  Print( gPhaseHeader )
+  Print( gPhases )
+  ## Resolve * and : notation:
+  nPhaseStimuli <- Length( gPhases )
+  loop( i, Sequence(1, nPhaseStimuli, 1) ) {
+    phaseStimulusInfo <- Nth( gPhases, i )
+    phase <- Lookup( "Phase", gPhaseHeader, phaseStimulusInfo )
+    stimulus <- Lookup( "Stimuli", gPhaseHeader, phaseStimulusInfo )
+    Print( "Resolving "+phase+ " and "+stimulus )
+    numFields <- Length( gPhaseHeader )
+    loop( j, Sequence(1, numFields, 1) ) {
+      field <- Nth( gPhaseHeader, j ) 
+      value <- Nth( phaseStimulusInfo, j ) 
+      if( field != "Phase" and field != "Stimulus" ) {
+        newvalue <- ResolvePhase( phase, stimulus, field, value )
+        SetElement(phaseStimulusInfo, j, newvalue )
+      }
+    }
+  }
+  gPhases <- Transpose( gPhases )
 }
 
 define ReadParameters() {
