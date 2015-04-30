@@ -33,36 +33,19 @@ Toward a release
   between and within subjects, present the experimental design in a
   table, etc.
 
-- Causal ratings: It should be possible to ask subjects to rate causal
-  relationships. This needs a scale widget and a way to configure the
-  rating question, as well as a way to record the rating. The plan
-  could be:
-
-  - GetEasyChoice for rating scale. We need a version that honors the
-    background color, we can grab the code from the pebl
-    implementation.
-
-  - Response type can be "rating." To configure the scale we could use
-    global parameters RatingMin, RatingMax, RatingStep, or have
-    parameters in the Response column, like "rating+1+10+1" for a 10
-    point scale with 1-point increments. Alternatively, could Rating
-    be a US?
-
-  - What else?
-
 
 Future
 ======
 
-ITI
----
+Optimizations
+-------------
 
-We should also register responses during ITI. This is perhaps best
-done by introducing an ITI stimulus (nothing by default, but allows
-configuration by user), which could also be set differently for each
-phase. The Duration field could be in the form min+max to specify
-range. Then RunPhase would insert a RunTrial call with the ITI
-stimulus after each trial.
+If there are reports of time lags, flickering stimuli, or anything
+related to performance, there are a number of potential optimizations
+that could be made. Because the experiment does not change, a lot of
+things that now are looked up dynamically (e.g., whether a phase has a
+defined background stimulus or not) could be determined once for all
+and cached in suitable lists.
 
 
 Stimulus sequences
