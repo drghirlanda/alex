@@ -148,6 +148,9 @@ define Display( stimulus ) {
   n <- Length( gStimNames )
   loop( stimName, SplitString(stimulus, "+") ) {
     i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
+    if( IsList(i) ) {
+      Message( "Cannot find stimulus: '" + stimName + "'", 1 )
+    }
     s <- Nth( gStimuli, i )
     if( IsAudioOut(s) ) {
       StartPlayback( s )
@@ -729,23 +732,33 @@ define Parameter( name ) {
 }
 
 define FindBackground( phaseName ) {
-  bg <- Lookup( "Background"+phaseName, gStimNames, gStimNames )
-  if( IsList(bg) ) {
-    bg <- Lookup( "Background", gStimNames, gStimNames )
+  backgroundList <- []
+  loop( name, gStimNames ) {
+    if( FindInString( name, "Background"+phaseName, 1 ) ) {
+      PushOnEnd( backgroundList, name )
+    }
   }
-  return bg
+  if( Length( backgroundList ) ) {
+    backgrounds <- First( backgroundList )
+    loop( b, Rest( backgroundList ) ) {
+      backgrounds <- backgrounds + "+" + b
+    }
+  } else {
+    backgrounds <- ""
+  }
+  return backgrounds
 }
 
 define DisplayBackground( phaseName ) {
   bg <- FindBackground( phaseName )
-  if( not IsList(bg) ) {
+  if( StringLength( bg ) ) {
     Display( bg )
   }
 }
 
 define UndisplayBackground( phaseName ) {
   bg <- FindBackground( phaseName )
-  if( not IsList(bg) ) {
+  if( StringLength( bg ) ) {
     Undisplay( bg )
   }
 }

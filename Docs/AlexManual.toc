@@ -7,8 +7,9 @@
 \contentsline {subsection}{The \texttt {Stimuli.csv} file}{4}{table.3}
 \contentsline {subsection}{The \texttt {Groups.csv} file}{5}{table.4}
 \contentsline {subsection}{The \texttt {Parameters.csv} file}{5}{table.9}
-\contentsline {section}{Special notation for stimuli}{6}{table.10}
-\contentsline {section}{Background stimuli}{7}{table.13}
+\contentsline {section}{More about stimuli}{6}{table.10}
+\contentsline {subsection}{Superposition of stimuli}{7}{table.13}
+\contentsline {subsection}{Stimuli that are always present during a phase}{7}{table.13}
 \contentsline {section}{Responses and classical vs.\nobreakspace {}instrumental trials}{8}{table.13}
 \contentsline {section}{Instructions and other text displays}{9}{table.15}
 \contentsline {section}{Data Format}{9}{table.17}

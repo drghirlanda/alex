@@ -476,7 +476,7 @@
 <p>The next few parameters control the screen background color while the experiment is running and the color, font, and size of text used for instructions and other messages.</p>
 <p>The <strong>Test</strong> parameter, if set to 1, skips instructions and acquisition of demographic information. It is meant to quickly start the experiment during development.</p>
 <p><a name="notation"></a></p>
-<h1 id="special-notation-for-stimuli">Special notation for stimuli</h1>
+<h1 id="more-about-stimuli">More about stimuli</h1>
 <p>We mentioned above one bit of special notation in the definition of stimuli, namely the construction * (star) + stimulus name (see the end of the previous section). There are two more bits of special notation, explained next.</p>
 <p>Sometimes we want some stimuli to share characteristics. For example, they should be of the same color. We can express the fact that we want a stimulus characteristic to equal that of another stimulus using a colon (:) followed by the stimulus name (we would have liked to use = rather than :, but unfortunately spreadsheet software stubbornly interprets = as introducing a formula). Consider the example above, with three squares of the same size as stimuli. The file in Table  is equivalent but uses colon notation for the Parameters field. This has two advantages: it makes explicit our intention of having three squares of equal size, and it reduces the possibility of typing errors.</p>
 <table>
@@ -602,10 +602,13 @@
 </tbody>
 </table>
 <p><strong>Note:</strong> The + notation is also valid for USs. This can be used to implement USs of different &quot;magnitude.&quot; For example, one can instruct subjects that each smiley face represents a point earned, and have multiple smileys appear for more valuable stimuli (this requires defining several smiley stimuli offset from each other, so that they do not overlap when displayed simultaneously). Compounding of USs may also be used to present a combination of a visual and auditory US.</p>
+<p><a name="stimulus-superposition"></a></p>
+<h2 id="superposition-of-stimuli">Superposition of stimuli</h2>
+<p>Visual stimuli are added to the screen in the order they appear in the <code>Stimuli.csv</code> file. This means that, should some stimuli overlap on the screen, those defined <em>later</em> will be displayed <em>on top</em> of those defined earlier, obscuring them partly or wholly.</p>
 <p><a name="background-stimuli"></a></p>
-<h1 id="background-stimuli">Background stimuli</h1>
-<p>It is sometimes desirable to have a particular stimulus present at all times during one or more experimental phases, for example as a background on which others are superimposed. A stimulus with the name &quot;Background&quot; followed by the name of a phase (from <code>Phases.csv</code>) will be displayed for the entire duration of that phase. Different phases can have different backgrounds. In the <code>Stimuli.csv</code> file, a background stimulus must be defined <strong>before</strong> the stimuli one wants to superimpose on the background, otherwise the background will actually be displayed on top of other stimuli, potentially obscuring the,.</p>
-<p>Note that, despite their name, background stimuli do not need to cover the whole screen or even be large. They can be any stimulus one wishes to display throughout a particular experimental phase, including sounds and texts.</p>
+<h2 id="stimuli-that-are-always-present-during-a-phase">Stimuli that are always present during a phase</h2>
+<p>It is sometimes desirable to have a stimulus or combination of stimuli present at all times, including inter-stimulus intervals, for example as a background on which others are superimposed. A stimulus whose name starts with &quot;Background&quot; followed by the name of a phase will be displayed for the entire duration of that phase. You can define many such stimuli, e..g, <code>BackgroundPhase1-1</code> and <code>BackgroundPhase1-2</code>.</p>
+<p><strong>Note:</strong> The rules for stimulus superposition for always-present stimuli are the same as for other stimuli, see <a href="#stimulus-superposition">Superposition of stimuli</a>. This means that if you want to use a stimulus as a backdrop for other stimuli, you have to define the stimulus before all those that are intended to appear on top of it. If the order is incorrect, the intended backdrop will instead obscure the other stimuli.</p>
 <p><a name="responses"></a></p>
 <h1 id="responses-and-classical-vs.-instrumental-trials">Responses and classical vs. instrumental trials</h1>
 <p>If we wish to record only one kind of response, e.g., space bar presses, the Response key can be specified in the <code>Parameters.csv</code> file. We can also, however, specify different responses for different stimuli by adding a Response column to the <code>Phases.csv</code> file. For example, to specify that the left arrow key is the correct response for stimulus Red, but the right arrow is correct for White, you would write as in Table .</p>

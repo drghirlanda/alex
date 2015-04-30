@@ -419,7 +419,7 @@ the experiment during development.
 
 <a name="notation"></a>
 
-# Special notation for stimuli 
+# More about stimuli 
 
 We mentioned above one bit of special notation in the definition of
 stimuli, namely the construction * (star) + stimulus name (see the end
@@ -483,25 +483,35 @@ defining several smiley stimuli offset from each other, so that they
 do not overlap when displayed simultaneously). Compounding of USs may
 also be used to present a combination of a visual and auditory US.
 
+
+<a name="stimulus-superposition"></a>
+
+## Superposition of stimuli
+
+Visual stimuli are added to the screen in the order they appear in the
+`Stimuli.csv` file. This means that, should some stimuli overlap on
+the screen, those defined *later* will be displayed *on top* of those
+defined earlier, obscuring them partly or wholly.
+
+
 <a name="background-stimuli"></a>
 
-# Background stimuli
+## Stimuli that are always present during a phase
 
-It is sometimes desirable to have a particular stimulus present at all
-times during one or more experimental phases, for example as a
-background on which others are superimposed. A stimulus with the name
-"Background" followed by the name of a phase (from `Phases.csv`) will
-be displayed for the entire duration of that phase. Different phases
-can have different backgrounds. In the `Stimuli.csv` file, a
-background stimulus must be defined **before** the stimuli one wants
-to superimpose on the background, otherwise the background will
-actually be displayed on top of other stimuli, potentially obscuring
-the,.
+It is sometimes desirable to have a stimulus or combination of stimuli
+present at all times, including inter-stimulus intervals, for example
+as a background on which others are superimposed. A stimulus whose
+name starts with "Background" followed by the name of a phase will be
+displayed for the entire duration of that phase. You can define many
+such stimuli, e..g, `BackgroundPhase1-1` and `BackgroundPhase1-2`. 
 
-Note that, despite their name, background stimuli do not need to cover
-the whole screen or even be large. They can be any stimulus one wishes
-to display throughout a particular experimental phase, including
-sounds and texts.
+**Note:** The rules for stimulus superposition for always-present
+stimuli are the same as for other stimuli, see [Superposition of
+stimuli](#stimulus-superposition). This means that if you want to use
+a stimulus as a backdrop for other stimuli, you have to define the
+stimulus before all those that are intended to appear on top of it. If
+the order is incorrect, the intended backdrop will instead obscure the
+other stimuli.
 
 
 <a name="responses"></a>
