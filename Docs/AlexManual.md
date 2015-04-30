@@ -274,9 +274,9 @@ you). Often, however, subjects need to be divided in different
 treatment groups. Any of the fields in the `Stimuli.csv` file can be
 specified on a per-subject bases. If you want to test two shades of
 pink, for example, you would extend the `Stimuli.csv` file in Table
-\ref{stimuli-color}. The special notation *Pink demonstrated there
-indicates that the color of stimulus Pink will be looked up, for each
-subject, in the column PinkColor of the `Groups.csv` file (Table
+\ref{stimuli-color}. The special value `*` in the table indicates that
+the color of stimulus Pink will be looked up, for each subject, in the
+column PinkColor of the `Groups.csv` file (Table
 \ref{subjects-color}). This syntax is available for all stimulus
 properties. For example, to change the size of Red square across
 subjects you would use the `Groups.csv` and `Stimuli.csv` files in
@@ -296,7 +296,7 @@ Name   Type   Parameters         Color XOffset YOffset
 ----   ----   ----------         ----- ------- -------
 Red    square 50                 red   0       0
 White  square 50                 white 0       0
-Pink   square 50                 *Pink 0       0
+Pink   square 50                 *     0       0
 Smiley image  smiley-o-white.png       0       150
 
 Table: A `Stimuli.csv` file instructing alex to look up the Color of
@@ -442,7 +442,7 @@ Name   Type   Parameters         Color XOffset YOffset
 ----   ----   ----------         ----- ------- -------
 Red    square 50                 red   0       0
 White  square :Red               white 0       0
-Pink   square :Red               *Pink 0       0
+Pink   square :Red               Pink  0       0
 Smiley image  smiley-o-white.png       0       150
 
 Table: A `Stimuli.csv` file demonstrating the * and : special
@@ -512,6 +512,49 @@ a stimulus as a backdrop for other stimuli, you have to define the
 stimulus before all those that are intended to appear on top of it. If
 the order is incorrect, the intended backdrop will instead obscure the
 other stimuli.
+
+
+<a name="notation-phases"></a>
+
+# More about phases
+
+Similarly to what we have just seen about stimuli, phase parameters
+can be set to differ by group using the '*' and ':' notation. For
+example, imagine we want to investigate how discrimination learning
+proceeds as a function of reward probability. We could use the
+`Phases.csv` file in Table \ref{phases-star-notation}, which employs
+`*` notation for the Reward variable, and the `Groups.csv` file in
+Table \ref{groups-phases-star-notation}, which provides the
+information that is "stared" in `Stimuli.csv`.
+
+Phase    Stimulus Trials Reward     US
+-----    -------- ------ ------     ------
+Training A        50     *          Smiley
+Training B        50     0
+
+Table: A `Phases.csv` using `*` notation indicating that the value of
+the Reward variable given as `*Training` has to be looked up in the
+`Groups.csv` file (see Table
+\ref{groups-phases-star-notation}). \label{phases-star-notation}
+
+
+Group Size TrainingAReward
+----- ---- --------------
+Rich  20   1
+Poor  20   0.5 
+
+Table: A `Groups.csv` file serving as a companion to the `Phases.csv`
+file in Table
+\ref{phases-star-notation}. \label{groups-phases-star-notation}
+
+Note that the name of the column in `Groups.csv` is `TrainingAReward`,
+or, more generally, `(phase name)(stimulus name)(parameter)`. Thus the
+column name specifies two things: the phase and the stimulus to which
+the column value refers to (in doing the same things for stimuli, we
+had to worry only about the stimulus name). This works also to set
+phase parameters for a compound stimulus. For example, if you want to
+set the `Reward` value for stimulus `A+B`, you would use the column
+`TrainingA+BReward`.
 
 
 <a name="responses"></a>

@@ -227,7 +227,7 @@
 <li><strong>XOffset</strong> and <strong>YOffset</strong>: offsets from the center of the screen, in pixel. In the example, all stimuli are centered but the reward stimulus Smiley, which is displayed 150 pixels above center (&quot;above&quot; is negative Y values).</li>
 </ul>
 <h2 id="the-groups.csv-file">The <code>Groups.csv</code> file</h2>
-<p>The <code>Groups.csv</code> file contains information about the experimental groups you want to run. If all subjects undergo the same treatment, you only to specify one group and its size. The file in Table , for example, instructs alex to run a single groups of 10 subjects (groups can be numbered or named, as is most convenient to you). Often, however, subjects need to be divided in different treatment groups. Any of the fields in the <code>Stimuli.csv</code> file can be specified on a per-subject bases. If you want to test two shades of pink, for example, you would extend the <code>Stimuli.csv</code> file in Table . The special notation *Pink demonstrated there indicates that the color of stimulus Pink will be looked up, for each subject, in the column PinkColor of the <code>Groups.csv</code> file (Table ). This syntax is available for all stimulus properties. For example, to change the size of Red square across subjects you would use the <code>Groups.csv</code> and <code>Stimuli.csv</code> files in Tables  and .</p>
+<p>The <code>Groups.csv</code> file contains information about the experimental groups you want to run. If all subjects undergo the same treatment, you only to specify one group and its size. The file in Table , for example, instructs alex to run a single groups of 10 subjects (groups can be numbered or named, as is most convenient to you). Often, however, subjects need to be divided in different treatment groups. Any of the fields in the <code>Stimuli.csv</code> file can be specified on a per-subject bases. If you want to test two shades of pink, for example, you would extend the <code>Stimuli.csv</code> file in Table . The special value <code>*</code> in the table indicates that the color of stimulus Pink will be looked up, for each subject, in the column PinkColor of the <code>Groups.csv</code> file (Table ). This syntax is available for all stimulus properties. For example, to change the size of Red square across subjects you would use the <code>Groups.csv</code> and <code>Stimuli.csv</code> files in Tables  and .</p>
 <table>
 <caption>A <code>Groups.csv</code> file instructing alex to run 6 subjects. </caption>
 <thead>
@@ -276,7 +276,7 @@
 <td align="left">Pink</td>
 <td align="left">square</td>
 <td align="left">50</td>
-<td align="left">*Pink</td>
+<td align="left">*</td>
 <td align="left">0</td>
 <td align="left">0</td>
 </tr>
@@ -512,7 +512,7 @@
 <td align="left">Pink</td>
 <td align="left">square</td>
 <td align="left">:Red</td>
-<td align="left">*Pink</td>
+<td align="left">Pink</td>
 <td align="left">0</td>
 <td align="left">0</td>
 </tr>
@@ -609,6 +609,60 @@
 <h2 id="stimuli-that-are-always-present-during-a-phase">Stimuli that are always present during a phase</h2>
 <p>It is sometimes desirable to have a stimulus or combination of stimuli present at all times, including inter-stimulus intervals, for example as a background on which others are superimposed. A stimulus whose name starts with &quot;Background&quot; followed by the name of a phase will be displayed for the entire duration of that phase. You can define many such stimuli, e..g, <code>BackgroundPhase1-1</code> and <code>BackgroundPhase1-2</code>.</p>
 <p><strong>Note:</strong> The rules for stimulus superposition for always-present stimuli are the same as for other stimuli, see <a href="#stimulus-superposition">Superposition of stimuli</a>. This means that if you want to use a stimulus as a backdrop for other stimuli, you have to define the stimulus before all those that are intended to appear on top of it. If the order is incorrect, the intended backdrop will instead obscure the other stimuli.</p>
+<p><a name="notation-phases"></a></p>
+<h1 id="more-about-phases">More about phases</h1>
+<p>Similarly to what we have just seen about stimuli, phase parameters can be set to differ by group using the '*' and ':' notation. For example, imagine we want to investigate how discrimination learning proceeds as a function of reward probability. We could use the <code>Phases.csv</code> file in Table , which employs <code>*</code> notation for the Reward variable, and the <code>Groups.csv</code> file in Table , which provides the information that is &quot;stared&quot; in <code>Stimuli.csv</code>.</p>
+<table>
+<caption>A <code>Phases.csv</code> using <code>*</code> notation indicating that the value of the Reward variable given as <code>*Training</code> has to be looked up in the <code>Groups.csv</code> file (see Table ). </caption>
+<thead>
+<tr class="header">
+<th align="left">Phase</th>
+<th align="left">Stimulus</th>
+<th align="left">Trials</th>
+<th align="left">Reward</th>
+<th align="left">US</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Training</td>
+<td align="left">A</td>
+<td align="left">50</td>
+<td align="left">*</td>
+<td align="left">Smiley</td>
+</tr>
+<tr class="even">
+<td align="left">Training</td>
+<td align="left">B</td>
+<td align="left">50</td>
+<td align="left">0</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>A <code>Groups.csv</code> file serving as a companion to the <code>Phases.csv</code> file in Table . </caption>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="left">Size</th>
+<th align="left">TrainingAReward</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Rich</td>
+<td align="left">20</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">Poor</td>
+<td align="left">20</td>
+<td align="left">0.5</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the name of the column in <code>Groups.csv</code> is <code>TrainingAReward</code>, or, more generally, <code>(phase name)(stimulus name)(parameter)</code>. Thus the column name specifies two things: the phase and the stimulus to which the column value refers to (in doing the same things for stimuli, we had to worry only about the stimulus name). This works also to set phase parameters for a compound stimulus. For example, if you want to set the <code>Reward</code> value for stimulus <code>A+B</code>, you would use the column <code>TrainingA+BReward</code>.</p>
 <p><a name="responses"></a></p>
 <h1 id="responses-and-classical-vs.-instrumental-trials">Responses and classical vs. instrumental trials</h1>
 <p>If we wish to record only one kind of response, e.g., space bar presses, the Response key can be specified in the <code>Parameters.csv</code> file. We can also, however, specify different responses for different stimuli by adding a Response column to the <code>Phases.csv</code> file. For example, to specify that the left arrow key is the correct response for stimulus Red, but the right arrow is correct for White, you would write as in Table .</p>

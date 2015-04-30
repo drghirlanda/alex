@@ -348,7 +348,7 @@ you). Often, however, subjects need to be divided in different treatment
 groups. Any of the fields in the \texttt{Stimuli.csv} file can be
 specified on a per-subject bases. If you want to test two shades of
 pink, for example, you would extend the \texttt{Stimuli.csv} file in
-Table \ref{stimuli-color}. The special notation *Pink demonstrated there
+Table \ref{stimuli-color}. The special value \texttt{*} in the table
 indicates that the color of stimulus Pink will be looked up, for each
 subject, in the column PinkColor of the \texttt{Groups.csv} file (Table
 \ref{subjects-color}). This syntax is available for all stimulus
@@ -379,7 +379,7 @@ Red & square & 50 & red & 0 & 0
 \\\noalign{\medskip}
 White & square & 50 & white & 0 & 0
 \\\noalign{\medskip}
-Pink & square & 50 & *Pink & 0 & 0
+Pink & square & 50 & * & 0 & 0
 \\\noalign{\medskip}
 Smiley & image & smiley-o-white.png & & 0 & 150
 \\\noalign{\medskip}
@@ -568,7 +568,7 @@ Red & square & 50 & red & 0 & 0
 \\\noalign{\medskip}
 White & square & :Red & white & 0 & 0
 \\\noalign{\medskip}
-Pink & square & :Red & *Pink & 0 & 0
+Pink & square & :Red & Pink & 0 & 0
 \\\noalign{\medskip}
 Smiley & image & smiley-o-white.png & & 0 & 150
 \\\noalign{\medskip}
@@ -652,6 +652,60 @@ that if you want to use a stimulus as a backdrop for other stimuli, you
 have to define the stimulus before all those that are intended to appear
 on top of it. If the order is incorrect, the intended backdrop will
 instead obscure the other stimuli.
+
+\section{More about phases}
+
+Similarly to what we have just seen about stimuli, phase parameters can
+be set to differ by group using the `*' and `:' notation. For example,
+imagine we want to investigate how discrimination learning proceeds as a
+function of reward probability. We could use the \texttt{Phases.csv}
+file in Table \ref{phases-star-notation}, which employs \texttt{*}
+notation for the Reward variable, and the \texttt{Groups.csv} file in
+Table \ref{groups-phases-star-notation}, which provides the information
+that is ``stared'' in \texttt{Stimuli.csv}.
+
+\begin{table*}[t]\begin{center}\small\begin{tabular}{@{}lllll@{}}
+\hline\noalign{\medskip}
+Phase & Stimulus & Trials & Reward & US
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Training & A & 50 & * & Smiley
+\\\noalign{\medskip}
+Training & B & 50 & 0 &
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
+\end{tabular}\caption{A \texttt{Phases.csv} using \texttt{*} notation indicating that
+the value of the Reward variable given as \texttt{*Training} has to be
+looked up in the \texttt{Groups.csv} file (see Table
+\ref{groups-phases-star-notation}). \label{phases-star-notation}}
+\end{center}\end{table*}
+
+\begin{table*}[t]\begin{center}\small\begin{tabular}{@{}lll@{}}
+\hline\noalign{\medskip}
+Group & Size & TrainingAReward
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Rich & 20 & 1
+\\\noalign{\medskip}
+Poor & 20 & 0.5
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
+\end{tabular}\caption{A \texttt{Groups.csv} file serving as a companion to the
+\texttt{Phases.csv} file in Table \ref{phases-star-notation}.
+\label{groups-phases-star-notation}}
+\end{center}\end{table*}
+
+Note that the name of the column in \texttt{Groups.csv} is
+\texttt{TrainingAReward}, or, more generally,
+\texttt{(phase name)(stimulus name)(parameter)}. Thus the column name
+specifies two things: the phase and the stimulus to which the column
+value refers to (in doing the same things for stimuli, we had to worry
+only about the stimulus name). This works also to set phase parameters
+for a compound stimulus. For example, if you want to set the
+\texttt{Reward} value for stimulus \texttt{A+B}, you would use the
+column \texttt{TrainingA+BReward}.
 
 \section{Responses and classical vs.~instrumental trials}
 

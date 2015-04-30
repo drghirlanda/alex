@@ -34,7 +34,7 @@ Toward a release
   table, etc.
 
 - Extend * notation for Phases.csv, so that different groups can
-  different in e.g., length of phases or reward probabilities.
+  differ in e.g., length of phases or reward probabilities.
 
 Future
 ======

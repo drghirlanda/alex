@@ -10,8 +10,9 @@
 \contentsline {section}{More about stimuli}{6}{table.10}
 \contentsline {subsection}{Superposition of stimuli}{7}{table.13}
 \contentsline {subsection}{Stimuli that are always present during a phase}{7}{table.13}
-\contentsline {section}{Responses and classical vs.\nobreakspace {}instrumental trials}{8}{table.13}
-\contentsline {section}{Instructions and other text displays}{9}{table.15}
-\contentsline {section}{Data Format}{9}{table.17}
-\contentsline {section}{Troubleshooting}{10}{table.17}
-\contentsline {section}{Contacts}{11}{table.17}
+\contentsline {section}{More about phases}{8}{table.13}
+\contentsline {section}{Responses and classical vs.\nobreakspace {}instrumental trials}{8}{table.15}
+\contentsline {section}{Instructions and other text displays}{9}{table.17}
+\contentsline {section}{Data Format}{10}{table.19}
+\contentsline {section}{Troubleshooting}{11}{table.19}
+\contentsline {section}{Contacts}{11}{table.19}
