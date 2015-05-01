@@ -242,8 +242,8 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   } else {
     rtMax <- ToNumber( rtMax )
   }
-  # Preprocess the response variable to handle the special "space" key
-  # and the "*" specification for 'classical' trials:
+  # Preprocess the response variable to handle the * specification for
+  # 'classical conditioning' trials:
   classical <- 0
   if( SubString(response,1,1) == "*" ) {
     classical <- 1
@@ -264,7 +264,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
     if( key == " " ) {
       key <- "space"
     }
-    rt <- GetTime() - startTime
+    rt <- GetTime() - startTime # Reaction time
     timeLeft <- csDuration - rt
     # If we did not time out we have to process the response:
     if( timeLeft > 1 ) {
