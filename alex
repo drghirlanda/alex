@@ -101,8 +101,8 @@ define Start( par ) {
   ## followed by whatever fields are defined in Groups.csv (stored in
   ## gSubjectHeader), then fields for other data:
   FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
-    "Sex","Age","Phase","Trial","Stimulus","Duration","Response","RewardPr",
-     "Key","RT","ResponseCount","Reward"] ) )
+    "Sex","Age","Phase","Trial","Stimulus","Duration","Response",
+    "RewardPr","Key","RT","Reward"] ) )
 
   ## Create a global list of possible keys
   gKeys <- []
@@ -262,19 +262,19 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   while( responseCount<maxResponses and timeLeft>1 ) {
     key <- WaitForListKeyPressWithTimeout( gKeys, timeLeft, 1 )
     if( key == " " ) {
-      key <- "space"
+      key <- "<space>"
     }
     rt <- GetTime() - startTime # Reaction time
     timeLeft <- csDuration - rt
     # If we did not time out we have to process the response:
     if( timeLeft > 1 ) {
-      responseCount <- responseCount + 1
       if( classical == 0 ) {
         # If response is invalid, reward is -1:
         if( rt<rtMin or rt>rtMax ) {
           reward <- -1
         # If response is valid and rewarded, reward is 1:
         } elseif( Random() < rewardProb and key == correct ) {
+          responseCount <- responseCount + 1
           reward <- 1
           Wait( csusInterval )
           Display( uss )
@@ -282,6 +282,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
           Undisplay( uss )
         # If response is valid but unrewarded, reward is 0:
         } else {
+          responseCount <- responseCount + 1
           reward <- 0
         }
       } elseif( Random() < rewardProb and reward == 0 ) {
@@ -297,7 +298,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
     if( not IsList(key) or responseCount == 0 ) {
     FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
       gSex, gAge, phase, trial, stimulus, csDuration, response, 
-      rewardProb, key, rt, responseCount, reward ] ) )
+      rewardProb, key, rt, reward ] ) )
     }
   }
   Undisplay( stimulus )
@@ -405,24 +406,19 @@ define RunPhase( phaseName ) {
     thisITI <- ( minITI + ( maxITI - minITI )*Random() )
     itiLeft <- thisITI
     startTime <- GetTime()
-    respCount <- 0
     while( itiLeft > 1 ) {
       key <- WaitForListKeyPressWithTimeout( gKeys, itiLeft, 1 )
       if( key == " " ) {
-        key <- "space"
+        key <- "<space>"
       }
       rt <- GetTime() - startTime
       itiLeft <- thisITI - rt
-      if( itiLeft > 1 ) {
-        respCount <- respCount + 1
-      } else {
-        respCount <- "NA"
-      }
+
       ## Save data line for stimulus "ITI" with reward details = "NA"
       if( not IsList(key) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gSex, gAge, phaseName, trial, "ITI", thisITI, "NA", "NA", key, rt,
-        respCount, "NA" ] ) )
+        gSex, gAge, phaseName, trial, "ITI", thisITI, "NA", "NA",
+        key, rt, "NA" ] ) )
       }
     }
     ## Run trial and get response times and rewards collected:
