@@ -33,7 +33,7 @@ $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
 $if(tables)$
-% nothing, we use table rather than longtable
+\usepackage{longtable}
 $endif$
 $if(graphics)$
 \usepackage{graphicx}

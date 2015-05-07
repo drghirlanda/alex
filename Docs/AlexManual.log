@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014 on Slackware (SlackBuilds.org)) (preloaded format=pdflatex 2015.4.10)  30 APR 2015 17:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014 on Slackware (SlackBuilds.org)) (preloaded format=pdflatex 2015.4.10)  7 MAY 2015 00:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -518,6 +518,24 @@ Package: geometry 2010/09/12 v5.6 Page Geometry
 \Gm@layoutvoffset=\dimen129
 \Gm@dimlist=\toks25
 )
+(/usr/share/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
+\LTleft=\skip50
+\LTright=\skip51
+\LTpre=\skip52
+\LTpost=\skip53
+\LTchunksize=\count113
+\LTcapwidth=\dimen130
+\LT@head=\box29
+\LT@firsthead=\box30
+\LT@foot=\box31
+\LT@lastfoot=\box32
+\LT@cols=\count114
+\LT@rows=\count115
+\c@LT@tables=\count116
+\c@LT@chunks=\count117
+\LT@p@ftn=\toks26
+)
 Package hyperref Info: Option `breaklinks' set `true' on input line 19.
 
 
@@ -546,7 +564,7 @@ LaTeX Font Info:    Try loading font information for T1+ptm on input line 30.
  (/usr/share/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
-\AtBeginShipoutBox=\box29
+\AtBeginShipoutBox=\box33
 
 (/usr/share/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2014/04/23 v1.1a Standard LaTeX Color (DPC)
@@ -558,21 +576,21 @@ Package color Info: Driver file: pdftex.def on input line 137.
 
 (/usr/share/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
-\Gread@gobject=\count113
+\Gread@gobject=\count118
 
 (/usr/share/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count114
-\scratchdimen=\dimen130
-\scratchbox=\box30
-\nofMPsegments=\count115
-\nofMParguments=\count116
-\everyMPshowfont=\toks26
-\MPscratchCnt=\count117
-\MPscratchDim=\dimen131
-\MPnumerator=\count118
-\makeMPintoPDFobject=\count119
-\everyMPtoPDFconversion=\toks27
+\scratchcounter=\count119
+\scratchdimen=\dimen131
+\scratchbox=\box34
+\nofMPsegments=\count120
+\nofMParguments=\count121
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count122
+\MPscratchDim=\dimen132
+\MPnumerator=\count123
+\makeMPintoPDFobject=\count124
+\everyMPtoPDFconversion=\toks28
 )))
 Package hyperref Info: Link coloring ON on input line 30.
  (/usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
@@ -581,7 +599,7 @@ Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 (/usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count120
+\c@section@level=\count125
 )
 LaTeX Info: Redefining \ref on input line 30.
 LaTeX Info: Redefining \pageref on input line 30.
@@ -736,47 +754,131 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 157.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 164.
-[3] [4] [5]
 
-LaTeX Warning: Hyper reference `textfiles' on page 6 undefined on input line 52
-9.
+Underfull \vbox (badness 10000) detected at line 192
+ []
+
+
+Overfull \vbox (29.69768pt too high) has occurred while \output is active []
+
+
+[3]
+Underfull \vbox (badness 10000) detected at line 217
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 234
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 263
+ []
+
+[4]
+Underfull \vbox (badness 10000) detected at line 371
+ []
+
+[5]
+Underfull \vbox (badness 10000) detected at line 391
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 407
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 428
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 449
+ []
 
 [6]
+Underfull \vbox (badness 10000) detected at line 494
+ []
 
-LaTeX Warning: Hyper reference `stimulus-superposition' on page 7 undefined on 
+
+LaTeX Warning: Hyper reference `textfiles' on page 7 undefined on input line 52
+9.
+
+[7]
+Underfull \vbox (badness 10000) detected at line 579
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 602
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 621
+ []
+
+[8]
+
+LaTeX Warning: Hyper reference `stimulus-superposition' on page 9 undefined on 
 input line 650.
 
-[7] [8]
 
-LaTeX Warning: Hyper reference `maxresponses' on page 9 undefined on input line
- 758.
-
-
-LaTeX Warning: Hyper reference `global' on page 9 undefined on input line 779.
+Underfull \vbox (badness 10000) detected at line 682
+ []
 
 
-LaTeX Warning: Reference `phases-instructions' on page 9 undefined on input lin
-e 788.
+Underfull \vbox (badness 10000) detected at line 698
+ []
+
+[9]
+Underfull \vbox (badness 10000) detected at line 733
+ []
 
 
-LaTeX Warning: Reference `stimuli-instructions' on page 9 undefined on input li
-ne 789.
+LaTeX Warning: Hyper reference `maxresponses' on page 10 undefined on input lin
+e 758.
 
 
-LaTeX Warning: Reference `stimuli-instructions' on page 9 undefined on input li
-ne 813.
+Underfull \vbox (badness 10000) detected at line 776
+ []
 
 
-LaTeX Warning: Reference `phases-instructions' on page 9 undefined on input lin
-e 829.
+LaTeX Warning: Hyper reference `global' on page 10 undefined on input line 779.
 
 
-LaTeX Warning: Reference `phases-instructions' on page 9 undefined on input lin
-e 829.
+[10]
 
-[9] [10]
+LaTeX Warning: Reference `phases-instructions' on page 11 undefined on input li
+ne 788.
+
+
+LaTeX Warning: Reference `stimuli-instructions' on page 11 undefined on input l
+ine 789.
+
+
+LaTeX Warning: Reference `stimuli-instructions' on page 11 undefined on input l
+ine 813.
+
+
+LaTeX Warning: Reference `stimuli-instructions' on page 11 undefined on input l
+ine 813.
+
+
+Underfull \vbox (badness 10000) detected at line 814
+ []
+
+
+LaTeX Warning: Reference `phases-instructions' on page 11 undefined on input li
+ne 829.
+
+
+LaTeX Warning: Reference `phases-instructions' on page 11 undefined on input li
+ne 829.
+
+
+Underfull \vbox (badness 10000) detected at line 830
+ []
+
+[11]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 926.
- [11] [12]
+ [12]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 926.
  (./AlexManual.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 926.
@@ -790,13 +892,13 @@ LaTeX Warning: There were undefined references.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 926.
  ) 
 Here is how much of TeX's memory you used:
- 8651 strings out of 493117
- 126049 string characters out of 6141180
- 252614 words of memory out of 5000000
- 11842 multiletter control sequences out of 15000+600000
+ 8754 strings out of 493117
+ 127138 string characters out of 6141180
+ 251094 words of memory out of 5000000
+ 11941 multiletter control sequences out of 15000+600000
  74279 words of font info for 196 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 31i,8n,38p,360b,405s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,8n,38p,345b,429s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texmf-dist/fon
 ts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt
@@ -804,9 +906,9 @@ ts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public
 share/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb></usr/share/texmf-dis
 t/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times
 /utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on AlexManual.pdf (12 pages, 170298 bytes).
+Output written on AlexManual.pdf (12 pages, 169851 bytes).
 PDF statistics:
- 241 PDF objects out of 1000 (max. 8388607)
+ 244 PDF objects out of 1000 (max. 8388607)
  212 compressed objects within 3 object streams
  38 named destinations out of 1000 (max. 500000)
  46225 words of extra memory for PDF output out of 51595 (max. 10000000)
