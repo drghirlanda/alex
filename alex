@@ -351,8 +351,8 @@ define RunPhase( phaseName ) {
   responses    <- LookupPhase(phaseName, "Response")
   maxResponses <- LookupPhase(phaseName, "MaxResponses")
 
-  Print( "Running phase:" )
-  PrintList( [phaseName, stimuli, numTrials, rewards, uss, responses, maxResponses] )
+#  Print( "Running phase:" )
+#  PrintList( [phaseName, stimuli, numTrials, rewards, uss, responses, maxResponses] )
 
   ## We build lists trialStimuli and trialRewards to contain stimuli
   ## and rewards repeated as many times as given in 'trials'. The
@@ -520,7 +520,7 @@ define ResolvePhase( phase, stimulus, field, value ) {
   } else {
     result <- value
   }
-  Print( "Resolved "+value+" to "+result )
+#  Print( "Resolved "+value+" to "+result )
   return result
 }
 
@@ -738,15 +738,15 @@ define ReadPhases() {
   csv <- ReadCSV( gWD + "Design/Phases.csv" )
   gPhaseHeader <- First( csv )
   gPhases <- Rest( csv )
-  Print( gPhaseHeader )
-  Print( gPhases )
+#  Print( gPhaseHeader )
+#  Print( gPhases )
   ## Resolve * and : notation:
   nPhaseStimuli <- Length( gPhases )
   loop( i, Sequence(1, nPhaseStimuli, 1) ) {
     phaseStimulusInfo <- Nth( gPhases, i )
     phase <- Lookup( "Phase", gPhaseHeader, phaseStimulusInfo )
     stimulus <- Lookup( "Stimuli", gPhaseHeader, phaseStimulusInfo )
-    Print( "Resolving "+phase+ " and "+stimulus )
+#    Print( "Resolving "+phase+ " and "+stimulus )
     numFields <- Length( gPhaseHeader )
     loop( j, Sequence(1, numFields, 1) ) {
       field <- Nth( gPhaseHeader, j ) 
