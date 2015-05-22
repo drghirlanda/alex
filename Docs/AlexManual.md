@@ -1,5 +1,5 @@
 %Alex: Associative Learning EXperiments
-%Stefano Ghirlanda
+%Stefano Ghirlanda \and Max Temnogorod
 
 <a name="intro"></a>
 
@@ -707,12 +707,12 @@ line for the particular subject. The remaining columns are as follows:
 - **Reward**: The reward received for the response, using the
   following code:
     
-  - 1: The response was rewarded (the US was presented)
+    + 1: The response was rewarded (the US was presented)
 
-  - 0: The response was not rewarded (no US presented)
+    + 0: The response was not rewarded (no US presented)
 
-  - -1: The response was invalid, i.e., it fell outside of the window
-        delimited by ReactionTimeMin and ReactionTimeMax, see
+    + -1: The response was invalid, i.e., it fell outside of the
+        window delimited by ReactionTimeMin and ReactionTimeMax, see
         above. No US is presented on such responses.
 
 We believe this information characterizes subject behavior competely,

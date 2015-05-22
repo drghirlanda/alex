@@ -4,14 +4,14 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <meta name="author" content="Stefano Ghirlanda" />
+  <meta name="author" content="Stefano Ghirlanda Max Temnogorod" />
   <title>Alex: Associative Learning EXperiments</title>
   <style type="text/css">code{white-space: pre;}</style>
 </head>
 <body>
 <div id="header">
 <h1 class="title">Alex: Associative Learning EXperiments</h1>
-<h2 class="author">Stefano Ghirlanda</h2>
+<h2 class="author">Stefano Ghirlanda Max Temnogorod</h2>
 </div>
 <p><a name="intro"></a></p>
 <h1 id="introduction">Introduction</h1>
@@ -801,10 +801,12 @@
 <li><p><strong>Key</strong>: Which key the subject actually pressed. This can be the correct key, or any other key that the subject may have pressed (the goal is to have a faithful record of everything the subject does).</p></li>
 <li><p><strong>RT</strong>: Reaction time for this response.</p></li>
 <li><p><strong>ResponseCount</strong>: The number of responses in this trial, up to the current response.</p></li>
-<li><p><strong>Reward</strong>: The reward received for the response, using the following code:</p></li>
+<li><p><strong>Reward</strong>: The reward received for the response, using the following code:</p>
+<ul>
 <li><p>1: The response was rewarded (the US was presented)</p></li>
 <li><p>0: The response was not rewarded (no US presented)</p></li>
 <li><p>-1: The response was invalid, i.e., it fell outside of the window delimited by ReactionTimeMin and ReactionTimeMax, see above. No US is presented on such responses.</p></li>
+</ul></li>
 </ul>
 <p>We believe this information characterizes subject behavior competely, but please do let us know if you think details could be added.</p>
 <p><a name="errors"></a></p>

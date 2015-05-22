@@ -11,7 +11,7 @@
 \usepackage{longtable}
 \hypersetup{breaklinks=true,
             bookmarks=true,
-            pdfauthor={Stefano Ghirlanda},
+            pdfauthor={Stefano Ghirlanda Max Temnogorod},
             pdftitle={Alex: Associative Learning EXperiments},
             colorlinks=true,
             urlcolor=blue,
@@ -24,7 +24,7 @@
 \setcounter{secnumdepth}{0}
 
 \title{Alex: Associative Learning EXperiments}
-\author{Stefano Ghirlanda}
+\author{Stefano Ghirlanda \and Max Temnogorod}
 \date{}
 
 \begin{document}
@@ -877,14 +877,17 @@ columns are as follows:
 \item
   \textbf{Reward}: The reward received for the response, using the
   following code:
-\item
-  1: The response was rewarded (the US was presented)
-\item
-  0: The response was not rewarded (no US presented)
-\item
-  -1: The response was invalid, i.e., it fell outside of the window
-  delimited by ReactionTimeMin and ReactionTimeMax, see above. No US is
-  presented on such responses.
+
+  \begin{itemize}
+  \item
+    1: The response was rewarded (the US was presented)
+  \item
+    0: The response was not rewarded (no US presented)
+  \item
+    -1: The response was invalid, i.e., it fell outside of the window
+    delimited by ReactionTimeMin and ReactionTimeMax, see above. No US
+    is presented on such responses.
+  \end{itemize}
 \end{itemize}
 
 We believe this information characterizes subject behavior competely,
