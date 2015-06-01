@@ -2,6 +2,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx,setspace}
 \renewcommand{\medskip}{}
+\usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{amssymb,amsmath}
 \usepackage[utf8]{inputenc}
