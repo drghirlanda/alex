@@ -1,6 +1,0 @@
-Phase,Stimuli,Trials,Reward,US
-Instr,Instructions,1,,
-Training,A,10,0.9,Smiley
-Training,X,10,0,
-Test,A+B,5,0,
-Test,X,5,0,
