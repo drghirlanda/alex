@@ -86,8 +86,7 @@ define Start( par ) {
     gAge <- GetEasyInput( "Please enter your age in years, "+
       "then press enter:", gWindow )
     gAge <- ToInteger( gAge )
-    Message( "Press the spacebar to start the experiment", 0 )
-    Wait( 2000 )
+    Wait( 1000 )
   } else {
     gSex <- "NA"
     gAge <- "NA"
