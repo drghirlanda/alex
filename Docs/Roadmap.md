@@ -6,6 +6,11 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
+- Rename Rewards to USProb in Phases.csv
+
+- Rename RewardPr to USProb and Reward to US throughout documentation
+  and supplied Example files
+
 - Decide whether to rename alex to alex.pbl
 
 - ReadStimuli() relies on the fields being in the correct order. We

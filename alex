@@ -101,7 +101,7 @@ define Start( par ) {
   ## gSubjectHeader), then fields for other data:
   FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
     "Sex","Age","Phase","Trial","Stimulus","Duration","Response",
-    "RewardPr","Key","RT","Reward"] ) )
+    "USProb","Key","RT","US"] ) )
 
   ## Create a global list of possible keys
   gKeys <- []
