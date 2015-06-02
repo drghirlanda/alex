@@ -1,3 +1,3 @@
-Phase,Stimuli,Trials,Reward,US,Response
-Start,StartText,1,,,space
-End,EndText,1,,,
+Phase,Stimuli,Trials,Reward,US,Response,MaxResponses
+Start,StartText,1,,,,1
+End,EndText,1,,,,1
