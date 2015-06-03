@@ -1,7 +1,7 @@
 Name,Type,Parameters,Color,XOffset,YOffset,Duration
 Start,textfile,Start.txt,,,,600000
 End,textfile,End.txt,,,,600000
-Smiley,image,smile-o-white.png+0.35,,0,0,500
+Smiley,image,smile-o-white.png+0.35,,0,150,500
 S1,square,35,white,0,0,1500
 S2,square,40,white,0,0,1500
 S3,square,45,white,0,0,1500
