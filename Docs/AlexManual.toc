@@ -13,6 +13,6 @@
 \contentsline {section}{More about phases}{9}{table.13}
 \contentsline {section}{Responses and classical vs.\nobreakspace {}instrumental trials}{10}{table.15}
 \contentsline {section}{Instructions and other text displays}{11}{table.17}
-\contentsline {section}{Data Format}{11}{table.19}
-\contentsline {section}{Troubleshooting}{12}{table.19}
-\contentsline {section}{Contacts}{12}{table.19}
+\contentsline {section}{Data Format}{12}{table.19}
+\contentsline {section}{Troubleshooting}{13}{table.19}
+\contentsline {section}{Contacts}{13}{table.19}
