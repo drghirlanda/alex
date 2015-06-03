@@ -123,7 +123,6 @@ define Start( par ) {
   alreadyRun <- []
   loop( p, Lookup("Phase",gPhaseHeader,gPhases)  ){
     if( not Sum( Match( alreadyRun, p ) ) ) {
-      Print( "Running phase "+p )
       RunPhase( p )
       PushOnEnd( alreadyRun, p )
     }
