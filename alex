@@ -123,6 +123,7 @@ define Start( par ) {
   alreadyRun <- []
   loop( p, Lookup("Phase",gPhaseHeader,gPhases)  ){
     if( not Sum( Match( alreadyRun, p ) ) ) {
+      Print( "Running phase "+p )
       RunPhase( p )
       PushOnEnd( alreadyRun, p )
     }
@@ -721,12 +722,20 @@ define ReadStimuli() {
       Move( s, x, y )
     } elseif( type == "textfile" ) {
       fileName <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
-      text <- FileReadText( gWD + "Materials/" + fileName )
+      fileName <- gWD + "Materials/" + fileName
+      if( not FileExists( fileName ) ) {
+        Message( "Cannot find file: "+fileName, 1 )
+      }
+      text <- FileReadText( fileName )
       s <- MakeTextBox( text, font, .9*gVideoWidth, .9*gVideoHeight )
       Move( s, .05*gVideoWidth, .05*gVideoHeight )
     } elseif( type == "sound" ) {
-       f <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
-       s <- LoadSound( gWD + "Materials/" + f )
+       fileName <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
+       fileName <- gWD + "Materials/" + fileName
+       if( not FileExists( fileName ) ) {
+         Message( "Cannot find file: "+fileName, 1 )
+       }
+       s <- LoadSound( fileName )
     } else {
        Message( "Unsupported stimulus type: "+type, 1 )
     }
