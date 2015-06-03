@@ -6,10 +6,17 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
-- Rename Rewards to USProb in Phases.csv
+- Right now responses during USs are not registered. This violates the
+  principle that we record everything the participant does. We could
+  register also these responses by putting the code to print a data
+  line into a function, so that it can be easily called from different
+  points. We have to be careful about semantics, though. In
+  particular, it should be possible to distinguish easily between
+  responses emitted when the US was present vs. those emitted in the
+  absence of the US.
 
-- Rename RewardPr to USProb and Reward to US throughout documentation
-  and supplied Example files
+- Redesign data lines to include info about CS, CSDuration, US,
+  USDuration, USProb, USPres, USOn.
 
 - Decide whether to rename alex to alex.pbl
 
@@ -40,6 +47,7 @@ Toward a release
 
 - Extend * notation for Phases.csv, so that different groups can
   differ in e.g., length of phases or reward probabilities.
+
 
 Future
 ======
