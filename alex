@@ -568,6 +568,7 @@ define LockFile( file ) {
   unsafe <- 1
   while( unsafe ) {
     while( FileExists( file + ".lck" ) ) {
+      Print( "Waiting for lock on Groups.csv to be released" )
       Wait( 50 )
     }
     stream <- FileOpenOverWrite( file + ".lck" ) 
@@ -580,6 +581,7 @@ define LockFile( file ) {
     FileClose( stream )
     if( ToNumber(check) == check2 ) {
       unsafe <- 0
+      Print( "Acquired lock on Groups.csv" )
     }
   }
 }
@@ -588,6 +590,7 @@ define UnlockFile( file ) {
   if( FileExists( file + ".lck" ) ) {
     DeleteFile( file + ".lck" )
   }
+  Print( "Released lock on "+file )
 }
 
 define ReadSubject() {
