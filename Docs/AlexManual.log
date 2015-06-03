@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.30)  1 JUN 2015 18:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.30)  3 JUN 2015 01:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -775,45 +775,56 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10.95> not available
 
 ]
 LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <12> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 153.
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 150.
 
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
-(hyperref)                be the same. Added a new anchor on input line 153.
+(hyperref)                be the same. Added a new anchor on input line 150.
 
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 158.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 155.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 158.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 155.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 165.
-[3] [4] [5]
-Overfull \vbox (2.1194pt too high) has occurred while \output is active []
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 162.
+[3] [4] [5] [6] [7] [8] [9]
+Underfull \hbox (badness 1067) in paragraph at lines 756--768
+[]\T1/ptm/m/n/10.95 Modkeys: \T1/cmtt/m/n/10.95 <lshift>\T1/ptm/m/n/10.95 , \T1
+/cmtt/m/n/10.95 <rshift>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <lctrl>\T1/ptm/m
+/n/10.95 , \T1/cmtt/m/n/10.95 <rctrl>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <la
+lt>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <ralt>\T1/ptm/m/n/10.95 , \T1/cmtt/m/
+n/10.95 <lmeta>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <rmeta>\T1/ptm/m/n/10.95 
+,
+ []
 
 
-[6] [7] [8] [9] [10]
-Overfull \vbox (4.57486pt too high) has occurred while \output is active []
+Underfull \hbox (badness 1859) in paragraph at lines 768--778
+[]\T1/ptm/m/n/10.95 Navigation, func-tion keys: \T1/cmtt/m/n/10.95 <up>\T1/ptm/
+m/n/10.95 , \T1/cmtt/m/n/10.95 <down>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <le
+ft>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <right>\T1/ptm/m/n/10.95 , \T1/cmtt/m
+/n/10.95 <home>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <end>\T1/ptm/m/n/10.95 , 
+\T1/cmtt/m/n/10.95 <pageup>\T1/ptm/m/n/10.95 ,
+ []
 
-
-[11] [12]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 945.
+[10] [11] [12]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 978.
  [13]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 945.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 978.
  (./AlexManual.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 945.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 945.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 978.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 978.
 Package rerunfilecheck Info: File `AlexManual.out' has not changed.
 (rerunfilecheck)             Checksum: AF2554B8EEDB5BEC6AF452FEF857400E;1086.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 945.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 978.
  ) 
 Here is how much of TeX's memory you used:
- 8882 strings out of 494522
- 131475 string characters out of 6167205
- 251684 words of memory out of 5000000
+ 8888 strings out of 494522
+ 131501 string characters out of 6167205
+ 250683 words of memory out of 5000000
  11858 multiletter control sequences out of 15000+600000
- 74149 words of font info for 194 fonts, out of 8000000 for 9000
+ 74409 words of font info for 198 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 31i,8n,38p,346b,433s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,8n,38p,345b,447s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2014basic/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/lo
 cal/texlive/2014basic/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr
 /local/texlive/2014basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
@@ -823,10 +834,10 @@ b></usr/local/texlive/2014basic/texmf-dist/fonts/type1/public/cm-super/sftt1095
 200.pfb></usr/local/texlive/2014basic/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></usr/local/texlive/2014basic/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></
 usr/local/texlive/2014basic/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on AlexManual.pdf (13 pages, 171350 bytes).
+Output written on AlexManual.pdf (13 pages, 173675 bytes).
 PDF statistics:
- 266 PDF objects out of 1000 (max. 8388607)
- 231 compressed objects within 3 object streams
+ 267 PDF objects out of 1000 (max. 8388607)
+ 232 compressed objects within 3 object streams
  43 named destinations out of 1000 (max. 500000)
  46225 words of extra memory for PDF output out of 51595 (max. 10000000)
 

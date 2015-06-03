@@ -1,22 +1,17 @@
 %Alex: Associative Learning EXperiments
 %Stefano Ghirlanda \and Max Temnogorod
 
-<a name="intro"></a>
+# Introduction {#intro}
 
-# Introduction
-
-Alex is a program to run associative learning experiments described in
-configuration files. This manual describe how to configure
+Alex is a program for running associative learning experiments described
+in configuration files. This manual explains how to configure the
 experiments. Please refer to the README file that comes with alex for
 installation instructions. The README also describes in brief what
 alex can and cannot do.
 
-<a name="workflow"></a>
+## Workflow {#workflow}
 
-## Workflow
-
-To build and run a new experiment you create a dedicated folder, say,
-MyExperiment, and within it the following subfolders:
+To build a new experiment you create a dedicated folder, and within it the following subfolders:
 
 - **Design**: This folder contains the files that specify experimental
   design, such as which stimuli to use, the structure of trials, and
@@ -25,40 +20,36 @@ MyExperiment, and within it the following subfolders:
 
 - **Materials**: Here you have any image, sound, or text files you need
   for your experiment, including an Instructions.txt file for the
-  initial instructions.
+  initial instructions (see the [section on text files](#textfiles)).
 
-- **Data**: This folder is created by alex if it is not found, and it
-  holds the data collected during experiment runs.
+- **Data**: This folder holds the data collected during experiment runs.
 
 The program `alex-init` generates a bare-bones experiment so that you
 know what files you need. It is run like this:
 
     alex-init -v <experiment name>
 
-This creates folder <experiment name> with the above mentioned
-subfolders and skeleton configuration files.
+This creates folder `<experiment name>` with the above mentioned
+subfolders (except Data, which is created on first run) and skeleton
+configuration files.
 
-## Acknowledgments
+## Acknowledgments {#acknowledgements}
 
 Alex is written using Shane Mueller's
 [Psychology Experiment Building Language](http://pebl.sourceforge.net)
 (PEBL). Many thanks to Shane for sharing PEBL!
 
 
-
-
-<a name="running"></a>
-
-# Starting and stopping alex
+# Starting and stopping alex {#running}
 
 From the folder where the Design and Materials folders are, you
-can just type 'alex'. You can also run experiments in other
-folders using:
+can just type `alex` in the command line. You can also run experiments
+in a different folder using:
 
-    alex -v <folder>
+    alex -v <path to folder>
 
-The `<folder>` is then expected to have Design and Materials subfolders
-with appropriate files. A Data folder will be create if not present.
+The folder is expected to have Design and Materials subfolders
+with appropriate files. A Data subfolder will be created if not present.
 
 Alex has been designed so that multiple instances of an experiment can
 be run simultaneously. This feature is useful when the experiment
@@ -72,69 +63,66 @@ The fact that a subject has been run is signaled by the existence of
 the corresponding data file (see [Data format](#data-format)). If the
 experiment is interrupted before it completes, alex will still
 consider that subject as having been run. It is up to you to check
-that data files are complete (you can check that they have the
-appropriate number of lines, for example). Although this may be
-inconvenient at times, it is hard to improve upon this situation,
-because there is no way for alex to decide whether important data
-would be overwritten by re-running a subject. If you decide a data
-file is worthless, either remove it or rename it with something like
-an 'incomplete-' prefix, and alex will automatically re-run that
-subject.
+that data files are complete (that they have the appropriate number
+of lines, for example). Although this may be inconvenient at times,
+it is hard to improve upon this situation because there is no way for
+alex to decide whether important data would be overwritten by re-running
+a subject. If you decide a data file is worthless, either remove it or
+rename it with something like an 'incomplete-' prefix, and alex will
+automatically re-run that subject.
 
-If you want to interrupt a running experiment, you can use the
-standard interrupt key comination for PEBL: `Ctrl+Alt+Shift+\`.
+To interrupt a running experiment, you can use the interrupt
+key combination for PEBL: `Ctrl+Alt+Shift+\`.
 
 
 # Configuration files {#configuration-files}
 
 All configuration files are in the Design folder:
 
-- `Phases.csv` describe the experimental design proper. It contains one
-  or more experimental phases, each composed of a number of trials in
-  which stimuli are presented, responses recorded, and outcomes
-  delivered.
+- `Phases.csv` describes the experimental design proper. It defines
+  experimental phases in terms of the stimuli, desired responses,
+  possible outcomes, and number of trials in each.
 
-- `Stimuli.csv` defines the stimuli that are mentioned
-  `Phases.csv`. The latter only mentions stimuli by name, while
-  `Stimuli.csv` informs alex of what the stimuli actually are.
+- `Stimuli.csv` specifies the presentation details of the stimuli
+  mentioned by name in `Phases.csv`.
 
-- `Groups.csv` defines the number of experimental groups and the
-   treatments to which subjects in each group are allocated.
+- `Groups.csv` specifies the number and size of experimental groups, as
+  well as the treatments to which subjects in each group are allocated.
 
 - `Parameters.csv` defines some global parameters such as screen
   background color, text color, font, and size, the duration of
-  inter-trial intervals, and so on. Can also be used to define
+  inter-trial intervals, and so on. It can also be used to define
   parameters that are the same for all stimuli, such as which key is
   used for responses.
 
-In addition, instruction files can be in Materials, see the
-[section on text files](#textfiles).
 
 ## The `Phases.csv` file
 
-Suppose we want to teach participants to discriminate a red square
+Suppose we want to teach subjects to discriminate a red square
 from a white square. We then want to know how subjects respond to,
 say, a pink square. Table \ref{phases} shows how a suitable
-`Phases.csv` file might look like.[^1] The file describes an
-experiment with two phases. Each line describes one type of trial that
-occurs in a phase. There are, for example two kinds of trials in phase
+`Phases.csv` file might look.[^1] The file describes an experiment
+with two phases, with each line defining one type of trial that
+occurs in a phase. Here, there are two kinds of trials in phase
 1, specifying 20 presentations of each of two stimuli, called Red and
-White. Red will be rewarded 90% of the time, White only 10%. On reward
-trials, stimulus Smiley will be displayed as the reward (US). In phase
-2, stimulus Pink is presented five times. When the experiment is run,
-Red and White trials will be intermixed randomly because they all
-pertain to phase 1. Pink trials, on the other hand, will be performed
-in phase 2 after all phase 1 trials have been run.
+White. Red will be rewarded 90% of the time, White only 10%. On
+these trials, stimulus Smiley will be displayed as the reward (US).
+In phase 2, stimulus Pink is presented five times and never rewarded.
+
+When the experiment is run, Red and White trials will be intermixed
+randomly because they all pertain to phase 1. Pink trials, on the
+other hand, will be performed in phase 2 after all phase 1 trials
+have been run.
 
 
 Phase Stimulus Trials Reward US
------ -------- ------ ------ -----
+----- -------- ------ ------ --
 1     Red      20     0.9    Smiley
 1     White    20     0.1    Smiley
 2     Pink     5      0
 
 Table: A simple `Phases.csv` to teach a discrimination between stimuli
-Red and White, and then testing responding to Pink. Note that the US
+Red and White, and then test responding to Pink. Note that the US
 field can be left empty if the Reward probability is 0. \label{phases}
 
 [^1]: In this manual, we use tables to display design files in a
@@ -146,11 +134,13 @@ comes from the PEBL function that reads CSV files.) Most spreadsheet
 software uses double quotes by default, but do check in case alex
 cannot read your CSV files.
 
+\pagebreak
+
 **Note:** Phases are run in the order they are defined, not in their
 numerical or alphabetical order (thus you can use descriptive names
 like Training, Testing, etc). To be more precise, phases are run in
 the order in which their *first* stimuli are defined. For example, the
-phases file in Tables \ref{phases} and \ref{phases-order1} are
+`Phases.csv` file in Tables \ref{phases} and \ref{phases-order1} are
 equivalent, but the file in Table \ref{phases-order2} runs phase 2
 before phase 1.
 
@@ -177,10 +167,10 @@ Table: With this `Phases.csv` file, alex will run phase 2 before phase
 
 ## The `Stimuli.csv` file
 
-In the `Phases.csv` files in Tables \ref{phases}--\ref{phases-order2},
-how does alex know that Red, White, and Pink represent red, white and
-pink squares, and that Smiley is a smiley face? This information is
-contained in the `Stimuli.csv` file, see Table \ref{stimuli}.
+How does alex know that Red, White, and Pink mentioned in the
+`Phases.csv` files in Tables \ref{phases}--\ref{phases-order2} represent
+red, white, and pink squares, and that Smiley is a smiley face? This
+information is contained in the `Stimuli.csv` file, see Table \ref{stimuli}.
 
 
 Name   Type   Parameters        Color       XOffset YOffset
@@ -191,25 +181,25 @@ Pink   square 50                255,128,128 0       0
 Smiley image  smile-o-white.png             0       -150
 
 Table: A `Stimuli.csv` file instructing alex that stimuli Red, White,
-and Pink are colored squares 50 pixels in side, and with different
-colors, and that Smiley is an image contained in file
-`smile-o-white.png`. \label{stimuli}
+and Pink are differently colored 50x50 pixel squares, and that Smiley
+is an image contained in the file `smile-o-white.png`. \label{stimuli}
 
 The fields in Table \ref{stimuli} should be fairly intuitive, but here
 is a detailed explanation:
 
-- **Name**: An arbitrary label for the stimulus, so that it can be
-  referenced in `Phases.csv`. It can be anything that does not contain
-  the characters " (double quote), + (plus), * (asterisk), :
-  (colon), and , (comma). These characters are reserved for special
+- **Name**: A label for the stimulus, so that it can be referenced
+  in `Phases.csv`. This can be anything that does not contain
+  the characters `"` (double quote), `+` (plus), `*` (asterisk), `:`
+  (colon), or `,` (comma). These characters are reserved for special
   operations described below.
 
-- **Type**: This can be square, circle, text, textfile, image, or sound.
+- **Type**: This can be `square`, `circle`, `text`, `textfile`,
+  `image`, or `sound`.
 
 - **Parameters**: The meaning of parameters varies according to the
   stimulus type:
 
-    - square: side in pixels.
+    - square: side length in pixels.
 
     - circle: radius in pixels.
 
@@ -232,7 +222,7 @@ is a detailed explanation:
         - `frown-o-white.png`: a sad face
  
         These images are drawn in white over a transparent background;
-        equivalent white images are available as smile-o.png, etc. All
+        equivalent black images are available as `smile-o.png`, etc. All
         images have been taken from
         [Font Awesome](http://fortawesome.github.io/Font-Awesome), via
         [this project](https://github.com/encharm/Font-Awesome-SVG-PNG). They
@@ -240,25 +230,26 @@ is a detailed explanation:
         monitors. If that is too big for you, you can zoom them as
         indicated above.
 
-- **Color**: the color of squares, circles, or text. This field is
+- **Color**: The color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given
   as an RGB triplet. As the latter are themselves comma-separated
-  lists, they need to be double-quoted in the CSV file (spreadhseet
+  lists, they need to be double-quoted in the CSV file (spreadsheet
   software will do this for you). In the case of text, you can specify
   the background as well as the foreground color by writing the color
   in the form Color1+Color2, where Color1 will be foreground and
   Color2 the background. If no foreground or background color is
-  given, the default set in `Parameters.csv` is used.
+  given, the defaults set in `Parameters.csv` are used.
 
     The PEBL reference manual lists valid color names, which are many
     hundreds. If you stick to simple stuff like red, blue, cyan, purple,
     and so on, you can get by without consulting this file. RGB, of
     course, enables you to define color shades more precisely.
 
-- **XOffset** and **YOffset**: offsets from the center of the screen,
-  in pixel. In the example, all stimuli are centered but the reward
-  stimulus Smiley, which is displayed 150 pixels above center ("above"
-  is negative Y values).
+- **XOffset** and **YOffset**: Offset from the center of the screen,
+  in pixels. In Table \ref{stimuli}, all stimuli are centered except
+  for the reward stimulus Smiley, which is displayed 150 pixels above
+  center (negative Y values place stimuli above center, negative X
+  values place them left of center).
 
 
 ## The `Groups.csv` file
@@ -294,7 +285,7 @@ Name   Type   Parameters         Color XOffset YOffset
 Red    square 50                 red   0       0
 White  square 50                 white 0       0
 Pink   square 50                 *     0       0
-Smiley image  smiley-o-white.png       0       150
+Smiley image  smile-o-white.png        0       -150
 
 Table: A `Stimuli.csv` file instructing alex to look up the Color of
 the Pink stimulus in the `Groups.csv` file. \label{stimuli-color}
@@ -315,7 +306,7 @@ Name   Type   Parameters         Color XOffset YOffset
 Red    square *Red               red   0       0
 White  square 50                 white 0       0
 Pink   square 50                 *Pink 0       0
-Smiley image  smiley-o-white.png       0       150
+Smiley image  smile-o-white.png        0       -150
 
 Table: A `Stimuli.csv` file instructing alex to run look up in the
 `Groups.csv` file both the Color of stimulus Pink and the Parameters
@@ -360,8 +351,7 @@ FontName        Vera
 FontSize        36
 Test            0
 
-Table: Sample `Parameters.csv` file with
-default values for parameters.
+Table: Sample `Parameters.csv` file with default values.
 
 **CSDuration** is the default duration of all the non-US stimuli,
 while **USDuration** is the default duration of all US stimuli. All
@@ -372,10 +362,10 @@ have the same duration.
 
 **CSUSInterval** is the interval between CS offset and US onset.
 
-**ReactionTimeMin** and **ReactionTimeMax** define at what times
+**ResponseTimeMin** and **ResponseTimeMax** define at what times
 within a trial subjects can respond. Responses outside this time
 window are registered with a special code (see [Data
-format](#data-format)) no USs are delivered. If not specified,
+format](#data-format)) and no USs are delivered. If not specified,
 ResponseTimeMin is set to 0 and ResponseTimeMax to CSDuration, thus
 allowing responses at any time during the trial.
   
@@ -437,7 +427,7 @@ Name   Type   Parameters         Color XOffset YOffset
 Red    square 50                 red   0       0
 White  square :Red               white 0       0
 Pink   square :Red               Pink  0       0
-Smiley image  smiley-o-white.png       0       150
+Smiley image  smile-o-white.png        0       150
 
 Table: A `Stimuli.csv` file demonstrating the * and : special
 notations for stimuli. \label{stimuli-special}
@@ -462,7 +452,7 @@ Name   Type   Parameters         Color XOffset YOffset
 ----   ----   ----------         ----- ------- -------
 Red    square 50                 red   0       0
 White  :Red   :Red               white 60      :Red
-Smiley image  smiley-o-white.png       0       150
+Smiley image  smile-o-white.png        0       150
 
 Table: A `Stimuli.csv` file to go with the `Phases.csv` file in Table
 \ref{phases-plus}. Note that we need to offset the white square,
@@ -517,7 +507,7 @@ proceeds as a function of reward probability. We could use the
 `Phases.csv` file in Table \ref{phases-star-notation}, which employs
 `*` notation for the Reward variable, and the `Groups.csv` file in
 Table \ref{groups-phases-star-notation}, which provides the
-information that is "stared" in `Stimuli.csv`.
+information that is "starred" in `Stimuli.csv`.
 
 Phase    Stimulus Trials Reward     US
 -----    -------- ------ ------     ------
@@ -551,13 +541,12 @@ set the `Reward` value for stimulus `A+B`, you would use the column
 
 # Responses and classical vs. instrumental trials {#responses}
 
-If we wish to record only one kind of response, e.g., space bar
-presses, the Response key can be specified in the `Parameters.csv`
-file. We can also, however, specify different responses for different
-stimuli by adding a Response column to the `Phases.csv` file. For
-example, to specify that the left arrow key is the correct response
-for stimulus Red, but the right arrow is correct for White, you would
-write as in Table \ref{per-stimulus-responses}.
+The default Response key for all stimuli can be specified in
+`Parameters.csv`. We can also, however, specify different responses
+for different stimuli by adding a Response column to the `Phases.csv`
+file. For example, to specify that the left arrow key is the correct
+response for stimulus Red, but the right arrow is correct for White,
+you would write as in Table \ref{per-stimulus-responses}.
 
 Phase Stimulus Trials Reward US     Response
 ----- -------- ------ ------ --     --------
@@ -568,17 +557,23 @@ Table: A `Phases.csv` specifying different responses for stimuli Red
 and White. \label{per-stimulus-responses}
 
 Here `<left>` and `<right>` are special codes that denote the left and
-right arrow key. You can look up the codes for different special keys
-in the "Keyboard Entry" section of the PEBL manual. If you only want
-to use letter and number keys, you simply can write the letter or
-number as a Response.
+right arrow keys. The following is a comprehensive list of valid key
+codes that can be used to specify correct responses:
 
-There are two special response codes. One is `<space>`, indicating a
-space bar press. We made this special because the space would be hard
-to see when editing the CSV file.
+- Characters: `a`--`z`, `0`--`9`, all standard punctuation (except
+  braces, pipes, tildes, and percent signs)
 
-The other special response code is obtained by prefixing the response
-with a * (asterisk). This means that the US will be displayed *only*
+- Editing keys: `<space>`, `<backspace>`, `<tab>`, `<clear>`,
+  `<kp_enter>`, `<return>`, `<insert>`, `<delete>`
+
+- Modkeys: `<lshift>`, `<rshift>`, `<lctrl>`, `<rctrl>`, `<lalt>`,
+  `<ralt>`, `<lmeta>`, `<rmeta>`, `<numlock>`, `<capslock>`, `<scrollock>`
+
+- Navigation, function keys: `<up>`, `<down>`, `<left>`, `<right>`,
+   `<home>`, `<end>`, `<pageup>`, `<pagedown>`, `<esc>`, `<f1>`--`<f15>`
+
+Responses can also employ `*` notation. Prefixing a specified response
+with an asterisk means that the US will be displayed *only*
 at the end of the trial (with the appropriate Reward probability)
 *regardless* of what the subject does during the trial, as in
 classical conditioning or causal rating studies. Thus the `Phases.csv`
@@ -606,8 +601,8 @@ behavior. \label{classical}
 
 Note also that on * trials, the ResponseTimeMin and ResponseTimeMax
 features are disabled (see [Global parameters](#global)). Because the
-US (if any), is delivered only once at the end of the trial, it is
-irrelevant when subjects responds.
+US (if any) is delivered only once at the end of the trial, it is
+irrelevant when a subject responds.
 
 
 # Instructions and other text displays {#textfiles}
