@@ -18,6 +18,12 @@ Toward a release
 - Redesign data lines to include info about CS, CSDuration, US,
   USDuration, USProb, USPres, USOn.
 
+- In fact, it might be worth emphasizing a more neutral terminology,
+  like S1 and S2 rather than CS and US, to appeal to people less
+  entrained in animal learning jargon.
+
+- Add section on steady state testing in manual.
+
 - Decide whether to rename alex to alex.pbl
 
 - ReadStimuli() relies on the fields being in the correct order. We
