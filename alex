@@ -2,6 +2,8 @@
 
 define Start( par ) {
 
+  gTimers <- []
+
   ## This is the folder where we look for support files. In contrast
   ## to alex-init, we might not need these files, so not finding
   ## anything is not an error. We look through a number of likely
@@ -214,7 +216,6 @@ define ResolveDuration( stimulus, role ) {
 
 define RunTrial( phase, trial, stimulus, rewardProb, uss, response, 
                  maxResponses ) {
-  Draw()
   # Determine CS and US duration:
   csDuration <- ToNumber( ResolveDuration( stimulus, "CS" ) )
   if( rewardProb>0 ) {
@@ -243,11 +244,11 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   }
   # Preprocess the response variable to handle the * specification for
   # 'classical conditioning' trials:
-  classical <- 0
   if( SubString(response,1,1) == "*" ) {
     classical <- 1
     correct <- SubString(response,2,StringLength(response)-1)
   } else {
+    classical <- 0
     correct <- response
   }
   # We are ready to run the trial loop. The trial continues until
@@ -257,7 +258,8 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   startTime    <- GetTime()
   responseCount <- 0
   reward <- 0
-  Display( stimulus )
+  SetTimer( GetTime(), csDuration, stimulus )
+  UpdateTimers()
   while( responseCount<maxResponses and timeLeft>1 ) {
     key <- WaitForListKeyPressWithTimeout( gKeys, timeLeft, 1 )
     if( key == " " ) {
@@ -275,10 +277,8 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
         } elseif( Random() < rewardProb and key == correct ) {
           responseCount <- responseCount + 1
           reward <- 1
-          Wait( csusInterval )
-          Display( uss )
-          Wait( usDuration )
-          Undisplay( uss )
+	  SetTimer( GetTime() + csusInterval, usDuration, uss )
+	  UpdateTimers()
         # If response is valid but unrewarded, reward is 0:
         } else {
           responseCount <- responseCount + 1
@@ -299,9 +299,9 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
       gSex, gAge, phase, trial, stimulus, csDuration, response, 
       rewardProb, key, rt, reward ] ) )
     }
+    UpdateTimers()
   }
-  Undisplay( stimulus )
-  Draw()
+  UpdateTimers()
   ## This happens at the end of a 'classical conditioning' trial. 
   if( classical == 1 and reward == 1 ) {
     Display( uss )
@@ -814,4 +814,62 @@ define UndisplayBackground( phaseName ) {
   if( StringLength( bg ) ) {
     Undisplay( bg )
   }
+}
+
+########################################################################
+#
+# Timer functions
+#
+########################################################################
+
+## A timer is a triplet [ tOn, duration, stimulus ] where the first
+## element is the time the stimulus is supposed to be turned on, and
+## the second element is its duration.
+
+define SetTimer( tOn, duration, stimulus ) {
+  if( tOn < 0 ) {
+    Message( stimulus+" start time is negative: "+tOn, 1 )
+  }
+  if( duration < 0 ) {
+    Message( stimulus+" has negative duration: "+duration, 1 )
+  }
+  newTimer <- [ tOn, duration, stimulus, 0 ]
+  PushOnEnd( gTimers, newTimer )
+  Print( GetTime() + ": adding timer " + newTimer )
+}
+
+define UpdateTimers() {
+  expired <- [] # expired timers, to be removed from gTimers
+  i <- 1
+  while( i <= Length( gTimers ) ) {
+    timer <- Nth( gTimers, i )
+    tOn <- Nth( timer, 1 )
+    duration <- Nth( timer, 2 )
+    stimulus <- Nth( timer, 3 )
+    isOn <- Nth( timer, 4 )
+    t <- GetTime()
+    if( t >= tOn and not isOn ) {
+      Display( stimulus )
+      SetElement( timer, 4, 1 ) # isOn <- 1
+      Print( t + ": turning on timer: " + timer )
+    } elseif( t >= tOn + duration ) {
+      Undisplay( stimulus )
+      PushOnEnd( expired, i )
+      Print( t + ": removing timer: " + timer )
+    }
+    i <- i + 1
+  }
+  gTimers <- RemoveSubset( gTimers, expired )
+  Print( GetTime() + ": active timers: " + gTimers ) 
+  Draw()
+}
+
+define QueryTimer( stimulus ) {
+  result <- 0
+  loop( timer, gTimers ) {
+    if( Nth(timer, 3) == stimulus and Nth(timer, 4) ) {
+      result <- 1
+    }
+  }
+  return result        
 }
