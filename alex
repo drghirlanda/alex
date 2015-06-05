@@ -208,6 +208,7 @@ define ResolveDuration( stimulus, role ) {
   return d
 }
 
+
 ########################################################################
 #                                                                      #
 # This function coordinates the events within a single trial           #
@@ -242,72 +243,67 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   } else {
     rtMax <- ToNumber( rtMax )
   }
+  startTime     <- GetTime()
+  endTime       <- startTime + csDuration
+  responseCount <- 0
+  reward        <- 0
+  SetTimer( startTime, csDuration, stimulus )
   # Preprocess the response variable to handle the * specification for
   # 'classical conditioning' trials:
   if( SubString(response,1,1) == "*" ) {
     classical <- 1
-    correct <- SubString(response,2,StringLength(response)-1)
+    if( Random() < rewardProb ) {
+      reward <- 1
+      SetTimer( endTime + csusInterval, usDuration, uss )
+      endTime <- endTime + csusInterval + usDuration
+    }
   } else {
     classical <- 0
-    correct <- response
   }
   # We are ready to run the trial loop. The trial continues until
   # either time runs out or we reach the maximum number of (valid)
   # responses.
-  timeLeft     <- ToNumber( csDuration )
-  startTime    <- GetTime()
-  responseCount <- 0
-  reward <- 0
-  SetTimer( GetTime(), csDuration, stimulus )
-  UpdateTimers()
-  while( responseCount<maxResponses and timeLeft>1 ) {
-    key <- WaitForListKeyPressWithTimeout( gKeys, timeLeft, 1 )
+  Print( GetTime() + ": trial will end at "+endTime )
+  while( responseCount<maxResponses and GetTime()<endTime ) {
+    UpdateTimers()
+    tNext <- NextTimer()
+    if( tNext == "NA" ) {
+      tWait <- endTime - GetTime()
+    } else {
+      tWait <- tNext - GetTime()
+    }
+    Print( GetTime()+": waiting for "+tWait )
+    key <- WaitForListKeyPressWithTimeout( gKeys, tWait, 1 )
     if( key == " " ) {
       key <- "<space>"
     }
-    rt <- GetTime() - startTime # Reaction time
-    timeLeft <- csDuration - rt
-    # If we did not time out we have to process the response:
-    if( timeLeft > 1 ) {
-      if( classical == 0 ) {
-        # If response is invalid, reward is -1:
-        if( rt<rtMin or rt>rtMax ) {
-          reward <- -1
-        # If response is valid and rewarded, reward is 1:
-        } elseif( Random() < rewardProb and key == correct ) {
-          responseCount <- responseCount + 1
-          reward <- 1
-	  SetTimer( GetTime() + csusInterval, usDuration, uss )
-	  UpdateTimers()
-        # If response is valid but unrewarded, reward is 0:
-        } else {
-          responseCount <- responseCount + 1
-          reward <- 0
-        }
-      } elseif( Random() < rewardProb and reward == 0 ) {
+    rt <- GetTime() - startTime # Time since trial start
+    if( GetTime() >= endTime ) {
+      rt <- "NA"
+    } else {
+      responseCount <- responseCount + 1
+    }
+    # If response is invalid, reward is -1:
+    if( rt<rtMin or rt>rtMax ) {
+        reward <- -1
+    # If response is valid and rewarded, reward is 1:
+    } elseif( Random() < rewardProb and key == response ) {
+      if( not TimerOn( uss ) ) { # Schedule S2 if not already on
         reward <- 1
+        SetTimer( GetTime() + csusInterval, usDuration, uss )
       }
-    } else { # If response timed out, reward is NA
-      reward <- "NA"
+    # If response is valid but unrewarded, reward is 0:
+    } else {
+      reward <- 0
     }
-    # Update timeLeft again because US display may have used time
-    timeLeft <- csDuration - GetTime() + startTime
-
     ## Save data line to file:
-    if( not IsList(key) or responseCount == 0 ) {
-    FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-      gSex, gAge, phase, trial, stimulus, csDuration, response, 
-      rewardProb, key, rt, reward ] ) )
+    if( not IsList(key) ) {
+      FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
+      		    gSex, gAge, phase, trial, stimulus, csDuration, 
+		    response, rewardProb, key, rt, reward ] ) )
     }
-    UpdateTimers()
   }
-  UpdateTimers()
-  ## This happens at the end of a 'classical conditioning' trial. 
-  if( classical == 1 and reward == 1 ) {
-    Display( uss )
-    Wait( usDuration )
-    Undisplay( uss )
-  }
+  ExpireTimers() # Turn off everything
 }
 
 # Helper function to identify what enters a phase. If we don't find a
@@ -859,12 +855,19 @@ define UpdateTimers() {
     }
     i <- i + 1
   }
+  Draw()
   gTimers <- RemoveSubset( gTimers, expired )
   Print( GetTime() + ": active timers: " + gTimers ) 
-  Draw()
 }
 
-define QueryTimer( stimulus ) {
+define ExpireTimers() {
+  loop( timer, gTimers ) {
+    Undisplay( Nth( timer, 3 ) )
+  }
+  gTimers <- []
+}
+
+define TimerOn( stimulus ) {
   result <- 0
   loop( timer, gTimers ) {
     if( Nth(timer, 3) == stimulus and Nth(timer, 4) ) {
@@ -872,4 +875,21 @@ define QueryTimer( stimulus ) {
     }
   }
   return result        
+}
+
+define NextTimer() {
+  tMagic <- 123456789
+  tMin <- tMagic
+  loop( timer, gTimers ) {
+    tOn <- Nth( timer, 1 )
+    if( tOn > GetTime() and tOn < tMin ) {
+      tMin <- tOn
+    }
+  }
+  if( tMin == tMagic ) {
+    tMin <- "NA"
+  }
+  PrintList( gTimers ) 
+  Print( GetTime()+": next timer: "+tMin )  
+  return tMin
 }
