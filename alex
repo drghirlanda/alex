@@ -243,21 +243,24 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   } else {
     rtMax <- ToNumber( rtMax )
   }
+  # Initialize some trial-level variables:
   startTime     <- GetTime()
-  endTime       <- startTime + csDuration
+  endTime       <- startTime + csDuration # could be longer, see next
   responseCount <- 0
   reward        <- 0
   SetTimer( startTime, csDuration, stimulus )
-  # Preprocess the response variable to handle the * specification for
-  # 'classical conditioning' trials:
-  if( SubString(response,1,1) == "*" ) {
+  # Now we preprocess the response variable to handle the *
+  # specification for 'classical conditioning' trials. If the trial is
+  # 'classical', we also decide whether to show the US or not. If the
+  # US is showed, we lengthen trial duration accordingly
+  if( SubString(response,1,1) == "*" ) { # Classical trial
     classical <- 1
     if( Random() < rewardProb ) {
       reward <- 1
-      SetTimer( endTime + csusInterval, usDuration, uss )
-      endTime <- endTime + csusInterval + usDuration
+      SetTimer( endTime+csusInterval, usDuration, uss ) # Schedule US
+      endTime <- endTime+csusInterval + usDuration      # Lengthen trial
     }
-  } else {
+  } else { # Operant trial
     classical <- 0
   }
   # We are ready to run the trial loop. The trial continues until
@@ -267,9 +270,9 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   while( responseCount<maxResponses and GetTime()<endTime ) {
     UpdateTimers()
     tNext <- NextTimer()
-    if( tNext == "NA" ) {
+    if( tNext == "NA" ) { # Nothing scheduled
       tWait <- endTime - GetTime()
-    } else {
+    } else { 
       tWait <- tNext - GetTime()
     }
     Print( GetTime()+": waiting for "+tWait )
@@ -818,13 +821,18 @@ define UndisplayBackground( phaseName ) {
 #
 ########################################################################
 
-## A timer is a triplet [ tOn, duration, stimulus ] where the first
+## A timer is a list [ tOn, duration, stimulus, isOn ] where the first
 ## element is the time the stimulus is supposed to be turned on, and
-## the second element is its duration.
+## the second element is its duration. The fourth element is a flag
+## that is 0 at the beginning and is set to 1 by UpdateTimers() when
+## the stimulus is actually turned on. The list of existing timers is
+## maintained in the gTimers variables created in Start().
 
+## This function creates a new timer, checking that the onset and
+## duration make sense
 define SetTimer( tOn, duration, stimulus ) {
-  if( tOn < 0 ) {
-    Message( stimulus+" start time is negative: "+tOn, 1 )
+  if( tOn >= GetTime() ) {
+    Message( stimulus+" start time is in the past: "+tOn, 1 )
   }
   if( duration < 0 ) {
     Message( stimulus+" has negative duration: "+duration, 1 )
@@ -834,8 +842,11 @@ define SetTimer( tOn, duration, stimulus ) {
   Print( GetTime() + ": adding timer " + newTimer )
 }
 
+## This function goes through all existing timers, turning on those
+## that due and turning off and removing from the list thos that have
+## expired
 define UpdateTimers() {
-  expired <- [] # expired timers, to be removed from gTimers
+  expired <- [] # List of expired timers
   i <- 1
   while( i <= Length( gTimers ) ) {
     timer <- Nth( gTimers, i )
@@ -844,29 +855,31 @@ define UpdateTimers() {
     stimulus <- Nth( timer, 3 )
     isOn <- Nth( timer, 4 )
     t <- GetTime()
-    if( t >= tOn and not isOn ) {
+    if( t >= tOn and not isOn ) { # We need to turn this on
       Display( stimulus )
-      SetElement( timer, 4, 1 ) # isOn <- 1
+      SetElement( timer, 4, 1 ) # Mark timer as being on
       Print( t + ": turning on timer: " + timer )
     } elseif( t >= tOn + duration ) {
       Undisplay( stimulus )
-      PushOnEnd( expired, i )
+      PushOnEnd( expired, i ) 
       Print( t + ": removing timer: " + timer )
     }
     i <- i + 1
   }
   Draw()
-  gTimers <- RemoveSubset( gTimers, expired )
-  Print( GetTime() + ": active timers: " + gTimers ) 
+  gTimers <- RemoveSubset( gTimers, expired ) 
 }
 
+## Undisplay all stimuli and cancel all timers
 define ExpireTimers() {
   loop( timer, gTimers ) {
     Undisplay( Nth( timer, 3 ) )
   }
+  Draw()
   gTimers <- []
 }
 
+## Returns 1 whether a stimulus is currently displayed, 0 otherwise
 define TimerOn( stimulus ) {
   result <- 0
   loop( timer, gTimers ) {
@@ -877,6 +890,10 @@ define TimerOn( stimulus ) {
   return result        
 }
 
+## Goes through all timers and returns the time of the next event,
+## i.e., the next time a stimulus has to be turned either on or
+## off. It is used when deciding how long to wait in
+## WaitForKeyListWithTimeout() in RunTrial()
 define NextTimer() {
   tMagic <- 123456789
   tMin <- tMagic
