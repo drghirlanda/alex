@@ -14,7 +14,6 @@ define Start( par ) {
   loop( d, dirs ) {
     if( IsDirectory( d + gAlexDir ) ) {
       gAlexDir <- d + gAlexDir
-      Print( "alex: Found system folder " + gAlexDir )
       break
     }
   }
@@ -30,16 +29,13 @@ define Start( par ) {
     gWD <- ""
   }
 
-  # Get hostname for recording in data lines
+  # Create data and log directories if not there
   if( not IsDirectory( gWD + "Data" ) ) {
     MakeDirectory( gWD + "Data" )
   }
-  hostxt <- gWD + "Data/hostname.txt"
-  LockFile( hostxt )
-  SystemCall( "hostname > "+hostxt )
-  gHostname <- FileReadLine( FileOpenRead( hostxt ) )
-  DeleteFile( hostxt )
-  UnlockFile( hostxt )
+  if( not IsDirectory( gWD + "Logs" ) ) {
+    MakeDirectory( gWD + "Logs" )
+  }
 
   ReadParameters()
 
@@ -78,6 +74,14 @@ define Start( par ) {
   ReadSubject()
   ReadPhases()     
   ReadStimuli()    
+
+  # Get hostname for recording in data lines
+  hostxt <- gWD + "Data/hostname.txt"
+  LockFile( hostxt )
+  SystemCall( "hostname > "+hostxt )
+  gHostname <- FileReadLine( FileOpenRead( hostxt ) )
+  DeleteFile( hostxt )
+  UnlockFile( hostxt )
 
   ## Subject information is only asked when not running in test mode
   if( not test ) {
@@ -129,6 +133,7 @@ define Start( par ) {
   }
 
   FileClose( gDataFile )
+  FileClose( gLogFile )
   ShowCursor( 1 )
 }
 
@@ -519,7 +524,7 @@ define ResolvePhase( phase, stimulus, field, value ) {
   } else {
     result <- value
   }
-#  Print( "Resolved "+value+" to "+result )
+  MyLog( "ResolvePhase: resolved '"+value+"' to '"+result+"'" )
   return result
 }
 
@@ -550,7 +555,9 @@ define Message( text, fatal ) {
   WaitForKeyDown(" ")
   RemoveObject( box, gWindow )
   Draw()
+  MyLog( "Message: "+ text )
   if( fatal ) {
+  MyLog( "Message: terminating" )
     SignalFatalError( "alex: " + text )
   }
 }
@@ -568,7 +575,7 @@ define LockFile( file ) {
   unsafe <- 1
   while( unsafe ) {
     while( FileExists( file + ".lck" ) ) {
-      Print( "Waiting for lock on "+file+" to be released" )
+      Print( "LockFile: waiting for lock on "+file+" to be released" )
       Wait( 50 )
     }
     stream <- FileOpenOverWrite( file + ".lck" ) 
@@ -581,7 +588,7 @@ define LockFile( file ) {
     FileClose( stream )
     if( ToNumber(check) == check2 ) {
       unsafe <- 0
-      Print( "Acquired lock on "+file )
+      Print( "LockFile: acquired lock on "+file )
     }
   }
 }
@@ -590,7 +597,7 @@ define UnlockFile( file ) {
   if( FileExists( file + ".lck" ) ) {
     DeleteFile( file + ".lck" )
   }
-  Print( "Released lock on "+file )
+  Print( "LockFile: released lock on "+file )
 }
 
 define ReadSubject() {
@@ -623,6 +630,8 @@ define ReadSubject() {
     UnlockFile( subjectsFile )
     Message( "It looks like all subjects have been run!", 1 )
   }
+  logFilename <- gWD + "Logs/" + Nth(e,1) + "-" + s + ".log"
+  gLogFile <- FileOpenWrite( logFilename )
 }
 
 define ReadStimuli() {
@@ -748,15 +757,12 @@ define ReadPhases() {
   csv <- ReadCSV( gWD + "Design/Phases.csv" )
   gPhaseHeader <- First( csv )
   gPhases <- Rest( csv )
-#  Print( gPhaseHeader )
-#  Print( gPhases )
   ## Resolve * and : notation:
   nPhaseStimuli <- Length( gPhases )
   loop( i, Sequence(1, nPhaseStimuli, 1) ) {
     phaseStimulusInfo <- Nth( gPhases, i )
     phase <- Lookup( "Phase", gPhaseHeader, phaseStimulusInfo )
     stimulus <- Lookup( "Stimuli", gPhaseHeader, phaseStimulusInfo )
-#    Print( "Resolving "+phase+ " and "+stimulus )
     numFields <- Length( gPhaseHeader )
     loop( j, Sequence(1, numFields, 1) ) {
       field <- Nth( gPhaseHeader, j ) 
@@ -815,3 +821,8 @@ define UndisplayBackground( phaseName ) {
     Undisplay( bg )
   }
 }
+
+define MyLog( logline ) {
+  t <- GetTime()
+  FilePrint( gLogFile, "[" + t + "] " + logline )
+}      
