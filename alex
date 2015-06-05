@@ -882,12 +882,15 @@ define NextTimer() {
   tMin <- tMagic
   loop( timer, gTimers ) {
     tOn <- Nth( timer, 1 )
+    tOff <- tOn + Nth( timer, 2 )
     if( tOn > GetTime() and tOn < tMin ) {
       tMin <- tOn
+    } elseif( tOff < tMin ) {
+      tMin <- tOff
     }
   }
   if( tMin == tMagic ) {
-    tMin <- "NA"
+     tMin <- "NA"
   }
   PrintList( gTimers ) 
   Print( GetTime()+": next timer: "+tMin )  

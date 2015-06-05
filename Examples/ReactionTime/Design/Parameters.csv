@@ -1,6 +1,6 @@
 Parameter,Value,Description
 CSDuration,1000,"Duration of CSs, unless specified in Stimuli.csv"
-CSUSInterval,-400,Interval between CS offset and US onset
+CSUSInterval,0,Interval between CS offset and US onset
 USDuration,250,"Duration of USs, unless specified in Stimuli.csv"
 ResponseTimeMin,0,Earliest time for valid responses within a trial
 ResponseTimeMax,1000,Latest time for valid responses within a trial
