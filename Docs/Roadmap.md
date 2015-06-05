@@ -6,21 +6,14 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
-- Right now responses during USs are not registered. This violates the
-  principle that we record everything the participant does. We could
-  register also these responses by putting the code to print a data
-  line into a function, so that it can be easily called from different
-  points. We have to be careful about semantics, though. In
-  particular, it should be possible to distinguish easily between
-  responses emitted when the US was present vs. those emitted in the
-  absence of the US.
-
 - Redesign data lines to include info about CS, CSDuration, US,
-  USDuration, USProb, USPres, USOn.
+  USDuration, USProb, USPres, USOn. Proposal for new data line format:
 
-- In fact, it might be worth emphasizing a more neutral terminology,
-  like S1 and S2 rather than CS and US, to appeal to people less
-  entrained in animal learning jargon.
+  [subject info], Host, Sex, Age, Time, Phase, Trial, S1,
+  S1Duration, S1On, S2, S2Duration, S2Prob, S2On, Response, RT, Key,
+  Reward
+
+  (this uses the new "neutral" terminology)
 
 - Add section on steady state testing in manual.
 
