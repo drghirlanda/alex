@@ -845,7 +845,7 @@ define SetTimer( tOn, duration, stimulus ) {
   }
   newTimer <- [ tOn, duration, stimulus, 0 ]
   PushOnEnd( gTimers, newTimer )
-  Print( GetTime() + ": adding timer " + newTimer )
+  MyLog( "SetTimer: new timer " + newTimer )
 }
 
 ## This function goes through all existing timers, turning on those
@@ -864,11 +864,11 @@ define UpdateTimers() {
     if( t >= tOn and not isOn ) { # We need to turn this on
       Display( stimulus )
       SetElement( timer, 4, 1 ) # Mark timer as being on
-      Print( t + ": turning on timer: " + timer )
+      MyLog( "UpdateTimers: turning on timer: " + timer )
     } elseif( t >= tOn + duration ) {
       Undisplay( stimulus )
       PushOnEnd( expired, i ) 
-      Print( t + ": removing timer: " + timer )
+      MyLog( "UpdateTimers: removing timer: " + timer )
     }
     i <- i + 1
   }
@@ -915,8 +915,7 @@ define NextTimer() {
   if( tMin == tMagic ) {
      tMin <- "NA"
   }
-  PrintList( gTimers ) 
-  Print( GetTime()+": next timer: "+tMin )  
+  MuLog( "NextTimer: next timer: "+tMin )  
   return tMin
 }
 
