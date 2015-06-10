@@ -106,8 +106,8 @@ define Start( par ) {
   ## followed by whatever fields are defined in Groups.csv (stored in
   ## gSubjectHeader), then fields for other data:
   FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
-    "Sex","Age","Phase","Trial","Stimulus","Duration","Response",
-    "USProb","Key","RT","US"] ) )
+    "Sex","Age","Time","Phase","Trial","S1","S1Duration","S1On",
+    "S2","S2Duration","S2Prob","S2On","Response","RT","Valid","Key"] ) )
 
   ## Create a global list of possible keys
   gKeys <- []
@@ -252,7 +252,6 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   startTime     <- GetTime()
   endTime       <- startTime + csDuration # could be longer, see next
   responseCount <- 0
-  reward        <- 0
   SetTimer( startTime, csDuration, stimulus )
   # Now we preprocess the response variable to handle the *
   # specification for 'classical conditioning' trials. If the trial is
@@ -261,7 +260,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   if( SubString(response,1,1) == "*" ) { # Classical trial
     classical <- 1
     if( Random() < rewardProb ) {
-      reward <- 1
+      valid <- "T"
       SetTimer( endTime+csusInterval, usDuration, uss ) # Schedule US
       endTime <- endTime+csusInterval + usDuration      # Lengthen trial
     }
@@ -291,24 +290,25 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
     } else {
       responseCount <- responseCount + 1
     }
-    # If response is invalid, reward is -1:
+    # If response is invalid:
     if( rt<rtMin or rt>rtMax ) {
-        reward <- -1
-    # If response is valid and rewarded, reward is 1:
+        valid <- "F"
+    # If response is valid and "rewarded":
     } elseif( Random() < rewardProb and key == response ) {
-      if( not TimerOn( uss ) ) { # Schedule S2 if not already on
-        reward <- 1
+      if( TimerOn( uss ) == "F" ) { # Schedule S2 if not already on
+        valid <- "T"
         SetTimer( GetTime() + csusInterval, usDuration, uss )
       }
-    # If response is valid but unrewarded, reward is 0:
+    # If response is valid but S2 not scheduled:
     } else {
-      reward <- 0
+      valid <- "T"
     }
     ## Save data line to file:
     if( not IsList(key) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-      		    gSex, gAge, phase, trial, stimulus, csDuration, 
-		    response, rewardProb, key, rt, reward ] ) )
+        gSex, gAge, GetTime(), phase, trial, stimulus, csDuration,
+        TimerOn(stimulus), uss, usDuration, rewardProb, TimerOn(uss),
+        response, rt, valid, key] ) )
     }
   }
   ExpireTimers() # Turn off everything
@@ -417,11 +417,11 @@ define RunPhase( phaseName ) {
       rt <- GetTime() - startTime
       itiLeft <- thisITI - rt
 
-      ## Save data line for stimulus "ITI" with reward details = "NA"
+      ## Save data line for stimulus "ITI" with S2 details = "NA"
       if( not IsList(key) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gSex, gAge, phaseName, trial, "ITI", thisITI, "NA", "NA",
-        key, rt, "NA" ] ) )
+        gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, "T",
+        "NA", "NA", "NA", "NA", "NA", rt, "F", key] ) )
       }
     }
     ## Run trial and get response times and rewards collected:
@@ -887,10 +887,10 @@ define ExpireTimers() {
 
 ## Returns 1 whether a stimulus is currently displayed, 0 otherwise
 define TimerOn( stimulus ) {
-  result <- 0
+  result <- "F"
   loop( timer, gTimers ) {
     if( Nth(timer, 3) == stimulus and Nth(timer, 4) ) {
-      result <- 1
+      result <- "T"
     }
   }
   return result        

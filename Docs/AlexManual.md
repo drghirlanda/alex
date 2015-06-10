@@ -485,7 +485,7 @@ present at all times, including inter-stimulus intervals, for example
 as a background on which others are superimposed. A stimulus whose
 name starts with "Background" followed by the name of a phase will be
 displayed for the entire duration of that phase. You can define many
-such stimuli, e..g, `BackgroundPhase1-1` and `BackgroundPhase1-2`. 
+such stimuli, e.g., `BackgroundPhase1-1` and `BackgroundPhase1-2`. 
 
 **Note:** The rules for stimulus superposition for always-present
 stimuli are the same as for other stimuli, see [Superposition of
