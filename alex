@@ -107,7 +107,7 @@ define Start( par ) {
   ## gSubjectHeader), then fields for other data:
   FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
     "Sex","Age","Time","Phase","Trial","S1","S1Duration","S1On",
-    "S2","S2Duration","S2Prob","S2On","Response","RT","Valid","Key"] ) )
+    "S2","S2Duration","S2On","S2Prob","Response","RT","Valid","Key"] ) )
 
   ## Create a global list of possible keys
   gKeys <- []
@@ -304,10 +304,10 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
       valid <- "T"
     }
     ## Save data line to file:
-    if( not IsList(key) ) {
+    if( not IsList(key) or responseCount == 0) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gSex, gAge, GetTime(), phase, trial, stimulus, csDuration,
-        TimerOn(stimulus), uss, usDuration, rewardProb, TimerOn(uss),
+        TimerOn(stimulus), uss, usDuration, TimerOn(uss), rewardProb, 
         response, rt, valid, key] ) )
     }
   }
