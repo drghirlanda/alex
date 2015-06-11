@@ -2,7 +2,39 @@
 
 define Start( par ) {
 
+  ## This list is used to schedule stimulus onset and offset, see the
+  ## section on timers below
   gTimers <- []
+
+  # Have we been asked to run in a directory other than .?
+  gWD <- Nth(par, 1)
+  if( gWD != 0 ) {
+    gWD <- gWD + "/"
+    if( not IsDirectory( gWD ) ) {
+      message <- "Command line argument "+gWD+" is not a folder"
+      SignalFatalError( message )
+    }
+  } else {
+    gWD <- ""
+  }
+
+  # We call ReadSubject() this as early as possible to acquire subject
+  # information and to have the proper information to set up data and
+  # log files (see inside the function):
+  ReadSubject()
+
+  # We can use loggging only after ReadSubject(): 
+  MyLog( "Start: Set working directory to '" + gWD + "'" ) 
+
+  # Create data and log directories if not there
+  if( not IsDirectory( gWD + "Data" ) ) {
+    MakeDirectory( gWD + "Data" )
+    MyLog( "Start: Created Data folder" )
+  }
+  if( not IsDirectory( gWD + "Logs" ) ) {
+    MakeDirectory( gWD + "Logs" )
+    MyLog( "Start: Created Logs folder" )
+  }
 
   ## This is the folder where we look for support files. In contrast
   ## to alex-init, we might not need these files, so not finding
@@ -19,35 +51,9 @@ define Start( par ) {
       break
     }
   }
-
-  # Have we been asked to run in a directory other than .?
-  gWD <- Nth(par, 1)
-  if( gWD != 0 ) {
-    gWD <- gWD + "/"
-    if( not IsDirectory( gWD ) ) {
-      message <- "Command line argument "+gWD+" is not a folder"
-      SignalFatalError( message )
-    }
-  } else {
-    gWD <- ""
-  }
-
-  ReadSubject()
-
-  # We can use loggging only after ReadSubject(): 
   MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
-  MyLog( "Start: Set working directory to '" + gWD + "'" ) 
 
-  # Create data and log directories if not there
-  if( not IsDirectory( gWD + "Data" ) ) {
-    MakeDirectory( gWD + "Data" )
-    MyLog( "Start: Created Data folder" )
-  }
-  if( not IsDirectory( gWD + "Logs" ) ) {
-    MakeDirectory( gWD + "Logs" )
-    MyLog( "Start: Created Logs folder" )
-  }
-
+  # Read global parameters:
   ReadParameters()
 
   # Determine whether to run in test mode or not:
@@ -85,14 +91,15 @@ define Start( par ) {
   ReadPhases()     
   ReadStimuli()    
 
-  # Get hostname for recording in data lines
+  # Get hostname for recording data lines
   hostxt <- gWD + "Data/hostname.txt"
   LockFile( hostxt )
   SystemCall( "hostname > "+hostxt )
   gHostname <- FileReadLine( FileOpenRead( hostxt ) )
   DeleteFile( hostxt )
   UnlockFile( hostxt )
-
+  MyLog( "Start: Determined hostname as '"+gHostname+"'" )
+  
   ## Subject information is only asked when not running in test mode
   if( not test ) {
     gSex <- GetEasyChoice( "Please select your sex", 
@@ -108,16 +115,7 @@ define Start( par ) {
 
   ShowCursor( 0 )
 
-  ## Print data file header. gDataFile has been opened by
-  ## ReadSubject() to avoid race conditions with acquiring and
-  ## releasing the lock to Groups.csv. We first print the hostname,
-  ## followed by whatever fields are defined in Groups.csv (stored in
-  ## gSubjectHeader), then fields for other data:
-  FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
-    "Sex","Age","Time","Phase","Trial","S1","S1Duration","S1On",
-    "S2","S2Duration","S2On","S2Prob","Response","RT","Valid","Key"] ) )
-
-  ## Create a global list of possible keys
+  ## Create a global list of valid response keys
   gKeys <- []
   kc <- [8,9,12,13,27]
   PushOnEnd( kc, Sequence(32,64,1) )
@@ -126,6 +124,16 @@ define Start( par ) {
   loop( c, Flatten(kc) ) {
     PushOnEnd( gKeys, TranslateKeyCode(c) )
   }
+  MyLog( "Start: Accepting these response keys: " + gKeys ) 
+
+  ## Print data file header. gDataFile has been opened by
+  ## ReadSubject() to avoid race conditions with acquiring and
+  ## releasing the lock to Groups.csv. We first print the hostname,
+  ## followed by whatever fields are defined in Groups.csv (stored in
+  ## gSubjectHeader), then fields for other data:
+  FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
+    "Sex","Age","Time","Phase","Trial","S1","S1Duration","S1On",
+    "S2","S2Duration","S2On","S2Prob","Response","RT","Valid","Key"] ) )
 
   ## Run experimental phases. We loop through all elements of the
   ## Phase column in Phases.csv. Phase p is run with RunPhase( p ),
@@ -328,7 +336,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
 define LookupPhase( phaseName, field ) {
   fields <- Lookup(field, gPhaseHeader, gPhases)
   if( not Length(fields) ) { 
-    stimuli <- LookupPhase( phaseName, "Stimuli" )
+    stimuli <- LookupPhase( phaseName, "S1" )
     result <- Repeat( Parameter(field), Length(stimuli) )
   } else {
     idx <- Match( Lookup("Phase", gPhaseHeader, gPhases), phaseName) 
@@ -351,19 +359,18 @@ define LookupPhase( phaseName, field ) {
 ########################################################################
 
 define RunPhase( phaseName ) {
+  MyLog( "RunPhase: Starting phase "+phaseName )
   DisplayBackground( phaseName )
+
   # Get stimulus settings for this phase. Each line in Phases.csv
   # contains a stimulus entry for a specific phase. Using
   # LookupPhase() we look up which stimuli enter this phase:
-  stimuli      <- LookupPhase(phaseName, "Stimuli")
+  stimuli      <- LookupPhase(phaseName, "S1")
   numTrials    <- LookupPhase(phaseName, "Trials")
-  rewards      <- LookupPhase(phaseName, "Reward")
-  uss          <- LookupPhase(phaseName, "US")
+  rewards      <- LookupPhase(phaseName, "S2Prob")
+  uss          <- LookupPhase(phaseName, "S2")
   responses    <- LookupPhase(phaseName, "Response")
   maxResponses <- LookupPhase(phaseName, "MaxResponses")
-
-#  Print( "Running phase:" )
-#  PrintList( [phaseName, stimuli, numTrials, rewards, uss, responses, maxResponses] )
 
   ## We build lists trialStimuli and trialRewards to contain stimuli
   ## and rewards repeated as many times as given in 'trials'. The
@@ -376,7 +383,9 @@ define RunPhase( phaseName ) {
   trialMaxResponses <- []
   loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
     n <- ToNumber( Nth(numTrials, i) )
-    PushOnEnd( trialStimuli,      Repeat( Nth(stimuli,      i), n ) )
+    s <- Nth(stimuli, i )
+    MyLog( "RunPhase: "+"Scheduling "+n+" trials with stimulus "+s )
+    PushOnEnd( trialStimuli,      Repeat( s                   , n ) )
     PushOnEnd( trialRewards,      Repeat( Nth(rewards,      i), n ) )
     PushOnEnd( trialUSs,          Repeat( Nth(uss,          i), n ) )
     PushOnEnd( trialResponses,    Repeat( Nth(responses,    i), n ) )
@@ -387,6 +396,7 @@ define RunPhase( phaseName ) {
   trialUSs          <- Flatten( trialUSs )
   trialResponses    <- Flatten( trialResponses )
   trialMaxResponses <- Flatten( trialMaxResponses )
+  MyLog( "RunPhase: Constructed trial list" )
 
   ## We define a random order for the trials, taking into account that
   ## the number of trials could be zero (in some experimental designs
@@ -396,6 +406,7 @@ define RunPhase( phaseName ) {
   } else {
     trialOrder <- []
   }
+  MyLog( "RunPhase: Constructed trial order" )
 
   ## Now we are ready to run all trials:
   maxTrial <- Length( trialStimuli )
@@ -774,12 +785,12 @@ define ReadPhases() {
   loop( i, Sequence(1, nPhaseStimuli, 1) ) {
     phaseStimulusInfo <- Nth( gPhases, i )
     phase <- Lookup( "Phase", gPhaseHeader, phaseStimulusInfo )
-    stimulus <- Lookup( "Stimuli", gPhaseHeader, phaseStimulusInfo )
+    stimulus <- Lookup( "S1", gPhaseHeader, phaseStimulusInfo )
     numFields <- Length( gPhaseHeader )
     loop( j, Sequence(1, numFields, 1) ) {
       field <- Nth( gPhaseHeader, j ) 
       value <- Nth( phaseStimulusInfo, j ) 
-      if( field != "Phase" and field != "Stimulus" ) {
+      if( field != "Phase" and field != "S1" ) {
         newvalue <- ResolvePhase( phase, stimulus, field, value )
         SetElement(phaseStimulusInfo, j, newvalue )
       }
@@ -832,7 +843,10 @@ define FindBackground( phaseName ) {
 define DisplayBackground( phaseName ) {
   bg <- FindBackground( phaseName )
   if( StringLength( bg ) ) {
+    MyLog( "DisplayBackground: Found "+bg+" as background" )
     Display( bg )
+  } else {
+    MyLog( "DisplayBackground: No background found" )
   }
 }
 
