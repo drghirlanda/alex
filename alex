@@ -25,18 +25,27 @@ define Start( par ) {
   if( gWD != 0 ) {
     gWD <- gWD + "/"
     if( not IsDirectory( gWD ) ) {
-      SignalFatalError("alex: Command line argument "+gWD+" is not a folder")
+      message <- "Command line argument "+gWD+" is not a folder"
+      SignalFatalError( message )
     }
   } else {
     gWD <- ""
   }
 
+  ReadSubject()
+
+  # We can use loggging only after ReadSubject(): 
+  MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
+  MyLog( "Start: Set working directory to '" + gWD + "'" ) 
+
   # Create data and log directories if not there
   if( not IsDirectory( gWD + "Data" ) ) {
     MakeDirectory( gWD + "Data" )
+    MyLog( "Start: Created Data folder" )
   }
   if( not IsDirectory( gWD + "Logs" ) ) {
     MakeDirectory( gWD + "Logs" )
+    MyLog( "Start: Created Logs folder" )
   }
 
   ReadParameters()
@@ -73,7 +82,6 @@ define Start( par ) {
     ToNumber(fontsize), gColor, gBackgroundColor, 1 )
 
   ## Read other Design files:
-  ReadSubject()
   ReadPhases()     
   ReadStimuli()    
 
@@ -515,15 +523,16 @@ define ResolvePhase( phase, stimulus, field, value ) {
     # This is the phase to be looked up:
     p <- SubString( value, 2, StringLength(value)-1 )
     result <- ResolvePhase( p, stimulus, field, value )
+    MyLog( "ResolvePhase: resolved '"+value+"' to '"+result+"'" )
   } elseif( value == "*" ) {
     result <- Lookup( phase+stimulus+field,gSubjectHeader,gSubjectInfo )
     if( IsList(result) ) { # Nothing found
       Message( "Cannot find "+phase+stimulus+field+" in Groups.csv", 1 )
     } 
+    MyLog( "ResolvePhase: resolved '"+value+"' to '"+result+"'" )
   } else {
     result <- value
   }
-  MyLog( "ResolvePhase: resolved '"+value+"' to '"+result+"'" )
   return result
 }
 
@@ -634,7 +643,9 @@ define ReadSubject() {
 }
 
 define ReadStimuli() {
-  csv <- ReadCSV( gWD + "Design/Stimuli.csv" )
+  filename <- gWD + "Design/Stimuli.csv"   
+  csv <- ReadCSV( filename )
+  MyLog( "ReadStimuli: Read '"+filename+"'; found these stimuli:" )
   gStimulusHeader <- First( csv )
   gStimulusInfo <- Rest( csv )
   gStimNames <- []
@@ -644,6 +655,7 @@ define ReadStimuli() {
   gStimXOffsets <- []
   gStimYOffsets <- []
   loop( s, gStimulusInfo ) {
+    MyLog( "  " + s )
     PushOnEnd( gStimNames, Nth( s, 1 ) )
     PushOnEnd( gStimTypes, Nth( s, 2 ) )
     PushOnEnd( gStimParams, Nth( s, 3 ) )
@@ -753,7 +765,8 @@ define ReadStimuli() {
 }
 
 define ReadPhases() {
-  csv <- ReadCSV( gWD + "Design/Phases.csv" )
+  filename <- gWD + "Design/Phases.csv"
+  csv <- ReadCSV( filename )
   gPhaseHeader <- First( csv )
   gPhases <- Rest( csv )
   ## Resolve * and : notation:
@@ -772,13 +785,22 @@ define ReadPhases() {
       }
     }
   }
+  MyLog( "ReadPhases: Read '" + filename + "'; found these phases:" )
+  loop( phase, gPhases ) {
+    MyLog( "  "+ Flatten(phase) )
+  }
   gPhases <- Transpose( gPhases )
 }
 
 define ReadParameters() {
-  csv <- Transpose( Rest( ReadCSV( gWD + "Design/Parameters.csv" ) ) )
+  filename <- gWD + "Design/Parameters.csv"
+  csv <- Transpose( Rest( ReadCSV( filename ) ) )
   gParameterNames <- Nth(csv, 1)
   gParameterValues <- Nth(csv, 2)
+  MyLog( "ReadParameters: Read '" + filename + "'" )
+  loop( i, Sequence(1,Length(gParameterNames),1) ) {
+    MyLog( "  "+Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) ) 
+  }
 }
 
 define Parameter( name ) {
