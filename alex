@@ -23,17 +23,12 @@ define Start( par ) {
   # log files (see inside the function):
   ReadSubject()
 
-  # We can use loggging only after ReadSubject(): 
-  MyLog( "Start: Set working directory to '" + gWD + "'" ) 
-
   # Create data and log directories if not there
   if( not IsDirectory( gWD + "Data" ) ) {
     MakeDirectory( gWD + "Data" )
-    MyLog( "Start: Created Data folder" )
   }
   if( not IsDirectory( gWD + "Logs" ) ) {
     MakeDirectory( gWD + "Logs" )
-    MyLog( "Start: Created Logs folder" )
   }
 
   ## This is the folder where we look for support files. In contrast
@@ -51,10 +46,16 @@ define Start( par ) {
       break
     }
   }
-  MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
 
   # Read global parameters:
   ReadParameters()
+
+  # We can use loggging only after ReadSubject() and RedParameters:
+  gLogging <- Parameter("Log") 
+  MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
+  MyLog( "Start: Set working directory to '" + gWD + "'" ) 
+
+
 
   # Determine whether to run in test mode or not:
   test <- Parameter("Test")
@@ -203,21 +204,24 @@ define Undisplay( stimulus ) {
 # anything, it returns "NA", which is returned back by
 # LookupStimulus(). Because Resolve() does not modify "NA", we can get
 # it back and detect that no specific stimulus duration has been
-# specified, so we can look up CSDuration or USDuration (as specified
+# specified, so we can look up S1Duration or S2Duration (as specified
 # by 'role'). Sorry for the complication.
 define ResolveDuration( stimulus, role ) {
   durations <- []
   loop( s, SplitString(stimulus,"+") ) {
-    d <- First(Resolve( s, "Duration", LookupStimulus( s, "Duration" ) ))
+    d <- First(Resolve( s, "Duration", LookupStimulus(s,"Duration") ))
     if( d == "NA" ) { # See Note above
       d <- Parameter( role + "Duration")
     }
     d <- ToNumber( d ) # NA becomes 0
+    if( d == 0 ) {
+      MyLog( "ResolveDuration: No duration for one or more stimuli:" )
+      MyLog( "  Stimuli: "+SplitString(stimulus,"+") )
+      MyLog( "  Durations: "+durations )
+      MyLog( "  Role: "+role )
+      Message( "Could not determine duration of " + s, 1 )
+    }
     PushOnEnd( durations, d )
-  }
-  ## If any duration is 0 (could not be determined), we have an error:
-  if( Sum( Match( durations, 0 ) ) ) {
-    Message( "Could not determine duration of " + stimulus, 1 )
   }
   ## The duration information is valid if all durations are equal
   d <- First( durations )
@@ -236,21 +240,21 @@ define ResolveDuration( stimulus, role ) {
 #                                                                      #
 ########################################################################
 
-define RunTrial( phase, trial, stimulus, rewardProb, uss, response, 
+define RunTrial( phase, trial, s1, rewardProb, s2, response, 
                  maxResponses ) {
-  # Determine CS and US duration:
-  csDuration <- ToNumber( ResolveDuration( stimulus, "CS" ) )
+  # Determine S1 and S2 duration:
+  s1Duration <- ToNumber( ResolveDuration( s1, "S1" ) )
   if( rewardProb>0 ) {
-    usDuration <- ToNumber( ResolveDuration( uss, "US" ) )
+    s2Duration <- ToNumber( ResolveDuration( s2, "S2" ) )
   } else {
-    usDuration <- "NA"
+    s2Duration <- "NA"
   }
   # Determine some other parameters:
-  csusInterval <- Parameter("CSUSInterval")
-  if( csusInterval == "NA" ) {
-    csusInterval <- 0
+  s1s2Interval <- Parameter("S1S2Interval")
+  if( s1s2Interval == "NA" ) {
+    s1s2Interval <- 0
   } else {
-    csusInterval <- ToNumber( csusInterval )
+    s1s2Interval <- ToNumber( s1s2Interval )
   }
   rtMin <- Parameter("ReactionTimeMin")
   if( rtMin == "NA" ) {
@@ -260,25 +264,25 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   }
   rtMax <- Parameter("ReactionTimeMax")
   if( rtMax == "NA" ) {
-    rtMax <- csDuration
+    rtMax <- s1Duration
   } else {
     rtMax <- ToNumber( rtMax )
   }
   # Initialize some trial-level variables:
   startTime     <- GetTime()
-  endTime       <- startTime + csDuration # could be longer, see next
+  endTime       <- startTime + s1Duration # could be longer, see next
   responseCount <- 0
-  SetTimer( startTime, csDuration, stimulus )
+  SetTimer( startTime, s1Duration, s1 )
   # Now we preprocess the response variable to handle the *
   # specification for 'classical conditioning' trials. If the trial is
-  # 'classical', we also decide whether to show the US or not. If the
-  # US is showed, we lengthen trial duration accordingly
+  # 'classical', we also decide whether to show S2 or not. If S2 is
+  # showed, we lengthen trial duration accordingly
   if( SubString(response,1,1) == "*" ) { # Classical trial
     classical <- 1
     if( Random() < rewardProb ) {
       valid <- "T"
-      SetTimer( endTime+csusInterval, usDuration, uss ) # Schedule US
-      endTime <- endTime+csusInterval + usDuration      # Lengthen trial
+      SetTimer( endTime+s1s2Interval, s2Duration, s2 ) # Schedule S2
+      endTime <- endTime+s1s2Interval + s2Duration     # Lengthen trial
     }
   } else { # Operant trial
     classical <- 0
@@ -286,7 +290,7 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
   # We are ready to run the trial loop. The trial continues until
   # either time runs out or we reach the maximum number of (valid)
   # responses.
-  Print( GetTime() + ": trial will end at "+endTime )
+  MyLog( "RunTrial: "+GetTime()+": trial will end at "+endTime )
   while( responseCount<maxResponses and GetTime()<endTime ) {
     UpdateTimers()
     tNext <- NextTimer()
@@ -295,7 +299,6 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
     } else { 
       tWait <- tNext - GetTime()
     }
-    Print( GetTime()+": waiting for "+tWait )
     key <- WaitForListKeyPressWithTimeout( gKeys, tWait, 1 )
     if( key == " " ) {
       key <- "<space>"
@@ -311,9 +314,9 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
         valid <- "F"
     # If response is valid and "rewarded":
     } elseif( Random() < rewardProb and key == response ) {
-      if( TimerOn( uss ) == "F" ) { # Schedule S2 if not already on
+      if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
         valid <- "T"
-        SetTimer( GetTime() + csusInterval, usDuration, uss )
+        SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
       }
     # If response is valid but S2 not scheduled:
     } else {
@@ -322,8 +325,8 @@ define RunTrial( phase, trial, stimulus, rewardProb, uss, response,
     ## Save data line to file:
     if( not IsList(key) or responseCount == 0) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gSex, gAge, GetTime(), phase, trial, stimulus, csDuration,
-        TimerOn(stimulus), uss, usDuration, TimerOn(uss), rewardProb, 
+        gSex, gAge, GetTime(), phase, trial, s1, s1Duration,
+        TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
         response, rt, valid, key] ) )
     }
   }
@@ -956,7 +959,9 @@ define NextTimer() {
 }
 
 define MyLog( logline ) {
-  t <- GetTime()
-  FilePrint( gLogFile, "[" + t + "] " + logline )
+  if( ToNumber(gLogging) == 1 ) {
+    t <- GetTime()
+    FilePrint( gLogFile, "[" + t + "] " + logline )
+  }
 }      
 
