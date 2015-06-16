@@ -18,11 +18,6 @@ define Start( par ) {
     gWD <- ""
   }
 
-  # We call ReadSubject() this as early as possible to acquire subject
-  # information and to have the proper information to set up data and
-  # log files (see inside the function):
-  ReadSubject()
-
   # Create data and log directories if not there
   if( not IsDirectory( gWD + "Data" ) ) {
     MakeDirectory( gWD + "Data" )
@@ -30,6 +25,11 @@ define Start( par ) {
   if( not IsDirectory( gWD + "Logs" ) ) {
     MakeDirectory( gWD + "Logs" )
   }
+
+  # Read global parameters: (MUST be before ReadSubject to initialize
+  # gFont which may be needed to create a message re: all subjects
+  # having been run)
+  ReadParameters()
 
   ## This is the folder where we look for support files. In contrast
   ## to alex-init, we might not need these files, so not finding
@@ -46,16 +46,6 @@ define Start( par ) {
       break
     }
   }
-
-  # Read global parameters:
-  ReadParameters()
-
-  # We can use loggging only after ReadSubject() and RedParameters:
-  gLogging <- Parameter("Log") 
-  MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
-  MyLog( "Start: Set working directory to '" + gWD + "'" ) 
-
-
 
   # Determine whether to run in test mode or not:
   test <- Parameter("Test")
@@ -88,9 +78,16 @@ define Start( par ) {
   gFont <- MakeFont( fontname+".ttf", 0, 
     ToNumber(fontsize), gColor, gBackgroundColor, 1 )
 
-  ## Read other Design files:
+  ## Read other Design files. These must come after the basic
+  ## initializations above to be able to display error messages if
+  ## needed.
+  ReadSubject()
   ReadPhases()     
   ReadStimuli()    
+
+  # We can use loggging only after ReadSubject() and ReadParameters():
+  MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
+  MyLog( "Start: Set working directory to '" + gWD + "'" ) 
 
   # Get hostname for recording data lines
   hostxt <- gWD + "Data/hostname.txt"
@@ -811,6 +808,7 @@ define ReadParameters() {
   csv <- Transpose( Rest( ReadCSV( filename ) ) )
   gParameterNames <- Nth(csv, 1)
   gParameterValues <- Nth(csv, 2)
+  gLogging <- Parameter("Log") 
   MyLog( "ReadParameters: Read '" + filename + "'" )
   loop( i, Sequence(1,Length(gParameterNames),1) ) {
     MyLog( "  "+Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) ) 
