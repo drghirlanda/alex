@@ -76,7 +76,7 @@ define Start( par ) {
     fontsize <- 24
   }
   gFont <- MakeFont( fontname+".ttf", 0, 
-    ToNumber(fontsize), gColor, gBackgroundColor, 1 )
+    ToInteger(ToNumber(fontsize)), gColor, gBackgroundColor, 1 )
 
   ## Read other Design files. These must come after the basic
   ## initializations above to be able to display error messages if
@@ -88,6 +88,19 @@ define Start( par ) {
   # We can use loggging only after ReadSubject() and ReadParameters():
   MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
   MyLog( "Start: Set working directory to '" + gWD + "'" ) 
+  # Log parameter, phases, and stimuli:
+  MyLog( "Start: Using these parameters:" )
+  loop( i, Sequence(1,Length(gParameterNames),1) ) {
+    MyLog( "  "+Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) ) 
+  }
+  MyLog( "Start: Using these phases:" )
+  loop( phase, gPhases  ) {
+    MyLog( "  "+ Flatten(phase) )
+  }
+  MyLog( "Start: Using these stimuli:" )
+  loop( s, gStimulusInfo ) {
+    MyLog( "  " + s )
+  }
 
   # Get hostname for recording data lines
   hostxt <- gWD + "Data/hostname.txt"
@@ -149,7 +162,7 @@ define Start( par ) {
   }
 
   FileClose( gDataFile )
-  FileClose( gLogFile )
+  FileClose( gLogFile)
   ShowCursor( 1 )
 }
 
@@ -525,6 +538,7 @@ define Resolve( stimulus, field, value ) {
       PushOnEnd( results, v )
     }
   }
+  MyLog( "Resolve: Mapped "+[stimulus, field, value]+" to "+results )
   return results
 }
 
@@ -651,12 +665,12 @@ define ReadSubject() {
   }
   logFilename <- gWD + "Logs/" + Nth(e,1) + "-" + s + ".log"
   gLogFile <- FileOpenWrite( logFilename )
+  gLogging <- Parameter("Log") 
 }
 
 define ReadStimuli() {
   filename <- gWD + "Design/Stimuli.csv"   
   csv <- ReadCSV( filename )
-  MyLog( "ReadStimuli: Read '"+filename+"'; found these stimuli:" )
   gStimulusHeader <- First( csv )
   gStimulusInfo <- Rest( csv )
   gStimNames <- []
@@ -666,7 +680,6 @@ define ReadStimuli() {
   gStimXOffsets <- []
   gStimYOffsets <- []
   loop( s, gStimulusInfo ) {
-    MyLog( "  " + s )
     PushOnEnd( gStimNames, Nth( s, 1 ) )
     PushOnEnd( gStimTypes, Nth( s, 2 ) )
     PushOnEnd( gStimParams, Nth( s, 3 ) )
@@ -796,10 +809,6 @@ define ReadPhases() {
       }
     }
   }
-  MyLog( "ReadPhases: Read '" + filename + "'; found these phases:" )
-  loop( phase, gPhases ) {
-    MyLog( "  "+ Flatten(phase) )
-  }
   gPhases <- Transpose( gPhases )
 }
 
@@ -808,11 +817,6 @@ define ReadParameters() {
   csv <- Transpose( Rest( ReadCSV( filename ) ) )
   gParameterNames <- Nth(csv, 1)
   gParameterValues <- Nth(csv, 2)
-  gLogging <- Parameter("Log") 
-  MyLog( "ReadParameters: Read '" + filename + "'" )
-  loop( i, Sequence(1,Length(gParameterNames),1) ) {
-    MyLog( "  "+Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) ) 
-  }
 }
 
 define Parameter( name ) {
