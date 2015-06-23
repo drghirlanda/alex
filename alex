@@ -643,7 +643,7 @@ define ReadSubject() {
   ## From a random group, pick a subject that has not yet been run
   loop( e, Shuffle( Rest(subjects) ) ) {
     loop( s, Sequence(1, ToNumber(Nth(e,2)), 1) ) {
-      dataFilename <- gWD + "Data/" + Nth(e,1) + "-" + s + ".dat"
+      dataFilename <- gWD + "Data/" + Nth(e,1) + "-" + s + ".csv"
       if( not FileExists(dataFilename) ) {
         found <- 1
         SetElement( e, 2, s )
