@@ -567,7 +567,7 @@ define ResolvePhase( phase, stimulus, field, value ) {
 define MakeColorRGBString( color ) {
   ## We see whether color is a name or RGB triplet, and act
   ## accordingly:
-  components <- SplitString( color, "," )
+  components <- SplitString( color, "." )
   if( Length(components) != 3 ) { ## treat as color name
     c <- MakeColor( color )
   } else {
