@@ -527,7 +527,12 @@ define Resolve( stimulus, field, value ) {
     if( SubString(v,1,1) == ":" ) {
       # This is the stimulus to be looked up:
       s <- SubString( v, 2, StringLength(v)-1 )
-      PushOnEnd( results, LookupStimulus( s, field ) )
+      v2 <- LookUpStimulus( s, field )
+      # We are sure we are passing only one field to Resolve so we
+      # take First to get rid of a nested list that would mess up the
+      # returned data:
+      r <- First( Resolve( s, field, v2 ) )
+      PushOnEnd( results, r )
     } elseif( v == "*" ) {
       r <- Lookup( stimulus+field,gSubjectHeader,gSubjectInfo )
       if( IsList(r) ) { # Nothing found
@@ -570,10 +575,12 @@ define MakeColorRGBString( color ) {
   components <- SplitString( color, "-" )
   if( Length(components) != 3 ) { ## treat as color name
     c <- MakeColor( color )
+    MyLog( "MakeColorRGBString: creating color '"+color+"'" )
   } else {
     cred <- ToNumber( Nth(components, 1) )
     cgreen <- ToNumber( Nth(components, 2) )
     cblue <- ToNumber( Nth(components, 3) )
+    MyLog( "MakeColorRGBString: creating color "+components )
     c <- MakeColorRGB( cred, cgreen, cblue )
   }
   return c
