@@ -177,7 +177,7 @@ Name   Type   Parameters        Color       XOffset YOffset
 ----   ----   ----------        -----       ------- -------
 Red    square 50                red         0       0
 White  square 50                white       0       0
-Pink   square 50                255,128,128 0       0
+Pink   square 50                255-128-128 0       0
 Smiley image  smile-o-white.png             0       -150
 
 Table: A `Stimuli.csv` file instructing alex that stimuli Red, White,
@@ -232,11 +232,9 @@ is a detailed explanation:
 
 - **Color**: The color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given
-  as an RGB triplet. As the latter are themselves comma-separated
-  lists, they need to be double-quoted in the CSV file (spreadsheet
-  software will do this for you). In the case of text, you can specify
-  the background as well as the foreground color by writing the color
-  in the form Color1+Color2, where Color1 will be foreground and
+  as an RGB triplet, delimited by hyphens (`-`). In the case of text, you can
+  specify the background as well as the foreground color by writing the
+  color in the form Color1+Color2, where Color1 will be foreground and
   Color2 the background. If no foreground or background color is
   given, the defaults set in `Parameters.csv` are used.
 
@@ -293,8 +291,8 @@ the Pink stimulus in the `Groups.csv` file. \label{stimuli-color}
 
 Group Size PinkColor
 ----- ---- ---------
-1     10   255,128,128
-2     10   255,190,190
+1     10   255-128-128
+2     10   255-190-190
 
 Table: A `Groups.csv` file instructing alex to run 6 subjects split
 in two treatment groups with different Color attributes for the Pink
@@ -316,10 +314,10 @@ of stimulus Red (see Table
 
 Group Size PinkColor   RedParameters
 ----- ---- ---------   -------------
-1     10   255,128,128 25
-2     10   255,128,128 50
-3     10   255,190,190 50
-4     10   255,190,190 75
+1     10   255-128-128 25
+2     10   255-128-128 50
+3     10   255-190-190 50
+4     10   255-190-190 75
 
 Table: A `Groups.csv` file instructing alex to run 4 experimental
 groups. Each group receives a unique combination of PinkColor and
@@ -406,16 +404,16 @@ the experiment during development.
 # More about stimuli 
 
 We mentioned above one bit of special notation in the definition of
-stimuli, namely the construction * (star) + stimulus name (see the end
+stimuli, namely the construction `*` (star) + stimulus name (see the end
 of the previous section). There are two more bits of special notation,
 explained next.
 
 Sometimes we want some stimuli to share characteristics. For example,
 they should be of the same color. We can express the fact that we want
 a stimulus characteristic to equal that of another stimulus using a
-colon (:) followed by the stimulus name (we would have liked to use =
-rather than :, but unfortunately spreadsheet software stubbornly
-interprets = as introducing a formula). Consider the example above,
+colon (`:`) followed by the stimulus name (we would have liked to use `=`
+rather than `:`, but unfortunately spreadsheet software stubbornly
+interprets `=` as introducing a formula). Consider the example above,
 with three squares of the same size as stimuli. The file in Table
 \ref{stimuli-special} is equivalent but uses colon notation for the
 Parameters field. This has two advantages: it makes explicit our
@@ -429,10 +427,10 @@ White  square :Red               white 0       0
 Pink   square :Red               Pink  0       0
 Smiley image  smile-o-white.png        0       150
 
-Table: A `Stimuli.csv` file demonstrating the * and : special
+Table: A `Stimuli.csv` file demonstrating the `*` and `:` special
 notations for stimuli. \label{stimuli-special}
 
-Another bit of special notation is + (plus), which is used to present
+Another bit of special notation is `+` (plus), which is used to present
 stimuli together (compound stimuli). Suppose that, after training a
 discrimination between red and white squares, we want to test the red
 and white squares together. We would then use the files in Tables
@@ -647,7 +645,7 @@ and a final message (see also Table \ref{phases-instructions}).
 
 When you run an experiment with alex, data are saved in the Data
 folder (which alex creates if it is not found) in CSV files named
-with group names and subject numbers, e.g., `Data/Training-1.dat` for
+with group names and subject numbers, e.g., `Data/Training-1.csv` for
 the first subject of group `Training`. These files have a header
 followed by one data line per response. This is so that each line
 identifies all variables it pertains to (so called "long format" in
