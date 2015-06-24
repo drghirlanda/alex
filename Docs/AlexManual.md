@@ -662,43 +662,44 @@ The remaining columns are as follows:
 
  - **Age**: Subject's age (ditto).
 
+ - **Time**: Time when response was made (since start of experiment, in ms).
+
  - **Phase**: Experimental phase the trial belongs to.
 
  - **Trial**: Trial number within the phase.
 
- - **Stimulus**: Stimulus presented in the trial (one of those defined
-   in `Stimuli.csv`), or `ITI` for responses registered between trials.
+ - **S1**: Designated S1 for this trial (defined in `Stimuli.csv`),
+   or `ITI` for responses registered between trials.
 
- - **Duration**: Duration of this stimulus (or inter-trial interval).
+ - **S1Duration**: Duration of S1 (or inter-trial interval).
 
- - **Response**: Key designated as the correct response. Recall that
-   this may be prepended by * (asterisk) if the trial was a "classical
-   conditioning" one (see [here](#responses)).
+ - **S1On**: Was S1 present when the response was made? (`T` for true,
+   `F` for false — as in the case of responding during an S1–S2 interval.)
 
- - **RewardPr**: Reward probability assigned to the stimulus, in case
-   of a correct response (from the `Phases.csv` design file).
+ - **S2**: Designated S2 for this trial (`NA` if not specified in
+   `Phases.csv` and during ITIs; **S2Duration** and **S2Prob**
+   are also `NA` in these cases).
+
+ - **S2Duration**: Duration of S2.
+
+ - **S2On**: see **S1On**.
+
+ - **S2Prob**: Probability of S2 presentation, given a correct response
+   (both specified in `Phases.csv`).
+
+ - **Response**: Key designated as the correct response (or `NA` during
+   ITIs). Recall that the key may be prepended by * (asterisk) if the
+   trial was a "classical conditioning" one (see [here](#responses)). 
+
+ - **RT**: Response time since start of trial (`NA` if trial timed out).
+
+ - **Valid**: Was the response made during a trial, within the window
+   delimited by ResponseTimeMin and ResponseTimeMax? (`T` or `F`).
 
  - **Key**: Subject's actual response. This can be the correct
    key, any other key the subject may have pressed, or `<timeout>`
    in the case of no responses within a trial (the goal is to have
    a faithful record of everything the subject does).
-  
- - **RT**: Reaction time for this response.
-
- - **Reward**: The reward received for the response, using the
-  following code:
-    
-    + 1: The response was rewarded (the US was presented)
-
-    + 0: The response was not rewarded (no US presented)
-
-    + -1: The response was invalid, i.e., it fell outside of the
-      window delimited by ReactionTimeMin and ReactionTimeMax, see
-      above. No US is presented on such responses.
-
-    For inter-trial intervals and trials that time out, **Reward** is
-    set to `NA`. **Response** and **RewardPr** are also set to `NA`
-    for responses registered during ITIs.
 
 We believe this information characterizes subject behavior competely,
 but please do let us know if you think details could be added.

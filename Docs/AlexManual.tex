@@ -893,49 +893,51 @@ The remaining columns are as follows:
 \item
   \textbf{Age}: Subject's age (ditto).
 \item
+  \textbf{Time}: Time when response was made (since start of experiment,
+  in ms).
+\item
   \textbf{Phase}: Experimental phase the trial belongs to.
 \item
   \textbf{Trial}: Trial number within the phase.
 \item
-  \textbf{Stimulus}: Stimulus presented in the trial (one of those
-  defined in \texttt{Stimuli.csv}), or \texttt{ITI} for responses
-  registered between trials.
+  \textbf{S1}: Designated S1 for this trial (defined in
+  \texttt{Stimuli.csv}), or \texttt{ITI} for responses registered
+  between trials.
 \item
-  \textbf{Duration}: Duration of this stimulus (or inter-trial
-  interval).
+  \textbf{S1Duration}: Duration of S1 (or inter-trial interval).
 \item
-  \textbf{Response}: Key designated as the correct response. Recall that
-  this may be prepended by * (asterisk) if the trial was a ``classical
-  conditioning'' one (see \hyperref[responses]{here}).
+  \textbf{S1On}: Was S1 present when the response was made? (\texttt{T}
+  for true, \texttt{F} for false --- as in the case of responding during
+  an S1--S2 interval.)
 \item
-  \textbf{RewardPr}: Reward probability assigned to the stimulus, in
-  case of a correct response (from the \texttt{Phases.csv} design file).
+  \textbf{S2}: Designated S2 for this trial (\texttt{NA} if not
+  specified in \texttt{Phases.csv} and during ITIs; \textbf{S2Duration}
+  and \textbf{S2Prob} are also \texttt{NA} in these cases).
+\item
+  \textbf{S2Duration}: Duration of S2.
+\item
+  \textbf{S2On}: see \textbf{S1On}.
+\item
+  \textbf{S2Prob}: Probability of S2 presentation, given a correct
+  response (both specified in \texttt{Phases.csv}).
+\item
+  \textbf{Response}: Key designated as the correct response (or
+  \texttt{NA} during ITIs). Recall that the key may be prepended by *
+  (asterisk) if the trial was a ``classical conditioning'' one (see
+  \hyperref[responses]{here}).
+\item
+  \textbf{RT}: Response time since start of trial (\texttt{NA} if trial
+  timed out).
+\item
+  \textbf{Valid}: Was the response made during a trial, within the
+  window delimited by ResponseTimeMin and ResponseTimeMax? (\texttt{T}
+  or \texttt{F}).
 \item
   \textbf{Key}: Subject's actual response. This can be the correct key,
   any other key the subject may have pressed, or
   \texttt{\textless{}timeout\textgreater{}} in the case of no responses
   within a trial (the goal is to have a faithful record of everything
   the subject does).
-\item
-  \textbf{RT}: Reaction time for this response.
-\item
-  \textbf{Reward}: The reward received for the response, using the
-  following code:
-
-  \begin{itemize}
-  \item
-    1: The response was rewarded (the US was presented)
-  \item
-    0: The response was not rewarded (no US presented)
-  \item
-    -1: The response was invalid, i.e., it fell outside of the window
-    delimited by ReactionTimeMin and ReactionTimeMax, see above. No US
-    is presented on such responses.
-  \end{itemize}
-
-  For inter-trial intervals and trials that time out, \textbf{Reward} is
-  set to \texttt{NA}. \textbf{Response} and \textbf{RewardPr} are also
-  set to \texttt{NA} for responses registered during ITIs.
 \end{itemize}
 
 We believe this information characterizes subject behavior competely,

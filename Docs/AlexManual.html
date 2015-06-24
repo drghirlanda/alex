@@ -789,21 +789,20 @@
 <ul>
 <li><p><strong>Sex</strong>: Subject's sex (collected by alex at the start of experiments, otherwise <code>NA</code>).</p></li>
 <li><p><strong>Age</strong>: Subject's age (ditto).</p></li>
+<li><p><strong>Time</strong>: Time when response was made (since start of experiment, in ms).</p></li>
 <li><p><strong>Phase</strong>: Experimental phase the trial belongs to.</p></li>
 <li><p><strong>Trial</strong>: Trial number within the phase.</p></li>
-<li><p><strong>Stimulus</strong>: Stimulus presented in the trial (one of those defined in <code>Stimuli.csv</code>), or <code>ITI</code> for responses registered between trials.</p></li>
-<li><p><strong>Duration</strong>: Duration of this stimulus (or inter-trial interval).</p></li>
-<li><p><strong>Response</strong>: Key designated as the correct response. Recall that this may be prepended by * (asterisk) if the trial was a &quot;classical conditioning&quot; one (see <a href="#responses">here</a>).</p></li>
-<li><p><strong>RewardPr</strong>: Reward probability assigned to the stimulus, in case of a correct response (from the <code>Phases.csv</code> design file).</p></li>
+<li><p><strong>S1</strong>: Designated S1 for this trial (defined in <code>Stimuli.csv</code>), or <code>ITI</code> for responses registered between trials.</p></li>
+<li><p><strong>S1Duration</strong>: Duration of S1 (or inter-trial interval).</p></li>
+<li><p><strong>S1On</strong>: Was S1 present when the response was made? (<code>T</code> for true, <code>F</code> for false — as in the case of responding during an S1–S2 interval.)</p></li>
+<li><p><strong>S2</strong>: Designated S2 for this trial (<code>NA</code> if not specified in <code>Phases.csv</code> and during ITIs; <strong>S2Duration</strong> and <strong>S2Prob</strong> are also <code>NA</code> in these cases).</p></li>
+<li><p><strong>S2Duration</strong>: Duration of S2.</p></li>
+<li><p><strong>S2On</strong>: see <strong>S1On</strong>.</p></li>
+<li><p><strong>S2Prob</strong>: Probability of S2 presentation, given a correct response (both specified in <code>Phases.csv</code>).</p></li>
+<li><p><strong>Response</strong>: Key designated as the correct response (or <code>NA</code> during ITIs). Recall that the key may be prepended by * (asterisk) if the trial was a &quot;classical conditioning&quot; one (see <a href="#responses">here</a>).</p></li>
+<li><p><strong>RT</strong>: Response time since start of trial (<code>NA</code> if trial timed out).</p></li>
+<li><p><strong>Valid</strong>: Was the response made during a trial, within the window delimited by ResponseTimeMin and ResponseTimeMax? (<code>T</code> or <code>F</code>).</p></li>
 <li><p><strong>Key</strong>: Subject's actual response. This can be the correct key, any other key the subject may have pressed, or <code>&lt;timeout&gt;</code> in the case of no responses within a trial (the goal is to have a faithful record of everything the subject does).</p></li>
-<li><p><strong>RT</strong>: Reaction time for this response.</p></li>
-<li><p><strong>Reward</strong>: The reward received for the response, using the following code:</p>
-<ul>
-<li><p>1: The response was rewarded (the US was presented)</p></li>
-<li><p>0: The response was not rewarded (no US presented)</p></li>
-<li><p>-1: The response was invalid, i.e., it fell outside of the window delimited by ReactionTimeMin and ReactionTimeMax, see above. No US is presented on such responses.</p></li>
-</ul>
-<p>For inter-trial intervals and trials that time out, <strong>Reward</strong> is set to <code>NA</code>. <strong>Response</strong> and <strong>RewardPr</strong> are also set to <code>NA</code> for responses registered during ITIs.</p></li>
 </ul>
 <p>We believe this information characterizes subject behavior competely, but please do let us know if you think details could be added.</p>
 <p><a name="errors"></a></p>
