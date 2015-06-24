@@ -187,7 +187,7 @@
 <td align="left">Pink</td>
 <td align="left">square</td>
 <td align="left">50</td>
-<td align="left">255,128,128</td>
+<td align="left">255-128-128</td>
 <td align="left">0</td>
 <td align="left">0</td>
 </tr>
@@ -219,7 +219,7 @@
 </ul>
 <p>These images are drawn in white over a transparent background; equivalent black images are available as <code>smile-o.png</code>, etc. All images have been taken from <a href="http://fortawesome.github.io/Font-Awesome">Font Awesome</a>, via <a href="https://github.com/encharm/Font-Awesome-SVG-PNG">this project</a>. They are 256x256 pixels in size to look OK even on high resolution monitors. If that is too big for you, you can zoom them as indicated above.</p></li>
 </ul></li>
-<li><p><strong>Color</strong>: The color of squares, circles, or text. This field is ignored for images and sounds. Colors can either be named or given as an RGB triplet. As the latter are themselves comma-separated lists, they need to be double-quoted in the CSV file (spreadsheet software will do this for you). In the case of text, you can specify the background as well as the foreground color by writing the color in the form Color1+Color2, where Color1 will be foreground and Color2 the background. If no foreground or background color is given, the defaults set in <code>Parameters.csv</code> are used.</p>
+<li><p><strong>Color</strong>: The color of squares, circles, or text. This field is ignored for images and sounds. Colors can either be named or given as an RGB triplet, delimited by hyphens (<code>-</code>). In the case of text, you can specify the background as well as the foreground color by writing the color in the form Color1+Color2, where Color1 will be foreground and Color2 the background. If no foreground or background color is given, the defaults set in <code>Parameters.csv</code> are used.</p>
 <p>The PEBL reference manual lists valid color names, which are many hundreds. If you stick to simple stuff like red, blue, cyan, purple, and so on, you can get by without consulting this file. RGB, of course, enables you to define color shades more precisely.</p></li>
 <li><p><strong>XOffset</strong> and <strong>YOffset</strong>: Offset from the center of the screen, in pixels. In Table , all stimuli are centered except for the reward stimulus Smiley, which is displayed 150 pixels above center (negative Y values place stimuli above center, negative X values place them left of center).</p></li>
 </ul>
@@ -300,12 +300,12 @@
 <tr class="odd">
 <td align="left">1</td>
 <td align="left">10</td>
-<td align="left">255,128,128</td>
+<td align="left">255-128-128</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
 <td align="left">10</td>
-<td align="left">255,190,190</td>
+<td align="left">255-190-190</td>
 </tr>
 </tbody>
 </table>
@@ -370,25 +370,25 @@
 <tr class="odd">
 <td align="left">1</td>
 <td align="left">10</td>
-<td align="left">255,128,128</td>
+<td align="left">255-128-128</td>
 <td align="left">25</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
 <td align="left">10</td>
-<td align="left">255,128,128</td>
+<td align="left">255-128-128</td>
 <td align="left">50</td>
 </tr>
 <tr class="odd">
 <td align="left">3</td>
 <td align="left">10</td>
-<td align="left">255,190,190</td>
+<td align="left">255-190-190</td>
 <td align="left">50</td>
 </tr>
 <tr class="even">
 <td align="left">4</td>
 <td align="left">10</td>
-<td align="left">255,190,190</td>
+<td align="left">255-190-190</td>
 <td align="left">75</td>
 </tr>
 </tbody>
@@ -472,10 +472,10 @@
 <p>The <strong>Test</strong> parameter, if set to 1, skips instructions and acquisition of demographic information. It is meant to quickly start the experiment during development.</p>
 <p><a name="notation"></a></p>
 <h1 id="more-about-stimuli">More about stimuli</h1>
-<p>We mentioned above one bit of special notation in the definition of stimuli, namely the construction * (star) + stimulus name (see the end of the previous section). There are two more bits of special notation, explained next.</p>
-<p>Sometimes we want some stimuli to share characteristics. For example, they should be of the same color. We can express the fact that we want a stimulus characteristic to equal that of another stimulus using a colon (:) followed by the stimulus name (we would have liked to use = rather than :, but unfortunately spreadsheet software stubbornly interprets = as introducing a formula). Consider the example above, with three squares of the same size as stimuli. The file in Table  is equivalent but uses colon notation for the Parameters field. This has two advantages: it makes explicit our intention of having three squares of equal size, and it reduces the possibility of typing errors.</p>
+<p>We mentioned above one bit of special notation in the definition of stimuli, namely the construction <code>*</code> (star) + stimulus name (see the end of the previous section). There are two more bits of special notation, explained next.</p>
+<p>Sometimes we want some stimuli to share characteristics. For example, they should be of the same color. We can express the fact that we want a stimulus characteristic to equal that of another stimulus using a colon (<code>:</code>) followed by the stimulus name (we would have liked to use <code>=</code> rather than <code>:</code>, but unfortunately spreadsheet software stubbornly interprets <code>=</code> as introducing a formula). Consider the example above, with three squares of the same size as stimuli. The file in Table  is equivalent but uses colon notation for the Parameters field. This has two advantages: it makes explicit our intention of having three squares of equal size, and it reduces the possibility of typing errors.</p>
 <table>
-<caption>A <code>Stimuli.csv</code> file demonstrating the * and : special notations for stimuli. </caption>
+<caption>A <code>Stimuli.csv</code> file demonstrating the <code>*</code> and <code>:</code> special notations for stimuli. </caption>
 <thead>
 <tr class="header">
 <th align="left">Name</th>
@@ -521,7 +521,7 @@
 </tr>
 </tbody>
 </table>
-<p>Another bit of special notation is + (plus), which is used to present stimuli together (compound stimuli). Suppose that, after training a discrimination between red and white squares, we want to test the red and white squares together. We would then use the files in Tables  and .</p>
+<p>Another bit of special notation is <code>+</code> (plus), which is used to present stimuli together (compound stimuli). Suppose that, after training a discrimination between red and white squares, we want to test the red and white squares together. We would then use the files in Tables  and .</p>
 <table>
 <caption>A <code>Phases.csv</code> file with a compound stimulus in phase 2. </caption>
 <thead>
@@ -601,7 +601,7 @@
 <p>Visual stimuli are added to the screen in the order they appear in the <code>Stimuli.csv</code> file. This means that, should some stimuli overlap on the screen, those defined <em>later</em> will be displayed <em>on top</em> of those defined earlier, obscuring them partly or wholly.</p>
 <p><a name="background-stimuli"></a></p>
 <h2 id="stimuli-that-are-always-present-during-a-phase">Stimuli that are always present during a phase</h2>
-<p>It is sometimes desirable to have a stimulus or combination of stimuli present at all times, including inter-stimulus intervals, for example as a background on which others are superimposed. A stimulus whose name starts with &quot;Background&quot; followed by the name of a phase will be displayed for the entire duration of that phase. You can define many such stimuli, e..g, <code>BackgroundPhase1-1</code> and <code>BackgroundPhase1-2</code>.</p>
+<p>It is sometimes desirable to have a stimulus or combination of stimuli present at all times, including inter-stimulus intervals, for example as a background on which others are superimposed. A stimulus whose name starts with &quot;Background&quot; followed by the name of a phase will be displayed for the entire duration of that phase. You can define many such stimuli, e.g., <code>BackgroundPhase1-1</code> and <code>BackgroundPhase1-2</code>.</p>
 <p><strong>Note:</strong> The rules for stimulus superposition for always-present stimuli are the same as for other stimuli, see <a href="#stimulus-superposition">Superposition of stimuli</a>. This means that if you want to use a stimulus as a backdrop for other stimuli, you have to define the stimulus before all those that are intended to appear on top of it. If the order is incorrect, the intended backdrop will instead obscure the other stimuli.</p>
 <p><a name="notation-phases"></a></p>
 <h1 id="more-about-phases">More about phases</h1>
@@ -784,26 +784,25 @@
 </tbody>
 </table>
 <h1 id="data-format">Data Format</h1>
-<p>When you run an experiment with alex, data are saved in the Data folder (which alex creates if it is not found) in CSV files named with group names and subject numbers, e.g., <code>Data/Training-1.dat</code> for the first subject of group <code>Training</code>. These files have a header followed by one data line per response. This is so that each line identifies all variables it pertains to (so called &quot;long format&quot; in statistical software) and can be loaded easily into statistical software without having to manually add data.</p>
+<p>When you run an experiment with alex, data are saved in the Data folder (which alex creates if it is not found) in CSV files named with group names and subject numbers, e.g., <code>Data/Training-1.csv</code> for the first subject of group <code>Training</code>. These files have a header followed by one data line per response. This is so that each line identifies all variables it pertains to (so called &quot;long format&quot; in statistical software) and can be loaded easily into statistical software without having to manually add data.</p>
 <p>The first few columns of each data line consist of the hostname, followed by the group, subject number, and pertinent treatments as specified in the <code>Groups.csv</code> line for the particular subject. The remaining columns are as follows:</p>
 <ul>
 <li><p><strong>Sex</strong>: Subject's sex (collected by alex at the start of experiments, otherwise <code>NA</code>).</p></li>
 <li><p><strong>Age</strong>: Subject's age (ditto).</p></li>
+<li><p><strong>Time</strong>: Time when response was made (since start of experiment, in ms).</p></li>
 <li><p><strong>Phase</strong>: Experimental phase the trial belongs to.</p></li>
 <li><p><strong>Trial</strong>: Trial number within the phase.</p></li>
-<li><p><strong>Stimulus</strong>: Stimulus presented in the trial (one of those defined in <code>Stimuli.csv</code>), or <code>ITI</code> for responses registered between trials.</p></li>
-<li><p><strong>Duration</strong>: Duration of this stimulus (or inter-trial interval).</p></li>
-<li><p><strong>Response</strong>: Key designated as the correct response. Recall that this may be prepended by * (asterisk) if the trial was a &quot;classical conditioning&quot; one (see <a href="#responses">here</a>).</p></li>
-<li><p><strong>RewardPr</strong>: Reward probability assigned to the stimulus, in case of a correct response (from the <code>Phases.csv</code> design file).</p></li>
+<li><p><strong>S1</strong>: Designated S1 for this trial (defined in <code>Stimuli.csv</code>), or <code>ITI</code> for responses registered between trials.</p></li>
+<li><p><strong>S1Duration</strong>: Duration of S1 (or inter-trial interval).</p></li>
+<li><p><strong>S1On</strong>: Was S1 present when the response was made? (<code>T</code> for true, <code>F</code> for false — as in the case of responding during an S1–S2 interval.)</p></li>
+<li><p><strong>S2</strong>: Designated S2 for this trial (<code>NA</code> if not specified in <code>Phases.csv</code> and during ITIs; <strong>S2Duration</strong> and <strong>S2Prob</strong> are also <code>NA</code> in these cases).</p></li>
+<li><p><strong>S2Duration</strong>: Duration of S2.</p></li>
+<li><p><strong>S2On</strong>: see <strong>S1On</strong>.</p></li>
+<li><p><strong>S2Prob</strong>: Probability of S2 presentation, given a correct response (both specified in <code>Phases.csv</code>).</p></li>
+<li><p><strong>Response</strong>: Key designated as the correct response (or <code>NA</code> during ITIs). Recall that the key may be prepended by * (asterisk) if the trial was a &quot;classical conditioning&quot; one (see <a href="#responses">here</a>).</p></li>
+<li><p><strong>RT</strong>: Response time since start of trial (<code>NA</code> if trial timed out).</p></li>
+<li><p><strong>Valid</strong>: Was the response made during a trial, within the window delimited by ResponseTimeMin and ResponseTimeMax? (<code>T</code> or <code>F</code>).</p></li>
 <li><p><strong>Key</strong>: Subject's actual response. This can be the correct key, any other key the subject may have pressed, or <code>&lt;timeout&gt;</code> in the case of no responses within a trial (the goal is to have a faithful record of everything the subject does).</p></li>
-<li><p><strong>RT</strong>: Reaction time for this response.</p></li>
-<li><p><strong>Reward</strong>: The reward received for the response, using the following code:</p>
-<ul>
-<li><p>1: The response was rewarded (the US was presented)</p></li>
-<li><p>0: The response was not rewarded (no US presented)</p></li>
-<li><p>-1: The response was invalid, i.e., it fell outside of the window delimited by ReactionTimeMin and ReactionTimeMax, see above. No US is presented on such responses.</p></li>
-</ul>
-<p>For inter-trial intervals and trials that time out, <strong>Reward</strong> is set to <code>NA</code>. <strong>Response</strong> and <strong>RewardPr</strong> are also set to <code>NA</code> for responses registered during ITIs.</p></li>
 </ul>
 <p>We believe this information characterizes subject behavior competely, but please do let us know if you think details could be added.</p>
 <p><a name="errors"></a></p>

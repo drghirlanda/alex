@@ -260,7 +260,7 @@ Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
 \endhead
 Red & square & 50 & red & 0 & 0\tabularnewline
 White & square & 50 & white & 0 & 0\tabularnewline
-Pink & square & 50 & 255,128,128 & 0 & 0\tabularnewline
+Pink & square & 50 & 255-128-128 & 0 & 0\tabularnewline
 Smiley & image & smile-o-white.png & & 0 & -150\tabularnewline
 \bottomrule
 \end{longtable}
@@ -321,13 +321,11 @@ is a detailed explanation:
 \item
   \textbf{Color}: The color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given as
-  an RGB triplet. As the latter are themselves comma-separated lists,
-  they need to be double-quoted in the CSV file (spreadsheet software
-  will do this for you). In the case of text, you can specify the
-  background as well as the foreground color by writing the color in the
-  form Color1+Color2, where Color1 will be foreground and Color2 the
-  background. If no foreground or background color is given, the
-  defaults set in \texttt{Parameters.csv} are used.
+  an RGB triplet, delimited by hyphens (\texttt{-}). In the case of
+  text, you can specify the background as well as the foreground color
+  by writing the color in the form Color1+Color2, where Color1 will be
+  foreground and Color2 the background. If no foreground or background
+  color is given, the defaults set in \texttt{Parameters.csv} are used.
 
   The PEBL reference manual lists valid color names, which are many
   hundreds. If you stick to simple stuff like red, blue, cyan, purple,
@@ -408,8 +406,8 @@ Group & Size & PinkColor\tabularnewline
 Group & Size & PinkColor\tabularnewline
 \midrule
 \endhead
-1 & 10 & 255,128,128\tabularnewline
-2 & 10 & 255,190,190\tabularnewline
+1 & 10 & 255-128-128\tabularnewline
+2 & 10 & 255-190-190\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -446,10 +444,10 @@ Group & Size & PinkColor & RedParameters\tabularnewline
 Group & Size & PinkColor & RedParameters\tabularnewline
 \midrule
 \endhead
-1 & 10 & 255,128,128 & 25\tabularnewline
-2 & 10 & 255,128,128 & 50\tabularnewline
-3 & 10 & 255,190,190 & 50\tabularnewline
-4 & 10 & 255,190,190 & 75\tabularnewline
+1 & 10 & 255-128-128 & 25\tabularnewline
+2 & 10 & 255-128-128 & 50\tabularnewline
+3 & 10 & 255-190-190 & 50\tabularnewline
+4 & 10 & 255-190-190 & 75\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -537,25 +535,26 @@ experiment during development.
 \section{More about stimuli}\label{more-about-stimuli}
 
 We mentioned above one bit of special notation in the definition of
-stimuli, namely the construction * (star) + stimulus name (see the end
-of the previous section). There are two more bits of special notation,
-explained next.
+stimuli, namely the construction \texttt{*} (star) + stimulus name (see
+the end of the previous section). There are two more bits of special
+notation, explained next.
 
 Sometimes we want some stimuli to share characteristics. For example,
 they should be of the same color. We can express the fact that we want a
 stimulus characteristic to equal that of another stimulus using a colon
-(:) followed by the stimulus name (we would have liked to use = rather
-than :, but unfortunately spreadsheet software stubbornly interprets =
-as introducing a formula). Consider the example above, with three
-squares of the same size as stimuli. The file in Table
-\ref{stimuli-special} is equivalent but uses colon notation for the
-Parameters field. This has two advantages: it makes explicit our
-intention of having three squares of equal size, and it reduces the
-possibility of typing errors.
+(\texttt{:}) followed by the stimulus name (we would have liked to use
+\texttt{=} rather than \texttt{:}, but unfortunately spreadsheet
+software stubbornly interprets \texttt{=} as introducing a formula).
+Consider the example above, with three squares of the same size as
+stimuli. The file in Table \ref{stimuli-special} is equivalent but uses
+colon notation for the Parameters field. This has two advantages: it
+makes explicit our intention of having three squares of equal size, and
+it reduces the possibility of typing errors.
 
 \begin{longtable}[c]{@{}llllll@{}}
-\caption{A \texttt{Stimuli.csv} file demonstrating the * and : special
-notations for stimuli. \label{stimuli-special}}\tabularnewline
+\caption{A \texttt{Stimuli.csv} file demonstrating the \texttt{*} and
+\texttt{:} special notations for stimuli.
+\label{stimuli-special}}\tabularnewline
 \toprule
 Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
 \midrule
@@ -571,11 +570,11 @@ Smiley & image & smile-o-white.png & & 0 & 150\tabularnewline
 \bottomrule
 \end{longtable}
 
-Another bit of special notation is + (plus), which is used to present
-stimuli together (compound stimuli). Suppose that, after training a
-discrimination between red and white squares, we want to test the red
-and white squares together. We would then use the files in Tables
-\ref{phases-plus} and \ref{stimuli-plus}.
+Another bit of special notation is \texttt{+} (plus), which is used to
+present stimuli together (compound stimuli). Suppose that, after
+training a discrimination between red and white squares, we want to test
+the red and white squares together. We would then use the files in
+Tables \ref{phases-plus} and \ref{stimuli-plus}.
 
 \begin{longtable}[c]{@{}lllll@{}}
 \caption{A \texttt{Phases.csv} file with a compound stimulus in phase 2.
@@ -637,7 +636,7 @@ present at all times, including inter-stimulus intervals, for example as
 a background on which others are superimposed. A stimulus whose name
 starts with ``Background'' followed by the name of a phase will be
 displayed for the entire duration of that phase. You can define many
-such stimuli, e..g, \texttt{BackgroundPhase1-1} and
+such stimuli, e.g., \texttt{BackgroundPhase1-1} and
 \texttt{BackgroundPhase1-2}.
 
 \textbf{Note:} The rules for stimulus superposition for always-present
@@ -875,7 +874,7 @@ EndText & textfile & End.txt & & & & 600000\tabularnewline
 
 When you run an experiment with alex, data are saved in the Data folder
 (which alex creates if it is not found) in CSV files named with group
-names and subject numbers, e.g., \texttt{Data/Training-1.dat} for the
+names and subject numbers, e.g., \texttt{Data/Training-1.csv} for the
 first subject of group \texttt{Training}. These files have a header
 followed by one data line per response. This is so that each line
 identifies all variables it pertains to (so called ``long format'' in
@@ -894,49 +893,51 @@ The remaining columns are as follows:
 \item
   \textbf{Age}: Subject's age (ditto).
 \item
+  \textbf{Time}: Time when response was made (since start of experiment,
+  in ms).
+\item
   \textbf{Phase}: Experimental phase the trial belongs to.
 \item
   \textbf{Trial}: Trial number within the phase.
 \item
-  \textbf{Stimulus}: Stimulus presented in the trial (one of those
-  defined in \texttt{Stimuli.csv}), or \texttt{ITI} for responses
-  registered between trials.
+  \textbf{S1}: Designated S1 for this trial (defined in
+  \texttt{Stimuli.csv}), or \texttt{ITI} for responses registered
+  between trials.
 \item
-  \textbf{Duration}: Duration of this stimulus (or inter-trial
-  interval).
+  \textbf{S1Duration}: Duration of S1 (or inter-trial interval).
 \item
-  \textbf{Response}: Key designated as the correct response. Recall that
-  this may be prepended by * (asterisk) if the trial was a ``classical
-  conditioning'' one (see \hyperref[responses]{here}).
+  \textbf{S1On}: Was S1 present when the response was made? (\texttt{T}
+  for true, \texttt{F} for false --- as in the case of responding during
+  an S1--S2 interval.)
 \item
-  \textbf{RewardPr}: Reward probability assigned to the stimulus, in
-  case of a correct response (from the \texttt{Phases.csv} design file).
+  \textbf{S2}: Designated S2 for this trial (\texttt{NA} if not
+  specified in \texttt{Phases.csv} and during ITIs; \textbf{S2Duration}
+  and \textbf{S2Prob} are also \texttt{NA} in these cases).
+\item
+  \textbf{S2Duration}: Duration of S2.
+\item
+  \textbf{S2On}: see \textbf{S1On}.
+\item
+  \textbf{S2Prob}: Probability of S2 presentation, given a correct
+  response (both specified in \texttt{Phases.csv}).
+\item
+  \textbf{Response}: Key designated as the correct response (or
+  \texttt{NA} during ITIs). Recall that the key may be prepended by *
+  (asterisk) if the trial was a ``classical conditioning'' one (see
+  \hyperref[responses]{here}).
+\item
+  \textbf{RT}: Response time since start of trial (\texttt{NA} if trial
+  timed out).
+\item
+  \textbf{Valid}: Was the response made during a trial, within the
+  window delimited by ResponseTimeMin and ResponseTimeMax? (\texttt{T}
+  or \texttt{F}).
 \item
   \textbf{Key}: Subject's actual response. This can be the correct key,
   any other key the subject may have pressed, or
   \texttt{\textless{}timeout\textgreater{}} in the case of no responses
   within a trial (the goal is to have a faithful record of everything
   the subject does).
-\item
-  \textbf{RT}: Reaction time for this response.
-\item
-  \textbf{Reward}: The reward received for the response, using the
-  following code:
-
-  \begin{itemize}
-  \item
-    1: The response was rewarded (the US was presented)
-  \item
-    0: The response was not rewarded (no US presented)
-  \item
-    -1: The response was invalid, i.e., it fell outside of the window
-    delimited by ReactionTimeMin and ReactionTimeMax, see above. No US
-    is presented on such responses.
-  \end{itemize}
-
-  For inter-trial intervals and trials that time out, \textbf{Reward} is
-  set to \texttt{NA}. \textbf{Response} and \textbf{RewardPr} are also
-  set to \texttt{NA} for responses registered during ITIs.
 \end{itemize}
 
 We believe this information characterizes subject behavior competely,

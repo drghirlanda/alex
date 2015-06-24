@@ -258,6 +258,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     s2Duration <- ToNumber( ResolveDuration( s2, "S2" ) )
   } else {
     s2Duration <- "NA"
+    rewardProb <- "NA"
   }
   # Determine some other parameters:
   s1s2Interval <- Parameter("S1S2Interval")
@@ -316,6 +317,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     rt <- GetTime() - startTime # Time since trial start
     if( GetTime() >= endTime ) {
       rt <- "NA"
+      valid <- "F"
     } else {
       responseCount <- responseCount + 1
     }
@@ -324,12 +326,12 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         valid <- "F"
     # If response is valid and "rewarded":
     } elseif( Random() < rewardProb and key == response ) {
+      valid <- "T"
       if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
-        valid <- "T"
         SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
       }
-    # If response is valid but S2 not scheduled:
-    } else {
+    # If response is valid (and not <timeout>) but S2 not scheduled:
+    } elseif (rt != "NA") {
       valid <- "T"
     }
     ## Save data line to file:
@@ -453,7 +455,7 @@ define RunPhase( phaseName ) {
       if( not IsList(key) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, "T",
-        "NA", "NA", "NA", "NA", "NA", rt, "F", key] ) )
+        "NA", "NA", "F", "NA", "NA", rt, "F", key] ) )
       }
     }
     ## Run trial and get response times and rewards collected:
@@ -973,4 +975,3 @@ define MyLog( logline ) {
     FilePrint( gLogFile, "[" + t + "] " + logline )
   }
 }      
-
