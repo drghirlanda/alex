@@ -13,3 +13,4 @@ ForegroundColor,white,"Color of text, unless specified in Stimuli.csv"
 FontName,Vera,Text font
 FontSize,24,Text size
 Test,1,Demographics questions are skipped if this is 1
+Log,1,
