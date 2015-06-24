@@ -1,3 +1,8 @@
 *~
 *.dat
 .~lock*
+*.aux
+*.html
+*.log
+*.pdf
+*.tex
