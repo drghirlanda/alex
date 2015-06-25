@@ -26,8 +26,8 @@ To build a new experiment you create a dedicated folder, and within it the follo
 
 - **Logs**: This one holds runtime messages recorded for each subject.
 
-The program `alex-init` generates a bare-bones experiment so that you
-know what files you need. It is run like this:
+The program `alex-init`, run as follows, generates a bare-bones experiment
+with the files you'll need:
 
     alex-init -v <experiment name>
 
@@ -684,8 +684,8 @@ The remaining columns are as follows:
    `F` for false — as in the case of responding during an S1–S2 interval.)
 
  - **S2**: Designated S2 for this trial (`NA` if not specified in
-   `Phases.csv` and during ITIs; **S2Duration** and **S2Prob**
-   are also `NA` in these cases).
+   `Phases.csv` and during ITIs; **S2Duration**, **S2Prob**, and
+   **Response** are also `NA` in these cases).
 
  - **S2Duration**: Duration of S2.
 
@@ -694,9 +694,9 @@ The remaining columns are as follows:
  - **S2Prob**: Probability of S2 presentation, given a correct response
    (both specified in `Phases.csv`).
 
- - **Response**: Key designated as the correct response (or `NA` during
-   ITIs). Recall that the key may be prepended by * (asterisk) if the
-   trial was a "classical conditioning" one (see [here](#responses)). 
+ - **Response**: Key designated as the correct response. Recall that the
+   key may be prepended by * (asterisk) if the trial was a "classical
+   conditioning" one (see [here](#responses)).
 
  - **RT**: Response time since start of trial (`NA` if trial timed out).
 

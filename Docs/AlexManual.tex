@@ -72,8 +72,8 @@ the following subfolders:
   subject.
 \end{itemize}
 
-The program \texttt{alex-init} generates a bare-bones experiment so that
-you know what files you need. It is run like this:
+The program \texttt{alex-init}, run as follows, generates a bare-bones
+experiment with the files you'll need:
 
 \begin{verbatim}
 alex-init -v <experiment name>
@@ -920,8 +920,9 @@ The remaining columns are as follows:
   an S1--S2 interval.)
 \item
   \textbf{S2}: Designated S2 for this trial (\texttt{NA} if not
-  specified in \texttt{Phases.csv} and during ITIs; \textbf{S2Duration}
-  and \textbf{S2Prob} are also \texttt{NA} in these cases).
+  specified in \texttt{Phases.csv} and during ITIs; \textbf{S2Duration},
+  \textbf{S2Prob}, and \textbf{Response} are also \texttt{NA} in these
+  cases).
 \item
   \textbf{S2Duration}: Duration of S2.
 \item
@@ -930,10 +931,9 @@ The remaining columns are as follows:
   \textbf{S2Prob}: Probability of S2 presentation, given a correct
   response (both specified in \texttt{Phases.csv}).
 \item
-  \textbf{Response}: Key designated as the correct response (or
-  \texttt{NA} during ITIs). Recall that the key may be prepended by *
-  (asterisk) if the trial was a ``classical conditioning'' one (see
-  \hyperref[responses]{here}).
+  \textbf{Response}: Key designated as the correct response. Recall that
+  the key may be prepended by * (asterisk) if the trial was a
+  ``classical conditioning'' one (see \hyperref[responses]{here}).
 \item
   \textbf{RT}: Response time since start of trial (\texttt{NA} if trial
   timed out).

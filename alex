@@ -85,7 +85,7 @@ define Start( par ) {
   ReadPhases()     
   ReadStimuli()    
 
-  # We can use loggging only after ReadSubject() and ReadParameters():
+  # We can use logging only after ReadSubject() and ReadParameters():
   MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
   MyLog( "Start: Set working directory to '" + gWD + "'" ) 
   # Log parameter, phases, and stimuli:
@@ -259,6 +259,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   } else {
     s2Duration <- "NA"
     rewardProb <- "NA"
+    response <- "NA"
   }
   # Determine some other parameters:
   s1s2Interval <- Parameter("S1S2Interval")

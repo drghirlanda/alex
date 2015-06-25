@@ -23,7 +23,7 @@
 <li><p><strong>Data</strong>: This folder holds the data collected during experiment runs.</p></li>
 <li><p><strong>Logs</strong>: This one holds runtime messages recorded for each subject.</p></li>
 </ul>
-<p>The program <code>alex-init</code> generates a bare-bones experiment so that you know what files you need. It is run like this:</p>
+<p>The program <code>alex-init</code>, run as follows, generates a bare-bones experiment with the files you'll need:</p>
 <pre><code>alex-init -v &lt;experiment name&gt;</code></pre>
 <p>This creates folder <code>&lt;experiment name&gt;</code> with the above mentioned subfolders (except Data and Logs, which are created on first run) and skeleton configuration files.</p>
 <h2 id="acknowledgements">Acknowledgments</h2>
@@ -801,11 +801,11 @@
 <li><p><strong>S1</strong>: Designated S1 for this trial (defined in <code>Stimuli.csv</code>), or <code>ITI</code> for responses registered between trials.</p></li>
 <li><p><strong>S1Duration</strong>: Duration of S1 (or inter-trial interval).</p></li>
 <li><p><strong>S1On</strong>: Was S1 present when the response was made? (<code>T</code> for true, <code>F</code> for false — as in the case of responding during an S1–S2 interval.)</p></li>
-<li><p><strong>S2</strong>: Designated S2 for this trial (<code>NA</code> if not specified in <code>Phases.csv</code> and during ITIs; <strong>S2Duration</strong> and <strong>S2Prob</strong> are also <code>NA</code> in these cases).</p></li>
+<li><p><strong>S2</strong>: Designated S2 for this trial (<code>NA</code> if not specified in <code>Phases.csv</code> and during ITIs; <strong>S2Duration</strong>, <strong>S2Prob</strong>, and <strong>Response</strong> are also <code>NA</code> in these cases).</p></li>
 <li><p><strong>S2Duration</strong>: Duration of S2.</p></li>
 <li><p><strong>S2On</strong>: see <strong>S1On</strong>.</p></li>
 <li><p><strong>S2Prob</strong>: Probability of S2 presentation, given a correct response (both specified in <code>Phases.csv</code>).</p></li>
-<li><p><strong>Response</strong>: Key designated as the correct response (or <code>NA</code> during ITIs). Recall that the key may be prepended by * (asterisk) if the trial was a &quot;classical conditioning&quot; one (see <a href="#responses">here</a>).</p></li>
+<li><p><strong>Response</strong>: Key designated as the correct response. Recall that the key may be prepended by * (asterisk) if the trial was a &quot;classical conditioning&quot; one (see <a href="#responses">here</a>).</p></li>
 <li><p><strong>RT</strong>: Response time since start of trial (<code>NA</code> if trial timed out).</p></li>
 <li><p><strong>Valid</strong>: Was the response made during a trial, within the window delimited by ResponseTimeMin and ResponseTimeMax? (<code>T</code> or <code>F</code>).</p></li>
 <li><p><strong>Key</strong>: Subject's actual response. This can be the correct key, any other key the subject may have pressed, or <code>&lt;timeout&gt;</code> in the case of no responses within a trial (the goal is to have a faithful record of everything the subject does).</p></li>
