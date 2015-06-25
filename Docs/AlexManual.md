@@ -106,9 +106,9 @@ say, a pink square. Table \ref{phases} shows how a suitable
 `Phases.csv` file might look.[^1] The file describes an experiment
 with two phases, with each line defining one type of trial that
 occurs in a phase. Here, there are two kinds of trials in phase
-1, specifying 20 presentations of each of two stimuli, called Red and
-White. Red will be rewarded 90% of the time, White only 10%. On
-these trials, stimulus Smiley will be displayed as the reward (US).
+1, specifying 20 presentations of each of two primary stimuli (S1),
+called Red and White. Red will be rewarded 90% of the time, White only
+10%. On these trials, stimulus Smiley will be presented as the reward (S2).
 In phase 2, stimulus Pink is presented five times and never rewarded.
 
 When the experiment is run, Red and White trials will be intermixed
@@ -117,14 +117,14 @@ other hand, will be performed in phase 2 after all phase 1 trials
 have been run.
 
 
-Phase Stimulus Trials Reward US
------ -------- ------ ------ --
-1     Red      20     0.9    Smiley
-1     White    20     0.1    Smiley
-2     Pink     5      0
+Phase S1    Trials S2Prob S2
+----- --    ------ ------ --
+1     Red   20     0.9    Smiley
+1     White 20     0.1    Smiley
+2     Pink  5      0
 
 Table: A simple `Phases.csv` to teach a discrimination between stimuli
-Red and White, and then test responding to Pink. Note that the US
+Red and White, and then test responding to Pink. Note that the S2
 field can be left empty if the Reward probability is 0. \label{phases}
 
 [^1]: In this manual, we use tables to display design files in a
@@ -147,21 +147,21 @@ equivalent, but the file in Table \ref{phases-order2} runs phase 2
 before phase 1.
 
 
-Phase Stimulus Trials Reward US
------ -------- ------ ------ --
-1     Red      20     0.9    Smiley
-2     Pink     5      0 
-1     White    20     0.1    Smiley
+Phase S1    Trials S2Prob S2
+----- --    ------ ------ --
+1     Red   20     0.9    Smiley
+2     Pink  5      0 
+1     White 20     0.1    Smiley
 
 Table: With this `Phases.csv` file, alex will run phase 1 before phase
 2 (cf. Table \ref{phases-order2}). \label{phases-order1}
 
 
-Phase Stimulus Trials Reward US
------ -------- ------ ------ --
-2     Pink     5      0
-1     Red      20     0.9    Smiley
-1     White    20     0.1    Smiley
+Phase S1    Trials S2Prob S2
+----- --    ------ ------ --
+2     Pink  5      0
+1     Red   20     0.9    Smiley
+1     White 20     0.1    Smiley
 
 Table: With this `Phases.csv` file, alex will run phase 2 before phase
 1 (cf. Table \ref{phases-order1}). \label{phases-order2}
@@ -354,56 +354,56 @@ Log             1
 
 Table: Sample `Parameters.csv` file with default values.
 
-**S1Duration** is the default duration of all the S1 stimuli,
-while **S2Duration** is the default duration of all S2 stimuli. All
-durations are in milliseconds. Note that you can set different
-durations for different stimuli by including a Duration column in the
-`Stimuli.csv` file. When using compound stimuli, all components must
-have the same duration.
+- **S1Duration** is the default duration of all the S1 stimuli,
+  while **S2Duration** is the default duration of all S2 stimuli. All
+  durations are in milliseconds. Note that you can set different
+  durations for different stimuli by including a Duration column in the
+  `Stimuli.csv` file. When using compound stimuli, all components must
+  have the same duration.
 
-**S1S2Interval** is the interval between S1 offset and S2 onset.
+- **S1S2Interval** is the interval between S1 offset and S2 onset.
 
-**ResponseTimeMin** and **ResponseTimeMax** define at what times
-within a trial subjects can respond. Responses outside this time
-window are considered invalid (see [Data format](#data-format))
-and preclude S2 presentation. If not specified, ResponseTimeMin is set
-to 0 and ResponseTimeMax to S1Duration, thus allowing responses at
-any time during the trial.
+- **ResponseTimeMin** and **ResponseTimeMax** define at what times
+  within a trial subjects can respond. Responses outside this time
+  window are considered invalid (see [Data format](#data-format))
+  and preclude S2 presentation. If not specified, ResponseTimeMin is set
+  to 0 and ResponseTimeMax to S1Duration, thus allowing responses at
+  any time during the trial.
   
-**MinITI** and **MaxITI** are the minimum and maximum values of the
-inter-trial interval. Each inter-trial interval will be drawn between
-these values with uniform distribution.
+- **MinITI** and **MaxITI** are the minimum and maximum values of the
+  inter-trial interval. Each inter-trial interval will be drawn between
+  these values with uniform distribution.
 
-**Response** is the key subjects are instructed to press if they want
-to respond. Note that this can also be set on a per-stimulus basis,
-see [here](#responses).
+- **Response** is the key subjects are instructed to press if they want
+  to respond. Note that this can also be set on a per-stimulus basis,
+  see [here](#responses).
 
 \label{maxresponses}
-**MaxResponses** is the maximum number of response a subject is
-allowed to make in one trial. There are essentially two useful
-settings. If you set this to 1 the trial ends with the first response
-(the S2 is presented if appropriate, of course). If you set it to an
-unrealistically large value, say 1000, you can record any number of
-responses per trial. Each of these may result in an S2 being
-presented, as described above. Note that you can set MaxReponses to a
-different value for different trial types, by including a MaxResponses
-column in `Phases.csv` (see the [section on text files](#textfiles)
-for an example). If a MaxResponses column exists, but the value is
-empty for some stimuli, the MaxResponses value in `Parameters.csv` will
-be looked up. If MaxResponses is not set there, it is given a default
-value of 1.
+- **MaxResponses** is the maximum number of response a subject is
+  allowed to make in one trial. There are essentially two useful
+  settings. If you set this to 1 the trial ends with the first response
+  (the S2 is presented if appropriate, of course). If you set it to an
+  unrealistically large value, say 1000, you can record any number of
+  responses per trial. Each of these may result in an S2 being
+  presented, as described above. Note that you can set MaxReponses to a
+  different value for different trial types, by including a MaxResponses
+  column in `Phases.csv` (see the [section on text files](#textfiles)
+  for an example). If a MaxResponses column exists, but the value is
+  empty for some stimuli, the MaxResponses value in `Parameters.csv` will
+  be looked up. If MaxResponses is not set there, it is given a default
+  value of 1.
 
 The next few parameters control the screen background color while the
 experiment is running and the color, font, and size of text used for
 instructions and other messages.
 
-The **Test** parameter, if set to 1, skips instructions and
-acquisition of demographic information. It is meant to quickly start
-the experiment during development.
+- The **Test** parameter, if set to 1, skips instructions and
+  acquisition of demographic information. It is meant to quickly start
+  the experiment during development.
 
-**Log** is a toggle for the logging feature, which records runtime
-messages for each subject in files named the same as corresponding
-data files, except with a `.log` suffix. Disabled by setting to 0.
+- **Log** is a toggle for the logging feature, which records runtime
+  messages for each subject in files named the same as corresponding
+  data files, except with a `.log` suffix. Disabled by setting to 0.
 
 
 <a name="notation"></a>

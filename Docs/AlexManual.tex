@@ -166,10 +166,10 @@ might look.\footnote{In this manual, we use tables to display design
   cannot read your CSV files.} The file describes an experiment with two
 phases, with each line defining one type of trial that occurs in a
 phase. Here, there are two kinds of trials in phase 1, specifying 20
-presentations of each of two stimuli, called Red and White. Red will be
-rewarded 90\% of the time, White only 10\%. On these trials, stimulus
-Smiley will be displayed as the reward (US). In phase 2, stimulus Pink
-is presented five times and never rewarded.
+presentations of each of two primary stimuli (S1), called Red and White.
+Red will be rewarded 90\% of the time, White only 10\%. On these trials,
+stimulus Smiley will be presented as the reward (S2). In phase 2,
+stimulus Pink is presented five times and never rewarded.
 
 When the experiment is run, Red and White trials will be intermixed
 randomly because they all pertain to phase 1. Pink trials, on the other
@@ -179,14 +179,14 @@ run.
 \begin{longtable}[c]{@{}lllll@{}}
 \caption{A simple \texttt{Phases.csv} to teach a discrimination between
 stimuli Red and White, and then test responding to Pink. Note that the
-US field can be left empty if the Reward probability is 0.
+S2 field can be left empty if the Reward probability is 0.
 \label{phases}}\tabularnewline
 \toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
+Phase & S1 & Trials & S2Prob & S2\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
+Phase & S1 & Trials & S2Prob & S2\tabularnewline
 \midrule
 \endhead
 1 & Red & 20 & 0.9 & Smiley\tabularnewline
@@ -210,11 +210,11 @@ example, the \texttt{Phases.csv} file in Tables \ref{phases} and
 before phase 2 (cf.~Table \ref{phases-order2}).
 \label{phases-order1}}\tabularnewline
 \toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
+Phase & S1 & Trials & S2Prob & S2\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
+Phase & S1 & Trials & S2Prob & S2\tabularnewline
 \midrule
 \endhead
 1 & Red & 20 & 0.9 & Smiley\tabularnewline
@@ -228,11 +228,11 @@ Phase & Stimulus & Trials & Reward & US\tabularnewline
 before phase 1 (cf.~Table \ref{phases-order1}).
 \label{phases-order2}}\tabularnewline
 \toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
+Phase & S1 & Trials & S2Prob & S2\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
+Phase & S1 & Trials & S2Prob & S2\tabularnewline
 \midrule
 \endhead
 2 & Pink & 5 & 0 &\tabularnewline
@@ -491,31 +491,34 @@ Log & 1\tabularnewline
 \bottomrule
 \end{longtable}
 
-\textbf{S1Duration} is the default duration of all the S1 stimuli, while
-\textbf{S2Duration} is the default duration of all S2 stimuli. All
-durations are in milliseconds. Note that you can set different durations
-for different stimuli by including a Duration column in the
-\texttt{Stimuli.csv} file. When using compound stimuli, all components
-must have the same duration.
+\begin{itemize}
+\item
+  \textbf{S1Duration} is the default duration of all the S1 stimuli,
+  while \textbf{S2Duration} is the default duration of all S2 stimuli.
+  All durations are in milliseconds. Note that you can set different
+  durations for different stimuli by including a Duration column in the
+  \texttt{Stimuli.csv} file. When using compound stimuli, all components
+  must have the same duration.
+\item
+  \textbf{S1S2Interval} is the interval between S1 offset and S2 onset.
+\item
+  \textbf{ResponseTimeMin} and \textbf{ResponseTimeMax} define at what
+  times within a trial subjects can respond. Responses outside this time
+  window are considered invalid (see \hyperref[data-format]{Data
+  format}) and preclude S2 presentation. If not specified,
+  ResponseTimeMin is set to 0 and ResponseTimeMax to S1Duration, thus
+  allowing responses at any time during the trial.
+\item
+  \textbf{MinITI} and \textbf{MaxITI} are the minimum and maximum values
+  of the inter-trial interval. Each inter-trial interval will be drawn
+  between these values with uniform distribution.
+\item
+  \textbf{Response} is the key subjects are instructed to press if they
+  want to respond. Note that this can also be set on a per-stimulus
+  basis, see \hyperref[responses]{here}.
+\end{itemize}
 
-\textbf{S1S2Interval} is the interval between S1 offset and S2 onset.
-
-\textbf{ResponseTimeMin} and \textbf{ResponseTimeMax} define at what
-times within a trial subjects can respond. Responses outside this time
-window are considered invalid (see \hyperref[data-format]{Data format})
-and preclude S2 presentation. If not specified, ResponseTimeMin is set
-to 0 and ResponseTimeMax to S1Duration, thus allowing responses at any
-time during the trial.
-
-\textbf{MinITI} and \textbf{MaxITI} are the minimum and maximum values
-of the inter-trial interval. Each inter-trial interval will be drawn
-between these values with uniform distribution.
-
-\textbf{Response} is the key subjects are instructed to press if they
-want to respond. Note that this can also be set on a per-stimulus basis,
-see \hyperref[responses]{here}.
-
-\label{maxresponses} \textbf{MaxResponses} is the maximum number of
+\label{maxresponses} - \textbf{MaxResponses} is the maximum number of
 response a subject is allowed to make in one trial. There are
 essentially two useful settings. If you set this to 1 the trial ends
 with the first response (the S2 is presented if appropriate, of course).
@@ -533,13 +536,17 @@ The next few parameters control the screen background color while the
 experiment is running and the color, font, and size of text used for
 instructions and other messages.
 
-The \textbf{Test} parameter, if set to 1, skips instructions and
-acquisition of demographic information. It is meant to quickly start the
-experiment during development.
-
-\textbf{Log} is a toggle for the logging feature, which records runtime
-messages for each subject in files named the same as corresponding data
-files, except with a \texttt{.log} suffix. Disabled by setting to 0.
+\begin{itemize}
+\item
+  The \textbf{Test} parameter, if set to 1, skips instructions and
+  acquisition of demographic information. It is meant to quickly start
+  the experiment during development.
+\item
+  \textbf{Log} is a toggle for the logging feature, which records
+  runtime messages for each subject in files named the same as
+  corresponding data files, except with a \texttt{.log} suffix. Disabled
+  by setting to 0.
+\end{itemize}
 
 \section{More about stimuli}\label{more-about-stimuli}
 

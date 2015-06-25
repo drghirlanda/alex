@@ -44,17 +44,17 @@
 <li><p><code>Parameters.csv</code> defines some global parameters such as screen background color, text color, font, and size, the duration of inter-trial intervals, and so on. It can also be used to define parameters that are the same for all stimuli, such as which key is used for responses.</p></li>
 </ul>
 <h2 id="the-phases.csv-file">The <code>Phases.csv</code> file</h2>
-<p>Suppose we want to teach subjects to discriminate a red square from a white square. We then want to know how subjects respond to, say, a pink square. Table  shows how a suitable <code>Phases.csv</code> file might look.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> The file describes an experiment with two phases, with each line defining one type of trial that occurs in a phase. Here, there are two kinds of trials in phase 1, specifying 20 presentations of each of two stimuli, called Red and White. Red will be rewarded 90% of the time, White only 10%. On these trials, stimulus Smiley will be displayed as the reward (US). In phase 2, stimulus Pink is presented five times and never rewarded.</p>
+<p>Suppose we want to teach subjects to discriminate a red square from a white square. We then want to know how subjects respond to, say, a pink square. Table  shows how a suitable <code>Phases.csv</code> file might look.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> The file describes an experiment with two phases, with each line defining one type of trial that occurs in a phase. Here, there are two kinds of trials in phase 1, specifying 20 presentations of each of two primary stimuli (S1), called Red and White. Red will be rewarded 90% of the time, White only 10%. On these trials, stimulus Smiley will be presented as the reward (S2). In phase 2, stimulus Pink is presented five times and never rewarded.</p>
 <p>When the experiment is run, Red and White trials will be intermixed randomly because they all pertain to phase 1. Pink trials, on the other hand, will be performed in phase 2 after all phase 1 trials have been run.</p>
 <table>
-<caption>A simple <code>Phases.csv</code> to teach a discrimination between stimuli Red and White, and then test responding to Pink. Note that the US field can be left empty if the Reward probability is 0. </caption>
+<caption>A simple <code>Phases.csv</code> to teach a discrimination between stimuli Red and White, and then test responding to Pink. Note that the S2 field can be left empty if the Reward probability is 0. </caption>
 <thead>
 <tr class="header">
 <th align="left">Phase</th>
-<th align="left">Stimulus</th>
+<th align="left">S1</th>
 <th align="left">Trials</th>
-<th align="left">Reward</th>
-<th align="left">US</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
 </tr>
 </thead>
 <tbody>
@@ -88,10 +88,10 @@
 <thead>
 <tr class="header">
 <th align="left">Phase</th>
-<th align="left">Stimulus</th>
+<th align="left">S1</th>
 <th align="left">Trials</th>
-<th align="left">Reward</th>
-<th align="left">US</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
 </tr>
 </thead>
 <tbody>
@@ -123,10 +123,10 @@
 <thead>
 <tr class="header">
 <th align="left">Phase</th>
-<th align="left">Stimulus</th>
+<th align="left">S1</th>
 <th align="left">Trials</th>
-<th align="left">Reward</th>
-<th align="left">US</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
 </tr>
 </thead>
 <tbody>
@@ -467,15 +467,19 @@
 </tr>
 </tbody>
 </table>
-<p><strong>S1Duration</strong> is the default duration of all the S1 stimuli, while <strong>S2Duration</strong> is the default duration of all S2 stimuli. All durations are in milliseconds. Note that you can set different durations for different stimuli by including a Duration column in the <code>Stimuli.csv</code> file. When using compound stimuli, all components must have the same duration.</p>
-<p><strong>S1S2Interval</strong> is the interval between S1 offset and S2 onset.</p>
-<p><strong>ResponseTimeMin</strong> and <strong>ResponseTimeMax</strong> define at what times within a trial subjects can respond. Responses outside this time window are considered invalid (see <a href="#data-format">Data format</a>) and preclude S2 presentation. If not specified, ResponseTimeMin is set to 0 and ResponseTimeMax to S1Duration, thus allowing responses at any time during the trial.</p>
-<p><strong>MinITI</strong> and <strong>MaxITI</strong> are the minimum and maximum values of the inter-trial interval. Each inter-trial interval will be drawn between these values with uniform distribution.</p>
-<p><strong>Response</strong> is the key subjects are instructed to press if they want to respond. Note that this can also be set on a per-stimulus basis, see <a href="#responses">here</a>.</p>
-<p> <strong>MaxResponses</strong> is the maximum number of response a subject is allowed to make in one trial. There are essentially two useful settings. If you set this to 1 the trial ends with the first response (the S2 is presented if appropriate, of course). If you set it to an unrealistically large value, say 1000, you can record any number of responses per trial. Each of these may result in an S2 being presented, as described above. Note that you can set MaxReponses to a different value for different trial types, by including a MaxResponses column in <code>Phases.csv</code> (see the <a href="#textfiles">section on text files</a> for an example). If a MaxResponses column exists, but the value is empty for some stimuli, the MaxResponses value in <code>Parameters.csv</code> will be looked up. If MaxResponses is not set there, it is given a default value of 1.</p>
+<ul>
+<li><p><strong>S1Duration</strong> is the default duration of all the S1 stimuli, while <strong>S2Duration</strong> is the default duration of all S2 stimuli. All durations are in milliseconds. Note that you can set different durations for different stimuli by including a Duration column in the <code>Stimuli.csv</code> file. When using compound stimuli, all components must have the same duration.</p></li>
+<li><p><strong>S1S2Interval</strong> is the interval between S1 offset and S2 onset.</p></li>
+<li><p><strong>ResponseTimeMin</strong> and <strong>ResponseTimeMax</strong> define at what times within a trial subjects can respond. Responses outside this time window are considered invalid (see <a href="#data-format">Data format</a>) and preclude S2 presentation. If not specified, ResponseTimeMin is set to 0 and ResponseTimeMax to S1Duration, thus allowing responses at any time during the trial.</p></li>
+<li><p><strong>MinITI</strong> and <strong>MaxITI</strong> are the minimum and maximum values of the inter-trial interval. Each inter-trial interval will be drawn between these values with uniform distribution.</p></li>
+<li><p><strong>Response</strong> is the key subjects are instructed to press if they want to respond. Note that this can also be set on a per-stimulus basis, see <a href="#responses">here</a>.</p></li>
+</ul>
+<p> - <strong>MaxResponses</strong> is the maximum number of response a subject is allowed to make in one trial. There are essentially two useful settings. If you set this to 1 the trial ends with the first response (the S2 is presented if appropriate, of course). If you set it to an unrealistically large value, say 1000, you can record any number of responses per trial. Each of these may result in an S2 being presented, as described above. Note that you can set MaxReponses to a different value for different trial types, by including a MaxResponses column in <code>Phases.csv</code> (see the <a href="#textfiles">section on text files</a> for an example). If a MaxResponses column exists, but the value is empty for some stimuli, the MaxResponses value in <code>Parameters.csv</code> will be looked up. If MaxResponses is not set there, it is given a default value of 1.</p>
 <p>The next few parameters control the screen background color while the experiment is running and the color, font, and size of text used for instructions and other messages.</p>
-<p>The <strong>Test</strong> parameter, if set to 1, skips instructions and acquisition of demographic information. It is meant to quickly start the experiment during development.</p>
-<p><strong>Log</strong> is a toggle for the logging feature, which records runtime messages for each subject in files named the same as corresponding data files, except with a <code>.log</code> suffix. Disabled by setting to 0.</p>
+<ul>
+<li><p>The <strong>Test</strong> parameter, if set to 1, skips instructions and acquisition of demographic information. It is meant to quickly start the experiment during development.</p></li>
+<li><p><strong>Log</strong> is a toggle for the logging feature, which records runtime messages for each subject in files named the same as corresponding data files, except with a <code>.log</code> suffix. Disabled by setting to 0.</p></li>
+</ul>
 <p><a name="notation"></a></p>
 <h1 id="more-about-stimuli">More about stimuli</h1>
 <p>We mentioned above one bit of special notation in the definition of stimuli, namely the construction <code>*</code> (star) + stimulus name (see the end of the previous section). There are two more bits of special notation, explained next.</p>

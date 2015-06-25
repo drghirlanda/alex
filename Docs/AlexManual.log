@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.30)  25 JUN 2015 13:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.30)  25 JUN 2015 14:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -788,7 +788,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 166.
 [3] [4] [5] [6] [7] [8] [9]
-Underfull \hbox (badness 1067) in paragraph at lines 764--776
+Underfull \hbox (badness 1067) in paragraph at lines 771--783
 []\T1/ptm/m/n/10.95 Modkeys: \T1/cmtt/m/n/10.95 <lshift>\T1/ptm/m/n/10.95 , \T1
 /cmtt/m/n/10.95 <rshift>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <lctrl>\T1/ptm/m
 /n/10.95 , \T1/cmtt/m/n/10.95 <rctrl>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <la
@@ -798,7 +798,7 @@ n/10.95 <lmeta>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <rmeta>\T1/ptm/m/n/10.95
  []
 
 
-Underfull \hbox (badness 1859) in paragraph at lines 776--786
+Underfull \hbox (badness 1859) in paragraph at lines 783--793
 []\T1/ptm/m/n/10.95 Navigation, func-tion keys: \T1/cmtt/m/n/10.95 <up>\T1/ptm/
 m/n/10.95 , \T1/cmtt/m/n/10.95 <down>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <le
 ft>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <right>\T1/ptm/m/n/10.95 , \T1/cmtt/m
@@ -807,24 +807,24 @@ ft>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <right>\T1/ptm/m/n/10.95 , \T1/cmtt/m
  []
 
 [10] [11] [12]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 988.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 995.
  [13]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 988.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 995.
  (./AlexManual.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 988.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 988.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 995.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 995.
 Package rerunfilecheck Info: File `AlexManual.out' has not changed.
 (rerunfilecheck)             Checksum: AF2554B8EEDB5BEC6AF452FEF857400E;1086.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 988.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 995.
  ) 
 Here is how much of TeX's memory you used:
- 8888 strings out of 494522
- 131501 string characters out of 6167205
- 250683 words of memory out of 5000000
+ 8885 strings out of 494522
+ 131477 string characters out of 6167205
+ 251686 words of memory out of 5000000
  11858 multiletter control sequences out of 15000+600000
- 74409 words of font info for 198 fonts, out of 8000000 for 9000
+ 74279 words of font info for 196 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
- 31i,8n,38p,345b,447s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 31i,8n,38p,345b,433s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2014basic/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/lo
 cal/texlive/2014basic/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr
 /local/texlive/2014basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
@@ -834,7 +834,7 @@ b></usr/local/texlive/2014basic/texmf-dist/fonts/type1/public/cm-super/sftt1095
 200.pfb></usr/local/texlive/2014basic/texmf-dist/fonts/type1/urw/times/utmb8a.p
 fb></usr/local/texlive/2014basic/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></
 usr/local/texlive/2014basic/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on AlexManual.pdf (13 pages, 174472 bytes).
+Output written on AlexManual.pdf (13 pages, 174612 bytes).
 PDF statistics:
  267 PDF objects out of 1000 (max. 8388607)
  232 compressed objects within 3 object streams
