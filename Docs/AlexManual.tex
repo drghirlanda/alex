@@ -67,6 +67,9 @@ the following subfolders:
 \item
   \textbf{Data}: This folder holds the data collected during experiment
   runs.
+\item
+  \textbf{Logs}: This one holds runtime messages recorded for each
+  subject.
 \end{itemize}
 
 The program \texttt{alex-init} generates a bare-bones experiment so that
@@ -77,8 +80,8 @@ alex-init -v <experiment name>
 \end{verbatim}
 
 This creates folder \texttt{\textless{}experiment name\textgreater{}}
-with the above mentioned subfolders (except Data, which is created on
-first run) and skeleton configuration files.
+with the above mentioned subfolders (except Data and Logs, which are
+created on first run) and skeleton configuration files.
 
 \subsection{Acknowledgments}\label{acknowledgements}
 
@@ -97,7 +100,8 @@ alex -v <path to folder>
 \end{verbatim}
 
 The folder is expected to have Design and Materials subfolders with
-appropriate files. A Data subfolder will be created if not present.
+appropriate files. Data and Logs subfolders will be created if not
+present.
 
 Alex has been designed so that multiple instances of an experiment can
 be run simultaneously. This feature is useful when the experiment folder
@@ -469,9 +473,9 @@ Parameter & Value\tabularnewline
 Parameter & Value\tabularnewline
 \midrule
 \endhead
-CSDuration & 4000\tabularnewline
-CSUSInterval & 0\tabularnewline
-USDuration & 400\tabularnewline
+S1Duration & 4000\tabularnewline
+S1S2Interval & 0\tabularnewline
+S2Duration & 400\tabularnewline
 ResponseTimeMin & 0\tabularnewline
 ResponseTimeMax & 4000\tabularnewline
 MinITI & 1000\tabularnewline
@@ -483,24 +487,25 @@ ForegroundColor & black\tabularnewline
 FontName & Vera\tabularnewline
 FontSize & 36\tabularnewline
 Test & 0\tabularnewline
+Log & 1\tabularnewline
 \bottomrule
 \end{longtable}
 
-\textbf{CSDuration} is the default duration of all the non-US stimuli,
-while \textbf{USDuration} is the default duration of all US stimuli. All
+\textbf{S1Duration} is the default duration of all the S1 stimuli, while
+\textbf{S2Duration} is the default duration of all S2 stimuli. All
 durations are in milliseconds. Note that you can set different durations
 for different stimuli by including a Duration column in the
 \texttt{Stimuli.csv} file. When using compound stimuli, all components
 must have the same duration.
 
-\textbf{CSUSInterval} is the interval between CS offset and US onset.
+\textbf{S1S2Interval} is the interval between S1 offset and S2 onset.
 
 \textbf{ResponseTimeMin} and \textbf{ResponseTimeMax} define at what
 times within a trial subjects can respond. Responses outside this time
-window are registered with a special code (see
-\hyperref[data-format]{Data format}) and no USs are delivered. If not
-specified, ResponseTimeMin is set to 0 and ResponseTimeMax to
-CSDuration, thus allowing responses at any time during the trial.
+window are considered invalid (see \hyperref[data-format]{Data format})
+and preclude S2 presentation. If not specified, ResponseTimeMin is set
+to 0 and ResponseTimeMax to S1Duration, thus allowing responses at any
+time during the trial.
 
 \textbf{MinITI} and \textbf{MaxITI} are the minimum and maximum values
 of the inter-trial interval. Each inter-trial interval will be drawn
@@ -513,10 +518,10 @@ see \hyperref[responses]{here}.
 \label{maxresponses} \textbf{MaxResponses} is the maximum number of
 response a subject is allowed to make in one trial. There are
 essentially two useful settings. If you set this to 1 the trial ends
-with the first response (the US is delivered if appropriate, of course).
+with the first response (the S2 is presented if appropriate, of course).
 If you set it to an unrealistically large value, say 1000, you can
-record any number of responses per trial. Each of these may result in
-the US being delivered, as described above. Note that you can set
+record any number of responses per trial. Each of these may result in an
+S2 being presented, as described above. Note that you can set
 MaxReponses to a different value for different trial types, by including
 a MaxResponses column in \texttt{Phases.csv} (see the
 \hyperref[textfiles]{section on text files} for an example). If a
@@ -531,6 +536,10 @@ instructions and other messages.
 The \textbf{Test} parameter, if set to 1, skips instructions and
 acquisition of demographic information. It is meant to quickly start the
 experiment during development.
+
+\textbf{Log} is a toggle for the logging feature, which records runtime
+messages for each subject in files named the same as corresponding data
+files, except with a \texttt{.log} suffix. Disabled by setting to 0.
 
 \section{More about stimuli}\label{more-about-stimuli}
 

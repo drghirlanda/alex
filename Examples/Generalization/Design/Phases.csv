@@ -1,4 +1,4 @@
-Phase,Stimuli,US,Reward,Trials,MaxResponses
+Phase,S1,S2,S2Prob,Trials,MaxResponses
 Start,Start,,,1,1
 Training,S4,Smiley,0.9,20,
 Training,X,Smiley,0.1,20,

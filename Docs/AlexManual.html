@@ -21,16 +21,17 @@
 <li><p><strong>Design</strong>: This folder contains the files that specify experimental design, such as which stimuli to use, the structure of trials, and different treatments for subjects. See <a href="#configuration-files">Configuration files</a>.</p></li>
 <li><p><strong>Materials</strong>: Here you have any image, sound, or text files you need for your experiment, including an Instructions.txt file for the initial instructions (see the <a href="#textfiles">section on text files</a>).</p></li>
 <li><p><strong>Data</strong>: This folder holds the data collected during experiment runs.</p></li>
+<li><p><strong>Logs</strong>: This one holds runtime messages recorded for each subject.</p></li>
 </ul>
 <p>The program <code>alex-init</code> generates a bare-bones experiment so that you know what files you need. It is run like this:</p>
 <pre><code>alex-init -v &lt;experiment name&gt;</code></pre>
-<p>This creates folder <code>&lt;experiment name&gt;</code> with the above mentioned subfolders (except Data, which is created on first run) and skeleton configuration files.</p>
+<p>This creates folder <code>&lt;experiment name&gt;</code> with the above mentioned subfolders (except Data and Logs, which are created on first run) and skeleton configuration files.</p>
 <h2 id="acknowledgements">Acknowledgments</h2>
 <p>Alex is written using Shane Mueller's <a href="http://pebl.sourceforge.net">Psychology Experiment Building Language</a> (PEBL). Many thanks to Shane for sharing PEBL!</p>
 <h1 id="running">Starting and stopping alex</h1>
 <p>From the folder where the Design and Materials folders are, you can just type <code>alex</code> in the command line. You can also run experiments in a different folder using:</p>
 <pre><code>alex -v &lt;path to folder&gt;</code></pre>
-<p>The folder is expected to have Design and Materials subfolders with appropriate files. A Data subfolder will be created if not present.</p>
+<p>The folder is expected to have Design and Materials subfolders with appropriate files. Data and Logs subfolders will be created if not present.</p>
 <p>Alex has been designed so that multiple instances of an experiment can be run simultaneously. This feature is useful when the experiment folder is shared among multiple computers, as it may occur in a lab. All instances of alex will read the same design files, and in particular the same <code>Groups.csv</code> file which describes how to run subjects. Different instances, however, will run different subjects and will not overwrite each other's data files.</p>
 <p>The fact that a subject has been run is signaled by the existence of the corresponding data file (see <a href="#data-format">Data format</a>). If the experiment is interrupted before it completes, alex will still consider that subject as having been run. It is up to you to check that data files are complete (that they have the appropriate number of lines, for example). Although this may be inconvenient at times, it is hard to improve upon this situation because there is no way for alex to decide whether important data would be overwritten by re-running a subject. If you decide a data file is worthless, either remove it or rename it with something like an 'incomplete-' prefix, and alex will automatically re-run that subject.</p>
 <p>To interrupt a running experiment, you can use the interrupt key combination for PEBL: <code>Ctrl+Alt+Shift+\</code>.</p>
@@ -405,15 +406,15 @@
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">CSDuration</td>
+<td align="left">S1Duration</td>
 <td align="left">4000</td>
 </tr>
 <tr class="even">
-<td align="left">CSUSInterval</td>
+<td align="left">S1S2Interval</td>
 <td align="left">0</td>
 </tr>
 <tr class="odd">
-<td align="left">USDuration</td>
+<td align="left">S2Duration</td>
 <td align="left">400</td>
 </tr>
 <tr class="even">
@@ -460,16 +461,21 @@
 <td align="left">Test</td>
 <td align="left">0</td>
 </tr>
+<tr class="odd">
+<td align="left">Log</td>
+<td align="left">1</td>
+</tr>
 </tbody>
 </table>
-<p><strong>CSDuration</strong> is the default duration of all the non-US stimuli, while <strong>USDuration</strong> is the default duration of all US stimuli. All durations are in milliseconds. Note that you can set different durations for different stimuli by including a Duration column in the <code>Stimuli.csv</code> file. When using compound stimuli, all components must have the same duration.</p>
-<p><strong>CSUSInterval</strong> is the interval between CS offset and US onset.</p>
-<p><strong>ResponseTimeMin</strong> and <strong>ResponseTimeMax</strong> define at what times within a trial subjects can respond. Responses outside this time window are registered with a special code (see <a href="#data-format">Data format</a>) and no USs are delivered. If not specified, ResponseTimeMin is set to 0 and ResponseTimeMax to CSDuration, thus allowing responses at any time during the trial.</p>
+<p><strong>S1Duration</strong> is the default duration of all the S1 stimuli, while <strong>S2Duration</strong> is the default duration of all S2 stimuli. All durations are in milliseconds. Note that you can set different durations for different stimuli by including a Duration column in the <code>Stimuli.csv</code> file. When using compound stimuli, all components must have the same duration.</p>
+<p><strong>S1S2Interval</strong> is the interval between S1 offset and S2 onset.</p>
+<p><strong>ResponseTimeMin</strong> and <strong>ResponseTimeMax</strong> define at what times within a trial subjects can respond. Responses outside this time window are considered invalid (see <a href="#data-format">Data format</a>) and preclude S2 presentation. If not specified, ResponseTimeMin is set to 0 and ResponseTimeMax to S1Duration, thus allowing responses at any time during the trial.</p>
 <p><strong>MinITI</strong> and <strong>MaxITI</strong> are the minimum and maximum values of the inter-trial interval. Each inter-trial interval will be drawn between these values with uniform distribution.</p>
 <p><strong>Response</strong> is the key subjects are instructed to press if they want to respond. Note that this can also be set on a per-stimulus basis, see <a href="#responses">here</a>.</p>
-<p> <strong>MaxResponses</strong> is the maximum number of response a subject is allowed to make in one trial. There are essentially two useful settings. If you set this to 1 the trial ends with the first response (the US is delivered if appropriate, of course). If you set it to an unrealistically large value, say 1000, you can record any number of responses per trial. Each of these may result in the US being delivered, as described above. Note that you can set MaxReponses to a different value for different trial types, by including a MaxResponses column in <code>Phases.csv</code> (see the <a href="#textfiles">section on text files</a> for an example). If a MaxResponses column exists, but the value is empty for some stimuli, the MaxResponses value in <code>Parameters.csv</code> will be looked up. If MaxResponses is not set there, it is given a default value of 1.</p>
+<p> <strong>MaxResponses</strong> is the maximum number of response a subject is allowed to make in one trial. There are essentially two useful settings. If you set this to 1 the trial ends with the first response (the S2 is presented if appropriate, of course). If you set it to an unrealistically large value, say 1000, you can record any number of responses per trial. Each of these may result in an S2 being presented, as described above. Note that you can set MaxReponses to a different value for different trial types, by including a MaxResponses column in <code>Phases.csv</code> (see the <a href="#textfiles">section on text files</a> for an example). If a MaxResponses column exists, but the value is empty for some stimuli, the MaxResponses value in <code>Parameters.csv</code> will be looked up. If MaxResponses is not set there, it is given a default value of 1.</p>
 <p>The next few parameters control the screen background color while the experiment is running and the color, font, and size of text used for instructions and other messages.</p>
 <p>The <strong>Test</strong> parameter, if set to 1, skips instructions and acquisition of demographic information. It is meant to quickly start the experiment during development.</p>
+<p><strong>Log</strong> is a toggle for the logging feature, which records runtime messages for each subject in files named the same as corresponding data files, except with a <code>.log</code> suffix. Disabled by setting to 0.</p>
 <p><a name="notation"></a></p>
 <h1 id="more-about-stimuli">More about stimuli</h1>
 <p>We mentioned above one bit of special notation in the definition of stimuli, namely the construction <code>*</code> (star) + stimulus name (see the end of the previous section). There are two more bits of special notation, explained next.</p>

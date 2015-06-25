@@ -1,7 +1,7 @@
 Parameter,Value
-CSDuration,1000
-CSUSInterval,0
-USDuration,250
+S1Duration,1000
+S1S2Interval,0
+S2Duration,250
 MinITI,1000
 MaxITI,2000
 MaxResponses,100

@@ -24,13 +24,15 @@ To build a new experiment you create a dedicated folder, and within it the follo
 
 - **Data**: This folder holds the data collected during experiment runs.
 
+- **Logs**: This one holds runtime messages recorded for each subject.
+
 The program `alex-init` generates a bare-bones experiment so that you
 know what files you need. It is run like this:
 
     alex-init -v <experiment name>
 
 This creates folder `<experiment name>` with the above mentioned
-subfolders (except Data, which is created on first run) and skeleton
+subfolders (except Data and Logs, which are created on first run) and skeleton
 configuration files.
 
 ## Acknowledgments {#acknowledgements}
@@ -48,8 +50,8 @@ in a different folder using:
 
     alex -v <path to folder>
 
-The folder is expected to have Design and Materials subfolders
-with appropriate files. A Data subfolder will be created if not present.
+The folder is expected to have Design and Materials subfolders with
+appropriate files. Data and Logs subfolders will be created if not present.
 
 Alex has been designed so that multiple instances of an experiment can
 be run simultaneously. This feature is useful when the experiment
@@ -334,9 +336,9 @@ format, displayed here as a table for legibility):
 
 Parameter       Value
 ---------       -----
-CSDuration      4000
-CSUSInterval    0
-USDuration      400
+S1Duration      4000
+S1S2Interval    0
+S2Duration      400
 ResponseTimeMin 0
 ResponseTimeMax 4000
 MinITI          1000
@@ -348,24 +350,25 @@ ForegroundColor black
 FontName        Vera
 FontSize        36
 Test            0
+Log             1
 
 Table: Sample `Parameters.csv` file with default values.
 
-**CSDuration** is the default duration of all the non-US stimuli,
-while **USDuration** is the default duration of all US stimuli. All
+**S1Duration** is the default duration of all the S1 stimuli,
+while **S2Duration** is the default duration of all S2 stimuli. All
 durations are in milliseconds. Note that you can set different
 durations for different stimuli by including a Duration column in the
 `Stimuli.csv` file. When using compound stimuli, all components must
 have the same duration.
 
-**CSUSInterval** is the interval between CS offset and US onset.
+**S1S2Interval** is the interval between S1 offset and S2 onset.
 
 **ResponseTimeMin** and **ResponseTimeMax** define at what times
 within a trial subjects can respond. Responses outside this time
-window are registered with a special code (see [Data
-format](#data-format)) and no USs are delivered. If not specified,
-ResponseTimeMin is set to 0 and ResponseTimeMax to CSDuration, thus
-allowing responses at any time during the trial.
+window are considered invalid (see [Data format](#data-format))
+and preclude S2 presentation. If not specified, ResponseTimeMin is set
+to 0 and ResponseTimeMax to S1Duration, thus allowing responses at
+any time during the trial.
   
 **MinITI** and **MaxITI** are the minimum and maximum values of the
 inter-trial interval. Each inter-trial interval will be drawn between
@@ -379,10 +382,10 @@ see [here](#responses).
 **MaxResponses** is the maximum number of response a subject is
 allowed to make in one trial. There are essentially two useful
 settings. If you set this to 1 the trial ends with the first response
-(the US is delivered if appropriate, of course). If you set it to an
+(the S2 is presented if appropriate, of course). If you set it to an
 unrealistically large value, say 1000, you can record any number of
-responses per trial. Each of these may result in the US being
-delivered, as described above. Note that you can set MaxReponses to a
+responses per trial. Each of these may result in an S2 being
+presented, as described above. Note that you can set MaxReponses to a
 different value for different trial types, by including a MaxResponses
 column in `Phases.csv` (see the [section on text files](#textfiles)
 for an example). If a MaxResponses column exists, but the value is
@@ -397,6 +400,10 @@ instructions and other messages.
 The **Test** parameter, if set to 1, skips instructions and
 acquisition of demographic information. It is meant to quickly start
 the experiment during development.
+
+**Log** is a toggle for the logging feature, which records runtime
+messages for each subject in files named the same as corresponding
+data files, except with a `.log` suffix. Disabled by setting to 0.
 
 
 <a name="notation"></a>

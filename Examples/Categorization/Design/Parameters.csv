@@ -1,7 +1,7 @@
 Parameter,Value,Description
-CSDuration,2000,"Duration of CSs, unless specified in Stimuli.csv"
-CSUSInterval,0,Interval between CS offset and US onset
-USDuration,500,"Duration of Uss, unless specified in Stimuli.csv"
+S1Duration,2000,"Duration of CSs, unless specified in Stimuli.csv"
+S1S2Interval,0,Interval between CS offset and US onset
+S2Duration,500,"Duration of Uss, unless specified in Stimuli.csv"
 MinITI,1000,Minimum intertrial interval
 MaxITI,2000,Maximum intertrial interval
 MaxResponses,1,Maximum number of responses allowed in a trial
