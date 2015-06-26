@@ -11,7 +11,7 @@
 \contentsline {section}{More about stimuli}{8}{table.10}
 \contentsline {subsection}{Superposition of stimuli}{9}{table.13}
 \contentsline {subsection}{Stimuli that are always present during a phase}{9}{table.13}
-\contentsline {section}{More about phases}{10}{table.13}
+\contentsline {section}{More about phases}{9}{table.13}
 \contentsline {section}{Responses and classical vs.\nobreakspace {}instrumental trials}{10}{table.15}
 \contentsline {section}{Instructions and other text displays}{11}{table.17}
 \contentsline {section}{Data Format}{12}{table.19}

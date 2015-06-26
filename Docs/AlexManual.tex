@@ -166,8 +166,8 @@ might look.\footnote{In this manual, we use tables to display design
   cannot read your CSV files.} The file describes an experiment with two
 phases, with each line defining one type of trial that occurs in a
 phase. Here, there are two kinds of trials in phase 1, specifying 20
-presentations of each of two primary stimuli (S1), called Red and White.
-Red will be rewarded 90\% of the time, White only 10\% (specified by
+presentations of each of two stimuli (S1s) called Red and White. Red
+will be rewarded 90\% of the time, White only 10\% (specified by
 S2Prob). On these trials, stimulus Smiley will be presented as the
 reward (S2). In phase 2, stimulus Pink is presented five times and never
 rewarded.
@@ -180,7 +180,7 @@ run.
 \begin{longtable}[c]{@{}lllll@{}}
 \caption{A simple \texttt{Phases.csv} to teach a discrimination between
 stimuli Red and White, and then test responding to Pink. Note that the
-S2 field can be left empty if the probability of S2 presentation is 0.
+S2 field can be left empty if probability of S2 presentation is 0.
 \label{phases}}\tabularnewline
 \toprule
 Phase & S1 & Trials & S2Prob & S2\tabularnewline
@@ -204,11 +204,10 @@ names like Training, Testing, etc). To be more precise, phases are run
 in the order in which their \emph{first} stimuli are defined. For
 example, the \texttt{Phases.csv} files in Tables \ref{phases} and
 \ref{phases-order1} are equivalent, but the file in Table
-\ref{phases-order2} runs phase 2 before phase 1.
+\ref{phases-order2} runs Phase 2 before Phase 1.
 
 \begin{longtable}[c]{@{}lllll@{}}
-\caption{With this \texttt{Phases.csv} file, alex will run phase 1
-before phase 2 (cf.~Table \ref{phases-order2}).
+\caption{With this \texttt{Phases.csv} file, Phase 1 will be run first.
 \label{phases-order1}}\tabularnewline
 \toprule
 Phase & S1 & Trials & S2Prob & S2\tabularnewline
@@ -225,8 +224,7 @@ Phase & S1 & Trials & S2Prob & S2\tabularnewline
 \end{longtable}
 
 \begin{longtable}[c]{@{}lllll@{}}
-\caption{With this \texttt{Phases.csv} file, alex will run phase 2
-before phase 1 (cf.~Table \ref{phases-order1}).
+\caption{With this \texttt{Phases.csv} file, Phase 2 will be run first.
 \label{phases-order2}}\tabularnewline
 \toprule
 Phase & S1 & Trials & S2Prob & S2\tabularnewline
@@ -248,9 +246,9 @@ The above experiment and other examples in this manual refer to reward
 training, in which the Smiley is an unconditioned stimulus (US) that
 serves to reinforce the conditioned stimuli (CSs) designated as S1s. We
 maintain the more generic S1/S2 terminology, however, in order to have
-alex equally applicable to trials where both stimuli are neutral (as,
-for example, in higher-order conditioning), and where S2 would not be
-considered a reward.
+alex equally applicable to trials where both stimuli are neutral (as in
+higher-order conditioning), and where S2 would not be considered a
+reward.
 
 \subsection{The \texttt{Stimuli.csv} file}\label{the-stimuli.csv-file}
 
@@ -308,12 +306,11 @@ is a detailed explanation:
     textfile: name of a file in the Materials folder where the desired
     text is stored.
   \item
-    image or sound: name of a file in the Materials folder that contains
-    the image or sound. An optional zoom factor can be provided to scale
-    the image to a desired size. It should be separated from the
-    filename by a \texttt{+} sign. The following stylized faces
-    (smileys) come with alex and you can use them without having them in
-    the Materials folder:
+    image or sound: name of an image or sound file in the Materials
+    folder. An optional zoom factor, separated from the filename by a
+    \texttt{+} (plus), can be provided to scale an image to a desired
+    size. The following stylized faces (smileys) come with alex and you
+    can use them without having them in the Materials folder:
 
     \begin{itemize}
     \item
@@ -336,9 +333,9 @@ is a detailed explanation:
 \item
   \textbf{Color}: The color of squares, circles, or text. This field is
   ignored for images and sounds. Colors can either be named or given as
-  an RGB triplet, delimited by hyphens (\texttt{-}). In the case of
-  text, you can specify the background as well as the foreground color
-  by writing the color in the form Color1+Color2, where Color1 will be
+  RGB triplets, delimited by hyphens (\texttt{-}). In the case of text,
+  you can specify the background as well as the foreground color by
+  writing the color in the form Color1+Color2, where Color1 is the
   foreground and Color2 the background. If no foreground or background
   color is given, the defaults set in \texttt{Parameters.csv} are used.
 
@@ -349,29 +346,27 @@ is a detailed explanation:
 \item
   \textbf{XOffset} and \textbf{YOffset}: Offset from the center of the
   screen, in pixels. In Table \ref{stimuli}, all stimuli are centered
-  except for the reward stimulus Smiley, which is displayed 150 pixels
-  above center (negative Y values place stimuli above center, negative X
-  values place them left of center).
+  except for Smiley, which is displayed 150 pixels above center
+  (negative Y values place stimuli above center, negative X values place
+  them left of center).
 \end{itemize}
 
 \subsection{The \texttt{Groups.csv} file}\label{the-groups.csv-file}
 
 The \texttt{Groups.csv} file contains information about the experimental
-groups you want to run. If all subjects undergo the same treatment, you
-only need to specify one group and its size. The file in Table
-\ref{subjects}, for example, instructs alex to run a single group of 10
-subjects (groups can be numbered or named, as is most convenient to
-you). Often, however, subjects need to be divided into different
-treatment groups. Any of the fields in the \texttt{Stimuli.csv} file can
-be specified on per-subject bases. If you want to test two shades of
-pink, for example, you would extend the \texttt{Stimuli.csv} file in
-Table \ref{stimuli-color}. The special value \texttt{*} in the table
-indicates that the color of stimulus Pink will be looked up, for each
-subject, in the column PinkColor of the \texttt{Groups.csv} file (Table
-\ref{subjects-color}). This syntax is available for all stimulus
-properties. For example, to change the size of Red square across
-subjects you would use the \texttt{Groups.csv} and \texttt{Stimuli.csv}
-files in Tables \ref{subjects-color-parameters} and
+groups. If all subjects undergo the same treatment, you only need to
+specify one group and its size. The file in Table \ref{subjects}
+instructs alex to run a single group of 10 subjects (groups can be
+numbered or named, as is most convenient to you). Often, however,
+subjects need to be divided into different treatment groups. If you want
+to test, say, two shades of pink, you would extend the
+\texttt{Stimuli.csv} file in Table \ref{stimuli-color}. The special
+value \texttt{*} here indicates that the color of stimulus Pink will be
+looked up, for each subject, in the column PinkColor of the
+\texttt{Groups.csv} file (Table \ref{subjects-color}). This syntax is
+available for all stimulus properties. For example, to vary the size of
+the Red square across subjects you would use the \texttt{Groups.csv} and
+\texttt{Stimuli.csv} files in Tables \ref{subjects-color-parameters} and
 \ref{stimuli-color-parameters}.
 
 \begin{longtable}[c]{@{}ll@{}}
@@ -409,7 +404,7 @@ Smiley & image & smile-o-white.png & & 0 & -150\tabularnewline
 \end{longtable}
 
 \begin{longtable}[c]{@{}lll@{}}
-\caption{A \texttt{Groups.csv} file instructing alex to run 6 subjects
+\caption{A \texttt{Groups.csv} file instructing alex to run 20 subjects
 split in two treatment groups with different Color attributes for the
 Pink stimulus (see Table \ref{stimuli-color}).
 \label{subjects-color}}\tabularnewline
@@ -448,8 +443,8 @@ Smiley & image & smile-o-white.png & & 0 & -150\tabularnewline
 
 \begin{longtable}[c]{@{}llll@{}}
 \caption{A \texttt{Groups.csv} file instructing alex to run 4
-experimental groups. Each group receives a unique combination of
-PinkColor and RedParameters (see Table \ref{stimuli-color-parameters}).
+experimental groups, each receiving a unique combination of PinkColor
+and RedParameters (see Table \ref{stimuli-color-parameters}).
 \label{subjects-color-parameters}}\tabularnewline
 \toprule
 Group & Size & PinkColor & RedParameters\tabularnewline
@@ -470,8 +465,7 @@ Group & Size & PinkColor & RedParameters\tabularnewline
 file}\label{global}}
 
 The \texttt{Parameters.csv} file contains some parameters that affect
-the whole experiment. Here is a sample file (as above, the file is in
-CSV format, displayed here as a table for legibility):
+the whole experiment. Here is a sample file:
 
 \begin{longtable}[c]{@{}ll@{}}
 \caption{Sample \texttt{Parameters.csv} file with default
@@ -504,9 +498,9 @@ Log & 1\tabularnewline
 
 \begin{itemize}
 \item
-  \textbf{S1Duration} is the default duration of all the S1 stimuli,
-  while \textbf{S2Duration} is the default duration of all S2 stimuli.
-  All durations are in milliseconds. Note that you can set different
+  \textbf{S1Duration} is the default duration of all S1 stimuli, while
+  \textbf{S2Duration} is the default duration of all S2 stimuli. All
+  durations are in milliseconds. Note that you can set different
   durations for different stimuli by including a Duration column in the
   \texttt{Stimuli.csv} file. When using compound stimuli, all components
   must have the same duration.
@@ -525,20 +519,20 @@ Log & 1\tabularnewline
   between these values with uniform distribution.
 \item
   \textbf{Response} is the key subjects are instructed to press if they
-  want to respond. Note that this can also be set on a per-stimulus
-  basis, see \hyperref[responses]{here}. \label{maxresponses}
+  want to respond. Note that this can also be set on a per-trial basis,
+  see \hyperref[responses]{here}. \label{maxresponses}
 \item
   \textbf{MaxResponses} is the maximum number of response a subject is
   allowed to make in one trial. There are essentially two useful
-  settings. If you set this to 1 the trial ends with the first response
+  settings. If you set this to 1, the trial ends with the first response
   (the S2 is presented if appropriate, of course). If you set it to an
   unrealistically large value, say 1000, you can record any number of
-  responses per trial. Each of these may result in an S2 being
-  presented, as described above. Note that you can set MaxReponses to a
-  different value for different trial types, by including a MaxResponses
-  column in \texttt{Phases.csv} (see the \hyperref[textfiles]{section on
-  text files} for an example). If a MaxResponses column exists, but the
-  value is empty for some stimuli, the MaxResponses value in
+  responses per trial, each of which may result in an S2 being
+  presented. Note that you can set MaxReponses to a different value for
+  different trial types, by including a MaxResponses column in
+  \texttt{Phases.csv} (see the \hyperref[textfiles]{section on text
+  files} for an example). If a MaxResponses column exists, but the value
+  is empty for some stimuli, the MaxResponses value in
   \texttt{Parameters.csv} will be looked up. If MaxResponses is not set
   there, it is given a default value of 1.
 \end{itemize}
@@ -603,7 +597,7 @@ the red and white squares together. We would then use the files in
 Tables \ref{phases-plus} and \ref{stimuli-plus}.
 
 \begin{longtable}[c]{@{}lllll@{}}
-\caption{A \texttt{Phases.csv} file with a compound stimulus in phase 2.
+\caption{A \texttt{Phases.csv} file with a compound stimulus in Phase 2.
 \label{phases-plus}}\tabularnewline
 \toprule
 Phase & S1 & Trials & S2Prob & S2\tabularnewline
@@ -644,7 +638,7 @@ can instruct subjects that each smiley face represents a point earned,
 and have multiple smileys appear for more valuable stimuli (this
 requires defining several smiley stimuli offset from each other, so that
 they do not overlap when displayed simultaneously). Compounding of S2s
-may also be used to present a combination of a visual and auditory
+may also be used to present a combination of visual and auditory
 stimuli.
 
 \hyperdef{}{stimulus-superposition}{\subsection{Superposition of
@@ -676,10 +670,10 @@ instead obscure the other stimuli.
 
 \section{More about phases}\label{more-about-phases}
 
-Similarly to what we have just seen about stimuli, phase parameters can
-be set to differ by group using the \texttt{*} and \texttt{:} notation.
-For example, imagine that we want to investigate how discrimination
-learning proceeds as a function of reward probability. We could use the
+Just as with stimuli, phase parameters can be set to differ across
+groups by using the \texttt{*} and \texttt{:} notation. For example,
+imagine that we want to investigate how discrimination learning proceeds
+as a function of reward probability. We could use the
 \texttt{Phases.csv} file in Table \ref{phases-star-notation}, which
 employs \texttt{*} notation for the S2Prob variable, and the
 \texttt{Groups.csv} file in Table \ref{groups-phases-star-notation},
@@ -688,9 +682,8 @@ which provides the information that is ``starred'' in
 
 \begin{longtable}[c]{@{}lllll@{}}
 \caption{A \texttt{Phases.csv} using \texttt{*} notation to indicate
-that the value of the S2Prob variable for trials with S1 named A has to
-be looked up in the \texttt{Groups.csv} file (see Table
-\ref{groups-phases-star-notation}).
+that the value of S2Prob for Training trials with S1 A must be looked up
+in \texttt{Groups.csv} (see Table \ref{groups-phases-star-notation}).
 \label{phases-star-notation}}\tabularnewline
 \toprule
 Phase & S1 & Trials & S2Prob & S2\tabularnewline
@@ -722,14 +715,14 @@ Poor & 20 & 0.5\tabularnewline
 \bottomrule
 \end{longtable}
 
-Note that the name of the column in \texttt{Groups.csv} is
+Note that the name of the relevant column in \texttt{Groups.csv} is
 \texttt{TrainingAS2Prob}, or, more generally,
 \texttt{(phase name)(S1 name)(parameter)}. Thus the column name
 specifies two things: the phase and the S1 to which the column value
-refers to (in employing the same notation for stimuli, we had to worry
-only about the stimulus name). This works also to set phase parameters
-for a compound stimulus. For example, if you want to set the
-\texttt{S2Prob} value for S1 \texttt{A+B}, you would use the column
+refers (in employing the same notation for stimuli, we had to worry only
+about the stimulus name). This works also to set phase parameters for a
+compound stimulus. For example, if you want to set the \texttt{S2Prob}
+value for S1 \texttt{A+B}, you would use the column
 \texttt{TrainingA+BS2Prob}.
 
 \hyperdef{}{responses}{\section{Responses and classical vs.~instrumental
@@ -739,12 +732,13 @@ The default Response key for all S1s can be specified in
 \texttt{Parameters.csv}. We can also, however, specify different
 responses for different S1s by adding a Response column to the
 \texttt{Phases.csv} file. For example, to specify that the left arrow
-key is the correct response for S1 Red, but the right arrow is correct
-for White, you would write as in Table \ref{per-stimulus-responses}.
+key is the correct response for S1 Red in Phase 1, but that the right
+arrow is correct for White, you would write as in Table
+\ref{per-stimulus-responses}.
 
 \begin{longtable}[c]{@{}llllll@{}}
 \caption{A \texttt{Phases.csv} specifying different responses for S1s
-Red and White. \label{per-stimulus-responses}}\tabularnewline
+Red and White in Phase 1. \label{per-stimulus-responses}}\tabularnewline
 \toprule
 Phase & S1 & Trials & S2Prob & S2 & Response\tabularnewline
 \midrule
@@ -856,20 +850,20 @@ that stays on for a long time (here 10 minutes), unless the subject
 performs the required response (which, by default, is the space bar).
 The Start.txt and End.txt files will be looked for in the Materials
 folder of the experiment. Note the column MaxResponses in
-\texttt{Phases.csv}, which makes sure the user has to press the space
-bar (the default response) only once to move on, even if a larger number
-of responses is allowed for actual experimental trials.
+\texttt{Phases.csv}, which makes sure the user only has to press the
+space bar (the default response) once to move on, even if a larger
+number of responses is allowed for actual experimental trials.
 
 \begin{longtable}[c]{@{}llll@{}}
 \caption{A \texttt{Phases.csv} file for displaying to subjects
 instructions and a final message (see also Table
 \ref{stimuli-instructions}). \label{phases-instructions}}\tabularnewline
 \toprule
-Phase & Stimulus & Trials & MaxResponses\tabularnewline
+Phase & S1 & Trials & MaxResponses\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Phase & Stimulus & Trials & MaxResponses\tabularnewline
+Phase & S1 & Trials & MaxResponses\tabularnewline
 \midrule
 \endhead
 Start & StartText & 1 & 1\tabularnewline
@@ -967,11 +961,11 @@ The remaining columns are as follows:
 \end{itemize}
 
 We believe this information characterizes subject behavior competely,
-but please do let us know if you think details could be added.
+but please do let us know if you think any details could be added.
 
 \section{Troubleshooting}\label{troubleshooting}
 
-Errors may arise if Design files have incorrect or incomplete
+Errors may arise if design files have incorrect or incomplete
 information. Presently, alex performs some checks at startup, but some
 errors are caught only as they occur while running the experiment. We
 advise to always run the experiment a few times before putting it into
@@ -983,9 +977,10 @@ run as you expect.
 With a few exceptions, all errors print a hopefully informative message
 both on the standard console output (terminal) and on screen. A few
 errors that may occur before the screen is set up, such as not finding
-necessary files, are reported only on the standard output. On Windows,
-these messages will appear in files \texttt{stdout.txt} and
-\texttt{stderr.txt}, which PEBL creates in the folder where alex is run.
+necessary files, are reported only on the standard output. When running
+alex through the PEBL launcher, these messages will appear in files
+\texttt{stdout.txt} and \texttt{stderr.txt}, which PEBL creates in the
+folder where alex is run.
 
 There is one error that appears mysterious to the uninitiated: the
 screen remains black and alex hangs forever. The reason is that alex
