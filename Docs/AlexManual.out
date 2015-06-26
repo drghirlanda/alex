@@ -4,15 +4,16 @@
 \BOOKMARK [1][-]{section*.1}{Starting and stopping alex}{}% 4
 \BOOKMARK [1][-]{section*.1}{Configuration files}{}% 5
 \BOOKMARK [2][-]{section*.2}{The Phases.csv file}{section*.1}% 6
-\BOOKMARK [2][-]{table.3}{The Stimuli.csv file}{section*.1}% 7
-\BOOKMARK [2][-]{table.4}{The Groups.csv file}{section*.1}% 8
-\BOOKMARK [2][-]{table.9}{The Parameters.csv file}{section*.1}% 9
-\BOOKMARK [1][-]{table.10}{More about stimuli}{}% 10
-\BOOKMARK [2][-]{table.13}{Superposition of stimuli}{table.10}% 11
-\BOOKMARK [2][-]{table.13}{Stimuli that are always present during a phase}{table.10}% 12
-\BOOKMARK [1][-]{table.13}{More about phases}{}% 13
-\BOOKMARK [1][-]{table.15}{Responses and classical vs. instrumental trials}{}% 14
-\BOOKMARK [1][-]{table.17}{Instructions and other text displays}{}% 15
-\BOOKMARK [1][-]{table.19}{Data Format}{}% 16
-\BOOKMARK [1][-]{table.19}{Troubleshooting}{}% 17
-\BOOKMARK [1][-]{table.19}{Contacts}{}% 18
+\BOOKMARK [3][-]{table.3}{Stimulus terminology}{section*.1}% 7
+\BOOKMARK [2][-]{table.3}{The Stimuli.csv file}{section*.1}% 8
+\BOOKMARK [2][-]{table.4}{The Groups.csv file}{section*.1}% 9
+\BOOKMARK [2][-]{table.9}{The Parameters.csv file}{section*.1}% 10
+\BOOKMARK [1][-]{table.10}{More about stimuli}{}% 11
+\BOOKMARK [2][-]{table.13}{Superposition of stimuli}{table.10}% 12
+\BOOKMARK [2][-]{table.13}{Stimuli that are always present during a phase}{table.10}% 13
+\BOOKMARK [1][-]{table.13}{More about phases}{}% 14
+\BOOKMARK [1][-]{table.15}{Responses and classical vs. instrumental trials}{}% 15
+\BOOKMARK [1][-]{table.17}{Instructions and other text displays}{}% 16
+\BOOKMARK [1][-]{table.19}{Data Format}{}% 17
+\BOOKMARK [1][-]{table.19}{Troubleshooting}{}% 18
+\BOOKMARK [1][-]{table.19}{Contacts}{}% 19

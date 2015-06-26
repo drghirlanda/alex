@@ -105,11 +105,12 @@ from a white square. We then want to know how subjects respond to,
 say, a pink square. Table \ref{phases} shows how a suitable
 `Phases.csv` file might look.[^1] The file describes an experiment
 with two phases, with each line defining one type of trial that
-occurs in a phase. Here, there are two kinds of trials in phase
-1, specifying 20 presentations of each of two primary stimuli (S1),
+occurs in a phase. Here, there are two kinds of trials in phase 1,
+specifying 20 presentations of each of two primary stimuli (S1),
 called Red and White. Red will be rewarded 90% of the time, White only
-10%. On these trials, stimulus Smiley will be presented as the reward (S2).
-In phase 2, stimulus Pink is presented five times and never rewarded.
+10% (specified by S2Prob). On these trials, stimulus Smiley will be
+presented as the reward (S2). In phase 2, stimulus Pink is presented
+five times and never rewarded.
 
 When the experiment is run, Red and White trials will be intermixed
 randomly because they all pertain to phase 1. Pink trials, on the
@@ -124,8 +125,8 @@ Phase S1    Trials S2Prob S2
 2     Pink  5      0
 
 Table: A simple `Phases.csv` to teach a discrimination between stimuli
-Red and White, and then test responding to Pink. Note that the S2
-field can be left empty if the Reward probability is 0. \label{phases}
+Red and White, and then test responding to Pink. Note that the S2 field
+can be left empty if the probability of S2 presentation is 0. \label{phases}
 
 [^1]: In this manual, we use tables to display design files in a
 readable form. These files, however, are actually
@@ -142,10 +143,9 @@ cannot read your CSV files.
 numerical or alphabetical order (thus you can use descriptive names
 like Training, Testing, etc). To be more precise, phases are run in
 the order in which their *first* stimuli are defined. For example, the
-`Phases.csv` file in Tables \ref{phases} and \ref{phases-order1} are
+`Phases.csv` files in Tables \ref{phases} and \ref{phases-order1} are
 equivalent, but the file in Table \ref{phases-order2} runs phase 2
 before phase 1.
-
 
 Phase S1    Trials S2Prob S2
 ----- --    ------ ------ --
@@ -165,6 +165,17 @@ Phase S1    Trials S2Prob S2
 
 Table: With this `Phases.csv` file, alex will run phase 2 before phase
 1 (cf. Table \ref{phases-order1}). \label{phases-order2}
+
+
+### Stimulus terminology
+
+The above experiment and other examples in this manual refer to reward
+training, in which the Smiley is an unconditioned stimulus (US) that
+serves to reinforce the conditioned stimuli (CSs) designated as S1s. We
+maintain the more generic S1/S2 terminology, however, in order to have
+alex equally applicable to trials where both stimuli are neutral (as, for
+example, in higher-order conditioning), and where S2 would not be
+considered a reward.
 
 
 ## The `Stimuli.csv` file
@@ -256,12 +267,12 @@ is a detailed explanation:
 
 The `Groups.csv` file contains information about the experimental
 groups you want to run. If all subjects undergo the same treatment,
-you only to specify one group and its size. The file in Table
-\ref{subjects}, for example, instructs alex to run a single groups of
+you only need to specify one group and its size. The file in Table
+\ref{subjects}, for example, instructs alex to run a single group of
 10 subjects (groups can be numbered or named, as is most convenient to
-you). Often, however, subjects need to be divided in different
+you). Often, however, subjects need to be divided into different
 treatment groups. Any of the fields in the `Stimuli.csv` file can be
-specified on a per-subject bases. If you want to test two shades of
+specified on per-subject bases. If you want to test two shades of
 pink, for example, you would extend the `Stimuli.csv` file in Table
 \ref{stimuli-color}. The special value `*` in the table indicates that
 the color of stimulus Pink will be looked up, for each subject, in the
@@ -272,11 +283,11 @@ subjects you would use the `Groups.csv` and `Stimuli.csv` files in
 Tables \ref{subjects-color-parameters} and \ref{stimuli-color-parameters}.
 
 
-Group   Size
-------- ----
-1       10
+Group Size
+----- ----
+1     10
 
-Table: A `Groups.csv` file instructing alex to run 6
+Table: A `Groups.csv` file instructing alex to run 10
 subjects. \label{subjects}
 
 
@@ -288,7 +299,8 @@ Pink   square 50                 *     0       0
 Smiley image  smile-o-white.png        0       -150
 
 Table: A `Stimuli.csv` file instructing alex to look up the Color of
-the Pink stimulus in the `Groups.csv` file. \label{stimuli-color}
+the Pink stimulus in the `Groups.csv` file (see Table \ref{subjects-color}).
+\label{stimuli-color}
 
 
 Group Size PinkColor
@@ -303,12 +315,12 @@ stimulus (see Table \ref{stimuli-color}). \label{subjects-color}
 
 Name   Type   Parameters         Color XOffset YOffset
 ----   ----   ----------         ----- ------- -------
-Red    square *Red               red   0       0
+Red    square *                  red   0       0
 White  square 50                 white 0       0
-Pink   square 50                 *Pink 0       0
+Pink   square 50                 *     0       0
 Smiley image  smile-o-white.png        0       -150
 
-Table: A `Stimuli.csv` file instructing alex to run look up in the
+Table: A `Stimuli.csv` file instructing alex to look up in the
 `Groups.csv` file both the Color of stimulus Pink and the Parameters
 of stimulus Red (see Table
 \ref{subjects-color-parameters}). \label{stimuli-color-parameters}
@@ -325,7 +337,6 @@ Table: A `Groups.csv` file instructing alex to run 4 experimental
 groups. Each group receives a unique combination of PinkColor and
 RedParameters (see Table
 \ref{stimuli-color-parameters}). \label{subjects-color-parameters}
-
 
 
 ## The `Parameters.csv` file {#global}
@@ -377,8 +388,8 @@ Table: Sample `Parameters.csv` file with default values.
 - **Response** is the key subjects are instructed to press if they want
   to respond. Note that this can also be set on a per-stimulus basis,
   see [here](#responses).
-
 \label{maxresponses}
+
 - **MaxResponses** is the maximum number of response a subject is
   allowed to make in one trial. There are essentially two useful
   settings. If you set this to 1 the trial ends with the first response
@@ -402,8 +413,8 @@ instructions and other messages.
   the experiment during development.
 
 - **Log** is a toggle for the logging feature, which records runtime
-  messages for each subject in files named the same as corresponding
-  data files, except with a `.log` suffix. Disabled by setting to 0.
+  messages for each subject, in files named the same as corresponding
+  data files except with a `.log` suffix. Disabled by setting to 0.
 
 
 <a name="notation"></a>
@@ -411,28 +422,27 @@ instructions and other messages.
 # More about stimuli 
 
 We mentioned above one bit of special notation in the definition of
-stimuli, namely the construction `*` (star) + stimulus name (see the end
-of the previous section). There are two more bits of special notation,
-explained next.
+stimuli, namely the value `*` (asterisk). There are two more bits of special
+notation, explained next.
 
 Sometimes we want some stimuli to share characteristics. For example,
 they should be of the same color. We can express the fact that we want
 a stimulus characteristic to equal that of another stimulus using a
 colon (`:`) followed by the stimulus name (we would have liked to use `=`
 rather than `:`, but unfortunately spreadsheet software stubbornly
-interprets `=` as introducing a formula). Consider the example above,
-with three squares of the same size as stimuli. The file in Table
-\ref{stimuli-special} is equivalent but uses colon notation for the
-Parameters field. This has two advantages: it makes explicit our
-intention of having three squares of equal size, and it reduces the
-possibility of typing errors.
+interprets `=` as introducing a formula). Consider the file in Table
+\ref{stimuli-color}, featuring three squares of the same size as stimuli.
+The file in Table \ref{stimuli-special} is equivalent but uses colon
+notation for the Parameters field. This has two advantages: it makes
+explicit our intention of having three squares of equal size, and it
+reduces the possibility of typing errors.
 
 Name   Type   Parameters         Color XOffset YOffset
 ----   ----   ----------         ----- ------- -------
 Red    square 50                 red   0       0
 White  square :Red               white 0       0
-Pink   square :Red               Pink  0       0
-Smiley image  smile-o-white.png        0       150
+Pink   square :Red               *     0       0
+Smiley image  smile-o-white.png        0       -150
 
 Table: A `Stimuli.csv` file demonstrating the `*` and `:` special
 notations for stimuli. \label{stimuli-special}
@@ -443,8 +453,8 @@ discrimination between red and white squares, we want to test the red
 and white squares together. We would then use the files in Tables
 \ref{phases-plus} and \ref{stimuli-plus}.
 
-Phase Stimulus  Trials Reward US
------ --------  ------ ------ --
+Phase S1        Trials S2Prob S2
+----- --        ------ ------ --
 1     Red       20     0.9    Smiley
 1     White     20     0.1    Smiley
 2     Red+White 5      0
@@ -464,13 +474,13 @@ Table: A `Stimuli.csv` file to go with the `Phases.csv` file in Table
 otherwise it would overlap with the red one when the two are presented
 together. \label{stimuli-plus}
 
-**Note:** The + notation is also valid for USs. This can be used to
-implement USs of different "magnitude." For example, one can instruct
+**Note:** The `+` notation is also valid for S2s. This can be used to
+implement S2s of different "magnitude." For example, one can instruct
 subjects that each smiley face represents a point earned, and have
 multiple smileys appear for more valuable stimuli (this requires
 defining several smiley stimuli offset from each other, so that they
-do not overlap when displayed simultaneously). Compounding of USs may
-also be used to present a combination of a visual and auditory US.
+do not overlap when displayed simultaneously). Compounding of S2s may
+also be used to present a combination of a visual and auditory stimuli.
 
 
 ## Superposition of stimuli {#stimulus-superposition}
@@ -492,7 +502,7 @@ name starts with "Background" followed by the name of a phase will be
 displayed for the entire duration of that phase. You can define many
 such stimuli, e.g., `BackgroundPhase1-1` and `BackgroundPhase1-2`. 
 
-**Note:** The rules for stimulus superposition for always-present
+**Note:** The rules for stimulus superposition of always-present
 stimuli are the same as for other stimuli, see [Superposition of
 stimuli](#stimulus-superposition). This means that if you want to use
 a stimulus as a backdrop for other stimuli, you have to define the
@@ -507,26 +517,26 @@ other stimuli.
 
 Similarly to what we have just seen about stimuli, phase parameters
 can be set to differ by group using the `*` and `:` notation. For
-example, imagine we want to investigate how discrimination learning
-proceeds as a function of reward probability. We could use the
+example, imagine that we want to investigate how discrimination
+learning proceeds as a function of reward probability. We could use the
 `Phases.csv` file in Table \ref{phases-star-notation}, which employs
-`*` notation for the Reward variable, and the `Groups.csv` file in
+`*` notation for the S2Prob variable, and the `Groups.csv` file in
 Table \ref{groups-phases-star-notation}, which provides the
 information that is "starred" in `Stimuli.csv`.
 
-Phase    Stimulus Trials Reward     US
------    -------- ------ ------     ------
-Training A        50     *          Smiley
-Training B        50     0
+Phase    S1 Trials S2Prob S2
+-----    -- ------ ------ --
+Training A  50     *      Smiley
+Training B  50     0
 
-Table: A `Phases.csv` using `*` notation indicating that the value of
-the Reward variable given as `*Training` has to be looked up in the
-`Groups.csv` file (see Table
+Table: A `Phases.csv` using `*` notation to indicate that the value of
+the S2Prob variable for trials with S1 named A has to be looked up in
+the `Groups.csv` file (see Table
 \ref{groups-phases-star-notation}). \label{phases-star-notation}
 
 
-Group Size TrainingAReward
------ ---- --------------
+Group Size TrainingAS2Prob
+----- ---- ---------------
 Rich  20   1
 Poor  20   0.5 
 
@@ -534,31 +544,31 @@ Table: A `Groups.csv` file serving as a companion to the `Phases.csv`
 file in Table
 \ref{phases-star-notation}. \label{groups-phases-star-notation}
 
-Note that the name of the column in `Groups.csv` is `TrainingAReward`,
-or, more generally, `(phase name)(stimulus name)(parameter)`. Thus the
-column name specifies two things: the phase and the stimulus to which
-the column value refers to (in doing the same things for stimuli, we
-had to worry only about the stimulus name). This works also to set
+Note that the name of the column in `Groups.csv` is `TrainingAS2Prob`,
+or, more generally, `(phase name)(S1 name)(parameter)`. Thus the
+column name specifies two things: the phase and the S1 to which
+the column value refers to (in employing the same notation for stimuli,
+we had to worry only about the stimulus name). This works also to set
 phase parameters for a compound stimulus. For example, if you want to
-set the `Reward` value for stimulus `A+B`, you would use the column
-`TrainingA+BReward`.
+set the `S2Prob` value for S1 `A+B`, you would use the column
+`TrainingA+BS2Prob`.
 
 
 # Responses and classical vs. instrumental trials {#responses}
 
-The default Response key for all stimuli can be specified in
+The default Response key for all S1s can be specified in
 `Parameters.csv`. We can also, however, specify different responses
-for different stimuli by adding a Response column to the `Phases.csv`
+for different S1s by adding a Response column to the `Phases.csv`
 file. For example, to specify that the left arrow key is the correct
-response for stimulus Red, but the right arrow is correct for White,
+response for S1 Red, but the right arrow is correct for White,
 you would write as in Table \ref{per-stimulus-responses}.
 
-Phase Stimulus Trials Reward US     Response
------ -------- ------ ------ --     --------
-1     Red      20     1      Smiley \<left\>
-1     White    20     1      Smiley \<right\>
+Phase S1    Trials S2Prob S2     Response
+----- --    ------ ------ --     --------
+1     Red   20     1      Smiley \<left\>
+1     White 20     1      Smiley \<right\>
 
-Table: A `Phases.csv` specifying different responses for stimuli Red
+Table: A `Phases.csv` specifying different responses for S1s Red
 and White. \label{per-stimulus-responses}
 
 Here `<left>` and `<right>` are special codes that denote the left and
@@ -578,35 +588,33 @@ codes that can be used to specify correct responses:
    `<home>`, `<end>`, `<pageup>`, `<pagedown>`, `<esc>`, `<f1>`--`<f15>`
 
 Responses can also employ `*` notation. Prefixing a specified response
-with an asterisk means that the US will be displayed *only*
-at the end of the trial (with the appropriate Reward probability)
-*regardless* of what the subject does during the trial, as in
-classical conditioning or causal rating studies. Thus the `Phases.csv`
-file in Table \ref{classical} specifies that Red is to be rewarded 90%
+with an asterisk means that the S2 will be displayed *only*
+at the end of the trial (with the appropriate S2Prob) *regardless* of
+what the subject does during the trial, as in classical conditioning
+or causal rating studies. Thus the `Phases.csv` file in
+Table \ref{classical} specifies that Red is to be rewarded 90%
 of the time at the end of a trial, *regardless* of whether the subject
 responds or not. Note that subject responses are still recorded, and
 if they exceed the allowed maximum the trial terminates without
 reward. This last feature makes it possible to implement omission
-training, i.e., reward subjects only when they abstain from
+training, i.e., to reward subjects only when they abstain from
 responding. This is controlled by the [MaxResponses](#maxresponses)
-parameter. The default value is 1, which corresponds precisley to
+parameter. The default value is 1, which corresponds precisely to
 omission training. If you don't want the trial to ever terminate
 before the allotted time, you can use a value of MaxResponses so high
-that it cannot be possibly reached, such as
-1000.
+that it cannot be possibly reached, such as 1000.
 
-Phase Stimulus Trials Reward US     Response
------ -------- ------ ------ --     --------
-1     Red      20     .9     Smiley *\<space\>
+Phase S1  Trials S2Prob S2     Response
+----- --  ------ ------ --     --------
+1     Red 20     .9     Smiley *\<space\>
 
-Table: A `Phases.csv` file using the Response notation *\<space\> to
-indicate a classical conditioning trial in which the US is delivered
-at the end of the trial regardless of subject
-behavior. \label{classical}
+Table: A `Phases.csv` file using the Response notation `*<space>` to
+indicate a classical conditioning trial in which the S2 is presented
+at the end of the trial regardless of subject behavior. \label{classical}
 
-Note also that on * trials, the ResponseTimeMin and ResponseTimeMax
+Note also that on `*` trials, the ResponseTimeMin and ResponseTimeMax
 features are disabled (see [Global parameters](#global)). Because the
-US (if any) is delivered only once at the end of the trial, it is
+S2 (if any) is delivered only once at the end of the trial, it is
 irrelevant when a subject responds.
 
 
