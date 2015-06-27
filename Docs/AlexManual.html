@@ -154,7 +154,7 @@
 </tbody>
 </table>
 <h3 id="stimulus-terminology">Stimulus terminology</h3>
-<p>The above experiment and other examples in this manual refer to reward training, in which the Smiley is an unconditioned stimulus (US) that serves to reinforce the conditioned stimuli (CSs) designated as S1s. We maintain the more generic S1/S2 terminology, however, in order to have alex equally applicable to trials where both stimuli are neutral (as in higher-order conditioning), and where S2 would not be considered a reward.</p>
+<p>The above experiment and other examples in this manual refer to reward training in which the Smiley is an unconditioned stimulus (US) that serves to reinforce the conditioned stimuli (CSs) designated as S1s. We maintain the more generic S1/S2 terminology, however, in order to have alex equally applicable to trials where both stimuli are neutral (as in higher-order conditioning), and where S2 would not be considered a reward.</p>
 <h2 id="the-stimuli.csv-file">The <code>Stimuli.csv</code> file</h2>
 <p>How does alex know that Red, White, and Pink mentioned in the <code>Phases.csv</code> files in Tables -- represent red, white, and pink squares, and that Smiley is a smiley face? This information is contained in the <code>Stimuli.csv</code> file, see Table .</p>
 <table>
@@ -668,7 +668,7 @@
 </tr>
 </tbody>
 </table>
-<p>Note that the name of the relevant column in <code>Groups.csv</code> is <code>TrainingAS2Prob</code>, or, more generally, <code>(phase name)(S1 name)(parameter)</code>. Thus the column name specifies two things: the phase and the S1 to which the column value refers (in employing the same notation for stimuli, we had to worry only about the stimulus name). This works also to set phase parameters for a compound stimulus. For example, if you want to set the <code>S2Prob</code> value for S1 <code>A+B</code>, you would use the column <code>TrainingA+BS2Prob</code>.</p>
+<p>Note that the name of the corresponding column in <code>Groups.csv</code> is <code>TrainingAS2Prob</code>, or, more generally, <code>(phase name)(S1 name)(parameter)</code>. Thus the column name specifies two things: the phase and the S1 to which the column value refers (in employing the same notation for stimuli, we had to worry only about the stimulus name). This works also to set phase parameters for a compound stimulus. For example, if you want to set the <code>S2Prob</code> value for S1 <code>A+B</code>, you would use the column <code>TrainingA+BS2Prob</code>.</p>
 <h1 id="responses">Responses and classical vs. instrumental trials</h1>
 <p>The default Response key for all S1s can be specified in <code>Parameters.csv</code>. We can also, however, specify different responses for different S1s by adding a Response column to the <code>Phases.csv</code> file. For example, to specify that the left arrow key is the correct response for S1 Red in Phase 1, but that the right arrow is correct for White, you would write as in Table .</p>
 <table>
@@ -733,7 +733,7 @@
 </tr>
 </tbody>
 </table>
-<p>Note also that on <code>*</code> trials, the ResponseTimeMin and ResponseTimeMax features are disabled (see <a href="#global">Global parameters</a>). Because the S2 (if any) is delivered only once at the end of the trial, it is irrelevant when a subject responds.</p>
+<p>Note also that on <code>*</code> trials, the ResponseTimeMin and ResponseTimeMax features are disabled (see <a href="#global">Global parameters</a>). The S2 (if any) is presented only once at the end of the trial, so it is irrelevant when a subject responds.</p>
 <h1 id="textfiles">Instructions and other text displays</h1>
 <p>Instructions or other longish text can be displayed with the textfile stimulus type. For example, to include both a start and an end message (say a 'thank you' or similar) you can use <code>Phases.csv</code> and <code>Stimuli.csv</code> file like those in Tables  and  to include the presentation of text files that are displayed until the subject responds once. As you see in these Tables, the display of instructions is construed simply as a stimulus that stays on for a long time (here 10 minutes), unless the subject performs the required response (which, by default, is the space bar). The Start.txt and End.txt files will be looked for in the Materials folder of the experiment. Note the column MaxResponses in <code>Phases.csv</code>, which makes sure the user only has to press the space bar (the default response) once to move on, even if a larger number of responses is allowed for actual experimental trials.</p>
 <table>

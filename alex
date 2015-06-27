@@ -319,7 +319,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     if( GetTime() >= endTime ) {
       rt <- "NA"
       valid <- "F"
-    } else {
+    # Avoid counting <timeout> as response in * trial with S2 scheduled:
+    } elseif( not IsList(key) ) {
       responseCount <- responseCount + 1
     }
     # If response is invalid:
@@ -332,11 +333,11 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
       }
     # If response is valid (and not <timeout>) but S2 not scheduled:
-    } elseif (rt != "NA") {
+    } elseif( rt != "NA" ) {
       valid <- "T"
     }
     ## Save data line to file:
-    if( not IsList(key) or responseCount == 0) {
+    if( not IsList(key) or ( responseCount == 0 and rt == "NA" ) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gSex, gAge, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 

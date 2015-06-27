@@ -170,7 +170,7 @@ Table: With this `Phases.csv` file, Phase 2 will be run first.
 ### Stimulus terminology
 
 The above experiment and other examples in this manual refer to reward
-training, in which the Smiley is an unconditioned stimulus (US) that
+training in which the Smiley is an unconditioned stimulus (US) that
 serves to reinforce the conditioned stimuli (CSs) designated as S1s. We
 maintain the more generic S1/S2 terminology, however, in order to have
 alex equally applicable to trials where both stimuli are neutral (as in
@@ -536,9 +536,9 @@ Table: A `Groups.csv` file serving as a companion to the `Phases.csv`
 file in Table
 \ref{phases-star-notation}. \label{groups-phases-star-notation}
 
-Note that the name of the relevant column in `Groups.csv` is `TrainingAS2Prob`,
-or, more generally, `(phase name)(S1 name)(parameter)`. Thus the
-column name specifies two things: the phase and the S1 to which
+Note that the name of the corresponding column in `Groups.csv` is
+`TrainingAS2Prob`, or, more generally, `(phase name)(S1 name)(parameter)`.
+Thus the column name specifies two things: the phase and the S1 to which
 the column value refers (in employing the same notation for stimuli,
 we had to worry only about the stimulus name). This works also to set
 phase parameters for a compound stimulus. For example, if you want to
@@ -605,9 +605,9 @@ indicate a classical conditioning trial in which the S2 is presented
 at the end of the trial regardless of subject behavior. \label{classical}
 
 Note also that on `*` trials, the ResponseTimeMin and ResponseTimeMax
-features are disabled (see [Global parameters](#global)). Because the
-S2 (if any) is delivered only once at the end of the trial, it is
-irrelevant when a subject responds.
+features are disabled (see [Global parameters](#global)). The S2 (if any)
+is presented only once at the end of the trial, so it is irrelevant when
+a subject responds.
 
 
 # Instructions and other text displays {#textfiles}
