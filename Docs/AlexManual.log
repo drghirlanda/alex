@@ -1,14 +1,14 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.4.30)  24 JUN 2015 00:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014 on Slackware (SlackBuilds.org)) (preloaded format=pdflatex 2015.4.10)  25 JUN 2015 09:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **AlexManual.tex
 (./AlexManual.tex
 LaTeX2e <2014/05/01>
-Babel <3.9k> and hyphenation patterns for 21 languages loaded.
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/article.cls
+Babel <3.9k> and hyphenation patterns for 78 languages loaded.
+(/usr/share/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/size11.clo
+(/usr/share/texmf-dist/tex/latex/base/size11.clo
 File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -23,14 +23,14 @@ File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/fontenc.sty
+(/usr/share/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/t1enc.def
+(/usr/share/texmf-dist/tex/latex/base/t1enc.def
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 ))
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/psnfss/mathptmx.sty
+(/usr/share/texmf-dist/tex/latex/psnfss/mathptmx.sty
 Package: mathptmx 2005/04/12 PSNFSS-v9.2a Times w/ Math, improved (SPQR, WaS) 
 LaTeX Font Info:    Redeclaring symbol font `operators' on input line 28.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
@@ -66,10 +66,10 @@ LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/cmr/bx/it --> OT1/ptm/m/it on input line 35.
 LaTeX Info: Redefining \hbar on input line 50.
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/setspace/setspace.sty
+(/usr/share/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/booktabs/booktabs.sty
+(/usr/share/texmf-dist/tex/latex/booktabs/booktabs.sty
 Package: booktabs 2005/04/14 v1.61803 publication quality tables
 \heavyrulewidth=\dimen103
 \lightrulewidth=\dimen104
@@ -89,16 +89,14 @@ Package: booktabs 2005/04/14 v1.61803 publication quality tables
 \@lastruleclass=\count90
 \@thisrulewidth=\dimen115
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/share/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2012/11/06 v6.83m Hypertext links for LaTeX
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.s
-ty
+(/usr/share/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
 Package: hobsub-hyperref 2012/05/28 v1.13 Bundle oberdiek, subset hyperref (HO)
 
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/generic/oberdiek/hobsub-generic.st
-y
+(/usr/share/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
 Package: hobsub-generic 2012/05/28 v1.13 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2012/05/28 v1.13 Construct package bundles (HO)
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
@@ -138,29 +136,30 @@ Package atveryend Info: \enddocument detected (standard20110627).
 Package: atbegshi 2011/10/05 v1.16 At begin shipout hook (HO)
 Package: refcount 2011/10/16 v3.4 Data extraction from label references (HO)
 Package: hycolor 2011/01/30 v1.7 Color options for hyperref/bookmark (HO)
-) (/usr/local/texlive/2014basic/texmf-dist/tex/latex/graphics/keyval.sty
+)
+(/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+(/usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/oberdiek/auxhook.sty
+(/usr/share/texmf-dist/tex/latex/oberdiek/auxhook.sty
 Package: auxhook 2011/03/04 v1.3 Hooks for auxiliary files (HO)
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+(/usr/share/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 )
 \@linkdim=\dimen116
 \Hy@linkcounter=\count91
 \Hy@pagecounter=\count92
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/hyperref/pd1enc.def
+(/usr/share/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2012/11/06 v6.83m Hyperref: PDFDocEncoding definition (HO)
 )
 \Hy@SavedSpaceFactor=\count93
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+(/usr/share/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
 Package hyperref Info: Hyper figures OFF on input line 4443.
@@ -172,7 +171,7 @@ Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4688.
 \c@Hy@tempcnt=\count94
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/url/url.sty
+(/usr/share/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
@@ -197,21 +196,22 @@ LaTeX Info: Redefining \pageref on input line 6369.
 
 Package hyperref Message: Driver (autodetected): hpdftex.
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/share/texmf-dist/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2012/11/06 v6.83m Hyperref driver for pdfTeX
 \Fld@listcount=\count99
 \c@bookmark@seq@number=\count100
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+(/usr/share/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 Package: rerunfilecheck 2011/04/15 v1.7 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
 \Hy@SectionHShift=\skip43
-) (/usr/local/texlive/2014basic/texmf-dist/tex/latex/amsfonts/amssymb.sty
+)
+(/usr/share/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+(/usr/share/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \@emptytoks=\toks15
 \symAMSa=\mathgroup6
@@ -219,24 +219,24 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/amsmath/amsmath.sty
+(/usr/share/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2013/01/14 v2.14 AMS math features
 \@mathmargin=\skip44
 
 For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/amsmath/amsgen.sty
+(/usr/share/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0
 \@emptytoks=\toks16
 \ex@=\dimen120
 ))
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(/usr/share/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d
 \pmbraise@=\dimen121
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/amsmath/amsopn.sty
+(/usr/share/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count101
@@ -277,19 +277,19 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
 LaTeX Info: Redefining \[ on input line 2665.
 LaTeX Info: Redefining \] on input line 2666.
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2014/04/30 v1.2b Input encoding file
 \inpenc@prehook=\toks21
 \inpenc@posthook=\toks22
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/utf8.def
+(/usr/share/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding T1 ...
 ... processing UTF-8 mapping file for font encoding T1
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/t1enc.dfu
+(/usr/share/texmf-dist/tex/latex/base/t1enc.dfu
 File: t1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
@@ -439,7 +439,7 @@ File: t1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OT1 ...
 ... processing UTF-8 mapping file for font encoding OT1
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/ot1enc.dfu
+(/usr/share/texmf-dist/tex/latex/base/ot1enc.dfu
 File: ot1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A1 (decimal 161)
    defining Unicode char U+00A3 (decimal 163)
@@ -470,7 +470,7 @@ File: ot1enc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
 Now handling font encoding OMS ...
 ... processing UTF-8 mapping file for font encoding OMS
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/omsenc.dfu
+(/usr/share/texmf-dist/tex/latex/base/omsenc.dfu
 File: omsenc.dfu 2008/04/05 v1.1m UTF-8 support for inputenc
    defining Unicode char U+00A7 (decimal 167)
    defining Unicode char U+00B6 (decimal 182)
@@ -496,27 +496,22 @@ Now handling font encoding PD1 ...
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
 ))
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/microtype/microtype.sty
-Package: microtype 2013/05/23 v2.5a Micro-typographical refinements (RS)
+(/home/stefano/texmf/tex/latex/microtype/microtype.sty
+Package: microtype 2010/01/10 v2.4 Micro-typography with pdfTeX (RS)
 \MT@toks=\toks23
 \MT@count=\count113
-LaTeX Info: Redefining \textls on input line 766.
-\MT@outer@kern=\dimen129
-LaTeX Info: Redefining \textmicrotypecontext on input line 1285.
-\MT@listname@count=\count114
-
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/microtype/microtype-pdftex.d
-ef
-File: microtype-pdftex.def 2013/05/23 v2.5a Definitions specific to pdftex (RS)
-
-LaTeX Info: Redefining \lsstyle on input line 915.
-LaTeX Info: Redefining \lslig on input line 915.
+LaTeX Info: Redefining \lsstyle on input line 1597.
+LaTeX Info: Redefining \lslig on input line 1597.
 \MT@outer@space=\skip47
-)
+LaTeX Info: Redefining \textls on input line 1605.
+\MT@outer@kern=\dimen129
+LaTeX Info: Redefining \textmicrotypecontext on input line 2156.
 Package microtype Info: Loading configuration file microtype.cfg.
- (/usr/local/texlive/2014basic/texmf-dist/tex/latex/microtype/microtype.cfg
-File: microtype.cfg 2013/05/23 v2.5a microtype main configuration file (RS)
-)) (/usr/local/texlive/2014basic/texmf-dist/tex/latex/titlesec/titlesec.sty
+
+(/home/stefano/texmf/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2010/01/10 v2.4 microtype main configuration file (RS)
+))
+(/usr/share/texmf-dist/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 \ttl@box=\box28
 \beforetitleunit=\skip48
@@ -528,11 +523,11 @@ Package: titlesec 2011/12/15 v2.10.0 Sectioning titles
 \titlewidthlast=\dimen133
 \titlewidthfirst=\dimen134
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/share/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2010/09/12 v5.6 Page Geometry
-\Gm@cnth=\count115
-\Gm@cntv=\count116
-\c@Gm@tempcnt=\count117
+\Gm@cnth=\count114
+\Gm@cntv=\count115
+\c@Gm@tempcnt=\count116
 \Gm@bindingoffset=\dimen135
 \Gm@wd@mp=\dimen136
 \Gm@odd@mp=\dimen137
@@ -543,22 +538,22 @@ Package: geometry 2010/09/12 v5.6 Page Geometry
 \Gm@layoutvoffset=\dimen142
 \Gm@dimlist=\toks25
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/tools/longtable.sty
+(/usr/share/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2004/02/01 v4.11 Multi-page Table package (DPC)
 \LTleft=\skip50
 \LTright=\skip51
 \LTpre=\skip52
 \LTpost=\skip53
-\LTchunksize=\count118
+\LTchunksize=\count117
 \LTcapwidth=\dimen143
 \LT@head=\box29
 \LT@firsthead=\box30
 \LT@foot=\box31
 \LT@lastfoot=\box32
-\LT@cols=\count119
-\LT@rows=\count120
-\c@LT@tables=\count121
-\c@LT@chunks=\count122
+\LT@cols=\count118
+\LT@rows=\count119
+\c@LT@tables=\count120
+\c@LT@chunks=\count121
 \LT@p@ftn=\toks26
 )
 Package hyperref Info: Option `breaklinks' set `true' on input line 20.
@@ -586,52 +581,51 @@ LaTeX Font Info:    ... okay on input line 31.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 31.
 LaTeX Font Info:    ... okay on input line 31.
 LaTeX Font Info:    Try loading font information for T1+ptm on input line 31.
-
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/psnfss/t1ptm.fd
+ (/usr/share/texmf-dist/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
 \AtBeginShipoutBox=\box33
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/graphics/color.sty
+(/usr/share/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2014/04/23 v1.1a Standard LaTeX Color (DPC)
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/latexconfig/color.cfg
+(/usr/share/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package color Info: Driver file: pdftex.def on input line 137.
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
-\Gread@gobject=\count123
+\Gread@gobject=\count122
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/context/base/supp-pdf.mkii
+(/usr/share/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count124
+\scratchcounter=\count123
 \scratchdimen=\dimen144
 \scratchbox=\box34
-\nofMPsegments=\count125
-\nofMParguments=\count126
+\nofMPsegments=\count124
+\nofMParguments=\count125
 \everyMPshowfont=\toks27
-\MPscratchCnt=\count127
+\MPscratchCnt=\count126
 \MPscratchDim=\dimen145
-\MPnumerator=\count128
-\makeMPintoPDFobject=\count129
+\MPnumerator=\count127
+\makeMPintoPDFobject=\count128
 \everyMPtoPDFconversion=\toks28
 )))
 Package hyperref Info: Link coloring ON on input line 31.
- (/usr/local/texlive/2014basic/texmf-dist/tex/latex/hyperref/nameref.sty
+ (/usr/share/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/generic/oberdiek/gettitlestring.st
-y
+(/usr/share/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count130
+\c@section@level=\count129
 )
 LaTeX Info: Redefining \ref on input line 31.
 LaTeX Info: Redefining \pageref on input line 31.
 LaTeX Info: Redefining \nameref on input line 31.
- (./AlexManual.out) (./AlexManual.out)
+
+(./AlexManual.out) (./AlexManual.out)
 \@outlinefile=\write3
 \openout3 = `AlexManual.out'.
 
@@ -642,11 +636,11 @@ Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 0, shrink: 30, step: 1, non-selected.
 Package microtype Info: Using default expansion set `basictext'.
-Package microtype Info: No adjustment of tracking.
+Package microtype Info: No tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/microtype/mt-ptm.cfg
+(/home/stefano/texmf/tex/latex/microtype/mt-ptm.cfg
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
 *geometry* driver: auto-detecting
@@ -685,34 +679,30 @@ File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 
 LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 33
 .
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
+(/usr/share/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
-Package microtype Info: Loading generic settings for font family
-(microtype)             `ztmcm' (encoding: OT1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
 LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 33
 .
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/psnfss/omlztmcm.fd
+(/usr/share/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
 LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 33
 .
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/psnfss/omsztmcm.fd
+(/usr/share/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
 LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 33
 .
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/psnfss/omxztmcm.fd
+(/usr/share/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 33.
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+(/usr/share/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
@@ -722,16 +712,15 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 33.
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/microtype/mt-msa.cfg
+(/home/stefano/texmf/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/microtype/mt-msb.cfg
+(/home/stefano/texmf/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 39.
-
-(./AlexManual.toc
+ (./AlexManual.toc
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 1.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
@@ -742,20 +731,15 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
 LaTeX Font Info:    Try loading font information for T1+cmtt on input line 6.
 
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/base/t1cmtt.fd
+(/usr/share/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-Package microtype Info: Loading generic settings for font family
-(microtype)             `cmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-)
+))
 \tf@toc=\write4
 \openout4 = `AlexManual.toc'.
 
  [1
 
-{/usr/local/texlive/2014basic/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+{/usr/share/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 51.
 
@@ -764,7 +748,7 @@ Package hyperref Warning: The anchor of a bookmark and its parent's must not
 (hyperref)                be the same. Added a new anchor on input line 51.
 
 LaTeX Font Info:    Try loading font information for OMS+ptm on input line 58.
-(/usr/local/texlive/2014basic/texmf-dist/tex/latex/psnfss/omsptm.fd
+(/usr/share/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10.95> not available
@@ -787,8 +771,72 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 155.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 162.
-[3] [4] [5] [6] [7] [8] [9]
-Underfull \hbox (badness 1067) in paragraph at lines 755--767
+
+Underfull \vbox (badness 10000) detected at line 192
+ []
+
+[3]
+Underfull \vbox (badness 10000) detected at line 219
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 236
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 265
+ []
+
+[4]
+Underfull \vbox (badness 10000) detected at line 372
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 392
+ []
+
+[5]
+Underfull \vbox (badness 10000) detected at line 408
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 429
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 450
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 495
+ []
+
+[6] [7]
+Underfull \vbox (badness 10000) detected at line 579
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 602
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 621
+ []
+
+[8]
+Underfull \vbox (badness 10000) detected at line 684
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 700
+ []
+
+[9]
+Underfull \vbox (badness 10000) detected at line 736
+ []
+
+
+Underfull \hbox (badness 1067) in paragraph at lines 757--769
 []\T1/ptm/m/n/10.95 Modkeys: \T1/cmtt/m/n/10.95 <lshift>\T1/ptm/m/n/10.95 , \T1
 /cmtt/m/n/10.95 <rshift>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <lctrl>\T1/ptm/m
 /n/10.95 , \T1/cmtt/m/n/10.95 <rctrl>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <la
@@ -798,7 +846,7 @@ n/10.95 <lmeta>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <rmeta>\T1/ptm/m/n/10.95
  []
 
 
-Underfull \hbox (badness 1859) in paragraph at lines 767--777
+Underfull \hbox (badness 1859) in paragraph at lines 769--779
 []\T1/ptm/m/n/10.95 Navigation, func-tion keys: \T1/cmtt/m/n/10.95 <up>\T1/ptm/
 m/n/10.95 , \T1/cmtt/m/n/10.95 <down>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <le
 ft>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <right>\T1/ptm/m/n/10.95 , \T1/cmtt/m
@@ -806,35 +854,45 @@ ft>\T1/ptm/m/n/10.95 , \T1/cmtt/m/n/10.95 <right>\T1/ptm/m/n/10.95 , \T1/cmtt/m
 \T1/cmtt/m/n/10.95 <pageup>\T1/ptm/m/n/10.95 ,
  []
 
-[10] [11] [12]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 979.
- [13]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 979.
+
+Underfull \vbox (badness 10000) detected at line 811
+ []
+
+[10]
+Underfull \vbox (badness 10000) detected at line 850
+ []
+
+
+Underfull \vbox (badness 10000) detected at line 866
+ []
+
+[11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 974.
+ [12] [13]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 974.
  (./AlexManual.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 979.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 979.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 974.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 974.
 Package rerunfilecheck Info: File `AlexManual.out' has not changed.
 (rerunfilecheck)             Checksum: AF2554B8EEDB5BEC6AF452FEF857400E;1086.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 979.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 974.
  ) 
 Here is how much of TeX's memory you used:
- 8888 strings out of 494522
- 131501 string characters out of 6167205
- 250683 words of memory out of 5000000
- 11858 multiletter control sequences out of 15000+600000
+ 8817 strings out of 493117
+ 127963 string characters out of 6141180
+ 252252 words of memory out of 5000000
+ 11993 multiletter control sequences out of 15000+600000
  74409 words of font info for 198 fonts, out of 8000000 for 9000
- 319 hyphenation exceptions out of 8191
- 31i,8n,38p,345b,447s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2014basic/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/lo
-cal/texlive/2014basic/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr
-/local/texlive/2014basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
-/usr/local/texlive/2014basic/texmf-dist/fonts/type1/public/cm-super/sftt1000.pf
-b></usr/local/texlive/2014basic/texmf-dist/fonts/type1/public/cm-super/sftt1095
-.pfb></usr/local/texlive/2014basic/texmf-dist/fonts/type1/public/cm-super/sftt1
-200.pfb></usr/local/texlive/2014basic/texmf-dist/fonts/type1/urw/times/utmb8a.p
-fb></usr/local/texlive/2014basic/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></
-usr/local/texlive/2014basic/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on AlexManual.pdf (13 pages, 174252 bytes).
+ 1141 hyphenation exceptions out of 8191
+ 31i,8n,38p,345b,453s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf-dist/fonts/enc/dvips/base/8r.enc}{/usr/share/texmf-dist/fon
+ts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt
+1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/
+share/texmf-dist/fonts/type1/public/cm-super/sftt1200.pfb></usr/share/texmf-dis
+t/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times
+/utmr8a.pfb></usr/share/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on AlexManual.pdf (13 pages, 174175 bytes).
 PDF statistics:
  267 PDF objects out of 1000 (max. 8388607)
  232 compressed objects within 3 object streams

@@ -40,7 +40,7 @@
 \end{spacing}
 \clearpage
 }
-\section{Introduction}\label{intro}
+\section{Introduction}
 
 Alex is a program for running associative learning experiments described
 in configuration files. This manual explains how to configure the
@@ -48,7 +48,7 @@ experiments. Please refer to the README file that comes with alex for
 installation instructions. The README also describes in brief what alex
 can and cannot do.
 
-\subsection{Workflow}\label{workflow}
+\subsection{Workflow}
 
 To build a new experiment you create a dedicated folder, and within it
 the following subfolders:
@@ -80,13 +80,13 @@ This creates folder \texttt{\textless{}experiment name\textgreater{}}
 with the above mentioned subfolders (except Data, which is created on
 first run) and skeleton configuration files.
 
-\subsection{Acknowledgments}\label{acknowledgements}
+\subsection{Acknowledgments}
 
 Alex is written using Shane Mueller's
 \href{http://pebl.sourceforge.net}{Psychology Experiment Building
 Language} (PEBL). Many thanks to Shane for sharing PEBL!
 
-\section{Starting and stopping alex}\label{running}
+\section{Starting and stopping alex}
 
 From the folder where the Design and Materials folders are, you can just
 type \texttt{alex} in the command line. You can also run experiments in
@@ -147,7 +147,7 @@ All configuration files are in the Design folder:
   used for responses.
 \end{itemize}
 
-\subsection{The \texttt{Phases.csv} file}\label{the-phases.csv-file}
+\subsection{The \texttt{Phases.csv} file}
 
 Suppose we want to teach subjects to discriminate a red square from a
 white square. We then want to know how subjects respond to, say, a pink
@@ -173,22 +173,22 @@ hand, will be performed in phase 2 after all phase 1 trials have been
 run.
 
 \begin{longtable}[c]{@{}lllll@{}}
+\hline\noalign{\medskip}
+Phase & Stimulus & Trials & Reward & US
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+1 & Red & 20 & 0.9 & Smiley
+\\\noalign{\medskip}
+1 & White & 20 & 0.1 & Smiley
+\\\noalign{\medskip}
+2 & Pink & 5 & 0 &
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A simple \texttt{Phases.csv} to teach a discrimination between
 stimuli Red and White, and then test responding to Pink. Note that the
 US field can be left empty if the Reward probability is 0.
-\label{phases}}\tabularnewline
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endhead
-1 & Red & 20 & 0.9 & Smiley\tabularnewline
-1 & White & 20 & 0.1 & Smiley\tabularnewline
-2 & Pink & 5 & 0 &\tabularnewline
-\bottomrule
+\label{phases}}
 \end{longtable}
 
 \pagebreak
@@ -202,42 +202,40 @@ example, the \texttt{Phases.csv} file in Tables \ref{phases} and
 \ref{phases-order2} runs phase 2 before phase 1.
 
 \begin{longtable}[c]{@{}lllll@{}}
+\hline\noalign{\medskip}
+Phase & Stimulus & Trials & Reward & US
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+1 & Red & 20 & 0.9 & Smiley
+\\\noalign{\medskip}
+2 & Pink & 5 & 0 &
+\\\noalign{\medskip}
+1 & White & 20 & 0.1 & Smiley
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{With this \texttt{Phases.csv} file, alex will run phase 1
-before phase 2 (cf.~Table \ref{phases-order2}).
-\label{phases-order1}}\tabularnewline
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endhead
-1 & Red & 20 & 0.9 & Smiley\tabularnewline
-2 & Pink & 5 & 0 &\tabularnewline
-1 & White & 20 & 0.1 & Smiley\tabularnewline
-\bottomrule
+before phase 2 (cf.~Table \ref{phases-order2}). \label{phases-order1}}
 \end{longtable}
 
 \begin{longtable}[c]{@{}lllll@{}}
+\hline\noalign{\medskip}
+Phase & Stimulus & Trials & Reward & US
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+2 & Pink & 5 & 0 &
+\\\noalign{\medskip}
+1 & Red & 20 & 0.9 & Smiley
+\\\noalign{\medskip}
+1 & White & 20 & 0.1 & Smiley
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{With this \texttt{Phases.csv} file, alex will run phase 2
-before phase 1 (cf.~Table \ref{phases-order1}).
-\label{phases-order2}}\tabularnewline
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endhead
-2 & Pink & 5 & 0 &\tabularnewline
-1 & Red & 20 & 0.9 & Smiley\tabularnewline
-1 & White & 20 & 0.1 & Smiley\tabularnewline
-\bottomrule
+before phase 1 (cf.~Table \ref{phases-order1}). \label{phases-order2}}
 \end{longtable}
 
-\subsection{The \texttt{Stimuli.csv} file}\label{the-stimuli.csv-file}
+\subsection{The \texttt{Stimuli.csv} file}
 
 How does alex know that Red, White, and Pink mentioned in the
 \texttt{Phases.csv} files in Tables \ref{phases}--\ref{phases-order2}
@@ -246,23 +244,24 @@ face? This information is contained in the \texttt{Stimuli.csv} file,
 see Table \ref{stimuli}.
 
 \begin{longtable}[c]{@{}llllll@{}}
+\hline\noalign{\medskip}
+Name & Type & Parameters & Color & XOffset & YOffset
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Red & square & 50 & red & 0 & 0
+\\\noalign{\medskip}
+White & square & 50 & white & 0 & 0
+\\\noalign{\medskip}
+Pink & square & 50 & 255-128-128 & 0 & 0
+\\\noalign{\medskip}
+Smiley & image & smile-o-white.png & & 0 & -150
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Stimuli.csv} file instructing alex that stimuli Red,
 White, and Pink are differently colored 50x50 pixel squares, and that
 Smiley is an image contained in the file \texttt{smile-o-white.png}.
-\label{stimuli}}\tabularnewline
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endhead
-Red & square & 50 & red & 0 & 0\tabularnewline
-White & square & 50 & white & 0 & 0\tabularnewline
-Pink & square & 50 & 255-128-128 & 0 & 0\tabularnewline
-Smiley & image & smile-o-white.png & & 0 & -150\tabularnewline
-\bottomrule
+\label{stimuli}}
 \end{longtable}
 
 The fields in Table \ref{stimuli} should be fairly intuitive, but here
@@ -339,7 +338,7 @@ is a detailed explanation:
   values place them left of center).
 \end{itemize}
 
-\subsection{The \texttt{Groups.csv} file}\label{the-groups.csv-file}
+\subsection{The \texttt{Groups.csv} file}
 
 The \texttt{Groups.csv} file contains information about the experimental
 groups you want to run. If all subjects undergo the same treatment, you
@@ -360,95 +359,94 @@ files in Tables \ref{subjects-color-parameters} and
 \ref{stimuli-color-parameters}.
 
 \begin{longtable}[c]{@{}ll@{}}
+\hline\noalign{\medskip}
+Group & Size
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+1 & 10
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Groups.csv} file instructing alex to run 6 subjects.
-\label{subjects}}\tabularnewline
-\toprule
-Group & Size\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Group & Size\tabularnewline
-\midrule
-\endhead
-1 & 10\tabularnewline
-\bottomrule
+\label{subjects}}
 \end{longtable}
 
 \begin{longtable}[c]{@{}llllll@{}}
+\hline\noalign{\medskip}
+Name & Type & Parameters & Color & XOffset & YOffset
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Red & square & 50 & red & 0 & 0
+\\\noalign{\medskip}
+White & square & 50 & white & 0 & 0
+\\\noalign{\medskip}
+Pink & square & 50 & * & 0 & 0
+\\\noalign{\medskip}
+Smiley & image & smile-o-white.png & & 0 & -150
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Stimuli.csv} file instructing alex to look up the
 Color of the Pink stimulus in the \texttt{Groups.csv} file.
-\label{stimuli-color}}\tabularnewline
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endhead
-Red & square & 50 & red & 0 & 0\tabularnewline
-White & square & 50 & white & 0 & 0\tabularnewline
-Pink & square & 50 & * & 0 & 0\tabularnewline
-Smiley & image & smile-o-white.png & & 0 & -150\tabularnewline
-\bottomrule
+\label{stimuli-color}}
 \end{longtable}
 
 \begin{longtable}[c]{@{}lll@{}}
+\hline\noalign{\medskip}
+Group & Size & PinkColor
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+1 & 10 & 255-128-128
+\\\noalign{\medskip}
+2 & 10 & 255-190-190
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Groups.csv} file instructing alex to run 6 subjects
 split in two treatment groups with different Color attributes for the
-Pink stimulus (see Table \ref{stimuli-color}).
-\label{subjects-color}}\tabularnewline
-\toprule
-Group & Size & PinkColor\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Group & Size & PinkColor\tabularnewline
-\midrule
-\endhead
-1 & 10 & 255-128-128\tabularnewline
-2 & 10 & 255-190-190\tabularnewline
-\bottomrule
+Pink stimulus (see Table \ref{stimuli-color}). \label{subjects-color}}
 \end{longtable}
 
 \begin{longtable}[c]{@{}llllll@{}}
+\hline\noalign{\medskip}
+Name & Type & Parameters & Color & XOffset & YOffset
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Red & square & *Red & red & 0 & 0
+\\\noalign{\medskip}
+White & square & 50 & white & 0 & 0
+\\\noalign{\medskip}
+Pink & square & 50 & *Pink & 0 & 0
+\\\noalign{\medskip}
+Smiley & image & smile-o-white.png & & 0 & -150
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Stimuli.csv} file instructing alex to run look up in
 the \texttt{Groups.csv} file both the Color of stimulus Pink and the
 Parameters of stimulus Red (see Table \ref{subjects-color-parameters}).
-\label{stimuli-color-parameters}}\tabularnewline
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endhead
-Red & square & *Red & red & 0 & 0\tabularnewline
-White & square & 50 & white & 0 & 0\tabularnewline
-Pink & square & 50 & *Pink & 0 & 0\tabularnewline
-Smiley & image & smile-o-white.png & & 0 & -150\tabularnewline
-\bottomrule
+\label{stimuli-color-parameters}}
 \end{longtable}
 
 \begin{longtable}[c]{@{}llll@{}}
+\hline\noalign{\medskip}
+Group & Size & PinkColor & RedParameters
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+1 & 10 & 255-128-128 & 25
+\\\noalign{\medskip}
+2 & 10 & 255-128-128 & 50
+\\\noalign{\medskip}
+3 & 10 & 255-190-190 & 50
+\\\noalign{\medskip}
+4 & 10 & 255-190-190 & 75
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Groups.csv} file instructing alex to run 4
 experimental groups. Each group receives a unique combination of
 PinkColor and RedParameters (see Table \ref{stimuli-color-parameters}).
-\label{subjects-color-parameters}}\tabularnewline
-\toprule
-Group & Size & PinkColor & RedParameters\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Group & Size & PinkColor & RedParameters\tabularnewline
-\midrule
-\endhead
-1 & 10 & 255-128-128 & 25\tabularnewline
-2 & 10 & 255-128-128 & 50\tabularnewline
-3 & 10 & 255-190-190 & 50\tabularnewline
-4 & 10 & 255-190-190 & 75\tabularnewline
-\bottomrule
+\label{subjects-color-parameters}}
 \end{longtable}
 
 \hyperdef{}{global}{\subsection{The \texttt{Parameters.csv}
@@ -459,31 +457,41 @@ the whole experiment. Here is a sample file (as above, the file is in
 CSV format, displayed here as a table for legibility):
 
 \begin{longtable}[c]{@{}ll@{}}
-\caption{Sample \texttt{Parameters.csv} file with default
-values.}\tabularnewline
-\toprule
-Parameter & Value\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Parameter & Value\tabularnewline
-\midrule
-\endhead
-CSDuration & 4000\tabularnewline
-CSUSInterval & 0\tabularnewline
-USDuration & 400\tabularnewline
-ResponseTimeMin & 0\tabularnewline
-ResponseTimeMax & 4000\tabularnewline
-MinITI & 1000\tabularnewline
-MaxITI & 3000\tabularnewline
-Response & \textless{}space\textgreater{}\tabularnewline
-MaxResponses & 100\tabularnewline
-BackgroundColor & gray95\tabularnewline
-ForegroundColor & black\tabularnewline
-FontName & Vera\tabularnewline
-FontSize & 36\tabularnewline
-Test & 0\tabularnewline
-\bottomrule
+\hline\noalign{\medskip}
+Parameter & Value
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+CSDuration & 4000
+\\\noalign{\medskip}
+CSUSInterval & 0
+\\\noalign{\medskip}
+USDuration & 400
+\\\noalign{\medskip}
+ResponseTimeMin & 0
+\\\noalign{\medskip}
+ResponseTimeMax & 4000
+\\\noalign{\medskip}
+MinITI & 1000
+\\\noalign{\medskip}
+MaxITI & 3000
+\\\noalign{\medskip}
+Response & \textless{}space\textgreater{}
+\\\noalign{\medskip}
+MaxResponses & 100
+\\\noalign{\medskip}
+BackgroundColor & gray95
+\\\noalign{\medskip}
+ForegroundColor & black
+\\\noalign{\medskip}
+FontName & Vera
+\\\noalign{\medskip}
+FontSize & 36
+\\\noalign{\medskip}
+Test & 0
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
+\caption{Sample \texttt{Parameters.csv} file with default values.}
 \end{longtable}
 
 \textbf{CSDuration} is the default duration of all the non-US stimuli,
@@ -532,7 +540,7 @@ The \textbf{Test} parameter, if set to 1, skips instructions and
 acquisition of demographic information. It is meant to quickly start the
 experiment during development.
 
-\section{More about stimuli}\label{more-about-stimuli}
+\section{More about stimuli}
 
 We mentioned above one bit of special notation in the definition of
 stimuli, namely the construction \texttt{*} (star) + stimulus name (see
@@ -552,22 +560,22 @@ makes explicit our intention of having three squares of equal size, and
 it reduces the possibility of typing errors.
 
 \begin{longtable}[c]{@{}llllll@{}}
+\hline\noalign{\medskip}
+Name & Type & Parameters & Color & XOffset & YOffset
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Red & square & 50 & red & 0 & 0
+\\\noalign{\medskip}
+White & square & :Red & white & 0 & 0
+\\\noalign{\medskip}
+Pink & square & :Red & Pink & 0 & 0
+\\\noalign{\medskip}
+Smiley & image & smile-o-white.png & & 0 & 150
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Stimuli.csv} file demonstrating the \texttt{*} and
-\texttt{:} special notations for stimuli.
-\label{stimuli-special}}\tabularnewline
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endhead
-Red & square & 50 & red & 0 & 0\tabularnewline
-White & square & :Red & white & 0 & 0\tabularnewline
-Pink & square & :Red & Pink & 0 & 0\tabularnewline
-Smiley & image & smile-o-white.png & & 0 & 150\tabularnewline
-\bottomrule
+\texttt{:} special notations for stimuli. \label{stimuli-special}}
 \end{longtable}
 
 Another bit of special notation is \texttt{+} (plus), which is used to
@@ -577,39 +585,39 @@ the red and white squares together. We would then use the files in
 Tables \ref{phases-plus} and \ref{stimuli-plus}.
 
 \begin{longtable}[c]{@{}lllll@{}}
+\hline\noalign{\medskip}
+Phase & Stimulus & Trials & Reward & US
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+1 & Red & 20 & 0.9 & Smiley
+\\\noalign{\medskip}
+1 & White & 20 & 0.1 & Smiley
+\\\noalign{\medskip}
+2 & Red+White & 5 & 0 &
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Phases.csv} file with a compound stimulus in phase 2.
-\label{phases-plus}}\tabularnewline
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endhead
-1 & Red & 20 & 0.9 & Smiley\tabularnewline
-1 & White & 20 & 0.1 & Smiley\tabularnewline
-2 & Red+White & 5 & 0 &\tabularnewline
-\bottomrule
+\label{phases-plus}}
 \end{longtable}
 
 \begin{longtable}[c]{@{}llllll@{}}
+\hline\noalign{\medskip}
+Name & Type & Parameters & Color & XOffset & YOffset
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Red & square & 50 & red & 0 & 0
+\\\noalign{\medskip}
+White & :Red & :Red & white & 60 & :Red
+\\\noalign{\medskip}
+Smiley & image & smile-o-white.png & & 0 & 150
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Stimuli.csv} file to go with the \texttt{Phases.csv}
 file in Table \ref{phases-plus}. Note that we need to offset the white
 square, otherwise it would overlap with the red one when the two are
-presented together. \label{stimuli-plus}}\tabularnewline
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset\tabularnewline
-\midrule
-\endhead
-Red & square & 50 & red & 0 & 0\tabularnewline
-White & :Red & :Red & white & 60 & :Red\tabularnewline
-Smiley & image & smile-o-white.png & & 0 & 150\tabularnewline
-\bottomrule
+presented together. \label{stimuli-plus}}
 \end{longtable}
 
 \textbf{Note:} The + notation is also valid for USs. This can be used to
@@ -628,8 +636,7 @@ Visual stimuli are added to the screen in the order they appear in the
 on the screen, those defined \emph{later} will be displayed \emph{on
 top} of those defined earlier, obscuring them partly or wholly.
 
-\subsection{Stimuli that are always present during a
-phase}\label{stimuli-that-are-always-present-during-a-phase}
+\subsection{Stimuli that are always present during a phase}
 
 It is sometimes desirable to have a stimulus or combination of stimuli
 present at all times, including inter-stimulus intervals, for example as
@@ -647,7 +654,7 @@ have to define the stimulus before all those that are intended to appear
 on top of it. If the order is incorrect, the intended backdrop will
 instead obscure the other stimuli.
 
-\section{More about phases}\label{more-about-phases}
+\section{More about phases}
 
 Similarly to what we have just seen about stimuli, phase parameters can
 be set to differ by group using the \texttt{*} and \texttt{:} notation.
@@ -660,39 +667,36 @@ which provides the information that is ``starred'' in
 \texttt{Stimuli.csv}.
 
 \begin{longtable}[c]{@{}lllll@{}}
+\hline\noalign{\medskip}
+Phase & Stimulus & Trials & Reward & US
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Training & A & 50 & * & Smiley
+\\\noalign{\medskip}
+Training & B & 50 & 0 &
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Phases.csv} using \texttt{*} notation indicating that
 the value of the Reward variable given as \texttt{*Training} has to be
 looked up in the \texttt{Groups.csv} file (see Table
-\ref{groups-phases-star-notation}).
-\label{phases-star-notation}}\tabularnewline
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Phase & Stimulus & Trials & Reward & US\tabularnewline
-\midrule
-\endhead
-Training & A & 50 & * & Smiley\tabularnewline
-Training & B & 50 & 0 &\tabularnewline
-\bottomrule
+\ref{groups-phases-star-notation}). \label{phases-star-notation}}
 \end{longtable}
 
 \begin{longtable}[c]{@{}lll@{}}
+\hline\noalign{\medskip}
+Group & Size & TrainingAReward
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Rich & 20 & 1
+\\\noalign{\medskip}
+Poor & 20 & 0.5
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Groups.csv} file serving as a companion to the
 \texttt{Phases.csv} file in Table \ref{phases-star-notation}.
-\label{groups-phases-star-notation}}\tabularnewline
-\toprule
-Group & Size & TrainingAReward\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Group & Size & TrainingAReward\tabularnewline
-\midrule
-\endhead
-Rich & 20 & 1\tabularnewline
-Poor & 20 & 0.5\tabularnewline
-\bottomrule
+\label{groups-phases-star-notation}}
 \end{longtable}
 
 Note that the name of the column in \texttt{Groups.csv} is
@@ -717,20 +721,18 @@ correct for White, you would write as in Table
 \ref{per-stimulus-responses}.
 
 \begin{longtable}[c]{@{}llllll@{}}
+\hline\noalign{\medskip}
+Phase & Stimulus & Trials & Reward & US & Response
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+1 & Red & 20 & 1 & Smiley & \textless{}left\textgreater{}
+\\\noalign{\medskip}
+1 & White & 20 & 1 & Smiley & \textless{}right\textgreater{}
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Phases.csv} specifying different responses for
-stimuli Red and White. \label{per-stimulus-responses}}\tabularnewline
-\toprule
-Phase & Stimulus & Trials & Reward & US & Response\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Phase & Stimulus & Trials & Reward & US & Response\tabularnewline
-\midrule
-\endhead
-1 & Red & 20 & 1 & Smiley & \textless{}left\textgreater{}\tabularnewline
-1 & White & 20 & 1 & Smiley &
-\textless{}right\textgreater{}\tabularnewline
-\bottomrule
+stimuli Red and White. \label{per-stimulus-responses}}
 \end{longtable}
 
 Here \texttt{\textless{}left\textgreater{}} and
@@ -794,21 +796,18 @@ trial to ever terminate before the allotted time, you can use a value of
 MaxResponses so high that it cannot be possibly reached, such as 1000.
 
 \begin{longtable}[c]{@{}llllll@{}}
+\hline\noalign{\medskip}
+Phase & Stimulus & Trials & Reward & US & Response
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+1 & Red & 20 & .9 & Smiley & *\textless{}space\textgreater{}
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Phases.csv} file using the Response notation
 *\textless{}space\textgreater{} to indicate a classical conditioning
 trial in which the US is delivered at the end of the trial regardless of
-subject behavior. \label{classical}}\tabularnewline
-\toprule
-Phase & Stimulus & Trials & Reward & US & Response\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Phase & Stimulus & Trials & Reward & US & Response\tabularnewline
-\midrule
-\endhead
-1 & Red & 20 & .9 & Smiley &
-*\textless{}space\textgreater{}\tabularnewline
-\bottomrule
+subject behavior. \label{classical}}
 \end{longtable}
 
 Note also that on * trials, the ResponseTimeMin and ResponseTimeMax
@@ -835,39 +834,35 @@ bar (the default response) only once to move on, even if a larger number
 of responses is allowed for actual experimental trials.
 
 \begin{longtable}[c]{@{}llll@{}}
+\hline\noalign{\medskip}
+Phase & Stimulus & Trials & MaxResponses
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+Start & StartText & 1 & 1
+\\\noalign{\medskip}
+End & EndText & 1 & 1
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Phases.csv} file for displaying to subjects
 instructions and a final message (see also Table
-\ref{stimuli-instructions}). \label{phases-instructions}}\tabularnewline
-\toprule
-Phase & Stimulus & Trials & MaxResponses\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Phase & Stimulus & Trials & MaxResponses\tabularnewline
-\midrule
-\endhead
-Start & StartText & 1 & 1\tabularnewline
-End & EndText & 1 & 1\tabularnewline
-\bottomrule
+\ref{stimuli-instructions}). \label{phases-instructions}}
 \end{longtable}
 
 \begin{longtable}[c]{@{}lllllll@{}}
+\hline\noalign{\medskip}
+Name & Type & Parameters & Color & XOffset & YOffset & Duration
+\\\noalign{\medskip}
+\hline\noalign{\medskip}
+StartText & textfile & Start.txt & & & & 600000
+\\\noalign{\medskip}
+EndText & textfile & End.txt & & & & 600000
+\\\noalign{\medskip}
+\hline
+\noalign{\medskip}
 \caption{A \texttt{Stimuli.csv} file for displaying to subjects
 instructions and a final message (see also Table
-\ref{phases-instructions}). \label{stimuli-instructions}}\tabularnewline
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset &
-Duration\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Name & Type & Parameters & Color & XOffset & YOffset &
-Duration\tabularnewline
-\midrule
-\endhead
-StartText & textfile & Start.txt & & & & 600000\tabularnewline
-EndText & textfile & End.txt & & & & 600000\tabularnewline
-\bottomrule
+\ref{phases-instructions}). \label{stimuli-instructions}}
 \end{longtable}
 
 \hyperdef{}{data-format}{\section{Data Format}\label{data-format}}
@@ -943,7 +938,7 @@ The remaining columns are as follows:
 We believe this information characterizes subject behavior competely,
 but please do let us know if you think details could be added.
 
-\section{Troubleshooting}\label{troubleshooting}
+\section{Troubleshooting}
 
 Errors may arise if Design files have incorrect or incomplete
 information. Presently, alex performs some checks at startup, but some
