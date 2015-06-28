@@ -1,4 +1,4 @@
-Phase,Stimuli,Trials,Reward,US,Response
+Phase,S1,Trials,S2Prob,S2,Response
 Training,A1,1,0.9,Smiley,a
 Training,A2,1,0.9,Smiley,a
 Training,A3,1,0.9,Smiley,a

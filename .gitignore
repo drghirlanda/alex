@@ -6,3 +6,6 @@
 *.log
 *.pdf
 *.tex
+*.toc
+*.tpl
+*.out

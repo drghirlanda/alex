@@ -85,7 +85,7 @@ define Start( par ) {
   ReadPhases()     
   ReadStimuli()    
 
-  # We can use loggging only after ReadSubject() and ReadParameters():
+  # We can use logging only after ReadSubject() and ReadParameters():
   MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
   MyLog( "Start: Set working directory to '" + gWD + "'" ) 
   # Log parameter, phases, and stimuli:
@@ -259,6 +259,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   } else {
     s2Duration <- "NA"
     rewardProb <- "NA"
+    response <- "NA"
   }
   # Determine some other parameters:
   s1s2Interval <- Parameter("S1S2Interval")
@@ -318,7 +319,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     if( GetTime() >= endTime ) {
       rt <- "NA"
       valid <- "F"
-    } else {
+    # Avoid counting <timeout> as response in * trial with S2 scheduled:
+    } elseif( not IsList(key) ) {
       responseCount <- responseCount + 1
     }
     # If response is invalid:
@@ -331,11 +333,11 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
       }
     # If response is valid (and not <timeout>) but S2 not scheduled:
-    } elseif (rt != "NA") {
+    } elseif( rt != "NA" ) {
       valid <- "T"
     }
     ## Save data line to file:
-    if( not IsList(key) or responseCount == 0) {
+    if( not IsList(key) or ( responseCount == 0 and rt == "NA" ) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gSex, gAge, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
@@ -887,7 +889,7 @@ define UndisplayBackground( phaseName ) {
 ## This function creates a new timer, checking that the onset and
 ## duration make sense
 define SetTimer( tOn, duration, stimulus ) {
-  if( tOn > GetTime() ) {
+  if( tOn < GetTime() ) {
     Message( stimulus+" start time is in the past: "+tOn, 1 )
   }
   if( duration < 0 ) {
