@@ -369,11 +369,11 @@ Table: Sample `Parameters.csv` file with default values.
 - **S1S2Interval** is the interval between S1 offset and S2 onset.
 
 - **ResponseTimeMin** and **ResponseTimeMax** define at what times
-  within a trial subjects can respond. Responses outside this time
-  window are considered invalid (see [Data format](#data-format))
-  and preclude S2 presentation. If not specified, ResponseTimeMin is set
-  to 0 and ResponseTimeMax to S1Duration, thus allowing responses at
-  any time during the trial.
+  within a trial subjects can respond. Responses made outside this time
+  window do not contribute to the per-trial response count, and
+  do not result in S2 presentation. If not specified, ResponseTimeMin
+  is set to 0 and ResponseTimeMax to S1Duration, thus allowing responses
+  at any time during the trial.
   
 - **MinITI** and **MaxITI** are the minimum and maximum values of the
   inter-trial interval. Each inter-trial interval will be drawn between
@@ -515,7 +515,7 @@ function of reward probability. We could use the `Phases.csv` file in
 Table \ref{phases-star-notation}, which employs `*` notation for the
 S2Prob variable, and the `Groups.csv` file in Table
 \ref{groups-phases-star-notation}, which provides the information that
-is "starred" in `Stimuli.csv`.
+is "starred" in `Phases.csv`.
 
 Phase    S1 Trials S2Prob S2
 -----    -- ------ ------ --
@@ -552,8 +552,8 @@ The default Response key for all S1s can be specified in
 `Parameters.csv`. We can also, however, specify different responses
 for different S1s by adding a Response column to the `Phases.csv`
 file. For example, to specify that the left arrow key is the correct
-response for S1 Red in Phase 1, but that the right arrow is correct for
-White, you would write as in Table \ref{per-stimulus-responses}.
+response for the S1 Red in Phase 1, but that the right arrow is correct
+for White, you would write as in Table \ref{per-stimulus-responses}.
 
 Phase S1    Trials S2Prob S2     Response
 ----- --    ------ ------ --     --------
@@ -579,32 +579,32 @@ codes that can be used to specify correct responses:
 - Navigation, function keys: `<up>`, `<down>`, `<left>`, `<right>`,
    `<home>`, `<end>`, `<pageup>`, `<pagedown>`, `<esc>`, `<f1>`--`<f15>`
 
-Responses can also employ `*` notation. Prefixing a specified response
-with an asterisk means that the S2 will be displayed *only*
-at the end of the trial (with the appropriate S2Prob) *regardless* of
-what the subject does during the trial, as in classical conditioning
-or causal rating studies. Thus the `Phases.csv` file in
-Table \ref{classical} specifies that Red is to be rewarded 90%
-of the time at the end of a trial, *regardless* of whether the subject
-responds or not. Note that subject responses are still recorded, and
-if they exceed the allowed maximum the trial terminates without
-reward. This last feature makes it possible to implement omission
-training, i.e., to reward subjects only when they abstain from
-responding. This is controlled by the [MaxResponses](#maxresponses)
-parameter. The default value is 1, which corresponds precisely to
-omission training. If you don't want the trial to ever terminate
-before the allotted time, you can use a value of MaxResponses so high
-that it cannot be possibly reached, such as 1000.
+Another special response code is `<classical>`. Specifying a response as
+such, either for a particular phase or as the default for all S1s,
+effectively means that the S2 will be displayed *only* at the end of the
+trial (with the appropriate S2Prob) *regardless* of what the subject does
+during the trial, as in classical conditioning or causal rating studies.
+Thus the `Phases.csv` file in Table \ref{classical} specifies that Red is
+to be rewarded 90% of the time at the end of a trial, *regardless* of
+whether the subject responds or not. Note that subject responses are
+still recorded, and if they exceed the allowed maximum the trial
+terminates without S2 presentation. This last feature makes it possible to
+implement omission training, i.e., to reward subjects only when they
+abstain from responding. This is controlled by the
+[MaxResponses](#maxresponses) parameter. The default value is 1, which
+corresponds precisely to omission training. If you don't want the trial
+to ever terminate before the allotted time, you can use a value of
+MaxResponses so high that it cannot be possibly reached, such as 1000.
 
 Phase S1  Trials S2Prob S2     Response
 ----- --  ------ ------ --     --------
-1     Red 20     .9     Smiley *\<space\>
+1     Red 20     .9     Smiley \<classical\>
 
-Table: A `Phases.csv` file using the Response notation `*<space>` to
+Table: A `Phases.csv` file using the Response notation `<classical>` to
 indicate a classical conditioning trial in which the S2 is presented
 at the end of the trial regardless of subject behavior. \label{classical}
 
-Note also that on `*` trials, the ResponseTimeMin and ResponseTimeMax
+Note also that on classical trials, the ResponseTimeMin/Max
 features are disabled (see [Global parameters](#global)). The S2 (if any)
 is presented only once at the end of the trial, so it is irrelevant when
 a subject responds.
@@ -681,11 +681,11 @@ The remaining columns are as follows:
  - **S1Duration**: Duration of S1 (or inter-trial interval).
 
  - **S1On**: Was S1 present when the response was made? (`T` for true,
-   `F` for false — as in the case of responding during an S1–S2 interval.)
+   `F` for false.)
 
- - **S2**: Designated S2 for this trial (`NA` if not specified in
-   `Phases.csv` and during ITIs; **S2Duration**, **S2Prob**, and
-   **Response** are also `NA` in these cases).
+ - **S2**: Designated S2 for this trial (or `NA` if not specified in
+   `Phases.csv` and during ITIs; **S2Duration** and **S2Prob** are also
+   `NA` in these cases).
 
  - **S2Duration**: Duration of S2.
 
@@ -694,14 +694,14 @@ The remaining columns are as follows:
  - **S2Prob**: Probability of S2 presentation, given a correct response
    (both specified in `Phases.csv`).
 
- - **Response**: Key designated as the correct response. Recall that the
-   key may be prepended by * (asterisk) if the trial was a "classical
-   conditioning" one (see [here](#responses)).
+ - **Response**: Key designated as the correct response (`NA` during ITIs),
+   or the code `<classical>` if the trial was a "classical conditioning"
+   one (see [here](#responses)).
 
  - **RT**: Response time since start of trial (`NA` if trial timed out).
 
- - **Valid**: Was the response made during a trial, within the window
-   delimited by ResponseTimeMin and ResponseTimeMax? (`T` or `F`).
+ - **S2Pres**: Did this response result in S2 presentation? (For classical
+   trials: was an S2 scheduled for the end of this trial?) (`T` or `F`).
 
  - **Key**: Subject's actual response. This can be the correct
    key, any other key the subject may have pressed, or `<timeout>`
@@ -724,6 +724,13 @@ production. If you think errors are due to bugs in alex, please write
 us at the address in [Contacts](#contacts). Also do contact us if you
 think that your design files are correct but the experiment does not
 run as you expect.
+
+In addition to double quotes in CSV design files (see the footnote below
+Table \ref{phases}), alex requires final line endings in these files.
+If a design file lacks a newline at the very end, alex will exclude the
+last row when reading in this file, resulting in obvious errors. Most
+spreadsheet software saves CSV files with this final newline, but you
+can always check for this by opening the design files with a text editor.
 
 With a few exceptions, all errors print a hopefully informative
 message both on the standard console output (terminal) and on

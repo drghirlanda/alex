@@ -144,7 +144,7 @@ define Start( par ) {
   ## gSubjectHeader), then fields for other data:
   FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
     "Sex","Age","Time","Phase","Trial","S1","S1Duration","S1On",
-    "S2","S2Duration","S2On","S2Prob","Response","RT","Valid","Key"] ) )
+    "S2","S2Duration","S2On","S2Prob","Response","RT","S2Pres","Key"] ) )
 
   ## Run experimental phases. We loop through all elements of the
   ## Phase column in Phases.csv. Phase p is run with RunPhase( p ),
@@ -256,10 +256,9 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   s1Duration <- ToNumber( ResolveDuration( s1, "S1" ) )
   if( rewardProb>0 ) {
     s2Duration <- ToNumber( ResolveDuration( s2, "S2" ) )
-  } else {
+  } elseif( s2 == "NA" ) {
     s2Duration <- "NA"
     rewardProb <- "NA"
-    response <- "NA"
   }
   # Determine some other parameters:
   s1s2Interval <- Parameter("S1S2Interval")
@@ -289,14 +288,16 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   # specification for 'classical conditioning' trials. If the trial is
   # 'classical', we also decide whether to show S2 or not. If S2 is
   # showed, we lengthen trial duration accordingly
-  if( SubString(response,1,1) == "*" ) { # Classical trial
+  if( response == "<classical>" ) { # Classical trial
     classical <- 1
     if( Random() < rewardProb ) {
-      valid <- "T"
+      s2Pres <- "T"
       SetTimer( endTime+s1s2Interval, s2Duration, s2 ) # Schedule S2
       endTime <- endTime+s1s2Interval + s2Duration     # Lengthen trial
+    } else {
+      s2Pres <- "F"
     }
-  } else { # Operant trial
+  } else { # Instrumental trial
     classical <- 0
   }
   # We are ready to run the trial loop. The trial continues until
@@ -315,33 +316,35 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     if( key == " " ) {
       key <- "<space>"
     }
-    rt <- GetTime() - startTime # Time since trial start
-    if( GetTime() >= endTime ) {
+    if( GetTime() >= endTime and responseCount == 0 ) { # Trial timed out
       rt <- "NA"
-      valid <- "F"
-    # Avoid counting <timeout> as response in * trial with S2 scheduled:
-    } elseif( not IsList(key) ) {
-      responseCount <- responseCount + 1
+    } else {
+      rt <- GetTime() - startTime # Time since trial start
     }
-    # If response is invalid:
-    if( rt<rtMin or rt>rtMax ) {
-        valid <- "F"
-    # If response is valid and "rewarded":
-    } elseif( Random() < rewardProb and key == response ) {
-      valid <- "T"
-      if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
-        SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
+    if( classical ) { # Avoid counting <timeout> as response:
+      if( not IsList(key) ) {
+        responseCount <- responseCount + 1
       }
-    # If response is valid (and not <timeout>) but S2 not scheduled:
-    } elseif( rt != "NA" ) {
-      valid <- "T"
+    } else { # Only relevant for instrumental trials
+      s2Pres <- "F" # No S2 by default
+      if( not ( rt<rtMin or rt>rtMax or rt!="NA" ) ) {
+        # Response is valid, count it:
+        responseCount <- responseCount + 1
+      }
+      # If response is also "rewarded":
+      if( Random() < rewardProb and key == response ) {
+        s2Pres <- "T"
+        if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
+          SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
+        }
+      }
     }
     ## Save data line to file:
     if( not IsList(key) or ( responseCount == 0 and rt == "NA" ) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gSex, gAge, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
-        response, rt, valid, key] ) )
+        response, rt, s2Pres, key] ) )
     }
   }
   ExpireTimers() # Turn off everything
