@@ -1,6 +1,0 @@
-Hostname,Group,Subject,Sex,Age,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,Valid,Key
-helix,1,1,NA,NA,3986,Test,1,S1,4000,T,S2,400,F,1,<space>,493,T,<space>
-helix,1,1,NA,NA,4674,Test,1,S1,4000,T,S2,400,F,1,<space>,1181,T,<space>
-helix,1,1,NA,NA,5472,Test,1,S1,4000,T,S2,400,F,1,<space>,1981,T,<lctrl>
-helix,1,1,NA,NA,5547,Test,1,S1,4000,T,S2,400,F,1,<space>,2056,T,<lalt>
-helix,1,1,NA,NA,5730,Test,1,S1,4000,T,S2,400,F,1,<space>,2238,T,<rshift>

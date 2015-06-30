@@ -1,3 +1,4 @@
 Name,Type,Parameters,Color,XOffset,YOffset,Duration
-S1,square,50,255-0-0,0,0,4000
-S2,square,50,green,0,-100,400
+Circle,circle,50,white,0,0,1000
+Start,textfile,Start.txt,,,,600000
+End,textfile,End.txt,,,,600000

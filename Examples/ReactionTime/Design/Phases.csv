@@ -1,2 +1,4 @@
-Phase,S1,Trials,S2Prob,S2,Response,MaxResponses
-Test,S1,5,1,S2,<space>,100
+Phase,S1,Trials
+Start,Start,1
+Test,Circle,20
+End,End,1
