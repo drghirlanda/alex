@@ -252,6 +252,8 @@ define ResolveDuration( stimulus, role ) {
 
 define RunTrial( phase, trial, s1, rewardProb, s2, response, 
                  maxResponses ) {
+  MyLog( "RunTrial: Starting trial: " + 
+    [phase, trial, s1, rewardProb, s2, response, maxResponses ] )
   # Determine S1 and S2 duration:
   s1Duration <- ToNumber( ResolveDuration( s1, "S1" ) )
   if( rewardProb>0 ) {
@@ -303,7 +305,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   # We are ready to run the trial loop. The trial continues until
   # either time runs out or we reach the maximum number of (valid)
   # responses.
-  MyLog( "RunTrial: "+GetTime()+": trial will end at "+endTime )
+  MyLog( "RunTrial: trial will end at "+endTime )
   while( responseCount<maxResponses and GetTime()<endTime ) {
     UpdateTimers()
     tNext <- NextTimer()
@@ -327,7 +329,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       }
     } else { # Only relevant for instrumental trials
       s2Pres <- "F" # No S2 by default
-      if( not ( rt<rtMin or rt>rtMax or rt!="NA" ) ) {
+      if( not ( rt<rtMin or rt>rtMax ) or rt!="NA" ) {
         # Response is valid, count it:
         responseCount <- responseCount + 1
       }
@@ -416,7 +418,7 @@ define RunPhase( phaseName ) {
   trialUSs          <- Flatten( trialUSs )
   trialResponses    <- Flatten( trialResponses )
   trialMaxResponses <- Flatten( trialMaxResponses )
-  MyLog( "RunPhase: Constructed trial list" )
+  MyLog( "RunPhase: Constructed trial list: " + trialStimuli )
 
   ## We define a random order for the trials, taking into account that
   ## the number of trials could be zero (in some experimental designs
@@ -426,7 +428,7 @@ define RunPhase( phaseName ) {
   } else {
     trialOrder <- []
   }
-  MyLog( "RunPhase: Constructed trial order" )
+  MyLog( "RunPhase: Constructed trial order: " + trialOrder )
 
   ## Now we are ready to run all trials:
   maxTrial <- Length( trialStimuli )
@@ -900,12 +902,12 @@ define SetTimer( tOn, duration, stimulus ) {
   }
   newTimer <- [ tOn, duration, stimulus, 0 ]
   PushOnEnd( gTimers, newTimer )
-  MyLog( "SetTimer: new timer " + newTimer )
+  MyLog( "SetTimer: New timer: " + newTimer )
 }
 
 ## This function goes through all existing timers, turning on those
-## that due and turning off and removing from the list thos that have
-## expired
+## that are due and turning off and removing from the list those that
+## have expired
 define UpdateTimers() {
   expired <- [] # List of expired timers
   i <- 1
@@ -940,7 +942,7 @@ define ExpireTimers() {
   gTimers <- []
 }
 
-## Returns 1 whether a stimulus is currently displayed, 0 otherwise
+## Returns 1 if a stimulus is currently displayed, 0 otherwise
 define TimerOn( stimulus ) {
   result <- "F"
   loop( timer, gTimers ) {
