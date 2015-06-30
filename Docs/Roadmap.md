@@ -6,16 +6,8 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
-- Redesign data lines to include info about CS, CSDuration, US,
-  USDuration, USProb, USPres, USOn. Proposal for new data line format:
-
-  [subject info], Host, Sex, Age, Time, Phase, Trial, S1,
-  S1Duration, S1On, S2, S2Duration, S2Prob, S2On, Response, RT, Key,
-  Reward
-
-  (this uses the new "neutral" terminology)
-
-- Add section on steady state testing in manual.
+- Add section on steady state testing in manual, perhaps as an
+  example.
 
 - Decide whether to rename alex to alex.pbl
 
@@ -23,12 +15,7 @@ Toward a release
   can be more lenient and determine the order of fields from the
   header line of Stimuli.csv (as is done in other Read*() functions).
 
-- Check Manual for styles and typos.
-
-- Example suite. Include also "cognitive" tasks like a categorization
-  task with test stimuli for prototype effect-shift. Other tasks:
-  simple discrimination, generalization, peak shift, replicate some
-  famous experiments, reaction times to bright or faint stimuli.
+- Example suite: reaction time, causal rating, categorization. 
 
 - A paper describing alex.
 
@@ -43,10 +30,6 @@ Toward a release
   possible to figure out which independent variables were manipulated
   between and within subjects, present the experimental design in a
   table, etc.
-
-- Extend * notation for Phases.csv, so that different groups can
-  differ in e.g., length of phases or reward probabilities.
-
 
 Future
 ======
@@ -74,6 +57,7 @@ Phases.csv:
 
     Phase Stimulus Durations Trials Rewards USs
     1     A,B      1000,2000 10     1       Smiley
+
 
 Multiple responses
 ------------------
