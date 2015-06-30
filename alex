@@ -450,6 +450,7 @@ define RunPhase( phaseName ) {
     thisITI <- ( minITI + ( maxITI - minITI )*Random() )
     itiLeft <- thisITI
     startTime <- GetTime()
+    itiResponses <- 0
     while( itiLeft > 1 ) {
       key <- WaitForListKeyPressWithTimeout( gKeys, itiLeft, 1 )
       if( key == " " ) {
@@ -460,11 +461,18 @@ define RunPhase( phaseName ) {
 
       ## Save data line for stimulus "ITI" with S2 details = "NA"
       if( not IsList(key) ) {
-      FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, "T",
-        "NA", "NA", "F", "NA", "NA", rt, "F", key] ) )
+        itiResponses <- itiResponses + 1
+        FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
+          gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, 
+	  "T", "NA", "NA", "F", "NA", "NA", rt, "F", key] ) )
       }
     }
+    ## Save a single ITI data line if no responses during ITI:  
+    if( not itiResponses ) {
+      FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
+        gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, "T",
+        "NA", "NA", "F", "NA", "NA", "NA", "F", "<timeout>"] ) ) 
+    }	
     ## Run trial and get response times and rewards collected:
     RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
               maxResponses )
