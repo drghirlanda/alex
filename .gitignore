@@ -1,5 +1,5 @@
 *~
-*.dat
+Data/*.csv
 .~lock*
 *.aux
 *.html
