@@ -471,7 +471,7 @@ define RunPhase( phaseName ) {
     if( not itiResponses ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, "T",
-        "NA", "NA", "F", "NA", "NA", "NA", "F", "<timeout>"] ) ) 
+        "NA", "NA", "F", "NA", "NA", thisITI, "F", "<timeout>"] ) ) 
     }	
     ## Run trial and get response times and rewards collected:
     RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
