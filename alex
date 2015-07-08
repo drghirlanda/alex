@@ -166,91 +166,312 @@ define Start( par ) {
   ShowCursor( 1 )
 }
 
+
 ########################################################################
 #                                                                      #
-# Display and Undisplay are two utility functions that can show and    #
-# hide multiple visual stimuli, and also start and pause the playback  #
-# of audio stimuli.                                                    #
+# This section contains the functions that read files in the Design    #
+# directory in order to configure the experiment.                      #
 #                                                                      #
 ########################################################################
 
-define Display( stimulus ) {
-  # The 'stimulus' may actually be a compound, like "A+B", so we split
-  # it into individual stimuli and then display each of them. We look
-  # up the stimulus objects in the gStimuli list.
+define ReadSubject() {
+  subjectsFile <- gWD + "Design/Groups.csv"
+  LockFile( subjectsFile )
+  subjects <- ReadCSV( subjectsFile )
+  gSubjectHeader <- Nth( subjects, 1 )
+  SetElement( gSubjectHeader, 2, "Subject")
+  found <- 0
+  ## From a random group, pick a subject that has not yet been run
+  loop( e, Shuffle( Rest(subjects) ) ) {
+    loop( s, Sequence(1, ToNumber(Nth(e,2)), 1) ) {
+      dataFilename <- gWD + "Data/" + Nth(e,1) + "-" + s + ".csv"
+      if( not FileExists(dataFilename) ) {
+        found <- 1
+        SetElement( e, 2, s )
+        break
+      }
+    }
+    if( found ) {
+      break
+    }
+  }
+  ## Open data file before releasing lock, to prevent race conditions
+  if( found ) {
+    gSubjectInfo <- e
+    gDataFile <- FileOpenWrite( dataFilename )
+    UnlockFile( subjectsFile )
+  } else {
+    UnlockFile( subjectsFile )
+    Message( "It looks like all subjects have been run!", 1 )
+  }
+  logFilename <- gWD + "Logs/" + Nth(e,1) + "-" + s + ".log"
+  gLogFile <- FileOpenWrite( logFilename )
+  gLogging <- Parameter("Log") 
+}
+
+define ReadStimuli() {
+  filename <- gWD + "Design/Stimuli.csv"   
+  csv <- ReadCSV( filename )
+  gStimulusHeader <- First( csv )
+  gStimulusInfo <- Rest( csv )
+  gStimNames <- []
+  gStimTypes <- []
+  gStimParams <- []
+  gStimColors <- []
+  gStimXOffsets <- []
+  gStimYOffsets <- []
+  loop( s, gStimulusInfo ) {
+    PushOnEnd( gStimNames, Nth( s, 1 ) )
+    PushOnEnd( gStimTypes, Nth( s, 2 ) )
+    PushOnEnd( gStimParams, Nth( s, 3 ) )
+    PushOnEnd( gStimColors, Nth( s, 4 ) )
+    PushOnEnd( gStimXOffsets, Nth( s, 5 ) )
+    PushOnEnd( gStimYOffsets, Nth( s, 6 ) )
+  }
+  ## Check there are no duplicate stimulus names
+  if( Length(gStimNames) != Length( Levels(gStimNames) ) ) {
+    Message("Duplicate in stimulus names: "+gStimNames, 1)
+  }
+  ## Now we are ready to create the stimulus objects
+  gStimuli <- []
   n <- Length( gStimNames )
-  loop( stimName, SplitString(stimulus, "+") ) {
-    i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
-    if( IsList(i) ) {
-      Message( "Cannot find stimulus: '" + stimName + "'", 1 )
-    }
-    s <- Nth( gStimuli, i )
-    if( IsAudioOut(s) ) {
-      StartPlayback( s )
+  loop( i, Sequence(1,n,1) ) {
+    stimulus <- Nth( gStimNames, i )
+    type <- Nth( gStimTypes, i )
+    if( StringLength( Nth( gStimColors, i ) ) ) {
+      ## Determine colors:
+      colors <- Resolve( stimulus, "Color", Nth(gStimColors, i) )
+      c1name <- First( colors )
+      if( StringLength(c1name) ) {
+        c1 <- MakeColorRGBString( c1name )
+      } else {
+        c1 <- gColor
+      }
+      if( Length(colors) == 2 ) {
+        c2name <- Rest( colors )
+        if( StringLength( c2name ) ) {
+          c2 <- MakeColorRGBString( c2name )
+        } else {
+          c2 <- gBackgroundColor
+        }
+      } else {
+        c2 <- gBackgroundColor
+      }    
     } else {
-      Show( s )
+      c1 <- gColor
+      c2 <- gBackgroundColor
     }
+    ## Create a font for text stimuli    
+    font <- MakeFont( Parameter("FontName")+".ttf", 0, 
+                      ToNumber(Parameter("FontSize")), c1, c2, 1 )
+    x <- ToNumber( First(Resolve(stimulus,"XOffset",Nth(gStimXOffsets, i))) )
+    y <- ToNumber( First(Resolve(stimulus,"YOffset",Nth(gStimYOffsets, i))) )
+    x <- x + gVideoWidth/2
+    y <- y + gVideoHeight/2
+    if(  type == "circle" ) {
+      r <- ToNumber( First(Resolve(stimulus,"Parameters",Nth(gStimParams,i))) )
+      s <- Circle( x, y, r, c1, 1 )
+    } elseif( type == "square" ) {
+      l <- ToNumber( First(Resolve(stimulus,"Parameters",Nth(gStimParams,i))) )
+      s <- Square( x, y, l, c1, 1 )
+    } elseif( type == "image" ) {
+      p <- Resolve( stimulus, "Parameters", Nth(gStimParams,i) )
+      file <- First( p )
+      if( Length(p) == 2 ) { # Optional 2nd parameter is zoom factor
+        zoom <- ToNumber( Nth( p, 2 ) )
+      } else {
+        zoom <- 1
+      }
+      # We look up the file in 4 dirs: this experiment's Materials,
+      # the system-wide Materials, PEBL's image files, and the current
+      # directory (the latter is undocumented, that's just how PEBL's
+      # MakeImage works).
+      fileLocal <- gWD + "Materials/" + file
+      fileAlex <- gAlexDir + file
+      if( FileExists( fileLocal ) ) {
+        s <- MakeImage( fileLocal )
+      } elseif( FileExists( fileAlex ) ) {
+        s <- MakeImage( fileAlex )
+      } elseif( FileExists( file ) ) {
+        s <- MakeImage( file )
+      } else {
+        Message( "Cannot find image file " + file, 1 )
+      }
+      s.ZOOMX <- zoom
+      s.ZOOMY <- zoom
+      Move( s, x, y )
+   } elseif( type == "text" ) {
+      w <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
+      s <- MakeLabel( w, font )
+      Move( s, x, y )
+    } elseif( type == "textfile" ) {
+      fileName <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
+      fileName <- gWD + "Materials/" + fileName
+      if( not FileExists( fileName ) ) {
+        Message( "Cannot find file: "+fileName, 1 )
+      }
+      text <- FileReadText( fileName )
+      s <- MakeTextBox( text, font, .9*gVideoWidth, .9*gVideoHeight )
+      Move( s, .05*gVideoWidth, .05*gVideoHeight )
+    } elseif( type == "sound" ) {
+       fileName <- First( Resolve(stimulus, "Parameters", Nth(gStimParams,i)) )
+       fileName <- gWD + "Materials/" + fileName
+       if( not FileExists( fileName ) ) {
+         Message( "Cannot find file: "+fileName, 1 )
+       }
+       s <- LoadSound( fileName )
+    } else {
+       Message( "Unsupported stimulus type: "+type, 1 )
+    }
+    PushOnEnd( gStimuli, s )
+    AddObject( s, gWindow )
+    Hide( s )
   }
-  Draw()
 }
 
-define Undisplay( stimulus ) {
-  n <- Length( gStimNames )
-  loop( stimName, SplitString(stimulus, "+") ) {
-    i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
-    s <- Nth( gStimuli, i )
-    if( IsAudioOut(s) ) {
-      PausePlayback( s )
-    } else {
-      Hide( s )
+define ReadPhases() {
+  filename <- gWD + "Design/Phases.csv"
+  csv <- ReadCSV( filename )
+  gPhaseHeader <- First( csv )
+  gPhases <- Rest( csv )
+  ## Resolve * and : notation:
+  nPhaseStimuli <- Length( gPhases )
+  loop( i, Sequence(1, nPhaseStimuli, 1) ) {
+    phaseStimulusInfo <- Nth( gPhases, i )
+    phase <- Lookup( "Phase", gPhaseHeader, phaseStimulusInfo )
+    stimulus <- Lookup( "S1", gPhaseHeader, phaseStimulusInfo )
+    numFields <- Length( gPhaseHeader )
+    loop( j, Sequence(1, numFields, 1) ) {
+      field <- Nth( gPhaseHeader, j ) 
+      value <- Nth( phaseStimulusInfo, j ) 
+      if( field != "Phase" and field != "S1" ) {
+        newvalue <- ResolvePhase( phase, stimulus, field, value )
+        SetElement(phaseStimulusInfo, j, newvalue )
+      }
     }
   }
-  Draw()
+  gPhases <- Transpose( gPhases )
 }
 
-# Helper function to determine the duration of stimuli. Note: the way
-# we can get "NA" below is the following: if LookupStimulus() does not
-# find anyting specific, it calls Parameter(). If this does not find
-# anything, it returns "NA", which is returned back by
-# LookupStimulus(). Because Resolve() does not modify "NA", we can get
-# it back and detect that no specific stimulus duration has been
-# specified, so we can look up S1Duration or S2Duration (as specified
-# by 'role'). Sorry for the complication.
-define ResolveDuration( stimulus, role ) {
-  durations <- []
-  loop( s, SplitString(stimulus,"+") ) {
-    d <- First(Resolve( s, "Duration", LookupStimulus(s,"Duration") ))
-    if( d == "NA" ) { # See Note above
-      d <- Parameter( role + "Duration")
-    }
-    d <- ToNumber( d ) # NA becomes 0
-    if( d == 0 ) {
-      MyLog( "ResolveDuration: No duration for one or more stimuli:" )
-      MyLog( "  Stimuli: "+SplitString(stimulus,"+") )
-      MyLog( "  Durations: "+durations )
-      MyLog( "  Role: "+role )
-      Message( "Could not determine duration of " + s, 1 )
-    }
-    PushOnEnd( durations, d )
-  }
-  ## The duration information is valid if all durations are equal
-  d <- First( durations )
-  loop( d2, Rest( durations ) ) {
-    if( d != d2 ) {
-      Message( "Some stimuli have different durations in "+stimulus, 1 )
-    }
-  } 
-  return d
+define ReadParameters() {
+  filename <- gWD + "Design/Parameters.csv"
+  csv <- Transpose( Rest( ReadCSV( filename ) ) )
+  gParameterNames <- Nth(csv, 1)
+  gParameterValues <- Nth(csv, 2)
 }
 
 
 ########################################################################
 #                                                                      #
-# This function coordinates the events within a single trial           #
+# The following two functions set the experiment in motion, with       #
+# RunPhase responsible for coordinating trials within a phase, and     #
+# RunTrial for coordinating the events within a single trial.          #
 #                                                                      #
 ########################################################################
 
-define RunTrial( phase, trial, s1, rewardProb, s2, response, 
+define RunPhase( phaseName ) {
+  MyLog( "RunPhase: Starting phase "+phaseName )
+  DisplayBackground( phaseName )
+
+  # Get stimulus settings for this phase. Each line in Phases.csv
+  # contains a stimulus entry for a specific phase. Using
+  # LookupPhase() we look up which stimuli enter this phase:
+  stimuli      <- LookupPhase(phaseName, "S1")
+  numTrials    <- LookupPhase(phaseName, "Trials")
+  rewards      <- LookupPhase(phaseName, "S2Prob")
+  uss          <- LookupPhase(phaseName, "S2")
+  responses    <- LookupPhase(phaseName, "Response")
+  maxResponses <- LookupPhase(phaseName, "MaxResponses")
+
+  ## We build lists trialStimuli and trialRewards to contain stimuli
+  ## and rewards repeated as many times as given in 'trials'. The
+  ## order of presentation is then randomized by picking stimuli from
+  ## a shuffled list 'trialOrder', see end of block
+  trialStimuli      <- []
+  trialRewards      <- []
+  trialUSs          <- []
+  trialResponses    <- []
+  trialMaxResponses <- []
+  loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
+    n <- ToNumber( Nth(numTrials, i) )
+    s <- Nth(stimuli, i )
+    MyLog( "RunPhase: "+"Scheduling "+n+" trials with stimulus "+s )
+    PushOnEnd( trialStimuli,      Repeat( s                   , n ) )
+    PushOnEnd( trialRewards,      Repeat( Nth(rewards,      i), n ) )
+    PushOnEnd( trialUSs,          Repeat( Nth(uss,          i), n ) )
+    PushOnEnd( trialResponses,    Repeat( Nth(responses,    i), n ) )
+    PushOnEnd( trialMaxResponses, Repeat( Nth(maxResponses, i), n ) )
+  }
+  trialStimuli      <- Flatten( trialStimuli ) # Nesting is undesired
+  trialRewards      <- Flatten( trialRewards )
+  trialUSs          <- Flatten( trialUSs )
+  trialResponses    <- Flatten( trialResponses )
+  trialMaxResponses <- Flatten( trialMaxResponses )
+  MyLog( "RunPhase: Constructed trial list: " + trialStimuli )
+
+  ## We define a random order for the trials, taking into account that
+  ## the number of trials could be zero (in some experimental designs
+  ## some phases might be excluded for some groups of subjects).
+  if( Length(trialStimuli) ) {
+    trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
+  } else {
+    trialOrder <- []
+  }
+  MyLog( "RunPhase: Constructed trial order: " + trialOrder )
+
+  ## Now we are ready to run all trials:
+  maxTrial <- Length( trialStimuli )
+  trial    <- 1
+  while( trial <= maxTrial ) {
+    ## Get stimulus and RewardPr for this trial:
+    thisTrial    <- Nth(trialOrder, trial)
+    stimulus     <- Nth( trialStimuli, thisTrial )
+    rewardPr     <- ToNumber( Nth( trialRewards, thisTrial ) )
+    uss          <- Nth( trialUSs, thisTrial )
+    response     <- Nth( trialResponses, thisTrial )
+    maxResponses <- ToNumber( Nth( trialMaxResponses, thisTrial ) )
+    if( maxResponses <= 0 ) {
+      maxResponses <- 1
+    }
+    ## Register responses during pre-trial ITI: 
+    minITI <- ToNumber( Parameter("MinITI") )
+    maxITI <- ToNumber( Parameter("MaxITI") )
+    thisITI <- ( minITI + ( maxITI - minITI )*Random() )
+    itiLeft <- thisITI
+    startTime <- GetTime()
+    itiResponses <- 0
+    while( itiLeft > 1 ) {
+      key <- WaitForListKeyPressWithTimeout( gKeys, itiLeft, 1 )
+      if( key == " " ) {
+        key <- "<space>"
+      }
+      rt <- GetTime() - startTime
+      itiLeft <- thisITI - rt
+
+      ## Save data line for stimulus "ITI" with S2 details = "NA"
+      if( not IsList(key) ) {
+        itiResponses <- itiResponses + 1
+        FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
+          gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, 
+          "T", "NA", "NA", "F", "NA", "NA", rt, "F", key] ) )
+      }
+    }
+    ## Save a single ITI data line if no responses during ITI:  
+    if( not itiResponses ) {
+      FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
+        gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, "T",
+        "NA", "NA", "F", "NA", "NA", thisITI, "F", "<timeout>"] ) ) 
+    } 
+    ## Run trial and get response times and rewards collected:
+    RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
+              maxResponses )
+    ## Advance to next trial
+    trial <- trial + 1
+  }
+  UndisplayBackground( phaseName )
+}
+
+define RunTrial( phase, trial, s1, rewardProb, s2, response,
                  maxResponses ) {
   MyLog( "RunTrial: Starting trial: " + 
     [phase, trial, s1, rewardProb, s2, response, maxResponses ] )
@@ -352,164 +573,42 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   ExpireTimers() # Turn off everything
 }
 
-# Helper function to identify what enters a phase. If we don't find a
-# field in the phase header, we try to see whether it is defined as a
-# global parameter (if that fails, we get NAs and we return those).
+
+########################################################################
+#                                                                      #
+# The next set are lookup functions that access phase, stimulus, and   #
+# parameter information as necessary during configuration and runtime. #
+#                                                                      #
+########################################################################
+
+# Identifies what enters a phase. If we don't find a field in the
+# phase header, we see whether it is defined as a global parameter
+# (if that fails, we get NAs, which we return).
 define LookupPhase( phaseName, field ) {
-  fields <- Lookup(field, gPhaseHeader, gPhases)
-  if( not Length(fields) ) { 
+  fields <- Lookup( field, gPhaseHeader, gPhases )
+  if( not Length( fields ) ) { 
     stimuli <- LookupPhase( phaseName, "S1" )
-    result <- Repeat( Parameter(field), Length(stimuli) )
+    result <- Repeat( Parameter( field ), Length( stimuli ) )
   } else {
-    idx <- Match( Lookup("Phase", gPhaseHeader, gPhases), phaseName) 
+    idx <- Match( Lookup( "Phase", gPhaseHeader, gPhases ), phaseName ) 
     tempResult <- Filter( fields, idx )
     result <- []
     loop( r, tempResult ) {
       if( not StringLength(r) ) {
-        r <- Parameter(field)
+        r <- Parameter( field )
       }
       PushOnEnd( result, r )
     }
   }
   return result
-} 
-
-########################################################################
-#                                                                      #
-# This function coordinates trials within a phase.                     #
-#                                                                      #
-########################################################################
-
-define RunPhase( phaseName ) {
-  MyLog( "RunPhase: Starting phase "+phaseName )
-  DisplayBackground( phaseName )
-
-  # Get stimulus settings for this phase. Each line in Phases.csv
-  # contains a stimulus entry for a specific phase. Using
-  # LookupPhase() we look up which stimuli enter this phase:
-  stimuli      <- LookupPhase(phaseName, "S1")
-  numTrials    <- LookupPhase(phaseName, "Trials")
-  rewards      <- LookupPhase(phaseName, "S2Prob")
-  uss          <- LookupPhase(phaseName, "S2")
-  responses    <- LookupPhase(phaseName, "Response")
-  maxResponses <- LookupPhase(phaseName, "MaxResponses")
-
-  ## We build lists trialStimuli and trialRewards to contain stimuli
-  ## and rewards repeated as many times as given in 'trials'. The
-  ## order of presentation is then randomized by picking stimuli from
-  ## a shuffled list 'trialOrder', see end of block
-  trialStimuli      <- []
-  trialRewards      <- []
-  trialUSs          <- []
-  trialResponses    <- []
-  trialMaxResponses <- []
-  loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
-    n <- ToNumber( Nth(numTrials, i) )
-    s <- Nth(stimuli, i )
-    MyLog( "RunPhase: "+"Scheduling "+n+" trials with stimulus "+s )
-    PushOnEnd( trialStimuli,      Repeat( s                   , n ) )
-    PushOnEnd( trialRewards,      Repeat( Nth(rewards,      i), n ) )
-    PushOnEnd( trialUSs,          Repeat( Nth(uss,          i), n ) )
-    PushOnEnd( trialResponses,    Repeat( Nth(responses,    i), n ) )
-    PushOnEnd( trialMaxResponses, Repeat( Nth(maxResponses, i), n ) )
-  }
-  trialStimuli      <- Flatten( trialStimuli ) # Nesting is undesired
-  trialRewards      <- Flatten( trialRewards )
-  trialUSs          <- Flatten( trialUSs )
-  trialResponses    <- Flatten( trialResponses )
-  trialMaxResponses <- Flatten( trialMaxResponses )
-  MyLog( "RunPhase: Constructed trial list: " + trialStimuli )
-
-  ## We define a random order for the trials, taking into account that
-  ## the number of trials could be zero (in some experimental designs
-  ## some phases might be excluded for some groups of subjects).
-  if( Length(trialStimuli) ) {
-    trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
-  } else {
-    trialOrder <- []
-  }
-  MyLog( "RunPhase: Constructed trial order: " + trialOrder )
-
-  ## Now we are ready to run all trials:
-  maxTrial <- Length( trialStimuli )
-  trial    <- 1
-  while( trial <= maxTrial ) {
-    ## Get stimulus and RewardPr for this trial:
-    thisTrial    <- Nth(trialOrder, trial)
-    stimulus     <- Nth( trialStimuli, thisTrial )
-    rewardPr     <- ToNumber( Nth( trialRewards, thisTrial ) )
-    uss          <- Nth( trialUSs, thisTrial )
-    response     <- Nth( trialResponses, thisTrial )
-    maxResponses <- ToNumber( Nth( trialMaxResponses, thisTrial ) )
-    if( maxResponses <= 0 ) {
-      maxResponses <- 1
-    }
-    ## Register responses during pre-trial ITI: 
-    minITI <- ToNumber( Parameter("MinITI") )
-    maxITI <- ToNumber( Parameter("MaxITI") )
-    thisITI <- ( minITI + ( maxITI - minITI )*Random() )
-    itiLeft <- thisITI
-    startTime <- GetTime()
-    itiResponses <- 0
-    while( itiLeft > 1 ) {
-      key <- WaitForListKeyPressWithTimeout( gKeys, itiLeft, 1 )
-      if( key == " " ) {
-        key <- "<space>"
-      }
-      rt <- GetTime() - startTime
-      itiLeft <- thisITI - rt
-
-      ## Save data line for stimulus "ITI" with S2 details = "NA"
-      if( not IsList(key) ) {
-        itiResponses <- itiResponses + 1
-        FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-          gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, 
-	  "T", "NA", "NA", "F", "NA", "NA", rt, "F", key] ) )
-      }
-    }
-    ## Save a single ITI data line if no responses during ITI:  
-    if( not itiResponses ) {
-      FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, "T",
-        "NA", "NA", "F", "NA", "NA", thisITI, "F", "<timeout>"] ) ) 
-    }	
-    ## Run trial and get response times and rewards collected:
-    RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
-              maxResponses )
-    ## Advance to next trial
-    trial <- trial + 1
-  }
-  UndisplayBackground( phaseName )
 }
 
-# Print a list to file in CSF format
-define FilePrintCSV( file, data ) {
-  n <- Length(data)
-  if( n==1 ) {
-    FilePrint_( file, Nth(data,1) )
-  } else {
-    front <- Subset( data, Sequence(1,n-1,1) )
-    loop( d, front ) {
-      if( FindInString( ToString(d), ",", 0) ) {
-    d <- gQuote + d + gQuote 
-  }
-        FilePrint_( file, d + "," )
-    }
-    last <- Last(data)
-    if( FindInString( ToString(last), ",", 0) ) {
-      last <- gQuote + last + gQuote 
-    }
-    FilePrint( file, last )
-  }
-}
-
-# Helper function to identify characteristics of stimuli. Given a
-# stimulusName and a field, consults the Stimulus.csv information
-# (stored in gStimulusInfo, with header in gStimulusHeader), and
-# returns the value of that field for that stimulus. If nothing is
-# found, the global parameters are consulted. If nothing is found
-# there, Parameter() returns "NA", which ends up being our return
-# value.
+# Identifies characteristics of stimuli. Given a stimulus and a field,
+# consults the Stimulus.csv information (stored in gStimulusInfo, with
+# header in gStimulusHeader) and returns the value of the field for
+# that stimulus. If nothing is found, the global parameters are
+# consulted. If nothing is found there, Parameter() returns "NA",
+# which ends up being our return value.
 define LookupStimulus( sName, field ) {
   nStim <- Length( gStimNames )
   sIndex <- Lookup( sName, gStimNames, Sequence(1,nStim,1) )
@@ -529,15 +628,84 @@ define LookupStimulus( sName, field ) {
   return result
 }
 
-# Resolve the value in a stimulus field expressed in :/* syntax. If
+# Determines the duration of stimuli. Note: the way we can get "NA" below
+# is as follows: if LookupStimulus() does not find anyting specific, it
+# calls Parameter(). If this does not find anything, it returns "NA",
+# which is returned back by LookupStimulus(). Because Resolve() does not
+# modify "NA", we can get it back and detect that no specific stimulus
+# duration has been specified, so we can look up S1Duration or S2Duration
+# (as specified by 'role'). Sorry for the complication.
+define ResolveDuration( stimulus, role ) {
+  durations <- []
+  loop( s, SplitString(stimulus,"+") ) {
+    d <- First(Resolve( s, "Duration", LookupStimulus(s,"Duration") ))
+    if( d == "NA" ) { # See Note above
+      d <- Parameter( role + "Duration")
+    }
+    d <- ToNumber( d ) # NA becomes 0
+    if( d == 0 ) {
+      MyLog( "ResolveDuration: No duration for one or more stimuli:" )
+      MyLog( "  Stimuli: "+SplitString(stimulus,"+") )
+      MyLog( "  Durations: "+durations )
+      MyLog( "  Role: "+role )
+      Message( "Could not determine duration of " + s, 1 )
+    }
+    PushOnEnd( durations, d )
+  }
+  ## The duration information is valid if all durations are equal
+  d <- First( durations )
+  loop( d2, Rest( durations ) ) {
+    if( d != d2 ) {
+      Message( "Some stimuli have different durations in "+stimulus, 1 )
+    }
+  } 
+  return d
+}
+
+# Returns the value of a parameter given by name.
+define Parameter( name ) {
+  value <- Lookup( name, gParameterNames, gParameterValues )
+  If( IsList(value) ) {
+    value <- "NA"
+  }
+  return value
+}
+
+# Identifies stimuli designated as present for the duration of a phase.
+define FindBackground( phaseName ) {
+  backgroundList <- []
+  loop( name, gStimNames ) {
+    if( FindInString( name, "Background"+phaseName, 1 ) ) {
+      PushOnEnd( backgroundList, name )
+    }
+  }
+  if( Length( backgroundList ) ) {
+    backgrounds <- First( backgroundList )
+    loop( b, Rest( backgroundList ) ) {
+      backgrounds <- backgrounds + "+" + b
+    }
+  } else {
+    backgrounds <- ""
+  }
+  return backgrounds
+}
+
+
+########################################################################
+#                                                                      #
+# These functions parse stimulus and phase information according to    #
+# special notation and return the resolved values.                     #
+#                                                                      #
+########################################################################
+
+# Resolves the value in a stimulus field expressed in :/* syntax. If
 # the value starts with :, the rest is expected to be a stimulus name,
-# and the value of the field for that stimulus named is
-# substituted. If the value start with *, we look up in the subject
-# information for a field of the form 'value+field', and we substitute
-# that value (here 'value' is stripped of the initial *). NOTE:
-# Because 'value' can be multiple things separated by '+', we split it
-# and return a list of resolved values (even if there is just one, for
-# consistency).
+# and the value of the field for the named stimulus is substituted.
+# If the value starts with *, we look up in the subject information
+# for a field of the form 'stimulus+field', and we return that value.
+# NOTE: Because 'value' can be multiple things separated by '+',
+# we split it and return a list of resolved values (even if there
+# is just one, for consistency).
 define Resolve( stimulus, field, value ) {
   results <- []
   loop( v, SplitString( value, "+" ) ) {
@@ -551,7 +719,7 @@ define Resolve( stimulus, field, value ) {
       r <- First( Resolve( s, field, v2 ) )
       PushOnEnd( results, r )
     } elseif( v == "*" ) {
-      r <- Lookup( stimulus+field,gSubjectHeader,gSubjectInfo )
+      r <- Lookup( stimulus+field, gSubjectHeader, gSubjectInfo )
       if( IsList(r) ) { # Nothing found
         Message( "Cannot find "+stimulus+field+" in Groups.csv", 1 )
       } 
@@ -564,7 +732,8 @@ define Resolve( stimulus, field, value ) {
   return results
 }
 
-# Similar to Resolve(), but for phases. Does not support + notation, only : and *.
+# Similar to Resolve(), but for phases. Does not support + notation,
+# only : and *.
 define ResolvePhase( phase, stimulus, field, value ) {
   if( SubString( value, 1, 1 ) == ":" ) {
     # This is the phase to be looked up:
@@ -572,7 +741,7 @@ define ResolvePhase( phase, stimulus, field, value ) {
     result <- ResolvePhase( p, stimulus, field, value )
     MyLog( "ResolvePhase: resolved '"+value+"' to '"+result+"'" )
   } elseif( value == "*" ) {
-    result <- Lookup( phase+stimulus+field,gSubjectHeader,gSubjectInfo )
+    result <- Lookup( phase+stimulus+field, gSubjectHeader, gSubjectInfo )
     if( IsList(result) ) { # Nothing found
       Message( "Cannot find "+phase+stimulus+field+" in Groups.csv", 1 )
     } 
@@ -583,14 +752,13 @@ define ResolvePhase( phase, stimulus, field, value ) {
   return result
 }
 
-# Interpret a 'color' string from Stimulus.csv, and return the
-# corresponding PEBL Color object. Read through to see how colors can
-# be specified 
+# Interprets a 'color' string from Stimulus.csv, and returns the
+# corresponding PEBL Color object. Refer to manual for how colors can
+# be specified.
 define MakeColorRGBString( color ) {
-  ## We see whether color is a name or RGB triplet, and act
-  ## accordingly:
+  # We see whether color is a name or RGB triplet, and act accordingly:
   components <- SplitString( color, "-" )
-  if( Length(components) != 3 ) { ## treat as color name
+  if( Length(components) != 3 ) { # treat as color name
     c <- MakeColor( color )
     MyLog( "MakeColorRGBString: creating color '"+color+"'" )
   } else {
@@ -603,30 +771,168 @@ define MakeColorRGBString( color ) {
   return c
 }
 
-define Message( text, fatal ) {
-  box <- MakeTextBox( text + " (Press space to quit)", 
-    gFont, .9*gVideoWidth, .9*gVideoHeight )
-  AddObject( box, gWindow )
-  Move( box, .05*gVideoWidth, .05*gVideoHeight )
+
+########################################################################
+#                                                                      #
+# Display and Undisplay are two utility functions that can show and    #
+# hide multiple visual stimuli, and also start and pause the playback  #
+# of audio stimuli. The next two do the same for background stimuli.   #
+#                                                                      #
+########################################################################
+
+define Display( stimulus ) {
+  # The 'stimulus' may actually be a compound, like "A+B", so we split
+  # it into individual stimuli and then display each of them. We look
+  # up the stimulus objects in the gStimuli list.
+  n <- Length( gStimNames )
+  loop( stimName, SplitString(stimulus, "+") ) {
+    i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
+    if( IsList(i) ) {
+      Message( "Cannot find stimulus: '" + stimName + "'", 1 )
+    }
+    s <- Nth( gStimuli, i )
+    if( IsAudioOut(s) ) {
+      StartPlayback( s )
+    } else {
+      Show( s )
+    }
+  }
   Draw()
-  WaitForKeyDown(" ")
-  RemoveObject( box, gWindow )
+}
+
+define Undisplay( stimulus ) {
+  n <- Length( gStimNames )
+  loop( stimName, SplitString(stimulus, "+") ) {
+    i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
+    s <- Nth( gStimuli, i )
+    if( IsAudioOut(s) ) {
+      PausePlayback( s )
+    } else {
+      Hide( s )
+    }
+  }
   Draw()
-  MyLog( "Message: "+ text )
-  if( fatal ) {
-  MyLog( "Message: terminating" )
-    SignalFatalError( "alex: " + text )
+}
+
+define DisplayBackground( phaseName ) {
+  bg <- FindBackground( phaseName )
+  if( StringLength( bg ) ) {
+    MyLog( "DisplayBackground: Found "+bg+" as background" )
+    Display( bg )
+  } else {
+    MyLog( "DisplayBackground: No background found" )
   }
 }
 
+define UndisplayBackground( phaseName ) {
+  bg <- FindBackground( phaseName )
+  if( StringLength( bg ) ) {
+    Undisplay( bg )
+  }
+}
+
+
 ########################################################################
 #                                                                      #
-# In this section we have functions reading files in the Design        #
-# directory to configure the experiment, and a few accessory functions #
+# These next functions manage timers, as described below.              #
 #                                                                      #
 ########################################################################
 
-## The two next functions implement a simple file locking mechanism
+## A timer is a list [ tOn, duration, stimulus, isOn ] where the first
+## element is the time the stimulus is supposed to be turned on, and
+## the second element is its duration. The fourth element is a flag
+## that is 0 at the beginning and is set to 1 by UpdateTimers() when
+## the stimulus is actually turned on. The list of existing timers is
+## maintained in the gTimers variables created in Start().
+
+# Creates a new timer, checking that the onset and duration make sense.
+define SetTimer( tOn, duration, stimulus ) {
+  if( tOn < GetTime() ) {
+    Message( stimulus+" start time is in the past: "+tOn, 1 )
+  }
+  if( duration < 0 ) {
+    Message( stimulus+" has negative duration: "+duration, 1 )
+  }
+  newTimer <- [ tOn, duration, stimulus, 0 ]
+  PushOnEnd( gTimers, newTimer )
+  MyLog( "SetTimer: New timer: " + newTimer )
+}
+
+# Goes through all existing timers, turning on those that are due
+# and turning off and removing from the list those that have expired.
+define UpdateTimers() {
+  expired <- [] # List of expired timers
+  i <- 1
+  while( i <= Length( gTimers ) ) {
+    timer <- Nth( gTimers, i )
+    tOn <- Nth( timer, 1 )
+    duration <- Nth( timer, 2 )
+    stimulus <- Nth( timer, 3 )
+    isOn <- Nth( timer, 4 )
+    t <- GetTime()
+    if( t >= tOn and not isOn ) { # We need to turn this on
+      Display( stimulus )
+      SetElement( timer, 4, 1 ) # Mark timer as being on
+      MyLog( "UpdateTimers: turning on timer: " + timer )
+    } elseif( t >= tOn + duration ) {
+      Undisplay( stimulus )
+      PushOnEnd( expired, i ) 
+      MyLog( "UpdateTimers: removing timer: " + timer )
+    }
+    i <- i + 1
+  }
+  Draw()
+  gTimers <- RemoveSubset( gTimers, expired ) 
+}
+
+# Undisplays all stimuli and cancels all timers.
+define ExpireTimers() {
+  loop( timer, gTimers ) {
+    Undisplay( Nth( timer, 3 ) )
+  }
+  Draw()
+  gTimers <- []
+}
+
+# Returns T if a stimulus is currently displayed, F otherwise.
+define TimerOn( stimulus ) {
+  result <- "F"
+  loop( timer, gTimers ) {
+    if( Nth(timer, 3) == stimulus and Nth(timer, 4) ) {
+      result <- "T"
+    }
+  }
+  return result        
+}
+
+# Goes through all timers and returns the time of the next event,
+# i.e., the next time a stimulus has to be turned either on or off.
+# Used when deciding how long to wait for responses in RunTrial.
+define NextTimer() {
+  tMagic <- 123456789
+  tMin <- tMagic
+  loop( timer, gTimers ) {
+    tOn <- Nth( timer, 1 )
+    tOff <- tOn + Nth( timer, 2 )
+    if( tOn > GetTime() and tOn < tMin ) {
+      tMin <- tOn
+    } elseif( tOff < tMin ) {
+      tMin <- tOff
+    }
+  }
+  if( tMin == tMagic ) {
+     tMin <- "NA"
+  }
+  MyLog( "NextTimer: next event: "+tMin )  
+  return tMin
+}
+
+
+########################################################################
+#                                                                      #
+# The two next functions implement a simple file locking mechanism.    #
+#                                                                      #
+########################################################################
 
 define LockFile( file ) {
   unsafe <- 1
@@ -657,331 +963,33 @@ define UnlockFile( file ) {
   Print( "LockFile: released lock on "+file )
 }
 
-define ReadSubject() {
-  subjectsFile <- gWD + "Design/Groups.csv"
-  LockFile( subjectsFile )
-  subjects <- ReadCSV( subjectsFile )
-  gSubjectHeader <- Nth( subjects, 1 )
-  SetElement( gSubjectHeader, 2, "Subject")
-  found <- 0
-  ## From a random group, pick a subject that has not yet been run
-  loop( e, Shuffle( Rest(subjects) ) ) {
-    loop( s, Sequence(1, ToNumber(Nth(e,2)), 1) ) {
-      dataFilename <- gWD + "Data/" + Nth(e,1) + "-" + s + ".csv"
-      if( not FileExists(dataFilename) ) {
-        found <- 1
-        SetElement( e, 2, s )
-        break
-      }
-    }
-    if( found ) {
-      break
-    }
-  }
-  ## Open data file before releasing lock, to prevent race conditions
-  if( found ) {
-    gSubjectInfo <- e
-    gDataFile <- FileOpenWrite( dataFilename )
-    UnlockFile( subjectsFile )
-  } else {
-    UnlockFile( subjectsFile )
-    Message( "It looks like all subjects have been run!", 1 )
-  }
-  logFilename <- gWD + "Logs/" + Nth(e,1) + "-" + s + ".log"
-  gLogFile <- FileOpenWrite( logFilename )
-  gLogging <- Parameter("Log") 
-}
-
-define ReadStimuli() {
-  filename <- gWD + "Design/Stimuli.csv"   
-  csv <- ReadCSV( filename )
-  gStimulusHeader <- First( csv )
-  gStimulusInfo <- Rest( csv )
-  gStimNames <- []
-  gStimTypes <- []
-  gStimParams <- []
-  gStimColors <- []
-  gStimXOffsets <- []
-  gStimYOffsets <- []
-  loop( s, gStimulusInfo ) {
-    PushOnEnd( gStimNames, Nth( s, 1 ) )
-    PushOnEnd( gStimTypes, Nth( s, 2 ) )
-    PushOnEnd( gStimParams, Nth( s, 3 ) )
-    PushOnEnd( gStimColors, Nth( s, 4 ) )
-    PushOnEnd( gStimXOffsets, Nth( s, 5 ) )
-    PushOnEnd( gStimYOffsets, Nth( s, 6 ) )
-  }
-  ## Check there are no duplicate stimulus names
-  if( Length(gStimNames) != Length( Levels(gStimNames) ) ) {
-    Message("Duplicate in stimulus names: "+gStimNames, 1)
-  }
-  ## Now we are ready to create the stimulus objects
-  gStimuli <- []
-  n <- Length( gStimNames )
-  loop( i, Sequence(1,n,1) ) {
-    stimulus <- Nth( gStimNames, i )
-    type <- Nth( gStimTypes, i )
-    if( StringLength( Nth( gStimColors, i ) ) ) {
-      ## Determine colors:
-      colors <- Resolve( stimulus, "Color", Nth(gStimColors, i) )
-      c1name <- First( colors )
-      if( StringLength(c1name) ) {
-        c1 <- MakeColorRGBString( c1name )
-      } else {
-        c1 <- gColor
-      }
-      if( Length(colors) == 2 ) {
-        c2name <- Rest( colors )
-        if( StringLength( c2name ) ) {
-          c2 <- MakeColorRGBString( c2name )
-        } else {
-          c2 <- gBackgroundColor
-        }
-      } else {
-        c2 <- gBackgroundColor
-      }    
-    } else {
-      c1 <- gColor
-      c2 <- gBackgroundColor
-    }
-    ## Create a font for text stimuli    
-    font <- MakeFont( Parameter("FontName")+".ttf", 0, 
-                      ToNumber(Parameter("FontSize")), c1, c2, 1 )
-    x <- ToNumber( First(Resolve( stimulus, "XOffset", Nth( gStimXOffsets, i ) )) )
-    y <- ToNumber( First(Resolve( stimulus, "YOffset", Nth( gStimYOffsets, i ) )) )
-    x <- x + gVideoWidth/2
-    y <- y + gVideoHeight/2
-    if(  type == "circle" ) {
-      r <- ToNumber( First(Resolve( stimulus, "Parameters", Nth(gStimParams,i) )) )
-      s <- Circle( x, y, r, c1, 1 )
-    } elseif( type == "square" ) {
-      l <- ToNumber( First(Resolve( stimulus, "Parameters", Nth(gStimParams,i) )) )
-      s <- Square( x, y, l, c1, 1 )
-    } elseif( type == "image" ) {
-      p <- Resolve( stimulus, "Parameters", Nth(gStimParams,i) )
-      file <- First( p )
-      if( Length(p) == 2 ) { # Optional 2nd parameter is zoom factor
-  zoom <- ToNumber( Nth( p, 2 ) )
-      } else {
-  zoom <- 1
-      }
-      # We look up the file in 4 dirs: this experiment's Materials,
-      # the system-wide Materials, PEBL's image files, and the current
-      # directory (the latter is undocumented, that's just how PEBL's
-      # MakeImage works).
-      fileLocal <- gWD + "Materials/" + file
-      fileAlex <- gAlexDir + file
-      if( FileExists( fileLocal ) ) {
-        s <- MakeImage( fileLocal )
-      } elseif( FileExists( fileAlex ) ) {
-        s <- MakeImage( fileAlex )
-      } elseif( FileExists( file ) ) {
-        s <- MakeImage( file )
-      } else {
-        Message( "Cannot find image file " + file, 1 )
-      }
-      s.ZOOMX <- zoom
-      s.ZOOMY <- zoom
-      Move( s, x, y )
-   } elseif( type == "text" ) {
-      w <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
-      s <- MakeLabel( w, font )
-      Move( s, x, y )
-    } elseif( type == "textfile" ) {
-      fileName <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
-      fileName <- gWD + "Materials/" + fileName
-      if( not FileExists( fileName ) ) {
-        Message( "Cannot find file: "+fileName, 1 )
-      }
-      text <- FileReadText( fileName )
-      s <- MakeTextBox( text, font, .9*gVideoWidth, .9*gVideoHeight )
-      Move( s, .05*gVideoWidth, .05*gVideoHeight )
-    } elseif( type == "sound" ) {
-       fileName <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
-       fileName <- gWD + "Materials/" + fileName
-       if( not FileExists( fileName ) ) {
-         Message( "Cannot find file: "+fileName, 1 )
-       }
-       s <- LoadSound( fileName )
-    } else {
-       Message( "Unsupported stimulus type: "+type, 1 )
-    }
-    PushOnEnd( gStimuli, s )
-    AddObject( s, gWindow )
-    Hide( s )
-  }
-}
-
-define ReadPhases() {
-  filename <- gWD + "Design/Phases.csv"
-  csv <- ReadCSV( filename )
-  gPhaseHeader <- First( csv )
-  gPhases <- Rest( csv )
-  ## Resolve * and : notation:
-  nPhaseStimuli <- Length( gPhases )
-  loop( i, Sequence(1, nPhaseStimuli, 1) ) {
-    phaseStimulusInfo <- Nth( gPhases, i )
-    phase <- Lookup( "Phase", gPhaseHeader, phaseStimulusInfo )
-    stimulus <- Lookup( "S1", gPhaseHeader, phaseStimulusInfo )
-    numFields <- Length( gPhaseHeader )
-    loop( j, Sequence(1, numFields, 1) ) {
-      field <- Nth( gPhaseHeader, j ) 
-      value <- Nth( phaseStimulusInfo, j ) 
-      if( field != "Phase" and field != "S1" ) {
-        newvalue <- ResolvePhase( phase, stimulus, field, value )
-        SetElement(phaseStimulusInfo, j, newvalue )
-      }
-    }
-  }
-  gPhases <- Transpose( gPhases )
-}
-
-define ReadParameters() {
-  filename <- gWD + "Design/Parameters.csv"
-  csv <- Transpose( Rest( ReadCSV( filename ) ) )
-  gParameterNames <- Nth(csv, 1)
-  gParameterValues <- Nth(csv, 2)
-}
-
-define Parameter( name ) {
-  value <- Lookup( name, gParameterNames, gParameterValues )
-  If( IsList(value) ) {
-    value <- "NA"
-  }
-  return value
-}
-
-define FindBackground( phaseName ) {
-  backgroundList <- []
-  loop( name, gStimNames ) {
-    if( FindInString( name, "Background"+phaseName, 1 ) ) {
-      PushOnEnd( backgroundList, name )
-    }
-  }
-  if( Length( backgroundList ) ) {
-    backgrounds <- First( backgroundList )
-    loop( b, Rest( backgroundList ) ) {
-      backgrounds <- backgrounds + "+" + b
-    }
-  } else {
-    backgrounds <- ""
-  }
-  return backgrounds
-}
-
-define DisplayBackground( phaseName ) {
-  bg <- FindBackground( phaseName )
-  if( StringLength( bg ) ) {
-    MyLog( "DisplayBackground: Found "+bg+" as background" )
-    Display( bg )
-  } else {
-    MyLog( "DisplayBackground: No background found" )
-  }
-}
-
-define UndisplayBackground( phaseName ) {
-  bg <- FindBackground( phaseName )
-  if( StringLength( bg ) ) {
-    Undisplay( bg )
-  }
-}
 
 ########################################################################
-#
-# Timer functions
-#
+#                                                                      #
+# These functions are responsible for recording data, logging          #
+# information, and printing error messages to screen.                  #
+#                                                                      #
 ########################################################################
 
-## A timer is a list [ tOn, duration, stimulus, isOn ] where the first
-## element is the time the stimulus is supposed to be turned on, and
-## the second element is its duration. The fourth element is a flag
-## that is 0 at the beginning and is set to 1 by UpdateTimers() when
-## the stimulus is actually turned on. The list of existing timers is
-## maintained in the gTimers variables created in Start().
-
-## This function creates a new timer, checking that the onset and
-## duration make sense
-define SetTimer( tOn, duration, stimulus ) {
-  if( tOn < GetTime() ) {
-    Message( stimulus+" start time is in the past: "+tOn, 1 )
+# Print a list to file in CSF format
+define FilePrintCSV( file, data ) {
+  n <- Length(data)
+  if( n==1 ) {
+    FilePrint_( file, Nth(data,1) )
+  } else {
+    front <- Subset( data, Sequence(1,n-1,1) )
+    loop( d, front ) {
+      if( FindInString( ToString(d), ",", 0) ) {
+    d <- gQuote + d + gQuote 
   }
-  if( duration < 0 ) {
-    Message( stimulus+" has negative duration: "+duration, 1 )
-  }
-  newTimer <- [ tOn, duration, stimulus, 0 ]
-  PushOnEnd( gTimers, newTimer )
-  MyLog( "SetTimer: New timer: " + newTimer )
-}
-
-## This function goes through all existing timers, turning on those
-## that are due and turning off and removing from the list those that
-## have expired
-define UpdateTimers() {
-  expired <- [] # List of expired timers
-  i <- 1
-  while( i <= Length( gTimers ) ) {
-    timer <- Nth( gTimers, i )
-    tOn <- Nth( timer, 1 )
-    duration <- Nth( timer, 2 )
-    stimulus <- Nth( timer, 3 )
-    isOn <- Nth( timer, 4 )
-    t <- GetTime()
-    if( t >= tOn and not isOn ) { # We need to turn this on
-      Display( stimulus )
-      SetElement( timer, 4, 1 ) # Mark timer as being on
-      MyLog( "UpdateTimers: turning on timer: " + timer )
-    } elseif( t >= tOn + duration ) {
-      Undisplay( stimulus )
-      PushOnEnd( expired, i ) 
-      MyLog( "UpdateTimers: removing timer: " + timer )
+        FilePrint_( file, d + "," )
     }
-    i <- i + 1
-  }
-  Draw()
-  gTimers <- RemoveSubset( gTimers, expired ) 
-}
-
-## Undisplay all stimuli and cancel all timers
-define ExpireTimers() {
-  loop( timer, gTimers ) {
-    Undisplay( Nth( timer, 3 ) )
-  }
-  Draw()
-  gTimers <- []
-}
-
-## Returns 1 if a stimulus is currently displayed, 0 otherwise
-define TimerOn( stimulus ) {
-  result <- "F"
-  loop( timer, gTimers ) {
-    if( Nth(timer, 3) == stimulus and Nth(timer, 4) ) {
-      result <- "T"
+    last <- Last(data)
+    if( FindInString( ToString(last), ",", 0) ) {
+      last <- gQuote + last + gQuote 
     }
+    FilePrint( file, last )
   }
-  return result        
-}
-
-## Goes through all timers and returns the time of the next event,
-## i.e., the next time a stimulus has to be turned either on or
-## off. It is used when deciding how long to wait in
-## WaitForKeyListWithTimeout() in RunTrial()
-define NextTimer() {
-  tMagic <- 123456789
-  tMin <- tMagic
-  loop( timer, gTimers ) {
-    tOn <- Nth( timer, 1 )
-    tOff <- tOn + Nth( timer, 2 )
-    if( tOn > GetTime() and tOn < tMin ) {
-      tMin <- tOn
-    } elseif( tOff < tMin ) {
-      tMin <- tOff
-    }
-  }
-  if( tMin == tMagic ) {
-     tMin <- "NA"
-  }
-  MyLog( "NextTimer: next event: "+tMin )  
-  return tMin
 }
 
 define MyLog( logline ) {
@@ -989,4 +997,20 @@ define MyLog( logline ) {
     t <- GetTime()
     FilePrint( gLogFile, "[" + t + "] " + logline )
   }
-}      
+}
+
+define Message( text, fatal ) {
+  box <- MakeTextBox( text + " (Press space to quit)", 
+    gFont, .9*gVideoWidth, .9*gVideoHeight )
+  AddObject( box, gWindow )
+  Move( box, .05*gVideoWidth, .05*gVideoHeight )
+  Draw()
+  WaitForKeyDown(" ")
+  RemoveObject( box, gWindow )
+  Draw()
+  MyLog( "Message: "+ text )
+  if( fatal ) {
+  MyLog( "Message: terminating" )
+    SignalFatalError( "alex: " + text )
+  }
+}    
