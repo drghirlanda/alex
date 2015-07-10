@@ -10,6 +10,6 @@ LazyLoad: yes
 LazyData: yes
 License: GPL-2
 Author: Stefano Ghirlanda [aut, cre]
-Maintainer: Stefano.GHirlanda <drghirlanda@gmail.com>
+Maintainer: Stefano.Ghirlanda <drghirlanda@gmail.com>
 NeedsCompilation: no
-
+Packaged: 2015-07-02 17:16:12 UTC; stefano
