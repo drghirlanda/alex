@@ -34,3 +34,8 @@ for DIR in $(find ${SHARE_DIR}/alex -type d); do
     chmod 0755 ${DIR}
 done
 
+# create R package and install it
+cd R
+R CMD build alex
+R CMD INSTALL alex_*.tar.gz
+cd -
