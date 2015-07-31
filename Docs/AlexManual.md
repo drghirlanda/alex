@@ -52,11 +52,11 @@ Alex is written using Shane Mueller's
 
 From the folder where the Design and Materials folders are, you
 can just type `alex` in the command line. You can also run experiments
-in a different folder using:
+in a folder other than the working directory by typing:
 
     alex -v <path to folder>
 
-The folder is expected to have Design and Materials subfolders with
+The folder is expected to have Design and Materials subfolders with the
 appropriate files. Data and Logs subfolders will be created if not present.
 
 Alex has been designed so that multiple instances of an experiment can
@@ -662,6 +662,7 @@ Table: A `Stimuli.csv` file for displaying to subjects instructions
 and a final message (see also Table \ref{phases-instructions}).
 \label{stimuli-instructions}
 
+\pagebreak
 
 \phantomsection \addcontentsline{toc}{section}{Data format} 
 \section*{Data format} \label{data-format}
@@ -731,14 +732,13 @@ but please do let us know if you think any details could be added.
 \phantomsection \addcontentsline{toc}{section}{Troubleshooting} 
 \section*{Troubleshooting}
 
-Errors may arise if design files have incorrect or incomplete
-information. Presently, alex performs some checks at startup, but some
-errors are caught only as they occur while running the experiment. We
-advise to always run the experiment a few times before putting it into
-production. If you think errors are due to bugs in alex, please write
-us at the address in \hyperref[contacts]{Contacts}. Also do contact us if you
-think that your design files are correct but the experiment does not
-run as you expect.
+Errors may arise if design files have incorrect or incomplete information.
+With a few exceptions, all errors print a hopefully informative message both
+on the standard console output (terminal) and on screen. A few errors that
+may occur before the screen is set up, such as not finding necessary files,
+are reported only on the standard output. When running alex through the PEBL
+launcher, these messages will appear in files `stdout.txt` and `stderr.txt`,
+which PEBL creates in the folder where alex is run.
 
 In addition to double quotes in CSV design files (see the footnote below
 Table \ref{phases}), alex requires final line endings in these files.
@@ -747,15 +747,7 @@ last row when reading in this file, resulting in obvious errors. Most
 spreadsheet software saves CSV files with this final newline, but you
 can always check for this by opening the design files with a text editor.
 
-With a few exceptions, all errors print a hopefully informative
-message both on the standard console output (terminal) and on
-screen. A few errors that may occur before the screen is set up, such
-as not finding necessary files, are reported only on the standard
-output. When running alex through the PEBL launcher, these messages
-will appear in files `stdout.txt` and `stderr.txt`, which PEBL
-creates in the folder where alex is run.
-
-There is one error that appears mysterious to the uninitiated: the
+There is one error that will appear mysterious to the uninitiated: the
 screen remains black and alex hangs forever. The reason is that alex
 uses a lock system on the `Groups.csv` file to prevent concurrent
 instances of alex from running the same subject. The lock is held for
@@ -764,6 +756,13 @@ or if alex crashes for any reason before the lock is released,
 subsequent instances of alex will wait forever for the lock to be
 released. In these cases, you can simply delete the lock file, which
 is `Groups.csv.lck` in the Design folder.
+
+Presently, alex performs some checks at startup, but some errors are caught
+only as they occur while running the experiment. We advise to always run
+the experiment a few times before putting it into production. If you think
+errors are due to bugs in alex, please write us at the address
+\hyperref[contacts]{below}. Also do contact us if you think that your
+design files are correct but the experiment does not run as you expect.
 
 
 \phantomsection \addcontentsline{toc}{section}{Contacts} 
