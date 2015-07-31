@@ -1,7 +1,9 @@
 %Alex: Associative Learning EXperiments
 %Stefano Ghirlanda \and Max Temnogorod
 
-# Introduction {#intro}
+
+\phantomsection \addcontentsline{toc}{section}{Introduction}
+\section*{Introduction}
 
 Alex is a program for running associative learning experiments described
 in configuration files. This manual explains how to configure the
@@ -9,18 +11,20 @@ experiments. Please refer to the README file that comes with alex for
 installation instructions. The README also describes in brief what
 alex can and cannot do.
 
-## Workflow {#workflow}
+\phantomsection \addcontentsline{toc}{subsection}{Workflow}
+\subsection*{Workflow}
 
-To build a new experiment you create a dedicated folder, and within it the following subfolders:
+To build a new experiment you create a dedicated folder, and within it the
+following subfolders:
 
 - **Design**: This folder contains the files that specify experimental
   design, such as which stimuli to use, the structure of trials, and
   different treatments for subjects. See
-  [Configuration files](#configuration-files).
+  \hyperref[config-files]{Configuration files}.
 
 - **Materials**: Here you have any image, sound, or text files you need
   for your experiment, including an Instructions.txt file for the
-  initial instructions (see the [section on text files](#textfiles)).
+  initial instructions (see the \hyperref[textfiles]{section on text files}).
 
 - **Data**: This folder holds the data collected during experiment runs.
 
@@ -31,18 +35,20 @@ with the files you'll need:
 
     alex-init -v <experiment name>
 
-This creates folder `<experiment name>` with the above mentioned
-subfolders (except Data and Logs, which are created on first run) and skeleton
+This creates folder `<experiment name>` with the above mentioned subfolders
+(except Data and Logs, which are created on first run) and skeleton
 configuration files.
 
-## Acknowledgments {#acknowledgements}
+\phantomsection \addcontentsline{toc}{subsection}{Acknowledgements}
+\subsection*{Acknowledgements}
 
 Alex is written using Shane Mueller's
 [Psychology Experiment Building Language](http://pebl.sourceforge.net)
 (PEBL). Many thanks to Shane for sharing PEBL!
 
 
-# Starting and stopping alex {#running}
+\phantomsection \addcontentsline{toc}{section}{Starting and stopping alex}
+\section*{Starting and stopping alex}
 
 From the folder where the Design and Materials folders are, you
 can just type `alex` in the command line. You can also run experiments
@@ -62,7 +68,7 @@ subjects. Different instances, however, will run different subjects
 and will not overwrite each other's data files.
 
 The fact that a subject has been run is signaled by the existence of
-the corresponding data file (see [Data format](#data-format)). If the
+the corresponding data file (see \hyperref[data-format]{Data format}). If the
 experiment is interrupted before it completes, alex will still
 consider that subject as having been run. It is up to you to check
 that data files are complete (that they have the appropriate number
@@ -77,7 +83,8 @@ To interrupt a running experiment, you can use the interrupt
 key combination for PEBL: `Ctrl+Alt+Shift+\`.
 
 
-# Configuration files {#configuration-files}
+\phantomsection \addcontentsline{toc}{section}{Configuration files}
+\section*{Configuration files} \label{config-files}
 
 All configuration files are in the Design folder:
 
@@ -98,7 +105,8 @@ All configuration files are in the Design folder:
   used for responses.
 
 
-## The `Phases.csv` file
+\phantomsection \addcontentsline{toc}{subsection}{The \texttt{Phases.csv} file}
+\subsection*{The \texttt{Phases.csv} file}
 
 Suppose we want to teach subjects to discriminate a red square
 from a white square. We then want to know how subjects respond to,
@@ -129,13 +137,12 @@ Red and White, and then test responding to Pink. Note that the S2 field
 can be left empty if probability of S2 presentation is 0. \label{phases}
 
 [^1]: In this manual, we use tables to display design files in a
-readable form. These files, however, are actually
-comma-separated-values (CSV) files. You can edit CSV files in any
-spreadsheet using the CSV format for saving. Alex wants double quotes
-(if needed) in CSV files. Single quotes will result in errors. (This
-comes from the PEBL function that reads CSV files.) Most spreadsheet
-software uses double quotes by default, but do check in case alex
-cannot read your CSV files.
+readable form. These files, however, are actually comma-separated values
+(CSV) files. You can edit CSV files in any spreadsheet using the CSV format
+for saving. Alex wants double quotes (if needed) in CSV files. Single
+quotes will result in errors. (This comes from the PEBL function that
+reads CSV files.) Most spreadsheet software uses double quotes by default,
+but do check in case alex cannot read your CSV files.
 
 \pagebreak
 
@@ -167,7 +174,8 @@ Table: With this `Phases.csv` file, Phase 2 will be run first.
 \label{phases-order2}
 
 
-### Stimulus terminology
+\phantomsection \addcontentsline{toc}{subsubsection}{Stimulus terminology}
+\subsubsection*{Stimulus terminology}
 
 The above experiment and other examples in this manual refer to reward
 training in which the Smiley is an unconditioned stimulus (US) that
@@ -177,13 +185,13 @@ alex equally applicable to trials where both stimuli are neutral (as in
 higher-order conditioning), and where S2 would not be considered a reward.
 
 
-## The `Stimuli.csv` file
+\phantomsection \addcontentsline{toc}{subsection}{The \texttt{Stimuli.csv} file}
+\subsection*{The \texttt{Stimuli.csv} file}
 
 How does alex know that Red, White, and Pink mentioned in the
 `Phases.csv` files in Tables \ref{phases}--\ref{phases-order2} represent
 red, white, and pink squares, and that Smiley is a smiley face? This
 information is contained in the `Stimuli.csv` file, see Table \ref{stimuli}.
-
 
 Name   Type   Parameters        Color       XOffset YOffset
 ----   ----   ----------        -----       ------- -------
@@ -195,6 +203,7 @@ Smiley image  smile-o-white.png             0       -150
 Table: A `Stimuli.csv` file instructing alex that stimuli Red, White,
 and Pink are differently colored 50x50 pixel squares, and that Smiley
 is an image contained in the file `smile-o-white.png`. \label{stimuli}
+
 
 The fields in Table \ref{stimuli} should be fairly intuitive, but here
 is a detailed explanation:
@@ -261,7 +270,8 @@ is a detailed explanation:
   values place them left of center).
 
 
-## The `Groups.csv` file
+\phantomsection \addcontentsline{toc}{subsection}{The \texttt{Groups.csv} file}
+\subsection*{The \texttt{Groups.csv} file}
 
 The `Groups.csv` file contains information about the experimental
 groups. If all subjects undergo the same treatment, you only need to
@@ -276,7 +286,6 @@ file (Table \ref{subjects-color}). This syntax is available for all
 stimulus properties. For example, to vary the size of the Red square across
 subjects you would use the `Groups.csv` and `Stimuli.csv` files in
 Tables \ref{subjects-color-parameters} and \ref{stimuli-color-parameters}.
-
 
 Group Size
 ----- ----
@@ -334,7 +343,8 @@ RedParameters (see Table
 \ref{stimuli-color-parameters}). \label{subjects-color-parameters}
 
 
-## The `Parameters.csv` file {#global}
+\phantomsection \addcontentsline{toc}{subsection}{The \texttt{Parameters.csv} file}
+\subsection*{The \texttt{Parameters.csv} file} \label{global}
 
 The `Parameters.csv` file contains some parameters that affect the
 whole experiment. Here is a sample file:
@@ -359,12 +369,13 @@ Log             1
 
 Table: Sample `Parameters.csv` file with default values.
 
+
 - **S1Duration** is the default duration of all S1 stimuli,
   while **S2Duration** is the default duration of all S2 stimuli. All
   durations are in milliseconds. Note that you can set different
   durations for different stimuli by including a Duration column in the
-  `Stimuli.csv` file. When using compound stimuli, all components must
-  have the same duration.
+  `Stimuli.csv` file (see \hyperref[textfiles]{here} for an example). When
+  using compound stimuli, all components must have the same duration.
 
 - **S1S2Interval** is the interval between S1 offset and S2 onset.
 
@@ -381,10 +392,10 @@ Table: Sample `Parameters.csv` file with default values.
 
 - **Response** is the key subjects are instructed to press if they want
   to respond. Note that this can also be set on a per-trial basis,
-  see [here](#responses).
-\label{maxresponses}
+  see (\hyperref[responses]{here}).
 
-- **MaxResponses** is the maximum number of response a subject is
+- \phantomsection \label{maxresponses}
+  **MaxResponses** is the maximum number of response a subject is
   allowed to make in one trial. There are essentially two useful
   settings. If you set this to 1, the trial ends with the first response
   (the S2 is presented if appropriate, of course). If you set it to an
@@ -392,7 +403,7 @@ Table: Sample `Parameters.csv` file with default values.
   responses per trial, each of which may result in an S2 being
   presented. Note that you can set MaxReponses to a different value for
   different trial types, by including a MaxResponses column in `Phases.csv`
-  (see the [section on text files](#textfiles) for an example). If a
+  (see the \hyperref[textfiles]{section on text files} for an example). If a
   MaxResponses column exists, but the value is empty for some stimuli,
   the MaxResponses value in `Parameters.csv` will be looked up.
   If MaxResponses is not set there, it is given a default value of 1.
@@ -410,9 +421,8 @@ instructions and other messages.
   data files except with a `.log` suffix. Disabled by setting to 0.
 
 
-<a name="notation"></a>
-
-# More about stimuli 
+\phantomsection \addcontentsline{toc}{section}{More about stimuli}
+\section*{More about stimuli}
 
 We mentioned above one bit of special notation in the definition of
 stimuli, namely the value `*` (asterisk). There are two more bits of special
@@ -439,6 +449,7 @@ Smiley image  smile-o-white.png        0       -150
 
 Table: A `Stimuli.csv` file demonstrating the `*` and `:` special
 notations for stimuli. \label{stimuli-special}
+
 
 Another bit of special notation is `+` (plus), which is used to present
 stimuli together (compound stimuli). Suppose that, after training a
@@ -467,6 +478,7 @@ Table: A `Stimuli.csv` file to go with the `Phases.csv` file in Table
 otherwise it would overlap with the red one when the two are presented
 together. \label{stimuli-plus}
 
+
 **Note:** The `+` notation is also valid for S2s. This can be used to
 implement S2s of different "magnitude." For example, one can instruct
 subjects that each smiley face represents a point earned, and have
@@ -476,7 +488,8 @@ do not overlap when displayed simultaneously). Compounding of S2s may
 also be used to present a combination of visual and auditory stimuli.
 
 
-## Superposition of stimuli {#stimulus-superposition}
+\phantomsection \addcontentsline{toc}{subsection}{Superposition of stimuli}
+\subsection*{Superposition of stimuli} \label{stimulus-superpos}
 
 Visual stimuli are added to the screen in the order they appear in the
 `Stimuli.csv` file. This means that, should some stimuli overlap on
@@ -484,29 +497,26 @@ the screen, those defined *later* will be displayed *on top* of those
 defined earlier, obscuring them partly or wholly.
 
 
-<a name="background-stimuli"></a>
-
-## Stimuli that are always present during a phase
+\phantomsection \addcontentsline{toc}{subsection}{Always-present stimuli}
+\subsection*{Always-present stimuli}
 
 It is sometimes desirable to have a stimulus or combination of stimuli
-present at all times, including inter-stimulus intervals, for example
-as a background on which others are superimposed. A stimulus whose
-name starts with "Background" followed by the name of a phase will be
-displayed for the entire duration of that phase. You can define many
+present at all times during a phase, including inter-stimulus intervals,
+for example as a background on which others are superimposed. A stimulus
+whose name starts with "Background" followed by the name of a phase will
+be displayed for the entire duration of that phase. You can define many
 such stimuli, e.g., `BackgroundPhase1-1` and `BackgroundPhase1-2`. 
 
 **Note:** The rules for stimulus superposition of always-present
-stimuli are the same as for other stimuli, see [Superposition of
-stimuli](#stimulus-superposition). This means that if you want to use
-a stimulus as a backdrop for other stimuli, you have to define the
-stimulus before all those that are intended to appear on top of it. If
-the order is incorrect, the intended backdrop will instead obscure the
-other stimuli.
+stimuli are the same as for other stimuli, see \hyperref[stimulus-superpos]
+{above}. This means that if you want to use a stimulus as a backdrop for
+other stimuli, you have to define the stimulus before all those that are
+intended to appear on top of it. If the order is incorrect, the intended
+backdrop will instead obscure the other stimuli.
 
 
-<a name="notation-phases"></a>
-
-# More about phases
+\phantomsection \addcontentsline{toc}{section}{More about phases}
+\section*{More about phases}
 
 Just as with stimuli, phase parameters can be set to differ across
 groups by using the `*` and `:` notation. For example, imagine that
@@ -536,6 +546,7 @@ Table: A `Groups.csv` file serving as a companion to the `Phases.csv`
 file in Table
 \ref{phases-star-notation}. \label{groups-phases-star-notation}
 
+
 Note that the name of the corresponding column in `Groups.csv` is
 `TrainingAS2Prob`, or, more generally, `(phase name)(S1 name)(parameter)`.
 Thus the column name specifies two things: the phase and the S1 to which
@@ -546,7 +557,9 @@ set the `S2Prob` value for S1 `A+B`, you would use the column
 `TrainingA+BS2Prob`.
 
 
-# Responses and classical vs. instrumental trials {#responses}
+\phantomsection \addcontentsline{toc}{section}{Responses and classical vs.
+instrumental trials} \section*{Responses and classical vs. instrumental trials}
+\label{responses}
 
 The default Response key for all S1s can be specified in
 `Parameters.csv`. We can also, however, specify different responses
@@ -562,6 +575,7 @@ Phase S1    Trials S2Prob S2     Response
 
 Table: A `Phases.csv` specifying different responses for S1s Red
 and White in Phase 1. \label{per-stimulus-responses}
+
 
 Here `<left>` and `<right>` are special codes that denote the left and
 right arrow keys. The following is a comprehensive list of valid key
@@ -590,8 +604,8 @@ whether the subject responds or not. Note that subject responses are
 still recorded, and if they exceed the allowed maximum the trial
 terminates without S2 presentation. This last feature makes it possible to
 implement omission training, i.e., to reward subjects only when they
-abstain from responding. This is controlled by the
-[MaxResponses](#maxresponses) parameter. The default value is 1, which
+abstain from responding. This is controlled by the \hyperref[maxresponses]
+{MaxResponses} parameter. The default value is 1, which
 corresponds precisely to omission training. If you don't want the trial
 to ever terminate before the allotted time, you can use a value of
 MaxResponses so high that it cannot be possibly reached, such as 1000.
@@ -604,13 +618,15 @@ Table: A `Phases.csv` file using the Response notation `<classical>` to
 indicate a classical conditioning trial in which the S2 is presented
 at the end of the trial regardless of subject behavior. \label{classical}
 
+
 Note also that on classical trials, the ResponseTimeMin/Max
-features are disabled (see [Global parameters](#global)). The S2 (if any)
+features are disabled (see \hyperref[global]{Global parameters}). The S2 (if any)
 is presented only once at the end of the trial, so it is irrelevant when
 a subject responds.
 
 
-# Instructions and other text displays {#textfiles}
+\phantomsection \addcontentsline{toc}{section}{Instructions and other text displays} 
+\section*{Instructions and other text displays} \label{textfiles}
 
 Instructions or other longish text can be displayed with the textfile
 stimulus type. For example, to include both a start and an end message
@@ -626,7 +642,6 @@ Materials folder of the experiment. Note the column MaxResponses in
 `Phases.csv`, which makes sure the user only has to press the space bar
 (the default response) once to move on, even if a larger number
 of responses is allowed for actual experimental trials.
-
 
 Phase S1        Trials MaxResponses
 ----- --        ------ ------------
@@ -648,7 +663,8 @@ and a final message (see also Table \ref{phases-instructions}).
 \label{stimuli-instructions}
 
 
-# Data Format {#data-format}
+\phantomsection \addcontentsline{toc}{section}{Data format} 
+\section*{Data format} \label{data-format}
 
 When you run an experiment with alex, data are saved in the Data
 folder (which alex creates if it is not found) in CSV files named
@@ -696,7 +712,7 @@ The remaining columns are as follows:
 
  - **Response**: Key designated as the correct response (`NA` during ITIs),
    or the code `<classical>` if the trial was a "classical conditioning"
-   one (see [here](#responses)).
+   one (see \hyperref[responses]{here}).
 
  - **RT**: Response time since start of trial (`NA` if trial timed out).
 
@@ -712,16 +728,15 @@ We believe this information characterizes subject behavior competely,
 but please do let us know if you think any details could be added.
 
 
-<a name="errors"></a>
-
-# Troubleshooting 
+\phantomsection \addcontentsline{toc}{section}{Troubleshooting} 
+\section*{Troubleshooting}
 
 Errors may arise if design files have incorrect or incomplete
 information. Presently, alex performs some checks at startup, but some
 errors are caught only as they occur while running the experiment. We
 advise to always run the experiment a few times before putting it into
 production. If you think errors are due to bugs in alex, please write
-us at the address in [Contacts](#contacts). Also do contact us if you
+us at the address in \hyperref[contacts]{Contacts}. Also do contact us if you
 think that your design files are correct but the experiment does not
 run as you expect.
 
@@ -751,7 +766,8 @@ released. In these cases, you can simply delete the lock file, which
 is `Groups.csv.lck` in the Design folder.
 
 
-# Contacts {#contacts}
+\phantomsection \addcontentsline{toc}{section}{Contacts} 
+\section*{Contacts} \label{contacts}
 
 Please send suggestions to improve alex or this manual to Stefano
 Ghirlanda, drghirlanda@gmail.com.
