@@ -101,8 +101,8 @@ All configuration files are in the Design folder:
 - `Parameters.csv` defines some global parameters such as screen
   background color, text color, font, and size, the duration of
   inter-trial intervals, and so on. It can also be used to define
-  parameters that are the same for all stimuli, such as which key is
-  used for responses.
+  parameters that are the same for all stimuli, such as a default
+  key used for responses.
 
 
 \phantomsection \addcontentsline{toc}{subsection}{The \texttt{Phases.csv} file}
