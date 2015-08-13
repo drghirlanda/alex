@@ -100,7 +100,7 @@ All configuration files are in the Design folder:
 
 - `Parameters.csv` defines some global parameters such as screen
   background color, text color, font, and size, the duration of
-  inter-trial intervals, and so on. It can also be used to define
+  intertrial intervals, and so on. It can also be used to define
   parameters that are the same for all stimuli, such as a default
   key used for responses.
 
@@ -387,7 +387,7 @@ Table: Sample `Parameters.csv` file with default values.
   at any time during the trial.
   
 - **MinITI** and **MaxITI** are the minimum and maximum values of the
-  inter-trial interval. Each inter-trial interval will be drawn between
+  intertrial interval. Each intertrial interval will be drawn between
   these values with uniform distribution.
 
 - **Response** is the key subjects are instructed to press if they want
@@ -501,7 +501,7 @@ defined earlier, obscuring them partly or wholly.
 \subsection*{Always-present stimuli}
 
 It is sometimes desirable to have a stimulus or combination of stimuli
-present at all times during a phase, including inter-stimulus intervals,
+present at all times during a phase, including interstimulus intervals,
 for example as a background on which others are superimposed. A stimulus
 whose name starts with "Background" followed by the name of a phase will
 be displayed for the entire duration of that phase. You can define many
@@ -695,7 +695,7 @@ The remaining columns are as follows:
  - **S1**: Designated S1 for this trial (defined in `Stimuli.csv`),
    or `ITI` for responses registered between trials.
 
- - **S1Duration**: Duration of S1 (or inter-trial interval).
+ - **S1Duration**: Duration of S1 (or intertrial interval).
 
  - **S1On**: Was S1 present when the response was made? (`T` for true,
    `F` for false.)
