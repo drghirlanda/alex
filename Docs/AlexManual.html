@@ -1,0 +1,832 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Stefano Ghirlanda Max Temnogorod" />
+  <title>Alex: Associative Learning EXperiments</title>
+  <style type="text/css">code{white-space: pre;}</style>
+</head>
+<body>
+<div id="header">
+<h1 class="title">Alex: Associative Learning EXperiments</h1>
+<h2 class="author">Stefano Ghirlanda Max Temnogorod</h2>
+</div>
+<p> </p>
+<p>Alex is a program for running associative learning experiments described in configuration files. This manual explains how to configure the experiments. Please refer to the README file that comes with alex for installation instructions. The README also describes in brief what alex can and cannot do.</p>
+<p> </p>
+<p>To build a new experiment you create a dedicated folder, and within it the following subfolders:</p>
+<ul>
+<li><p><strong>Design</strong>: This folder contains the files that specify experimental design, such as which stimuli to use, the structure of trials, and different treatments for subjects. See .</p></li>
+<li><p><strong>Materials</strong>: Here you have any image, sound, or text files you need for your experiment, including an Instructions.txt file for the initial instructions (see the ).</p></li>
+<li><p><strong>Data</strong>: This folder holds the data collected during experiment runs.</p></li>
+<li><p><strong>Logs</strong>: This one holds runtime messages recorded for each subject.</p></li>
+</ul>
+<p>The program <code>alex-init</code>, run as follows, generates a bare-bones experiment with the files you'll need:</p>
+<pre><code>alex-init -v &lt;experiment name&gt;</code></pre>
+<p>This creates folder <code>&lt;experiment name&gt;</code> with the above mentioned subfolders (except Data and Logs, which are created on first run) and skeleton configuration files.</p>
+<p> </p>
+<p>Alex is written using Shane Mueller's <a href="http://pebl.sourceforge.net">Psychology Experiment Building Language</a> (PEBL). Many thanks to Shane for sharing PEBL!</p>
+<p> </p>
+<p>From the folder where the Design and Materials folders are, you can just type <code>alex</code> in the command line. You can also run experiments in a folder other than the working directory by typing:</p>
+<pre><code>alex -v &lt;path to folder&gt;</code></pre>
+<p>The folder is expected to have Design and Materials subfolders with the appropriate files. Data and Logs subfolders will be created if not present.</p>
+<p>Alex has been designed so that multiple instances of an experiment can be run simultaneously. This feature is useful when the experiment folder is shared among multiple computers, as it may occur in a lab. All instances of alex will read the same design files, and in particular the same <code>Groups.csv</code> file which describes how to run subjects. Different instances, however, will run different subjects and will not overwrite each other's data files.</p>
+<p>The fact that a subject has been run is signaled by the existence of the corresponding data file (see ). If the experiment is interrupted before it completes, alex will still consider that subject as having been run. It is up to you to check that data files are complete (that they have the appropriate number of lines, for example). Although this may be inconvenient at times, it is hard to improve upon this situation because there is no way for alex to decide whether important data would be overwritten by re-running a subject. If you decide a data file is worthless, either remove it or rename it with something like an 'incomplete-' prefix, and alex will automatically re-run that subject.</p>
+<p>To interrupt a running experiment, you can use the interrupt key combination for PEBL: <code>Ctrl+Alt+Shift+\</code>.</p>
+<p>  </p>
+<p>All configuration files are in the Design folder:</p>
+<ul>
+<li><p><code>Phases.csv</code> describes the experimental design proper. It defines experimental phases in terms of the stimuli, desired responses, possible outcomes, and number of trials in each.</p></li>
+<li><p><code>Stimuli.csv</code> specifies the presentation details of the stimuli mentioned by name in <code>Phases.csv</code>.</p></li>
+<li><p><code>Groups.csv</code> specifies the number and size of experimental groups, as well as the treatments to which subjects in each group are allocated.</p></li>
+<li><p><code>Parameters.csv</code> defines some global parameters such as screen background color, text color, font, and size, the duration of intertrial intervals, and so on. It can also be used to define parameters that are the same for all stimuli, such as a default key used for responses.</p></li>
+</ul>
+<p> </p>
+<p>Suppose we want to teach subjects to discriminate a red square from a white square. We then want to know how subjects respond to, say, a pink square. Table  shows how a suitable <code>Phases.csv</code> file might look.<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup> The file describes an experiment with two phases, with each line defining one type of trial that occurs in a phase. Here, there are two kinds of trials in phase 1, specifying 20 presentations of each of two stimuli (S1s) called Red and White. Red will be rewarded 90% of the time, White only 10% (specified by S2Prob). On these trials, stimulus Smiley will be presented as the reward (S2). In phase 2, stimulus Pink is presented five times and never rewarded.</p>
+<p>When the experiment is run, Red and White trials will be intermixed randomly because they all pertain to phase 1. Pink trials, on the other hand, will be performed in phase 2 after all phase 1 trials have been run.</p>
+<table>
+<caption>A simple <code>Phases.csv</code> to teach a discrimination between stimuli Red and White, and then test responding to Pink. Note that the S2 field can be left empty if probability of S2 presentation is 0. </caption>
+<thead>
+<tr class="header">
+<th align="left">Phase</th>
+<th align="left">S1</th>
+<th align="left">Trials</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">Red</td>
+<td align="left">20</td>
+<td align="left">0.9</td>
+<td align="left">Smiley</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">White</td>
+<td align="left">20</td>
+<td align="left">0.1</td>
+<td align="left">Smiley</td>
+</tr>
+<tr class="odd">
+<td align="left">2</td>
+<td align="left">Pink</td>
+<td align="left">5</td>
+<td align="left">0</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p><strong>Note:</strong> Phases are run in the order they are defined, not in their numerical or alphabetical order (thus you can use descriptive names like Training, Testing, etc). To be more precise, phases are run in the order in which their <em>first</em> stimuli are defined. For example, the <code>Phases.csv</code> files in Tables  and  are equivalent, but the file in Table  runs Phase 2 before Phase 1.</p>
+<table>
+<caption>With this <code>Phases.csv</code> file, Phase 1 will be run first. </caption>
+<thead>
+<tr class="header">
+<th align="left">Phase</th>
+<th align="left">S1</th>
+<th align="left">Trials</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">Red</td>
+<td align="left">20</td>
+<td align="left">0.9</td>
+<td align="left">Smiley</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">Pink</td>
+<td align="left">5</td>
+<td align="left">0</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">White</td>
+<td align="left">20</td>
+<td align="left">0.1</td>
+<td align="left">Smiley</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>With this <code>Phases.csv</code> file, Phase 2 will be run first. </caption>
+<thead>
+<tr class="header">
+<th align="left">Phase</th>
+<th align="left">S1</th>
+<th align="left">Trials</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2</td>
+<td align="left">Pink</td>
+<td align="left">5</td>
+<td align="left">0</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">Red</td>
+<td align="left">20</td>
+<td align="left">0.9</td>
+<td align="left">Smiley</td>
+</tr>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">White</td>
+<td align="left">20</td>
+<td align="left">0.1</td>
+<td align="left">Smiley</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>The above experiment and other examples in this manual refer to reward training in which the Smiley is an unconditioned stimulus (US) that serves to reinforce the conditioned stimuli (CSs) designated as S1s. We maintain the more generic S1/S2 terminology, however, in order to have alex equally applicable to trials where both stimuli are neutral (as in higher-order conditioning), and where S2 would not be considered a reward.</p>
+<p> </p>
+<p>How does alex know that Red, White, and Pink mentioned in the <code>Phases.csv</code> files in Tables -- represent red, white, and pink squares, and that Smiley is a smiley face? This information is contained in the <code>Stimuli.csv</code> file, see Table .</p>
+<table>
+<caption>A <code>Stimuli.csv</code> file instructing alex that stimuli Red, White, and Pink are differently colored 50x50 pixel squares, and that Smiley is an image contained in the file <code>smile-o-white.png</code>. </caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Type</th>
+<th align="left">Parameters</th>
+<th align="left">Color</th>
+<th align="left">XOffset</th>
+<th align="left">YOffset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Red</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">red</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">white</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Pink</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">255-128-128</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">Smiley</td>
+<td align="left">image</td>
+<td align="left">smile-o-white.png</td>
+<td align="left"></td>
+<td align="left">0</td>
+<td align="left">-150</td>
+</tr>
+</tbody>
+</table>
+<p>The fields in Table  should be fairly intuitive, but here is a detailed explanation:</p>
+<ul>
+<li><p><strong>Name</strong>: A label for the stimulus, so that it can be referenced in <code>Phases.csv</code>. This can be anything that does not contain the characters <code>&quot;</code> (double quote), <code>+</code> (plus), <code>*</code> (asterisk), <code>:</code> (colon), or <code>,</code> (comma). These characters are reserved for special operations described below.</p></li>
+<li><p><strong>Type</strong>: This can be <code>square</code>, <code>circle</code>, <code>text</code>, <code>textfile</code>, <code>image</code>, or <code>sound</code>.</p></li>
+<li><p><strong>Parameters</strong>: The meaning of parameters varies according to the stimulus type:</p>
+<ul>
+<li><p>square: side length in pixels.</p></li>
+<li><p>circle: radius in pixels.</p></li>
+<li><p>text: the text to be displayed.</p></li>
+<li><p>textfile: name of a file in the Materials folder where the desired text is stored.</p></li>
+<li><p>image or sound: name of an image or sound file in the Materials folder. An optional zoom factor, separated from the filename by a <code>+</code> (plus), can be provided to scale an image to a desired size. The following stylized faces (smileys) come with alex and you can use them without having them in the Materials folder:</p>
+<ul>
+<li><p><code>smile-o-white.png</code>: a happy face, as used above</p></li>
+<li><p><code>meh-o-white.png</code>: a neutral face</p></li>
+<li><p><code>frown-o-white.png</code>: a sad face</p></li>
+</ul>
+<p>These images are drawn in white over a transparent background; equivalent black images are available as <code>smile-o.png</code>, etc. All images have been taken from <a href="http://fortawesome.github.io/Font-Awesome">Font Awesome</a>, via <a href="https://github.com/encharm/Font-Awesome-SVG-PNG">this project</a>. They are 256x256 pixels in size to look OK even on high resolution monitors. If that is too big for you, you can zoom them as indicated above.</p></li>
+</ul></li>
+<li><p><strong>Color</strong>: The color of squares, circles, or text. This field is ignored for images and sounds. Colors can either be named or given as RGB triplets, delimited by hyphens (<code>-</code>). In the case of text, you can specify the background as well as the foreground color by writing the color in the form Color1+Color2, where Color1 is the foreground and Color2 the background. If no foreground or background color is given, the defaults set in <code>Parameters.csv</code> are used.</p>
+<p>The PEBL reference manual lists valid color names, which are many hundreds. If you stick to simple stuff like red, blue, cyan, purple, and so on, you can get by without consulting this file. RGB, of course, enables you to define color shades more precisely.</p></li>
+<li><p><strong>XOffset</strong> and <strong>YOffset</strong>: Offset from the center of the screen, in pixels. In Table , all stimuli are centered except for Smiley, which is displayed 150 pixels above center (negative Y values place stimuli above center, negative X values place them left of center).</p></li>
+</ul>
+<p> </p>
+<p>The <code>Groups.csv</code> file contains information about the experimental groups. If all subjects undergo the same treatment, you only need to specify one group and its size. The file in Table  instructs alex to run a single group of 10 subjects (groups can be numbered or named, as is most convenient to you). Often, however, subjects need to be divided into different treatment groups. If you want to test, say, two shades of pink, you would extend the <code>Stimuli.csv</code> file in Table . The special value <code>*</code> here indicates that the color of stimulus Pink will be looked up, for each subject, in the column PinkColor of the <code>Groups.csv</code> file (Table ). This syntax is available for all stimulus properties. For example, to vary the size of the Red square across subjects you would use the <code>Groups.csv</code> and <code>Stimuli.csv</code> files in Tables  and .</p>
+<table>
+<caption>A <code>Groups.csv</code> file instructing alex to run 10 subjects. </caption>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="left">Size</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">10</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>A <code>Stimuli.csv</code> file instructing alex to look up the Color of the Pink stimulus in the <code>Groups.csv</code> file (see Table ). </caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Type</th>
+<th align="left">Parameters</th>
+<th align="left">Color</th>
+<th align="left">XOffset</th>
+<th align="left">YOffset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Red</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">red</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">white</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Pink</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">*</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">Smiley</td>
+<td align="left">image</td>
+<td align="left">smile-o-white.png</td>
+<td align="left"></td>
+<td align="left">0</td>
+<td align="left">-150</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>A <code>Groups.csv</code> file instructing alex to run 20 subjects split in two treatment groups with different Color attributes for the Pink stimulus (see Table ). </caption>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="left">Size</th>
+<th align="left">PinkColor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">10</td>
+<td align="left">255-128-128</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">10</td>
+<td align="left">255-190-190</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>A <code>Stimuli.csv</code> file instructing alex to look up in the <code>Groups.csv</code> file both the Color of stimulus Pink and the Parameters of stimulus Red (see Table ). </caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Type</th>
+<th align="left">Parameters</th>
+<th align="left">Color</th>
+<th align="left">XOffset</th>
+<th align="left">YOffset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Red</td>
+<td align="left">square</td>
+<td align="left">*</td>
+<td align="left">red</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">white</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Pink</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">*</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">Smiley</td>
+<td align="left">image</td>
+<td align="left">smile-o-white.png</td>
+<td align="left"></td>
+<td align="left">0</td>
+<td align="left">-150</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>A <code>Groups.csv</code> file instructing alex to run 4 experimental groups, each receiving a unique combination of PinkColor and RedParameters (see Table ). </caption>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="left">Size</th>
+<th align="left">PinkColor</th>
+<th align="left">RedParameters</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">10</td>
+<td align="left">255-128-128</td>
+<td align="left">25</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">10</td>
+<td align="left">255-128-128</td>
+<td align="left">50</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="left">10</td>
+<td align="left">255-190-190</td>
+<td align="left">50</td>
+</tr>
+<tr class="even">
+<td align="left">4</td>
+<td align="left">10</td>
+<td align="left">255-190-190</td>
+<td align="left">75</td>
+</tr>
+</tbody>
+</table>
+<p>  </p>
+<p>The <code>Parameters.csv</code> file contains some parameters that affect the whole experiment. Here is a sample file:</p>
+<table>
+<caption>Sample <code>Parameters.csv</code> file with default values.</caption>
+<thead>
+<tr class="header">
+<th align="left">Parameter</th>
+<th align="left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">S1Duration</td>
+<td align="left">4000</td>
+</tr>
+<tr class="even">
+<td align="left">S1S2Interval</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">S2Duration</td>
+<td align="left">400</td>
+</tr>
+<tr class="even">
+<td align="left">ResponseTimeMin</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">ResponseTimeMax</td>
+<td align="left">4000</td>
+</tr>
+<tr class="even">
+<td align="left">MinITI</td>
+<td align="left">1000</td>
+</tr>
+<tr class="odd">
+<td align="left">MaxITI</td>
+<td align="left">3000</td>
+</tr>
+<tr class="even">
+<td align="left">Response</td>
+<td align="left">&lt;space&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">MaxResponses</td>
+<td align="left">100</td>
+</tr>
+<tr class="even">
+<td align="left">BackgroundColor</td>
+<td align="left">gray95</td>
+</tr>
+<tr class="odd">
+<td align="left">ForegroundColor</td>
+<td align="left">black</td>
+</tr>
+<tr class="even">
+<td align="left">FontName</td>
+<td align="left">Vera</td>
+</tr>
+<tr class="odd">
+<td align="left">FontSize</td>
+<td align="left">36</td>
+</tr>
+<tr class="even">
+<td align="left">Test</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Log</td>
+<td align="left">1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p><strong>S1Duration</strong> is the default duration of all S1 stimuli, while <strong>S2Duration</strong> is the default duration of all S2 stimuli. All durations are in milliseconds. Note that you can set different durations for different stimuli by including a Duration column in the <code>Stimuli.csv</code> file (see  for an example). When using compound stimuli, all components must have the same duration.</p></li>
+<li><p><strong>S1S2Interval</strong> is the interval between S1 offset and S2 onset.</p></li>
+<li><p><strong>ResponseTimeMin</strong> and <strong>ResponseTimeMax</strong> define at what times within a trial subjects can respond. Responses made outside this time window do not contribute to the per-trial response count, and do not result in S2 presentation. If not specified, ResponseTimeMin is set to 0 and ResponseTimeMax to S1Duration, thus allowing responses at any time during the trial.</p></li>
+<li><p><strong>MinITI</strong> and <strong>MaxITI</strong> are the minimum and maximum values of the intertrial interval. Each intertrial interval will be drawn between these values with uniform distribution.</p></li>
+<li><p><strong>Response</strong> is the key subjects are instructed to press if they want to respond. Note that this can also be set on a per-trial basis, see ().</p></li>
+<li><p> <strong>MaxResponses</strong> is the maximum number of response a subject is allowed to make in one trial. There are essentially two useful settings. If you set this to 1, the trial ends with the first response (the S2 is presented if appropriate, of course). If you set it to an unrealistically large value, say 1000, you can record any number of responses per trial, each of which may result in an S2 being presented. Note that you can set MaxReponses to a different value for different trial types, by including a MaxResponses column in <code>Phases.csv</code> (see the  for an example). If a MaxResponses column exists, but the value is empty for some stimuli, the MaxResponses value in <code>Parameters.csv</code> will be looked up. If MaxResponses is not set there, it is given a default value of 1.</p></li>
+</ul>
+<p>The next few parameters control the screen background color while the experiment is running and the color, font, and size of text used for instructions and other messages.</p>
+<ul>
+<li><p>The <strong>Test</strong> parameter, if set to 1, skips instructions and acquisition of demographic information. It is meant to quickly start the experiment during development.</p></li>
+<li><p><strong>Log</strong> is a toggle for the logging feature, which records runtime messages for each subject, in files named the same as corresponding data files except with a <code>.log</code> suffix. Disabled by setting to 0.</p></li>
+</ul>
+<p> </p>
+<p>We mentioned above one bit of special notation in the definition of stimuli, namely the value <code>*</code> (asterisk). There are two more bits of special notation, explained next.</p>
+<p>Sometimes we want some stimuli to share characteristics. For example, they should be of the same color. We can express the fact that we want a stimulus characteristic to equal that of another stimulus using a colon (<code>:</code>) followed by the stimulus name (we would have liked to use <code>=</code> rather than <code>:</code>, but unfortunately spreadsheet software stubbornly interprets <code>=</code> as introducing a formula). Consider the file in Table , featuring three squares of the same size as stimuli. The file in Table  is equivalent but uses colon notation for the Parameters field. This has two advantages: it makes explicit our intention of having three squares of equal size, and it reduces the possibility of typing errors.</p>
+<table>
+<caption>A <code>Stimuli.csv</code> file demonstrating the <code>*</code> and <code>:</code> special notations for stimuli. </caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Type</th>
+<th align="left">Parameters</th>
+<th align="left">Color</th>
+<th align="left">XOffset</th>
+<th align="left">YOffset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Red</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">red</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">square</td>
+<td align="left">:Red</td>
+<td align="left">white</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Pink</td>
+<td align="left">square</td>
+<td align="left">:Red</td>
+<td align="left">*</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">Smiley</td>
+<td align="left">image</td>
+<td align="left">smile-o-white.png</td>
+<td align="left"></td>
+<td align="left">0</td>
+<td align="left">-150</td>
+</tr>
+</tbody>
+</table>
+<p>Another bit of special notation is <code>+</code> (plus), which is used to present stimuli together (compound stimuli). Suppose that, after training a discrimination between red and white squares, we want to test the red and white squares together. We would then use the files in Tables  and .</p>
+<table>
+<caption>A <code>Phases.csv</code> file with a compound stimulus in Phase 2. </caption>
+<thead>
+<tr class="header">
+<th align="left">Phase</th>
+<th align="left">S1</th>
+<th align="left">Trials</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">Red</td>
+<td align="left">20</td>
+<td align="left">0.9</td>
+<td align="left">Smiley</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">White</td>
+<td align="left">20</td>
+<td align="left">0.1</td>
+<td align="left">Smiley</td>
+</tr>
+<tr class="odd">
+<td align="left">2</td>
+<td align="left">Red+White</td>
+<td align="left">5</td>
+<td align="left">0</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>A <code>Stimuli.csv</code> file to go with the <code>Phases.csv</code> file in Table . Note that we need to offset the white square, otherwise it would overlap with the red one when the two are presented together. </caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Type</th>
+<th align="left">Parameters</th>
+<th align="left">Color</th>
+<th align="left">XOffset</th>
+<th align="left">YOffset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Red</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">red</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">:Red</td>
+<td align="left">:Red</td>
+<td align="left">white</td>
+<td align="left">60</td>
+<td align="left">:Red</td>
+</tr>
+<tr class="odd">
+<td align="left">Smiley</td>
+<td align="left">image</td>
+<td align="left">smile-o-white.png</td>
+<td align="left"></td>
+<td align="left">0</td>
+<td align="left">150</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong> The <code>+</code> notation is also valid for S2s. This can be used to implement S2s of different &quot;magnitude.&quot; For example, one can instruct subjects that each smiley face represents a point earned, and have multiple smileys appear for more valuable stimuli (this requires defining several smiley stimuli offset from each other, so that they do not overlap when displayed simultaneously). Compounding of S2s may also be used to present a combination of visual and auditory stimuli.</p>
+<p>  </p>
+<p>Visual stimuli are added to the screen in the order they appear in the <code>Stimuli.csv</code> file. This means that, should some stimuli overlap on the screen, those defined <em>later</em> will be displayed <em>on top</em> of those defined earlier, obscuring them partly or wholly.</p>
+<p> </p>
+<p>It is sometimes desirable to have a stimulus or combination of stimuli present at all times during a phase, including interstimulus intervals, for example as a background on which others are superimposed. A stimulus whose name starts with &quot;Background&quot; followed by the name of a phase will be displayed for the entire duration of that phase. You can define many such stimuli, e.g., <code>BackgroundPhase1-1</code> and <code>BackgroundPhase1-2</code>.</p>
+<p><strong>Note:</strong> The rules for stimulus superposition of always-present stimuli are the same as for other stimuli, see . This means that if you want to use a stimulus as a backdrop for other stimuli, you have to define the stimulus before all those that are intended to appear on top of it. If the order is incorrect, the intended backdrop will instead obscure the other stimuli.</p>
+<p> </p>
+<p>Just as with stimuli, phase parameters can be set to differ across groups by using the <code>*</code> and <code>:</code> notation. For example, imagine that we want to investigate how discrimination learning proceeds as a function of reward probability. We could use the <code>Phases.csv</code> file in Table , which employs <code>*</code> notation for the S2Prob variable, and the <code>Groups.csv</code> file in Table , which provides the information that is &quot;starred&quot; in <code>Phases.csv</code>.</p>
+<table>
+<caption>A <code>Phases.csv</code> using <code>*</code> notation to indicate that the value of S2Prob for Training trials with S1 A must be looked up in <code>Groups.csv</code> (see Table ). </caption>
+<thead>
+<tr class="header">
+<th align="left">Phase</th>
+<th align="left">S1</th>
+<th align="left">Trials</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Training</td>
+<td align="left">A</td>
+<td align="left">50</td>
+<td align="left">*</td>
+<td align="left">Smiley</td>
+</tr>
+<tr class="even">
+<td align="left">Training</td>
+<td align="left">B</td>
+<td align="left">50</td>
+<td align="left">0</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>A <code>Groups.csv</code> file serving as a companion to the <code>Phases.csv</code> file in Table . </caption>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="left">Size</th>
+<th align="left">TrainingAS2Prob</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Rich</td>
+<td align="left">20</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">Poor</td>
+<td align="left">20</td>
+<td align="left">0.5</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the name of the corresponding column in <code>Groups.csv</code> is <code>TrainingAS2Prob</code>, or, more generally, <code>(phase name)(S1 name)(parameter)</code>. Thus the column name specifies two things: the phase and the S1 to which the column value refers (in employing the same notation for stimuli, we had to worry only about the stimulus name). This works also to set phase parameters for a compound stimulus. For example, if you want to set the <code>S2Prob</code> value for S1 <code>A+B</code>, you would use the column <code>TrainingA+BS2Prob</code>.</p>
+<p>  </p>
+<p>The default Response key for all S1s can be specified in <code>Parameters.csv</code>. We can also, however, specify different responses for different S1s by adding a Response column to the <code>Phases.csv</code> file. For example, to specify that the left arrow key is the correct response for the S1 Red in Phase 1, but that the right arrow is correct for White, you would write as in Table .</p>
+<table>
+<caption>A <code>Phases.csv</code> specifying different responses for S1s Red and White in Phase 1. </caption>
+<thead>
+<tr class="header">
+<th align="left">Phase</th>
+<th align="left">S1</th>
+<th align="left">Trials</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
+<th align="left">Response</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">Red</td>
+<td align="left">20</td>
+<td align="left">1</td>
+<td align="left">Smiley</td>
+<td align="left">&lt;left&gt;</td>
+</tr>
+<tr class="even">
+<td align="left">1</td>
+<td align="left">White</td>
+<td align="left">20</td>
+<td align="left">1</td>
+<td align="left">Smiley</td>
+<td align="left">&lt;right&gt;</td>
+</tr>
+</tbody>
+</table>
+<p>Here <code>&lt;left&gt;</code> and <code>&lt;right&gt;</code> are special codes that denote the left and right arrow keys. The following is a comprehensive list of valid key codes that can be used to specify correct responses:</p>
+<ul>
+<li><p>Characters: <code>a</code>--<code>z</code>, <code>0</code>--<code>9</code>, all standard punctuation (except braces, pipes, tildes, and percent signs)</p></li>
+<li><p>Editing keys: <code>&lt;space&gt;</code>, <code>&lt;backspace&gt;</code>, <code>&lt;tab&gt;</code>, <code>&lt;clear&gt;</code>, <code>&lt;kp_enter&gt;</code>, <code>&lt;return&gt;</code>, <code>&lt;insert&gt;</code>, <code>&lt;delete&gt;</code></p></li>
+<li><p>Modkeys: <code>&lt;lshift&gt;</code>, <code>&lt;rshift&gt;</code>, <code>&lt;lctrl&gt;</code>, <code>&lt;rctrl&gt;</code>, <code>&lt;lalt&gt;</code>, <code>&lt;ralt&gt;</code>, <code>&lt;lmeta&gt;</code>, <code>&lt;rmeta&gt;</code>, <code>&lt;numlock&gt;</code>, <code>&lt;capslock&gt;</code>, <code>&lt;scrollock&gt;</code></p></li>
+<li><p>Navigation, function keys: <code>&lt;up&gt;</code>, <code>&lt;down&gt;</code>, <code>&lt;left&gt;</code>, <code>&lt;right&gt;</code>, <code>&lt;home&gt;</code>, <code>&lt;end&gt;</code>, <code>&lt;pageup&gt;</code>, <code>&lt;pagedown&gt;</code>, <code>&lt;esc&gt;</code>, <code>&lt;f1&gt;</code>--<code>&lt;f15&gt;</code></p></li>
+</ul>
+<p>Another special response code is <code>&lt;classical&gt;</code>. Specifying a response as such, either for a particular phase or as the default for all S1s, effectively means that the S2 will be displayed <em>only</em> at the end of the trial (with the appropriate S2Prob) <em>regardless</em> of what the subject does during the trial, as in classical conditioning or causal rating studies. Thus the <code>Phases.csv</code> file in Table  specifies that Red is to be rewarded 90% of the time at the end of a trial, <em>regardless</em> of whether the subject responds or not. Note that subject responses are still recorded, and if they exceed the allowed maximum the trial terminates without S2 presentation. This last feature makes it possible to implement omission training, i.e., to reward subjects only when they abstain from responding. This is controlled by the  parameter. The default value is 1, which corresponds precisely to omission training. If you don't want the trial to ever terminate before the allotted time, you can use a value of MaxResponses so high that it cannot be possibly reached, such as 1000.</p>
+<table>
+<caption>A <code>Phases.csv</code> file using the Response notation <code>&lt;classical&gt;</code> to indicate a classical conditioning trial in which the S2 is presented at the end of the trial regardless of subject behavior. </caption>
+<thead>
+<tr class="header">
+<th align="left">Phase</th>
+<th align="left">S1</th>
+<th align="left">Trials</th>
+<th align="left">S2Prob</th>
+<th align="left">S2</th>
+<th align="left">Response</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">Red</td>
+<td align="left">20</td>
+<td align="left">.9</td>
+<td align="left">Smiley</td>
+<td align="left">&lt;classical&gt;</td>
+</tr>
+</tbody>
+</table>
+<p>Note also that on classical trials, the ResponseTimeMin/Max features are disabled (see ). The S2 (if any) is presented only once at the end of the trial, so it is irrelevant when a subject responds.</p>
+<p>  </p>
+<p>Instructions or other longish text can be displayed with the textfile stimulus type. For example, to include both a start and an end message (say a 'thank you' or similar) you can use <code>Phases.csv</code> and <code>Stimuli.csv</code> file like those in Tables  and  to include the presentation of text files that are displayed until the subject responds once. As you see in these Tables, the display of instructions is construed simply as a stimulus that stays on for a long time (here 10 minutes), unless the subject performs the required response (which, by default, is the space bar). The Start.txt and End.txt files will be looked for in the Materials folder of the experiment. Note the column MaxResponses in <code>Phases.csv</code>, which makes sure the user only has to press the space bar (the default response) once to move on, even if a larger number of responses is allowed for actual experimental trials.</p>
+<table>
+<caption>A <code>Phases.csv</code> file for displaying to subjects instructions and a final message (see also Table ). </caption>
+<thead>
+<tr class="header">
+<th align="left">Phase</th>
+<th align="left">S1</th>
+<th align="left">Trials</th>
+<th align="left">MaxResponses</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Start</td>
+<td align="left">StartText</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">End</td>
+<td align="left">EndText</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>A <code>Stimuli.csv</code> file for displaying to subjects instructions and a final message (see also Table ). </caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Type</th>
+<th align="left">Parameters</th>
+<th align="left">Color</th>
+<th align="left">XOffset</th>
+<th align="left">YOffset</th>
+<th align="left">Duration</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">StartText</td>
+<td align="left">textfile</td>
+<td align="left">Start.txt</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">600000</td>
+</tr>
+<tr class="even">
+<td align="left">EndText</td>
+<td align="left">textfile</td>
+<td align="left">End.txt</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">600000</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p>  </p>
+<p>When you run an experiment with alex, data are saved in the Data folder (which alex creates if it is not found) in CSV files named with group names and subject numbers, e.g., <code>Data/Training-1.csv</code> for the first subject of group <code>Training</code>. These files have a header followed by one data line per response. This is so that each line identifies all variables it pertains to (so called &quot;long format&quot; in statistical software) and can be loaded easily into statistical software without having to manually add data.</p>
+<p>The first few columns of each data line consist of the hostname, followed by the group, subject number, and pertinent treatments as specified in the <code>Groups.csv</code> line for the particular subject. The remaining columns are as follows:</p>
+<ul>
+<li><p><strong>Sex</strong>: Subject's sex (collected by alex at the start of experiments, otherwise <code>NA</code>).</p></li>
+<li><p><strong>Age</strong>: Subject's age (ditto).</p></li>
+<li><p><strong>Time</strong>: Time when response was made (since start of experiment, in ms).</p></li>
+<li><p><strong>Phase</strong>: Experimental phase the trial belongs to.</p></li>
+<li><p><strong>Trial</strong>: Trial number within the phase.</p></li>
+<li><p><strong>S1</strong>: Designated S1 for this trial (defined in <code>Stimuli.csv</code>), or <code>ITI</code> for responses registered between trials.</p></li>
+<li><p><strong>S1Duration</strong>: Duration of S1 (or intertrial interval).</p></li>
+<li><p><strong>S1On</strong>: Was S1 present when the response was made? (<code>T</code> for true, <code>F</code> for false.)</p></li>
+<li><p><strong>S2</strong>: Designated S2 for this trial (or <code>NA</code> if not specified in <code>Phases.csv</code> and during ITIs; <strong>S2Duration</strong> and <strong>S2Prob</strong> are also <code>NA</code> in these cases).</p></li>
+<li><p><strong>S2Duration</strong>: Duration of S2.</p></li>
+<li><p><strong>S2On</strong>: see <strong>S1On</strong>.</p></li>
+<li><p><strong>S2Prob</strong>: Probability of S2 presentation, given a correct response (both specified in <code>Phases.csv</code>).</p></li>
+<li><p><strong>Response</strong>: Key designated as the correct response (<code>NA</code> during ITIs), or the code <code>&lt;classical&gt;</code> if the trial was a &quot;classical conditioning&quot; one (see ).</p></li>
+<li><p><strong>RT</strong>: Response time since start of trial (<code>NA</code> if trial timed out).</p></li>
+<li><p><strong>S2Pres</strong>: Did this response result in S2 presentation? (For classical trials: was an S2 scheduled for the end of this trial?) (<code>T</code> or <code>F</code>).</p></li>
+<li><p><strong>Key</strong>: Subject's actual response. This can be the correct key, any other key the subject may have pressed, or <code>&lt;timeout&gt;</code> in the case of no responses within a trial (the goal is to have a faithful record of everything the subject does).</p></li>
+</ul>
+<p>We believe this information characterizes subject behavior competely, but please do let us know if you think any details could be added.</p>
+<p> </p>
+<p>Errors may arise if design files have incorrect or incomplete information. With a few exceptions, all errors print a hopefully informative message both on the standard console output (terminal) and on screen. A few errors that may occur before the screen is set up, such as not finding necessary files, are reported only on the standard output. When running alex through the PEBL launcher, these messages will appear in files <code>stdout.txt</code> and <code>stderr.txt</code>, which PEBL creates in the folder where alex is run.</p>
+<p>In addition to double quotes in CSV design files (see the footnote below Table ), alex requires final line endings in these files. If a design file lacks a newline at the very end, alex will exclude the last row when reading in this file, resulting in obvious errors. Most spreadsheet software saves CSV files with this final newline, but you can always check for this by opening the design files with a text editor.</p>
+<p>There is one error that will appear mysterious to the uninitiated: the screen remains black and alex hangs forever. The reason is that alex uses a lock system on the <code>Groups.csv</code> file to prevent concurrent instances of alex from running the same subject. The lock is held for as little as possible, but if you interrupt alex at a critical time, or if alex crashes for any reason before the lock is released, subsequent instances of alex will wait forever for the lock to be released. In these cases, you can simply delete the lock file, which is <code>Groups.csv.lck</code> in the Design folder.</p>
+<p>Presently, alex performs some checks at startup, but some errors are caught only as they occur while running the experiment. We advise to always run the experiment a few times before putting it into production. If you think errors are due to bugs in alex, please write us at the address . Also do contact us if you think that your design files are correct but the experiment does not run as you expect.</p>
+<p>  </p>
+<p>Please send suggestions to improve alex or this manual to Stefano Ghirlanda, drghirlanda@gmail.com.</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>In this manual, we use tables to display design files in a readable form. These files, however, are actually comma-separated values (CSV) files. You can edit CSV files in any spreadsheet using the CSV format for saving. Alex wants double quotes (if needed) in CSV files. Single quotes will result in errors. (This comes from the PEBL function that reads CSV files.) Most spreadsheet software uses double quotes by default, but do check in case alex cannot read your CSV files.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+</body>
+</html>
