@@ -315,17 +315,20 @@ define ReadStimuli() {
       Move( s, .05*gVideoWidth, .05*gVideoHeight )
     } elseif( type == "sound" ) {
        fileName <- First( Resolve(stimulus, "Parameters", Nth(gStimParams,i)) )
-       fileName <- gWD + "Materials/" + fileName
-       if( not FileExists( fileName ) ) {
-         Message( "Cannot find file: "+fileName, 1 )
+       dirfileName <- gWD + "Materials/" + fileName
+       if( FileExists( dirfileName ) ) {
+         s <- LoadSound( dirfilename )
+       } else { # Attempt to load PEBL-provided audio file
+         s <- LoadSound( fileName )
        }
-       s <- LoadSound( fileName )
     } else {
        Message( "Unsupported stimulus type: "+type, 1 )
     }
     PushOnEnd( gStimuli, s )
-    AddObject( s, gWindow )
-    Hide( s )
+    if( type != "sound" ) { # Sounds don't have to be added to the screen 
+      AddObject( s, gWindow )
+      Hide( s )
+    }
   }
 }
 
@@ -792,7 +795,7 @@ define Display( stimulus ) {
     }
     s <- Nth( gStimuli, i )
     if( IsAudioOut(s) ) {
-      StartPlayback( s )
+      Playbackground( s )
     } else {
       Show( s )
     }
@@ -806,7 +809,7 @@ define Undisplay( stimulus ) {
     i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
     s <- Nth( gStimuli, i )
     if( IsAudioOut(s) ) {
-      PausePlayback( s )
+      Stop( s )
     } else {
       Hide( s )
     }
