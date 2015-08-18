@@ -24,12 +24,19 @@ Toward a release
   script but will probably have to install into different
   folders. Research needed for Windows.
 
-- R package. Minimum requirements: a way to read in alex data into
-  data.frames, descriptive stats for response time distributions and
-  response count distributions to the different stimuli. It is also
-  possible to figure out which independent variables were manipulated
-  between and within subjects, present the experimental design in a
-  table, etc.
+- R package. 
+
+  - Creating presentation variable is slow. It could be faster to
+    create it for each subject as they are read, rather than for all
+    subjects at the end (less looping, shorter arrays to sort, etc.).
+
+  - Descriptive stats for response time distributions and response
+    count distributions to the different stimuli and phases.
+
+  - Future: It is possible to figure out which independent variables
+    were manipulated between and within subjects, present the
+    experimental design in a table, etc.
+
 
 Future
 ======
@@ -49,30 +56,22 @@ Stimulus sequences
 ------------------
 
 It should be possible to display sequences of stimuli, rather than
-single stimuli, in each trial. The comma charatcter (,) has been
-reserved for the specification of sequences. A Durations field is
-planned for Stimuli.csv. For example a sequence of two stimuli A and
-B, lasting 1 and 2 seconds, respectively, could be described in
-Phases.csv:
+single stimuli, in each trial. For example a sequence of two stimuli A
+and B, lasting 1 and 2 seconds, respectively, could be described in
+Phases.csv as:
 
     Phase Stimulus Durations Trials Rewards USs
-    1     A,B      1000,2000 10     1       Smiley
+    1     A|B      1000|2000 10     1       Smiley
+
+But we need a clean syntax to specify onset and offset of all stimuli
+in the sequence...
 
 
 Multiple responses
 ------------------
 
-It should be possible to instruct alex to record any keypress, and
-make rewards specific to stimulus/key combinations. Proposed syntax:
-
-    Phase Stimulus Trials Rewards USs
-    1     A        10     a:1     Smiley
-    1     B        10     l:1     Smiley
-
-This would indicate that presses of the 'a' key should be rewarded
-with a smiley when stimulus A is presented, while when B is presented
-the rewarded key is 'l'. Multiple stimulus/key pairs could be entered
-as:
+It should be possible to make rewards specific to stimulus/key
+combinations. Possible syntax:
 
     Phase Stimulus Trials Rewards   USs
     1     A        10     a:1,l:0.5 a:Smiley,l:Smiley
