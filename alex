@@ -739,10 +739,11 @@ define Resolve( stimulus, field, value ) {
 # only : and *.
 define ResolvePhase( phase, stimulus, field, value ) {
   if( SubString( value, 1, 1 ) == ":" ) {
-    # This is the phase to be looked up:
-    p <- SubString( value, 2, StringLength(value)-1 )
-    result <- ResolvePhase( p, stimulus, field, value )
-    MyLog( "ResolvePhase: resolved '"+value+"' to '"+result+"'" )
+    Message( "Invalid notation for phase parameters (:)", 1 )
+    # Under construction...
+    # p <- SubString( value, 2, StringLength(value)-1 )
+    # result <- ResolvePhase( p, stimulus, field, value )
+    # MyLog( "ResolvePhase: resolved '"+value+"' to '"+result+"'" )
   } elseif( value == "*" ) {
     result <- Lookup( phase+stimulus+field, gSubjectHeader, gSubjectInfo )
     if( IsList(result) ) { # Nothing found
