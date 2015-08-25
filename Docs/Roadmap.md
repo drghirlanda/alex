@@ -67,6 +67,13 @@ But we need a clean syntax to specify onset and offset of all stimuli
 in the sequence...
 
 
+Phase sequences
+---------------
+
+We could have a PhaseOrder column in Groups.csv that allows for
+alternate phase sequences as a type of group treatment.
+
+
 Multiple responses
 ------------------
 
