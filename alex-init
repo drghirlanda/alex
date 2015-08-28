@@ -53,4 +53,17 @@ define Start( par ) {
       AppendFile( destination, source )
     }
   }
+
+  if( GetSystemType() == "WINDOWS" ) {
+    file <- FileOpenWrite( gExpDir + "/RunExperiment.bat" )
+    FilePrint( file, "start" ) # FIX: How to start alex? 
+    FilePrint( file, "exit" )
+    FileClose( file )
+  } else { # Linux and Mac Os X
+    file <- FileOpenWrite( gExpDir + "/RunExperiment.sh" )
+    FilePrint( file, "#!/bin/sh" )
+    FilePrint( file, "alex" )
+    FileClose( file )
+    SystemCall( "chmod u+x "+gExpDir+"/RunExperiment.sh" )
+  }  
 }
