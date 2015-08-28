@@ -33,7 +33,7 @@ following subfolders:
 The program `alex-init`, run as follows, generates a bare-bones experiment
 with the files you'll need:
 
-    alex-init -v <experiment name>
+         alex-init -v <experiment name>
 
 This creates folder `<experiment name>` with the above mentioned subfolders
 (except Data and Logs, which are created on first run) and skeleton
@@ -54,7 +54,7 @@ From the folder where the Design and Materials folders are, you
 can just type `alex` in the command line. You can also run experiments
 in a folder other than the working directory by typing:
 
-    alex -v <path to folder>
+         alex -v <path to folder>
 
 The folder is expected to have Design and Materials subfolders with the
 appropriate files. Data and Logs subfolders will be created if not present.
@@ -76,7 +76,7 @@ of lines, for example). Although this may be inconvenient at times,
 it is hard to improve upon this situation because there is no way for
 alex to decide whether important data would be overwritten by re-running
 a subject. If you decide a data file is worthless, either remove it or
-rename it with something like an 'incomplete-' prefix, and alex will
+rename it with something like an `incomplete-` prefix, and alex will
 automatically re-run that subject.
 
 To interrupt a running experiment, you can use the interrupt
@@ -113,16 +113,16 @@ from a white square. We then want to know how subjects respond to,
 say, a pink square. Table \ref{phases} shows how a suitable
 `Phases.csv` file might look.[^1] The file describes an experiment
 with two phases, with each line defining one type of trial that
-occurs in a phase. Here, there are two kinds of trials in phase 1,
-specifying 20 presentations of each of two stimuli (S1s) called Red
-and White. Red will be rewarded 90% of the time, White only 10%
-(specified by S2Prob). On these trials, stimulus Smiley will be
-presented as the reward (S2). In phase 2, stimulus Pink is presented
+occurs in a phase. Here, there are two kinds of trials in `Phase 1`,
+specifying 20 presentations of each of two stimuli (S1s) called `Red`
+and `White`. `Red` will be rewarded 90% of the time, `White` only 10%
+(specified by `S2Prob`). On these trials, stimulus `Smiley` will be
+presented as the reward (`S2`). In `Phase 2`, stimulus `Pink` is presented
 five times and never rewarded.
 
-When the experiment is run, Red and White trials will be intermixed
-randomly because they all pertain to phase 1. Pink trials, on the
-other hand, will be performed in phase 2 after all phase 1 trials
+When the experiment is run, `Red` and `White` trials will be intermixed
+randomly because they all pertain to `Phase 1`. `Pink` trials, on the
+other hand, will be performed in `Phase 2` after all `Phase 1` trials
 have been run.
 
 
@@ -133,8 +133,9 @@ Phase S1    Trials S2Prob S2
 2     Pink  5      0
 
 Table: A simple `Phases.csv` to teach a discrimination between stimuli
-Red and White, and then test responding to Pink. Note that the S2 field
-can be left empty if probability of S2 presentation is 0. \label{phases}
+Red and White, and then test responding to Pink. Note that the S2
+field can be left empty if probability of S2 presentation is 0.
+\label{phases}
 
 [^1]: In this manual, we use tables to display design files in a
 readable form. These files, however, are actually comma-separated values
@@ -148,11 +149,11 @@ but do check in case alex cannot read your CSV files.
 
 **Note:** Phases are run in the order they are defined, not in their
 numerical or alphabetical order (thus you can use descriptive names
-like Training, Testing, etc). To be more precise, phases are run in
+like `Training`, `Testing`, etc). To be more precise, phases are run in
 the order in which their *first* stimuli are defined. For example, the
 `Phases.csv` files in Tables \ref{phases} and \ref{phases-order1} are
-equivalent, but the file in Table \ref{phases-order2} runs Phase 2
-before Phase 1.
+equivalent, but the file in Table \ref{phases-order2} runs `Phase 2`
+before `Phase 1`.
 
 Phase S1    Trials S2Prob S2
 ----- --    ------ ------ --
@@ -188,9 +189,9 @@ higher-order conditioning), and where S2 would not be considered a reward.
 \phantomsection \addcontentsline{toc}{subsection}{The \texttt{Stimuli.csv} file}
 \subsection*{The \texttt{Stimuli.csv} file}
 
-How does alex know that Red, White, and Pink mentioned in the
+How does alex know that `Red`, `White`, and `Pink` mentioned in the
 `Phases.csv` files in Tables \ref{phases}--\ref{phases-order2} represent
-red, white, and pink squares, and that Smiley is a smiley face? This
+red, white, and pink squares, and that `Smiley` is a smiley face? This
 information is contained in the `Stimuli.csv` file, see Table \ref{stimuli}.
 
 Name   Type   Parameters        Color       XOffset YOffset
@@ -220,16 +221,16 @@ is a detailed explanation:
 - **Parameters**: The meaning of parameters varies according to the
   stimulus type:
 
-    - square: side length in pixels.
+    - `square`: side length in pixels.
 
-    - circle: radius in pixels.
+    - `circle`: radius in pixels.
 
-    - text: the text to be displayed.
+    - `text`: the text to be displayed.
 
-    - textfile: name of a file in the Materials folder where the desired
+    - `textfile`: name of a file in the Materials folder where the desired
       text is stored.
 
-    - image or sound: name of an image or sound file in the Materials
+    - `image` or `sound`: name of an image or sound file in the Materials
       folder. An optional zoom factor, separated from the filename by
       a `+` (plus), can be provided to scale an image to a desired size.
       The following stylized faces (smileys) come with alex and you can
@@ -254,8 +255,8 @@ is a detailed explanation:
   ignored for images and sounds. Colors can either be named or given
   as RGB triplets, delimited by hyphens (`-`). In the case of text, you can
   specify the background as well as the foreground color by writing the
-  color in the form Color1+Color2, where Color1 is the foreground and
-  Color2 the background. If no foreground or background color is
+  color in the form `Color1+Color2`, where `Color1` is the foreground and
+  `Color2` the background. If no foreground or background color is
   given, the defaults set in `Parameters.csv` are used.
 
     The PEBL reference manual lists valid color names, which are many
@@ -265,7 +266,7 @@ is a detailed explanation:
 
 - **XOffset** and **YOffset**: Offset from the center of the screen,
   in pixels. In Table \ref{stimuli}, all stimuli are centered except
-  for Smiley, which is displayed 150 pixels above
+  for `Smiley`, which is displayed 150 pixels above
   center (negative Y values place stimuli above center, negative X
   values place them left of center).
 
@@ -280,10 +281,10 @@ alex to run a single group of 10 subjects (groups can be numbered or named,
 as is most convenient to you). Often, however, subjects need to be divided
 into different treatment groups. If you want to test, say, two shades of
 pink, you would extend the `Stimuli.csv` file in Table \ref{stimuli-color}.
-The special value `*` here indicates that the color of stimulus Pink will
-be looked up, for each subject, in the column PinkColor of the `Groups.csv`
+The special value `*` here indicates that the color of stimulus `Pink` will
+be looked up, for each subject, in the column `PinkColor` of the `Groups.csv`
 file (Table \ref{subjects-color}). This syntax is available for all
-stimulus properties. For example, to vary the size of the Red square across
+stimulus properties. For example, to vary the size of the red square across
 subjects you would use the `Groups.csv` and `Stimuli.csv` files in
 Tables \ref{subjects-color-parameters} and \ref{stimuli-color-parameters}.
 
@@ -367,13 +368,13 @@ FontSize        36
 Test            0
 Log             1
 
-Table: Sample `Parameters.csv` file with default values.
+Table: A sample `Parameters.csv` file with default values.
 
 
 - **S1Duration** is the default duration of all S1 stimuli,
   while **S2Duration** is the default duration of all S2 stimuli. All
   durations are in milliseconds. Note that you can set different
-  durations for different stimuli by including a Duration column in the
+  durations for different stimuli by including a `Duration` column in the
   `Stimuli.csv` file (see \hyperref[textfiles]{here} for an example). When
   using compound stimuli, all components must have the same duration.
 
@@ -382,8 +383,8 @@ Table: Sample `Parameters.csv` file with default values.
 - **ResponseTimeMin** and **ResponseTimeMax** define at what times
   within a trial subjects can respond. Responses made outside this time
   window do not contribute to the per-trial response count, and
-  do not result in S2 presentation. If not specified, ResponseTimeMin
-  is set to 0 and ResponseTimeMax to S1Duration, thus allowing responses
+  do not result in S2 presentation. If not specified, `ResponseTimeMin`
+  is set to 0 and `ResponseTimeMax` to `S1Duration`, thus allowing responses
   at any time during the trial.
   
 - **MinITI** and **MaxITI** are the minimum and maximum values of the
@@ -397,28 +398,28 @@ Table: Sample `Parameters.csv` file with default values.
 - \phantomsection \label{maxresponses}
   **MaxResponses** is the maximum number of response a subject is
   allowed to make in one trial. There are essentially two useful
-  settings. If you set this to 1, the trial ends with the first response
+  settings. If you set this to `1`, the trial ends with the first response
   (the S2 is presented if appropriate, of course). If you set it to an
-  unrealistically large value, say 1000, you can record any number of
+  unrealistically large value, say `1000`, you can record any number of
   responses per trial, each of which may result in an S2 being
-  presented. Note that you can set MaxReponses to a different value for
-  different trial types, by including a MaxResponses column in `Phases.csv`
+  presented. Note that you can set `MaxReponses` to a different value for
+  different trial types, by including a `MaxResponses` column in `Phases.csv`
   (see the \hyperref[textfiles]{section on text files} for an example). If a
-  MaxResponses column exists, but the value is empty for some stimuli,
-  the MaxResponses value in `Parameters.csv` will be looked up.
-  If MaxResponses is not set there, it is given a default value of 1.
+  `MaxResponses` column exists, but the value is empty for some stimuli,
+  the `MaxResponses` value in `Parameters.csv` will be looked up.
+  If `MaxResponses` is not set there, it is given a default value of 1.
 
 The next few parameters control the screen background color while the
 experiment is running and the color, font, and size of text used for
 instructions and other messages.
 
-- The **Test** parameter, if set to 1, skips instructions and
+- The **Test** parameter, if set to `1`, skips instructions and
   acquisition of demographic information. It is meant to quickly start
   the experiment during development.
 
 - **Log** is a toggle for the logging feature, which records runtime
   messages for each subject, in files named the same as corresponding
-  data files except with a `.log` suffix. Disabled by setting to 0.
+  data files except with a `.log` suffix. Disabled by setting to `0`.
 
 
 \phantomsection \addcontentsline{toc}{section}{More about stimuli}
@@ -430,13 +431,13 @@ notation, explained next.
 
 Sometimes we want some stimuli to share characteristics. For example,
 they should be of the same color. We can express the fact that we want
-a stimulus characteristic to equal that of another stimulus using a
-colon (`:`) followed by the stimulus name (we would have liked to use `=`
+a stimulus characteristic to equal that of another stimulus using
+`:` (colon) followed by the stimulus name (we would have liked to use `=`
 rather than `:`, but unfortunately spreadsheet software stubbornly
 interprets `=` as introducing a formula). Consider the file in Table
 \ref{stimuli-color}, featuring three squares of the same size as stimuli.
 The file in Table \ref{stimuli-special} is equivalent but uses colon
-notation for the Parameters field. This has two advantages: it makes
+notation for the `Parameters` field. This has two advantages: it makes
 explicit our intention of having three squares of equal size, and it
 reduces the possibility of typing errors.
 
@@ -503,7 +504,7 @@ defined earlier, obscuring them partly or wholly.
 It is sometimes desirable to have a stimulus or combination of stimuli
 present at all times during a phase, including interstimulus intervals,
 for example as a background on which others are superimposed. A stimulus
-whose name starts with "Background" followed by the name of a phase will
+whose name starts with `Background` followed by the name of a phase will
 be displayed for the entire duration of that phase. You can define many
 such stimuli, e.g., `BackgroundPhase1-1` and `BackgroundPhase1-2`. 
 
@@ -518,14 +519,13 @@ backdrop will instead obscure the other stimuli.
 \phantomsection \addcontentsline{toc}{section}{More about phases}
 \section*{More about phases}
 
-Just as with stimuli, phase parameters can be set to differ across
-groups by using the `*` and `:` notation. For example, imagine that
-we want to investigate how discrimination learning proceeds as a
-function of reward probability. We could use the `Phases.csv` file in
-Table \ref{phases-star-notation}, which employs `*` notation for the
-S2Prob variable, and the `Groups.csv` file in Table
-\ref{groups-phases-star-notation}, which provides the information that
-is "starred" in `Phases.csv`.
+As with stimuli, phase parameters can be set to differ across groups by
+using `*` notation. For example, let's suppose we want to investigate how
+discrimination learning varies with reward probability. We could use the
+`Phases.csv` file in Table \ref{phases-star-notation}, which  employs `*`
+notation for the `S2Prob` variable, and the `Groups.csv` file in Table
+\ref{groups-phases-star-notation}, which provides the information  that is
+"starred" in `Phases.csv`.
 
 Phase    S1 Trials S2Prob S2
 -----    -- ------ ------ --
@@ -548,7 +548,7 @@ file in Table
 
 
 Note that the name of the corresponding column in `Groups.csv` is
-`TrainingAS2Prob`, or, more generally, `(phase name)(S1 name)(parameter)`.
+`TrainingAS2Prob`, or, more generally, (`phase name`)(`S1 name`)(`parameter`).
 Thus the column name specifies two things: the phase and the S1 to which
 the column value refers (in employing the same notation for stimuli,
 we had to worry only about the stimulus name). This works also to set
@@ -561,12 +561,12 @@ set the `S2Prob` value for S1 `A+B`, you would use the column
 instrumental trials} \section*{Responses and classical vs. instrumental trials}
 \label{responses}
 
-The default Response key for all S1s can be specified in
+The default `Response` key for all S1s can be specified in
 `Parameters.csv`. We can also, however, specify different responses
 for different S1s by adding a Response column to the `Phases.csv`
 file. For example, to specify that the left arrow key is the correct
-response for the S1 Red in Phase 1, but that the right arrow is correct
-for White, you would write as in Table \ref{per-stimulus-responses}.
+response for the S1 `Red` in `Phase 1`, but that the right arrow is correct
+for `White`, you would write as in Table \ref{per-stimulus-responses}.
 
 Phase S1    Trials S2Prob S2     Response
 ----- --    ------ ------ --     --------
@@ -584,7 +584,7 @@ codes that can be used to specify correct responses:
 - Characters: `a`--`z`, `0`--`9`, all standard punctuation (except
   braces, pipes, tildes, and percent signs)
 
-- Editing keys: `<space>`, `<backspace>`, `<tab>`, `<clear>`,
+- Edit keys: `<space>`, `<backspace>`, `<tab>`, `<clear>`,
   `<kp_enter>`, `<return>`, `<insert>`, `<delete>`
 
 - Modkeys: `<lshift>`, `<rshift>`, `<lctrl>`, `<rctrl>`, `<lalt>`,
@@ -608,7 +608,7 @@ abstain from responding. This is controlled by the \hyperref[maxresponses]
 {MaxResponses} parameter. The default value is 1, which
 corresponds precisely to omission training. If you don't want the trial
 to ever terminate before the allotted time, you can use a value of
-MaxResponses so high that it cannot be possibly reached, such as 1000.
+`MaxResponses` so high that it cannot be possibly reached, such as `1000`.
 
 Phase S1  Trials S2Prob S2     Response
 ----- --  ------ ------ --     --------
@@ -619,10 +619,10 @@ indicate a classical conditioning trial in which the S2 is presented
 at the end of the trial regardless of subject behavior. \label{classical}
 
 
-Note also that on classical trials, the ResponseTimeMin/Max
-features are disabled (see \hyperref[global]{Global parameters}). The S2 (if any)
-is presented only once at the end of the trial, so it is irrelevant when
-a subject responds.
+Note also that on classical trials, the `ResponseTimeMin`/`Max`
+features are disabled (see \hyperref[global]{Global parameters}). The S2
+(if any) is presented only once at the end of the trial, so it is irrelevant 
+when a subject responds.
 
 
 \phantomsection \addcontentsline{toc}{section}{Instructions and other text displays} 
@@ -634,7 +634,7 @@ stimulus type. For example, to include both a start and an end message
 `Stimuli.csv` file like those in Tables \ref{phases-instructions} and
 \ref{stimuli-instructions} to include the presentation of text files
 that are displayed until the subject responds once. As you see in
-these Tables, the display of instructions is construed simply as a
+these tables, the display of instructions is construed simply as a
 stimulus that stays on for a long time (here 10 minutes), unless the
 subject performs the required response (which, by default, is the
 space bar). The Start.txt and End.txt files will be looked for in the
@@ -692,8 +692,8 @@ The remaining columns are as follows:
 
  - **Trial**: Trial number within the phase.
 
- - **S1**: Designated S1 for this trial (defined in `Stimuli.csv`),
-   or `ITI` for responses registered between trials.
+ - **S1**: Designated S1 for this trial, or `ITI` for responses registered 
+   between trials.
 
  - **S1Duration**: Duration of S1 (or intertrial interval).
 
@@ -701,12 +701,12 @@ The remaining columns are as follows:
    `F` for false.)
 
  - **S2**: Designated S2 for this trial (or `NA` if not specified in
-   `Phases.csv` and during ITIs; **S2Duration** and **S2Prob** are also
+   `Phases.csv` and during ITIs; `S2Duration` and `S2Prob` are also
    `NA` in these cases).
 
  - **S2Duration**: Duration of S2.
 
- - **S2On**: see **S1On**.
+ - **S2On**: see `S1On`.
 
  - **S2Prob**: Probability of S2 presentation, given a correct response
    (both specified in `Phases.csv`).
@@ -744,10 +744,10 @@ In addition to double quotes in CSV design files (see the footnote below
 Table \ref{phases}), alex requires final line endings in these files.
 If a design file lacks a newline at the very end, alex will exclude the
 last row when reading in this file, resulting in obvious errors. Most
-spreadsheet software saves CSV files with this final newline, but you
-can always check for this by opening the design files with a text editor.
+spreadsheet software saves CSV files with this final newline, but be sure
+to check for this if you encounter any problems with running your experiment.
 
-There is one error that will appear mysterious to the uninitiated: the
+There is another error that will appear mysterious to the uninitiated: the
 screen remains black and alex hangs forever. The reason is that alex
 uses a lock system on the `Groups.csv` file to prevent concurrent
 instances of alex from running the same subject. The lock is held for
