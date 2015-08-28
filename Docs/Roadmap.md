@@ -6,6 +6,8 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
+- Make RunExperiment.bat work!
+
 - Add section on steady state testing in manual, perhaps as an
   example.
 
