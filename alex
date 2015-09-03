@@ -106,7 +106,9 @@ define Start( par ) {
   hostxt <- gWD + "Data/hostname.txt"
   LockFile( hostxt )
   SystemCall( "hostname > "+hostxt )
-  gHostname <- FileReadLine( FileOpenRead( hostxt ) )
+  hostream <- FileOpenRead( hostxt )
+  gHostname <- FileReadLine( hostream )
+  FileClose( hostream )
   DeleteFile( hostxt )
   UnlockFile( hostxt )
   MyLog( "Start: Determined hostname as '"+gHostname+"'" )

@@ -393,7 +393,7 @@ Table: A sample `Parameters.csv` file with default values.
 
 - **Response** is the key subjects are instructed to press if they want
   to respond. Note that this can also be set on a per-trial basis,
-  see (\hyperref[responses]{here}).
+  see \hyperref[responses]{here}.
 
 - \phantomsection \label{maxresponses}
   **MaxResponses** is the maximum number of response a subject is
