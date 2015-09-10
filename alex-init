@@ -5,20 +5,21 @@ define Start( par ) {
   ## This is the folder where we look for support files:
   gAlexDir <- "Library/Init/"
   ## It can itself be in a number of places:
-  dirs <- [ "",                # Current folder takes precedence
-            "/usr/share/alex/" # Linux
-	    # ADD OS X AND WINDOWS
+  dirs <- [ "",                      # Current folder takes precedence
+            "/usr/share/alex/",      # Linux
+	                             # ADD OS X
+	    "C:\Program Files\alex\" # Windows
 	  ]
   ## Here we find out where:
   found <- 0
-  loop( d, dirs ) {
-    if( IsDirectory( d + gAlexDir ) ) {
-      gAlexDir <- d + gAlexDir
+  loop( gD, dirs ) {
+    if( IsDirectory( gD + gAlexDir ) ) {
+      gAlexDir <- gD + gAlexDir
       found <- 1
       Print( gAlexDir + " found!" )
       break
     } else {
-      Print( d + gAlexDir + " not found, moving on" )
+      Print( gD + gAlexDir + " not found, moving on" )
     }
   }
   if( not found ) {
@@ -55,11 +56,10 @@ define Start( par ) {
   }
 
   if( GetSystemType() == "WINDOWS" ) {
-    file <- FileOpenWrite( gExpDir + "/RunExperiment.bat" )
-    FilePrint( file, "start" ) # FIX: How to start alex? 
-    FilePrint( file, "exit" )
-    FileClose( file )
-  } else { # Linux and Mac Os X
+    runExp <- gExpDir + "/RunExperiment.bat"
+    alexbat <- gD + "alex.bat"
+    AppendFile( runExp, alexbat )
+  } else { # Linux and Mac OS X
     file <- FileOpenWrite( gExpDir + "/RunExperiment.sh" )
     FilePrint( file, "#!/bin/sh" )
     FilePrint( file, "alex" )
