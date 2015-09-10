@@ -6,7 +6,7 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
-- Make RunExperiment.bat work!
+- Configurable timing tolerance in Parameters.csv (note in manual).
 
 - Add section on steady state testing in manual, perhaps as an
   example.
