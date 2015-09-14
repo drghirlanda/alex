@@ -26,7 +26,8 @@ following subfolders:
   for your experiment, including an Instructions.txt file for the
   initial instructions (see the \hyperref[textfiles]{section on text files}).
 
-- **Data**: This folder holds the data collected during experiment runs.
+- **Data**: This folder holds the data collected during experiment runs. See
+  \hyperref[data-format]{Data format}.
 
 - **Logs**: This one holds runtime messages recorded for each subject.
 
@@ -35,9 +36,11 @@ with the files you'll need:
 
          alex-init -v <experiment name>
 
-This creates folder `<experiment name>` with the above mentioned subfolders
+This creates folder `<experiment name>` with the above-mentioned subfolders
 (except Data and Logs, which are created on first run) and skeleton
-configuration files.
+configuration files. It also creates a `RunExperiment` script (`.sh` on Linux
+and OS X, `.bat` on Windows) that can be double-clicked to run alex in the
+folder, as an alternative to the command line method described below.
 
 \phantomsection \addcontentsline{toc}{subsection}{Acknowledgements}
 \subsection*{Acknowledgements}
@@ -67,17 +70,15 @@ particular the same `Groups.csv` file which describes how to run
 subjects. Different instances, however, will run different subjects
 and will not overwrite each other's data files.
 
-The fact that a subject has been run is signaled by the existence of
-the corresponding data file (see \hyperref[data-format]{Data format}). If the
-experiment is interrupted before it completes, alex will still
-consider that subject as having been run. It is up to you to check
-that data files are complete (that they have the appropriate number
-of lines, for example). Although this may be inconvenient at times,
-it is hard to improve upon this situation because there is no way for
-alex to decide whether important data would be overwritten by re-running
-a subject. If you decide a data file is worthless, either remove it or
-rename it with something like an `incomplete-` prefix, and alex will
-automatically re-run that subject.
+The fact that a subject has been run is signaled by the existence of the
+corresponding data file. If the experiment is interrupted before it completes,
+alex will still consider that subject as having been run. It is up to you to
+check that data files are complete (e.g., that they have the appropriate
+number of lines). Although this may be inconvenient, it is hard to improve
+upon this situation because there is no way for alex to decide whether
+important data would be overwritten by re-running a subject. If you decide a
+data file is worthless, either remove it or rename it (e.g., with an
+`incomplete-` prefix) and alex will automatically re-run that subject.
 
 To interrupt a running experiment, you can use the interrupt
 key combination for PEBL: `Ctrl+Alt+Shift+\`.

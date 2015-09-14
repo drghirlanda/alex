@@ -20,12 +20,12 @@
 <ul>
 <li><p><strong>Design</strong>: This folder contains the files that specify experimental design, such as which stimuli to use, the structure of trials, and different treatments for subjects. See .</p></li>
 <li><p><strong>Materials</strong>: Here you have any image, sound, or text files you need for your experiment, including an Instructions.txt file for the initial instructions (see the ).</p></li>
-<li><p><strong>Data</strong>: This folder holds the data collected during experiment runs.</p></li>
+<li><p><strong>Data</strong>: This folder holds the data collected during experiment runs. See .</p></li>
 <li><p><strong>Logs</strong>: This one holds runtime messages recorded for each subject.</p></li>
 </ul>
 <p>The program <code>alex-init</code>, run as follows, generates a bare-bones experiment with the files you'll need:</p>
 <pre><code>     alex-init -v &lt;experiment name&gt;</code></pre>
-<p>This creates folder <code>&lt;experiment name&gt;</code> with the above mentioned subfolders (except Data and Logs, which are created on first run) and skeleton configuration files.</p>
+<p>This creates folder <code>&lt;experiment name&gt;</code> with the above-mentioned subfolders (except Data and Logs, which are created on first run) and skeleton configuration files. It also creates a <code>RunExperiment</code> script (<code>.sh</code> on Linux and OS X, <code>.bat</code> on Windows) that can be double-clicked to run alex in the folder, as an alternative to the command line method described below.</p>
 <p> </p>
 <p>Alex is written using Shane Mueller's <a href="http://pebl.sourceforge.net">Psychology Experiment Building Language</a> (PEBL). Many thanks to Shane for sharing PEBL!</p>
 <p> </p>
@@ -33,7 +33,7 @@
 <pre><code>     alex -v &lt;path to folder&gt;</code></pre>
 <p>The folder is expected to have Design and Materials subfolders with the appropriate files. Data and Logs subfolders will be created if not present.</p>
 <p>Alex has been designed so that multiple instances of an experiment can be run simultaneously. This feature is useful when the experiment folder is shared among multiple computers, as it may occur in a lab. All instances of alex will read the same design files, and in particular the same <code>Groups.csv</code> file which describes how to run subjects. Different instances, however, will run different subjects and will not overwrite each other's data files.</p>
-<p>The fact that a subject has been run is signaled by the existence of the corresponding data file (see ). If the experiment is interrupted before it completes, alex will still consider that subject as having been run. It is up to you to check that data files are complete (that they have the appropriate number of lines, for example). Although this may be inconvenient at times, it is hard to improve upon this situation because there is no way for alex to decide whether important data would be overwritten by re-running a subject. If you decide a data file is worthless, either remove it or rename it with something like an <code>incomplete-</code> prefix, and alex will automatically re-run that subject.</p>
+<p>The fact that a subject has been run is signaled by the existence of the corresponding data file. If the experiment is interrupted before it completes, alex will still consider that subject as having been run. It is up to you to check that data files are complete (e.g., that they have the appropriate number of lines). Although this may be inconvenient, it is hard to improve upon this situation because there is no way for alex to decide whether important data would be overwritten by re-running a subject. If you decide a data file is worthless, either remove it or rename it (e.g., with an <code>incomplete-</code> prefix) and alex will automatically re-run that subject.</p>
 <p>To interrupt a running experiment, you can use the interrupt key combination for PEBL: <code>Ctrl+Alt+Shift+\</code>.</p>
 <p> </p>
 <p>All configuration files are in the Design folder:</p>
@@ -474,7 +474,7 @@
 <li><p><strong>S1S2Interval</strong> is the interval between S1 offset and S2 onset.</p></li>
 <li><p><strong>ResponseTimeMin</strong> and <strong>ResponseTimeMax</strong> define at what times within a trial subjects can respond. Responses made outside this time window do not contribute to the per-trial response count, and do not result in S2 presentation. If not specified, <code>ResponseTimeMin</code> is set to 0 and <code>ResponseTimeMax</code> to <code>S1Duration</code>, thus allowing responses at any time during the trial.</p></li>
 <li><p><strong>MinITI</strong> and <strong>MaxITI</strong> are the minimum and maximum values of the intertrial interval. Each intertrial interval will be drawn between these values with uniform distribution.</p></li>
-<li><p><strong>Response</strong> is the key subjects are instructed to press if they want to respond. Note that this can also be set on a per-trial basis, see ().</p></li>
+<li><p><strong>Response</strong> is the key subjects are instructed to press if they want to respond. Note that this can also be set on a per-trial basis, see .</p></li>
 <li><p> <strong>MaxResponses</strong> is the maximum number of response a subject is allowed to make in one trial. There are essentially two useful settings. If you set this to <code>1</code>, the trial ends with the first response (the S2 is presented if appropriate, of course). If you set it to an unrealistically large value, say <code>1000</code>, you can record any number of responses per trial, each of which may result in an S2 being presented. Note that you can set <code>MaxReponses</code> to a different value for different trial types, by including a <code>MaxResponses</code> column in <code>Phases.csv</code> (see the  for an example). If a <code>MaxResponses</code> column exists, but the value is empty for some stimuli, the <code>MaxResponses</code> value in <code>Parameters.csv</code> will be looked up. If <code>MaxResponses</code> is not set there, it is given a default value of 1.</p></li>
 </ul>
 <p>The next few parameters control the screen background color while the experiment is running and the color, font, and size of text used for instructions and other messages.</p>

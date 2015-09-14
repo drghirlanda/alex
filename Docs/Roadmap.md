@@ -6,7 +6,7 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
-- Configurable timing tolerance in Parameters.csv (note in manual).
+- Configurable timing tolerance in Parameters.csv (+ note in manual).
 
 - Add section on steady state testing in manual, perhaps as an
   example.
