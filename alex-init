@@ -7,9 +7,9 @@ define Start( par ) {
   ## It can itself be in a number of places:
   dirs <- [ "",                      # Current folder takes precedence
             "/usr/share/alex/",      # Linux
-	                             # ADD OS X
-	    "C:\Program Files\alex\" # Windows
-	  ]
+                                     # ADD OS X
+            "C:\Program Files\alex\" # Windows
+          ]
   ## Here we find out where:
   found <- 0
   loop( gD, dirs ) {
