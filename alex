@@ -203,7 +203,6 @@ define ReadSubject() {
     gSubjectInfo <- e
     gDataFile <- FileOpenWrite( dataFilename )
     UnlockFile( subjectsFile )
-    Message( "Saving data in "+dataFilename, 0 )
   } else {
     UnlockFile( subjectsFile )
     Message( "It looks like all subjects have been run!", 1 )
@@ -211,6 +210,9 @@ define ReadSubject() {
   logFilename <- gWD + "Logs/" + Nth(e,1) + "-" + s + ".log"
   gLogFile <- FileOpenWrite( logFilename )
   gLogging <- Parameter("Log") 
+
+  ## This is at the end because Message uses logging:
+  Message( "Saving data in "+dataFilename, 0 )
 }
 
 define ReadStimuli() {
