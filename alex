@@ -203,6 +203,7 @@ define ReadSubject() {
     gSubjectInfo <- e
     gDataFile <- FileOpenWrite( dataFilename )
     UnlockFile( subjectsFile )
+    Message( "Saving data in "+dataFilename, 0 )
   } else {
     UnlockFile( subjectsFile )
     Message( "It looks like all subjects have been run!", 1 )
@@ -1009,7 +1010,12 @@ define MyLog( logline ) {
 }
 
 define Message( text, fatal ) {
-  box <- MakeTextBox( text + " (Press space to quit)", 
+  if( fatal ) {
+    instr <- " (press space to quit)"
+  } else {
+    instr <- " (press space to continue)"
+  }
+  box <- MakeTextBox( text + instr, 
     gFont, .9*gVideoWidth, .9*gVideoHeight )
   AddObject( box, gWindow )
   Move( box, .05*gVideoWidth, .05*gVideoHeight )
