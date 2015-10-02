@@ -857,7 +857,7 @@ define UndisplayBackground( phaseName ) {
 
 # Creates a new timer, checking that the onset and duration make sense.
 define SetTimer( tOn, duration, stimulus ) {
-  if( tOn < GetTime() ) {
+  if( tOn + 1 < GetTime() ) {
     x <- stimulus+" start time is in the past: "+tOn
     MyLog( "SetTimer: " + x )
     Message( x, 1 )
