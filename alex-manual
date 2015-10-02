@@ -26,6 +26,6 @@ define Start( par ) {
   if( GetSystemType() == "WINDOWS" ) {
     SystemCall( "start "+gAlexDir+"/AlexManual.pdf" )
   } else { # Linux and Mac OS X
-    SystemCall( "xdg-open "+gAlexDir+"/AlexManual.pdf" )
+    SystemCall( "xdg-open "+gAlexDir+"/AlexManual.pdf &" )
   }  
 }
