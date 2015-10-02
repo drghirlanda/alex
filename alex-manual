@@ -1,0 +1,31 @@
+#!/usr/bin/pebl
+
+define Start( par ) {
+
+  ## It can itself be in a number of places:
+  dirs <- [ "/usr/share/alex/",      # Linux
+                                     # ADD OS X
+            "C:\Program Files\alex\" # Windows
+          ]
+  ## Here we find out where:
+  found <- 0
+  loop( gD, dirs ) {
+    if( IsDirectory( gD ) ) {
+      gAlexDir <- gD
+      found <- 1
+      Print( gAlexDir + " found!" )
+      break
+    } else {
+      Print( gAlexDir + " not found, moving on" )
+    }
+  }
+  if( not found ) {
+    SignalFatalError( "Cannot find "+gAlexDir+" anywhere" )
+  }
+
+  if( GetSystemType() == "WINDOWS" ) {
+    SystemCall( "start "+gAlexDir+"/AlexManual.pdf" )
+  } else { # Linux and Mac OS X
+    SystemCall( "xdg-open "+gAlexDir+"/AlexManual.pdf" )
+  }  
+}

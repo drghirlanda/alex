@@ -18,11 +18,15 @@ xcopy %~dp0. "%alex_dir%" /e/i/o/-y
 cd %alex_dir%
 ren alex alex.pbl
 ren alex-init alex-init.pbl
+ren alex-manual alex-manual.pbl
 
-:: write .bat files for alex and alex-init
+:: write .bat files for alex, alex-init, alex-manual
 ( echo @echo off
   echo "%pf%\PEBL\bin\pebl.exe" "%pf%\alex\alex.pbl" %%1 %%2 --fullscreen
 ) > alex.bat
 ( echo @echo off
   echo "%pf%\PEBL\bin\pebl.exe" "%pf%\alex\alex-init.pbl" %%1 %%2
 ) > alex-init.bat
+( echo @echo off
+  echo "%pf%\PEBL\bin\pebl.exe" "%pf%\alex\alex-manual.pbl" %%1 %%2
+) > alex-manual.bat

@@ -5,7 +5,7 @@ USER=root
 GROUP=root
 
 # install program files:
-for BIN in alex alex-init; do
+for BIN in alex alex-init alex-manual; do
     install -o ${USER} -g ${GROUP} -m 0755 ${BIN} ${BIN_DIR}
 done
 
