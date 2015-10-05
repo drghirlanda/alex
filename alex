@@ -516,7 +516,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   endTime       <- startTime + s1Duration # could be longer, see next
   responseCount <- 0
   SetTimer( startTime, s1Duration, s1 )
-  # Now we preprocess the response variable to handle the *
+  # Now we preprocess the response variable to handle the <classical>
   # specification for 'classical conditioning' trials. If the trial is
   # 'classical', we also decide whether to show S2 or not. If S2 is
   # showed, we lengthen trial duration accordingly
