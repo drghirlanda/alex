@@ -48,14 +48,6 @@ define Start( par ) {
     }
   }
 
-  # Determine whether to run in test mode or not:
-  test <- Parameter("Test")
-  if( test != "NA" and ToNumber(test) == 1 ) {
-    test <- 1
-  } else {
-    test <- 0
-  }
-  
   ## Initialize basic display elements:
   fg <- Parameter( "ForegroundColor" )
   if( fg == "NA" ) {
@@ -114,20 +106,54 @@ define Start( par ) {
   UnlockFile( hostxt )
   MyLog( "Start: determined hostname as '"+gHostname+"'" )
   
-  ## Subject information is only asked when not running in test mode
-  if( not test ) {
+  # Determine whether to run in test mode or not:
+  test <- Parameter("Test")
+  if( test != "NA" and ToNumber(test) == 1 ) {
+    test <- 1
+  } else {
+    test <- 0
+  }
+  
+  askID <- Parameter("AskID")
+  if( askID != "NA" and ToNumber(askID) == 1 ) {
+    gID <- GetEasyInput( "Please enter participant id, "+
+      "then press enter:", gWindow )
+    gID <- ToInteger( gID )
+  } else {
+    gID <- "NA"
+  }
+
+  askSex <- Parameter("AskSex")
+  if( askSex != "NA" and ToNumber(askSex) == 1 ) {
     gSex <- GetEasyChoice( "Please select your sex", 
-       ["Male", "Female"], ["M", "F"], gWindow )
+       ["Male", "Female", "Decline to answer"], ["M", "F", "NA"], gWindow )
+  } else {
+    gSex <- "NA"
+  }
+
+  askAge <- Parameter("AskAge")
+  if( askAge != "NA" and ToNumber(askAge) == 1 ) {
     gAge <- GetEasyInput( "Please enter your age in years, "+
       "then press enter:", gWindow )
     gAge <- ToInteger( gAge )
-    Wait( 1000 )
   } else {
-    gSex <- "NA"
     gAge <- "NA"
   }
 
+  askRace <- Parameter("AskRace")
+  if( askRace != "NA" and ToNumber(askRace) == 1 ) {
+    raceNIH <- ["American Indian or Alaska Native", "Asian", "Black or African American", 
+                 "Hispanic or Latino", "Native Hawaiian or other Pacific Islander", 
+                 "White", "Other", "Decline to answer"]
+    raceCodes <- ["AIAN", "A", "BAA", "HL", "NHPI", "W", "O", "NA"]
+    gRace <- GetEasyChoice( "Please select your race or ethnicity",
+      raceNIH, raceCodes, gWindow )
+  } else {
+    gRace <- "NA"
+  }
+
   ShowCursor( 0 )
+  Draw()
 
   ## Create a global list of valid response keys
   gKeys <- []
@@ -146,7 +172,7 @@ define Start( par ) {
   ## followed by whatever fields are defined in Groups.csv (stored in
   ## gSubjectHeader), then fields for other data:
   FilePrintCSV( gDataFile, Flatten( ["Hostname",gSubjectHeader, 
-    "Sex","Age","Time","Phase","Trial","S1","S1Duration","S1On",
+    "ID","Sex","Age","Race","Time","Phase","Trial","S1","S1Duration","S1On",
     "S2","S2Duration","S2On","S2Prob","Response","RT","S2Pres","Key"] ) )
 
   ## Run experimental phases. We loop through all elements of the
@@ -461,14 +487,14 @@ define RunPhase( phaseName ) {
       if( not IsList(key) ) {
         itiResponses <- itiResponses + 1
         FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-          gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, 
+          gID, gSex, gAge, gRace, GetTime(), phaseName, trial, "ITI", thisITI, 
           "T", "NA", "NA", "F", "NA", "NA", rt, "F", key] ) )
       }
     }
     ## Save a single ITI data line if no responses during ITI:  
     if( not itiResponses ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gSex, gAge, GetTime(), phaseName, trial, "ITI", thisITI, "T",
+        gID, gSex, gAge, gRace, GetTime(), phaseName, trial, "ITI", thisITI, "T",
         "NA", "NA", "F", "NA", "NA", "NA", "F", "<timeout>"] ) ) 
     } 
     ## Run trial and get response times and rewards collected:
@@ -579,7 +605,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     ## of what stimuli appeared in the trial
     if( key!="<timeout>" or (responseCount==0 and key=="<timeout>") ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gSex, gAge, GetTime(), phase, trial, s1, s1Duration,
+        gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
         response, rt, s2Pres, key] ) )
     }
