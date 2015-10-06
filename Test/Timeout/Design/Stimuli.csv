@@ -1,0 +1,4 @@
+Name,Type,Parameters,Color,XOffset,YOffset,Duration
+CS,text,Classical,,0,0,2000
+US,circle,30,red,0,-150,400
+SD,text,Operant,,0,0,2000
