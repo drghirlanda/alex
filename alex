@@ -39,7 +39,7 @@ define Start( par ) {
   dirs <- [ "",                      # Current folder takes precedence
             "/usr/share/alex/",      # Linux
                                      # ADD OS X
-            "C:\Program Files\alex\" # Windows
+            "C:\Program Files\alex\\" # Windows
           ]
   loop( d, dirs ) {
     if( IsDirectory( d + gAlexDir ) ) {
@@ -88,17 +88,17 @@ define Start( par ) {
 
   # We can use logging only after ReadSubject() and ReadParameters():
   MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
-  MyLog( "Start: Set working directory to '" + gWD + "'" ) 
+  MyLog( "Start: set working directory to '" + gWD + "'" ) 
   # Log parameter, phases, and stimuli:
-  MyLog( "Start: Using these parameters:" )
+  MyLog( "Start: using these parameters:" )
   loop( i, Sequence(1,Length(gParameterNames),1) ) {
     MyLog( "  "+Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) ) 
   }
-  MyLog( "Start: Using these phases:" )
+  MyLog( "Start: using these phases:" )
   loop( phase, gPhases  ) {
     MyLog( "  "+ Flatten(phase) )
   }
-  MyLog( "Start: Using these stimuli:" )
+  MyLog( "Start: using these stimuli:" )
   loop( s, gStimulusInfo ) {
     MyLog( "  " + s )
   }
@@ -112,7 +112,7 @@ define Start( par ) {
   FileClose( hostream )
   DeleteFile( hostxt )
   UnlockFile( hostxt )
-  MyLog( "Start: Determined hostname as '"+gHostname+"'" )
+  MyLog( "Start: determined hostname as '"+gHostname+"'" )
   
   ## Subject information is only asked when not running in test mode
   if( not test ) {
@@ -138,7 +138,7 @@ define Start( par ) {
   loop( c, Flatten(kc) ) {
     PushOnEnd( gKeys, TranslateKeyCode(c) )
   }
-  MyLog( "Start: Accepting these response keys: " + gKeys ) 
+  MyLog( "Start: accepting these response keys: " + gKeys ) 
 
   ## Print data file header. gDataFile has been opened by
   ## ReadSubject() to avoid race conditions with acquiring and
@@ -379,7 +379,7 @@ define ReadParameters() {
 ########################################################################
 
 define RunPhase( phaseName ) {
-  MyLog( "RunPhase: Starting phase "+phaseName )
+  MyLog( "RunPhase: starting phase "+phaseName )
   DisplayBackground( phaseName )
 
   # Get stimulus settings for this phase. Each line in Phases.csv
@@ -404,7 +404,7 @@ define RunPhase( phaseName ) {
   loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
     n <- ToNumber( Nth(numTrials, i) )
     s <- Nth(stimuli, i )
-    MyLog( "RunPhase: "+"Scheduling "+n+" trials with stimulus "+s )
+    MyLog( "RunPhase: scheduling "+n+" trials with stimulus "+s )
     PushOnEnd( trialStimuli,      Repeat( s                   , n ) )
     PushOnEnd( trialRewards,      Repeat( Nth(rewards,      i), n ) )
     PushOnEnd( trialUSs,          Repeat( Nth(uss,          i), n ) )
@@ -416,7 +416,7 @@ define RunPhase( phaseName ) {
   trialUSs          <- Flatten( trialUSs )
   trialResponses    <- Flatten( trialResponses )
   trialMaxResponses <- Flatten( trialMaxResponses )
-  MyLog( "RunPhase: Constructed trial list: " + trialStimuli )
+  MyLog( "RunPhase: constructed trial list: " + trialStimuli )
 
   ## We define a random order for the trials, taking into account that
   ## the number of trials could be zero (in some experimental designs
@@ -426,7 +426,7 @@ define RunPhase( phaseName ) {
   } else {
     trialOrder <- []
   }
-  MyLog( "RunPhase: Constructed trial order: " + trialOrder )
+  MyLog( "RunPhase: constructed trial order: " + trialOrder )
 
   ## Now we are ready to run all trials:
   maxTrial <- Length( trialStimuli )
@@ -482,7 +482,7 @@ define RunPhase( phaseName ) {
 
 define RunTrial( phase, trial, s1, rewardProb, s2, response,
                  maxResponses ) {
-  MyLog( "RunTrial: Starting trial: " + 
+  MyLog( "RunTrial: starting trial: " + 
     [phase, trial, s1, rewardProb, s2, response, maxResponses ] )
   # Determine S1 and S2 duration:
   s1Duration <- ToNumber( ResolveDuration( s1, "S1" ) )
@@ -516,11 +516,10 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   endTime       <- startTime + s1Duration # could be longer, see next
   responseCount <- 0
   SetTimer( startTime, s1Duration, s1 )
-  # Now we preprocess the response variable to handle the <classical>
-  # specification for 'classical conditioning' trials. If the trial is
-  # 'classical', we also decide whether to show S2 or not. If S2 is
-  # showed, we lengthen trial duration accordingly
-  if( response == "<classical>" ) { # Classical trial
+  # Now we handle the <classical> specification. If the trial is
+  # 'classical', we decide whether to show S2 or not. If S2 is showed,
+  # we lengthen trial duration accordingly
+  if( response == "<classical>" ) {
     MyLog( "RunTrial: <classical> trial" )
     classical <- 1
     if( Random() < rewardProb ) {
@@ -547,42 +546,38 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       tWait <- tNext - GetTime()
     }
     key <- WaitForListKeyPressWithTimeout( gKeys, tWait, 1 )
-    if( key == " " ) {
+    if( key == " " ) { # Special notation for spacebar
       key <- "<space>"
     }
-    if( IsList(key) ) {
+    if( IsList(key) ) { 
       key <- "<timeout>"
-    }
-    if( GetTime() >= endTime and responseCount == 0 ) { # Trial timed out
-      MyLog( "RunTrial: trial timed out after "+responseCount+" responses" )
       rt <- "NA"
+      s2Pres <- "F"
+      MyLog( "RunTrial: time out" )
     } else {
       rt <- GetTime() - startTime # Time since trial start
-    }
-    if( classical ) { # Avoid counting <timeout> as response:
-      if( key != "<timeout>" ) {
-        MyLog( "RunTrial: (classical) incrementing responseCount on response: "+key )
+      if( not ( rt<rtMin or rt>rtMax ) or rt!="NA" ) { # Valid?
         responseCount <- responseCount + 1
+	MyLog( "RunTrial: valid response on key '"+key+"'" )
+      } else {
+        rt <- "NA"
+	MyLog( "RunTrial: invalid response on key '"+key+"'" )
       }
-    } else { # Only relevant for instrumental trials
-      s2Pres <- "F" # No S2 by default
-      if( not ( rt<rtMin or rt>rtMax ) or rt!="NA" ) {
-        # Response is valid, count it:
-        MyLog( "RunTrial: (instrumental) incrementing responseCount on response: "+key )
-        responseCount <- responseCount + 1
-      }
-      # If response is also "rewarded":
-      if( Random() < rewardProb and key == response ) {
-        s2Pres <- "T"
-        if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
-          SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
+      if( not classical ) { # Schedule S2 (possibly)
+        if( Random() < rewardProb and key == response ) {
+          s2Pres <- "T"
+          if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
+            SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
+          }
+        } else {
+          s2Pres <- "F" 
         }
       }
     }
     ## Save data line to file if there was a response, or if there was
     ## no response and the trial timed out (so that we have a record
     ## of what stimuli appeared in the trial
-    if( key != "<timeout>" or ( responseCount == 0 and key == "<timeout>" ) ) {
+    if( key!="<timeout>" or (responseCount==0 and key=="<timeout>") ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gSex, gAge, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
@@ -590,6 +585,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     }
   }
   ExpireTimers() # Turn off everything
+  MyLog( "RunTrial: trial completed" )
 }
 
 
@@ -663,7 +659,7 @@ define ResolveDuration( stimulus, role ) {
     }
     d <- ToNumber( d ) # NA becomes 0
     if( d == 0 ) {
-      MyLog( "ResolveDuration: No duration for one or more stimuli:" )
+      MyLog( "ResolveDuration: no duration for one or more stimuli:" )
       MyLog( "  Stimuli: "+SplitString(stimulus,"+") )
       MyLog( "  Durations: "+durations )
       MyLog( "  Role: "+role )
@@ -747,7 +743,7 @@ define Resolve( stimulus, field, value ) {
       PushOnEnd( results, v )
     }
   }
-  MyLog( "Resolve: Mapped "+[stimulus, field, value]+" to "+results )
+  MyLog( "Resolve: mapped "+[stimulus, field, value]+" to "+results )
   return results
 }
 
@@ -837,10 +833,10 @@ define Undisplay( stimulus ) {
 define DisplayBackground( phaseName ) {
   bg <- FindBackground( phaseName )
   if( StringLength( bg ) ) {
-    MyLog( "DisplayBackground: Found "+bg+" as background" )
+    MyLog( "DisplayBackground: found "+bg+" as background" )
     Display( bg )
   } else {
-    MyLog( "DisplayBackground: No background found" )
+    MyLog( "DisplayBackground: no background found" )
   }
 }
 
@@ -877,7 +873,7 @@ define SetTimer( tOn, duration, stimulus ) {
   }
   newTimer <- [ tOn, duration, stimulus, 0 ]
   PushOnEnd( gTimers, newTimer )
-  MyLog( "SetTimer: New timer: " + newTimer )
+  MyLog( "SetTimer: new timer: " + newTimer )
 }
 
 # Goes through all existing timers, turning on those that are due
