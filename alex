@@ -520,8 +520,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     classical <- 1
     if( Random() < rewardProb ) {
       s2Pres <- "T"
-      SetTimer( endTime+s1s2Interval, s2Duration, s2 ) # Schedule S2
-      endTime <- endTime+s1s2Interval + s2Duration     # Lengthen trial
+      SetTimer( endTime + s1s2Interval, s2Duration, s2 ) # Schedule S2
+      endTime <- endTime + s1s2Interval + s2Duration     # Lengthen trial
     } else {
       s2Pres <- "F"
     }
@@ -570,6 +570,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
             SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
             endTime <- endTime + s1s2Interval + s2Duration # Lengthen trial
           }
+        } else {
+	  s2Pres <- "F"
         }
       }
     }
@@ -592,9 +594,11 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     ## next can check meaningfully whether s2 is on or not
     UpdateTimers()
 
-    ## End trial if s1 and s2 are off and max responses reached
-    if( responseCount >= maxResponses and TimerOn(s2)=="F" and TimerOn(s1)=="F" ) {
+    ## End trial if s2 is off and max responses reached
+    if( responseCount >= maxResponses and TimerOn(s2)=="F" ) {
       MyLog( "RunTrial: maximum responses reached: endindg trial" )
+      MyLog( "          and expiring all timers" )
+      ExpireTimers()
       continue <- 0
     }
   }
