@@ -558,10 +558,15 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   }
   # We are ready to run the trial loop. The trial continues until
   # either time runs out or we reach the maximum number of (valid)
-  # responses.
-  MyLog( "RunTrial: trial will end at "+endTime )
-  while( responseCount<maxResponses and GetTime()<endTime ) {
+  # responses. To break out of the loop in the latter case we use a
+  # 'continue' variabel because PEBL does not have a break statement
+  # for while loops (as of version 0.14).
+  continue <- 1
+  MyLog( "RunTrial: trial scheduled to end at "+endTime )
+  while( GetTime() < endTime and continue ) {
+
     UpdateTimers()
+
     tNext <- NextTimer()
     if( tNext == "NA" ) { # Nothing scheduled
       tWait <- endTime - GetTime()
@@ -591,6 +596,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
           s2Pres <- "T"
           if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
             SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
+            endTime <- endTime + s1s2Interval + s2Duration # Lengthen trial
           }
         } else {
           s2Pres <- "F" 
@@ -605,6 +611,15 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
         response, rt, s2Pres, key] ) )
+    }
+
+    UpdateTimers()
+
+    ## End trial if s2 is not on and max responses reached
+    if( responseCount >= maxResponses and TimerOn(s2)=="F" ) {
+      MyLog( "RunTrial: maximum responses reached: endindg trial" )
+      MyLog( "          (responses = "+responseCount+", S2 on = "+TimerOn(s2)+")" ) 
+      continue <- 0
     }
   }
   ExpireTimers() # Turn off everything
@@ -930,6 +945,7 @@ define UpdateTimers() {
 define ExpireTimers() {
   loop( timer, gTimers ) {
     Undisplay( Nth( timer, 3 ) )
+    MyLog( "ExpireTimers: expired "+timer )
   }
   Draw()
   gTimers <- []
