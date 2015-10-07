@@ -613,6 +613,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         response, rt, s2Pres, key] ) )
     }
 
+    ## We need to UpdateTimers() now so that the next if block can
+    ## check whether s2 is on or not
     UpdateTimers()
 
     ## End trial if s2 is not on and max responses reached
