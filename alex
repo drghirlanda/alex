@@ -465,35 +465,8 @@ define RunPhase( phaseName ) {
     if( maxResponses <= 0 ) {
       maxResponses <- 1
     }
-    ## Register responses during pre-trial ITI: 
-    minITI <- ToNumber( Parameter("MinITI") )
-    maxITI <- ToNumber( Parameter("MaxITI") )
-    thisITI <- ( minITI + ( maxITI - minITI )*Random() )
-    itiLeft <- thisITI
-    startTime <- GetTime()
-    itiResponses <- 0
-    while( itiLeft > 1 ) {
-      key <- WaitForListKeyPressWithTimeout( gKeys, itiLeft, 1 )
-      if( key == " " ) {
-        key <- "<space>"
-      }
-      rt <- GetTime() - startTime
-      itiLeft <- thisITI - rt
-
-      ## Save data line for stimulus "ITI" with S2 details = "NA"
-      if( not IsList(key) ) {
-        itiResponses <- itiResponses + 1
-        FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-          gID, gSex, gAge, gRace, GetTime(), phaseName, trial, "ITI", thisITI, 
-          "T", "NA", "NA", "F", "NA", "NA", rt, "F", key] ) )
-      }
-    }
-    ## Save a single ITI data line if no responses during ITI:  
-    if( not itiResponses ) {
-      FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gID, gSex, gAge, gRace, GetTime(), phaseName, trial, "ITI", thisITI, "T",
-        "NA", "NA", "F", "NA", "NA", "NA", "F", "<timeout>"] ) ) 
-    } 
+    ## Collect responses during pre-trial ITI:
+    RunITI( phaseName, trial )
     ## Run trial and get response times and rewards collected:
     RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
               maxResponses )
@@ -577,14 +550,13 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     if( key == " " ) { # Special notation for spacebar
       key <- "<space>"
     }
-    if( IsList(key) ) { 
-      key <- "<timeout>"
+    if( IsList(key) ) {   # Keep in mind: the Wait...() timed out,
+      key <- "<timeout>"  # but not necessarily the whole trial
       rt <- "NA"
       s2Pres <- "F"
-      MyLog( "RunTrial: time out" )
     } else {
       rt <- GetTime() - startTime # Time since trial start
-      if( not ( rt<rtMin or rt>rtMax ) or rt!="NA" ) { # Valid?
+      if( rt>=rtMin and rt<=rtMax ) { # Valid?
         responseCount <- responseCount + 1
 	MyLog( "RunTrial: valid response on key '"+key+"'" )
       } else {
@@ -598,29 +570,31 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
             SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
             endTime <- endTime + s1s2Interval + s2Duration # Lengthen trial
           }
-        } else {
-          s2Pres <- "F" 
         }
       }
     }
     ## Save data line to file if there was a response, or if there was
     ## no response and the trial timed out (so that we have a record
-    ## of what stimuli appeared in the trial
-    if( key!="<timeout>" or (responseCount==0 and key=="<timeout>") ) {
+    ## of what stimuli appeared in the trial)
+    if( key=="<timeout>" and GetTime() >= endTime ) {
+      trialTimeout <- 1
+    } else {
+      trialTimeout <- 0
+    }
+    if( key!="<timeout>" or (responseCount==0 and trialTimeout) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
         response, rt, s2Pres, key] ) )
     }
 
-    ## We need to UpdateTimers() now so that the next if block can
-    ## check whether s2 is on or not
+    ## We need to UpdateTimers() now so that the if block that comes
+    ## next can check meaningfully whether s2 is on or not
     UpdateTimers()
 
-    ## End trial if s2 is not on and max responses reached
-    if( responseCount >= maxResponses and TimerOn(s2)=="F" ) {
+    ## End trial if s1 and s2 are off and max responses reached
+    if( responseCount >= maxResponses and TimerOn(s2)=="F" and TimerOn(s1)=="F" ) {
       MyLog( "RunTrial: maximum responses reached: endindg trial" )
-      MyLog( "          (responses = "+responseCount+", S2 on = "+TimerOn(s2)+")" ) 
       continue <- 0
     }
   }
@@ -628,6 +602,37 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   MyLog( "RunTrial: trial completed" )
 }
 
+## This is a simplified event loop that runs during ITIs, when by
+## definition no events are scheduled
+define RunITI( phaseName, trial ) {
+  minITI <- ToNumber( Parameter("MinITI") )
+  maxITI <- ToNumber( Parameter("MaxITI") )
+  thisITI <- ( minITI + ( maxITI - minITI )*Random() )
+  itiLeft <- thisITI
+  startTime <- GetTime()
+  itiResponses <- 0
+  while( itiLeft > 1 ) {
+    key <- WaitForListKeyPressWithTimeout( gKeys, itiLeft, 1 )
+    if( key == " " ) {
+      key <- "<space>"
+    }
+    rt <- GetTime() - startTime
+    itiLeft <- thisITI - rt
+    ## Save data line for stimulus "ITI" with S2 details = "NA"
+    if( not IsList(key) ) {
+      itiResponses <- itiResponses + 1
+      FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
+        gID, gSex, gAge, gRace, GetTime(), phaseName, trial, "ITI", thisITI, 
+        "T", "NA", "NA", "F", "NA", "NA", rt, "F", key] ) )
+    }
+  }
+  ## Save a single ITI data line if no responses during ITI:  
+  if( itiResponses == 0 ) {
+    FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
+      gID, gSex, gAge, gRace, GetTime(), phaseName, trial, "ITI", thisITI, "T",
+      "NA", "NA", "F", "NA", "NA", "NA", "F", "<timeout>"] ) ) 
+  }
+}
 
 ########################################################################
 #                                                                      #
