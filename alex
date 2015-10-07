@@ -183,7 +183,9 @@ define Start( par ) {
   }
 
   FileClose( gDataFile )
-  FileClose( gLogFile)
+  if( gLogging == 1 ) {
+    FileClose( gLogFile)
+  }
   ShowCursor( 1 )
 }
 
@@ -225,9 +227,12 @@ define ReadSubject() {
     UnlockFile( subjectsFile )
     Message( "It looks like all subjects have been run!", 1 )
   }
-  logFilename <- gWD + "Logs/" + Nth(e,1) + "-" + s + ".log"
-  gLogFile <- FileOpenWrite( logFilename )
-  gLogging <- Parameter("Log") 
+
+  gLogging <- ToNumber( Parameter("Log") )
+  if( gLogging == 1 ) {  
+    logFilename <- gWD + "Logs/" + Nth(e,1) + "-" + s + ".log"
+    gLogFile <- FileOpenWrite( logFilename )
+  }
 
   ## This is at the end because Message uses logging:
   Message( "Running subject "+Nth(gSubjectInfo,2)+" in group "+Nth(gSubjectInfo,1), 0 )
@@ -1029,7 +1034,7 @@ define FilePrintCSV( file, data ) {
 }
 
 define MyLog( logline ) {
-  if( ToNumber(gLogging) == 1 ) {
+  if( gLogging == 1 ) {
     t <- GetTime()
     FilePrint( gLogFile, "[" + t + "] " + logline )
   }
