@@ -508,10 +508,9 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     rtMax <- ToNumber( rtMax )
   }
   # Initialize some trial-level variables:
-  startTime     <- GetTime()
-  endTime       <- startTime + s1Duration # could be longer, see next
   responseCount <- 0
-  SetTimer( startTime, s1Duration, s1 )
+  endTime       <- startTime + s1Duration # could be longer, see next
+  startTime     <- SetTimer( GetTime(), s1Duration, s1 )
   # Now we handle the <classical> specification. If the trial is
   # 'classical', we decide whether to show S2 or not. If S2 is showed,
   # we lengthen trial duration accordingly
@@ -567,8 +566,11 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         if( Random() < rewardProb and key == response ) {
           s2Pres <- "T"
           if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
-            SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
-            endTime <- endTime + s1s2Interval + s2Duration # Lengthen trial
+	    onTime <- SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
+	    # Lengthen trial if necessary:
+	    if( onTime + s2Duration > endTime ) {
+              endTime <- onTime + s2Duration
+	    }
           }
         } else {
 	  s2Pres <- "F"
@@ -910,12 +912,16 @@ define UndisplayBackground( phaseName ) {
 ## the stimulus is actually turned on. The list of existing timers is
 ## maintained in the gTimers variables created in Start().
 
-# Creates a new timer, checking that the onset and duration make sense.
+# Creates a new timer. The tOn argument is the absolute start time
+# (since when the program was started). The duration must be
+# non-negative. The tOn argument is returned, which enables the
+# construct StartTime( GetTime(), ... ) to avoid the ticker elapsing
+# between the time tOn is calculated and the time tOn is actually used
+# to create the timer structure.
 define SetTimer( tOn, duration, stimulus ) {
-  if( tOn + 1 < GetTime() ) {
+  if( tOn < GetTime() ) {
     x <- stimulus+" start time is in the past: "+tOn
     MyLog( "SetTimer: " + x )
-    Message( x, 1 )
   }
   if( duration < 0 ) {
     Message( stimulus+" has negative duration: "+duration, 1 )
@@ -923,6 +929,7 @@ define SetTimer( tOn, duration, stimulus ) {
   newTimer <- [ tOn, duration, stimulus, 0 ]
   PushOnEnd( gTimers, newTimer )
   MyLog( "SetTimer: new timer: " + newTimer )
+  return tOn
 }
 
 # Goes through all existing timers, turning on those that are due
