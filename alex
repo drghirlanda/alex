@@ -1,4 +1,4 @@
-#!/usr/bin/pebl --fullscreen
+#!/usr/local/bin/pebl-language --fullscreen
 
 define Start( par ) {
 
