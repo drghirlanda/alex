@@ -1,0 +1,128 @@
+#!/usr/bin/pebl --fullscreen
+
+define Start( par ) {
+
+  ## This list is used to schedule stimulus onset and offset, see the
+  ## section on timers below
+  gTimers <- []
+
+  event <- 0
+  continue <- 1
+  while( event < 1000 and continue ) {
+
+    ## Create a new event
+    start <- 1000 + 1000 * Random()
+    duration <- 1000 * Random() 
+    SetTimer( GetTime() + start, duration, event )
+    event <- event + 1
+
+    UpdateTimers()
+
+    tNext <- NextTimer()
+    if( tNext == "NA" ) { # Nothing scheduled
+      continue <- 0
+      tWait <- 0
+    } else { 
+      tWait <- tNext - GetTime()
+      Wait( tWait )
+    }
+  }
+  ExpireTimers() # Turn off everything
+}
+
+########################################################################
+#                                                                      #
+# These next functions manage timers, as described below.              #
+#                                                                      #
+########################################################################
+
+## A timer is a list [ tOn, duration, stimulus, isOn ] where the first
+## element is the time the stimulus is supposed to be turned on, and
+## the second element is its duration. The fourth element is a flag
+## that is 0 at the beginning and is set to 1 by UpdateTimers() when
+## the stimulus is actually turned on. The list of existing timers is
+## maintained in the gTimers variables created in Start().
+
+# Creates a new timer, checking that the onset and duration make sense.
+define SetTimer( tOn, duration, stimulus ) {
+  if( tOn + 1 < GetTime() ) {
+    x <- stimulus+" start time is in the past: "+tOn
+    SignalFatalError( "SetTimer: " + x )
+  }
+  if( duration < 0 ) {
+    SignalFatalError( stimulus+" has negative duration: "+duration, 1 )
+  }
+  newTimer <- [ tOn, duration, stimulus, 0 ]
+  PushOnEnd( gTimers, newTimer )
+  Print( "SetTimer: new timer: " + newTimer )
+}
+
+# Goes through all existing timers, turning on those that are due
+# and turning off and removing from the list those that have expired.
+define UpdateTimers() {
+  expired <- [] # List of expired timers
+  i <- 1
+  while( i <= Length( gTimers ) ) {
+    timer <- Nth( gTimers, i )
+    tOn <- Nth( timer, 1 )
+    duration <- Nth( timer, 2 )
+    stimulus <- Nth( timer, 3 )
+    isOn <- Nth( timer, 4 )
+    t <- GetTime()
+    if( t >= tOn and not isOn ) { # We need to turn this on
+#      Display( stimulus )
+      SetElement( timer, 4, 1 ) # Mark timer as being on
+      Print( "UpdateTimers: turning on timer: " + timer )
+    } elseif( t >= tOn + duration ) {
+#      Undisplay( stimulus )
+      PushOnEnd( expired, i ) 
+      Print( "UpdateTimers: removing timer: " + timer )
+    }
+    i <- i + 1
+  }
+  Draw()
+  gTimers <- RemoveSubset( gTimers, expired ) 
+}
+
+# Undisplays all stimuli and cancels all timers.
+define ExpireTimers() {
+  loop( timer, gTimers ) {
+#    Undisplay( Nth( timer, 3 ) )
+    Print( "ExpireTimers: expired "+timer )
+  }
+  Draw()
+  gTimers <- []
+}
+
+# Returns T if a stimulus is currently displayed, F otherwise.
+define TimerOn( stimulus ) {
+  result <- "F"
+  loop( timer, gTimers ) {
+    if( Nth(timer, 3) == stimulus and Nth(timer, 4) ) {
+      result <- "T"
+    }
+  }
+  return result        
+}
+
+# Goes through all timers and returns the time of the next event,
+# i.e., the next time a stimulus has to be turned either on or off.
+# Used when deciding how long to wait for responses in RunTrial.
+define NextTimer() {
+  tMagic <- 123456789
+  tMin <- tMagic
+  loop( timer, gTimers ) {
+    tOn <- Nth( timer, 1 )
+    tOff <- tOn + Nth( timer, 2 )
+    if( tOn > GetTime() and tOn < tMin ) {
+      tMin <- tOn
+    } elseif( tOff < tMin ) {
+      tMin <- tOff
+    }
+  }
+  if( tMin == tMagic ) {
+     tMin <- "NA"
+  }
+  Print( "NextTimer: next event: "+tMin )  
+  return tMin
+}
