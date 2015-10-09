@@ -509,8 +509,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   }
   # Initialize some trial-level variables:
   responseCount <- 0
-  endTime       <- startTime + s1Duration # could be longer, see next
   startTime     <- SetTimer( GetTime(), s1Duration, s1 )
+  endTime       <- startTime + s1Duration # could be longer, see next
   # Now we handle the <classical> specification. If the trial is
   # 'classical', we decide whether to show S2 or not. If S2 is showed,
   # we lengthen trial duration accordingly
