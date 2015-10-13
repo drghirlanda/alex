@@ -590,6 +590,10 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
         response, rt, s2Pres, key] ) )
+	# "Hostname", gSubjectHeader, "ID", "Sex", "Age", "Race",
+	# "Time", "Phase", "Trial", "S1", "S1Duration", "S1On", "S2",
+	# "S2Duration", "S2On", "S2Prob", "Response", "RT", "S2Pres",
+	# "Key"
     }
 
     ## We need to UpdateTimers() now so that the if block that comes
