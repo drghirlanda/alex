@@ -528,6 +528,12 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     MyLog( "RunTrial: instrumental trial" )
     classical <- 0
   }
+  # This variable keeps track of whether an instrumental trial has
+  # been lengthened or not because the US had to be shown near the end
+  # of the trial. It is checked later on before deciding to lengthen a
+  # trial, and it is set to zero upon lengthening a trial. (Note: that
+  # code is only reached in instrumental trials.)
+  notLengthened <- 1 
   # We are ready to run the trial loop. The trial continues until
   # either time runs out or we reach the maximum number of (valid)
   # responses. To break out of the loop in the latter case we use a
@@ -567,9 +573,11 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
           s2Pres <- "T"
           if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
 	    onTime <- SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
-	    # Lengthen trial if necessary:
-	    if( onTime + s2Duration > endTime ) {
+	    # Lengthen trial if necessary, but only if it has not been
+	    # lengthened already:
+	    if( onTime + s2Duration > endTime and notLengthened ) {
               endTime <- onTime + s2Duration
+	      notLengthened <- 0
 	    }
           }
         } else {
