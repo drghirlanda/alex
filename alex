@@ -521,6 +521,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       s2Pres <- "T"
       SetTimer( endTime + s1s2Interval, s2Duration, s2 ) # Schedule S2
       endTime <- endTime + s1s2Interval + s2Duration     # Lengthen trial
+      MyLog( "RunTrial: lengthening classical trial to show S2 completely" )
     } else {
       s2Pres <- "F"
     }
@@ -578,6 +579,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
 	    if( onTime + s2Duration > endTime and notLengthened ) {
               endTime <- onTime + s2Duration
 	      notLengthened <- 0
+	      MyLog( "RunTrial: lengthening instrumental trial to show S2 completely" )
 	    }
           }
         } else {
