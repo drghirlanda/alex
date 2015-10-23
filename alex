@@ -118,7 +118,7 @@ define Start( par ) {
   askSex <- Parameter("AskSex")
   if( askSex != "NA" and ToNumber(askSex) == 1 ) {
     gSex <- GetEasyChoice( "Please select your sex", 
-       ["Male", "Female", "Decline to answer"], ["M", "F", "NA"], gWindow )
+       ["Male", "Female", "Decline to answer"], ["M", "F", "D"], gWindow )
   } else {
     gSex <- "NA"
   }
@@ -562,7 +562,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       s2Pres <- "F"
     } else {
       rt <- GetTime() - startTime # Time since trial start
-      if( rt>=rtMin and rt<=rtMax ) { # Valid?
+      if( rt>=rtMin and rt<=rtMax and key==response ) { # Valid?
         responseCount <- responseCount + 1
 	MyLog( "RunTrial: valid response on key '"+key+"'" )
       } else {
