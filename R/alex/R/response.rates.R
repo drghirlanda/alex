@@ -5,9 +5,9 @@
 #'   being the standard error of the response rate
 #' @examples
 #' d <- read.alex()
-#' r <- mean.response.dates( d )
+#' r <- mean.response.rates( d )
 #' @export
-response.rates <- function( d ) {
+response.rates <- function( d, by.subject=FALSE ) {
   ## we first aggregate preserving subject identity and using max to
   ## get the number of responses to a given stimulus in a
   ## presentation:
@@ -16,11 +16,15 @@ response.rates <- function( d ) {
                  max,
                  data=d )
   names( d )[ length(names(d)) ] <- "Rate"
-  r <- aggregate( Rate ~ S1 + Group + Presentation + Phase, mean,
-                 data=d )
-  rate.se <- aggregate( Rate ~ S1 + Group + Presentation + Phase,
-                       function(x){ sd(x)/sqrt(length(x)-1) },
-                       data=d )
-  r$RateSE <- rate.se$Rate
-  r
+  ## then, if requested, we average over subjects:
+  if( ! by.subject ) {
+    r <- aggregate( Rate ~ S1 + Group + Presentation + Phase, mean,
+                   data=d )
+    rate.se <- aggregate( Rate ~ S1 + Group + Presentation + Phase,
+                         function(x){ sd(x)/sqrt(length(x)-1) },
+                         data=d )
+    r$RateSE <- rate.se$Rate
+    d <- r
+  }
+  droplevels( d )
 }
