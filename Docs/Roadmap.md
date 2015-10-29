@@ -6,38 +6,37 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
-- Configurable timing tolerance in Parameters.csv (+ note in manual).
+- Document the feature displaying the subject number and group and
+  explain why it is there. Perhaps a section on "Running alex" with
+  the RunExperiment stuff plus this info.
 
-- Add section on steady state testing in manual, perhaps as an
-  example.
-
-- Decide whether to rename alex to alex.pbl
+- Add "Subject demographics" section to the manual. Document there the
+  AskID, AskAge, AskSex, AskRace parameters. Remove mentions to "test"
+  mode if present, which is superseded by these parameters
 
 - ReadStimuli() relies on the fields being in the correct order. We
   can be more lenient and determine the order of fields from the
-  header line of Stimuli.csv (as is done in other Read*() functions).
+  header line of Stimuli.csv (as is done in other Read*() functions)
 
-- Example suite: reaction time, causal rating, categorization. 
+- Example suite: reaction time, discrimination task, causal rating,
+  categorization.
 
-- A paper describing alex.
+- OS X installation scripts.
 
-- Installation scripts. We should have installation scripts for all
-  systems supported by PEBL. Linux and OS X can use the same bash
-  script but will probably have to install into different
-  folders. Research needed for Windows.
+- Add to troubleshooting section that on Windows you don't get error
+  messages on console. If no log file, it means that alex cannot read
+  subject information or create the log file itself.
 
-- R package. 
-
-  - Creating presentation variable is slow. It could be faster to
-    create it for each subject as they are read, rather than for all
-    subjects at the end (less looping, shorter arrays to sort, etc.).
+- R package
 
   - Descriptive stats for response time distributions and response
-    count distributions to the different stimuli and phases.
+    count distributions to the different stimuli and phases
 
   - Future: It is possible to figure out which independent variables
     were manipulated between and within subjects, present the
     experimental design in a table, etc.
+
+- Document configurable timing tolerance and explain why it's there
 
 
 Future
