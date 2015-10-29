@@ -1,13 +1,19 @@
 Parameter,Value,Description
 S1Duration,2000,"Duration of CSs, unless specified in Stimuli.csv"
 S1S2Interval,0,Interval between CS offset and US onset
-S2Duration,500,"Duration of Uss, unless specified in Stimuli.csv"
+S2Duration,400,"Duration of USs, unless specified in Stimuli.csv"
+ResponseTimeMin,0,Earliest time for valid responses within a trial
+ResponseTimeMax,2000,Latest time for valid responses within a trial
 MinITI,1000,Minimum intertrial interval
 MaxITI,2000,Maximum intertrial interval
+Response,<space>,"What key constitutes a correct response, unless specified in Phases.csv"
 MaxResponses,1,Maximum number of responses allowed in a trial
 BackgroundColor,black,Background screen color
 ForegroundColor,white,"Color of text, unless specified in Stimuli.csv"
 FontName,Vera,Text font
 FontSize,24,Text size
-Test,1,Demographics questions are skipped if this is 1
-Response,<space>,"What key constitutes a 'response,' unless specified in Phases.csv"
+AskID,0,
+AskAge,0,
+AskSex,0,
+AskRace,0,
+Log,1,Logging is disabled if this is 0

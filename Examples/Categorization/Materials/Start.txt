@@ -1,5 +1,5 @@
-You can write your initial instructions here. Delete this text, but
-keep the following line (you can modify it if necessary) so that the
-subject knows how to start the experiment.
+This is an example categorization task distributed with alex. 
+
+You will see patterns belonging to one or another category and you have to learn to classify them correctly. Press 'a' to assign a pattern to category 1, and 'l' to assign it to category 2. If you classification is correct, you will see a smiley face appear. If nothing appears and the pattern simply goes away, your response was incorrect.
 
 Please press the space bar to start the experiment.

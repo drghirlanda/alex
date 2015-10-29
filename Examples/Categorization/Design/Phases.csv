@@ -1,4 +1,5 @@
 Phase,S1,Trials,S2Prob,S2,Response
+Start,Start,1,,,<space>
 Training,A1,1,0.9,Smiley,a
 Training,A2,1,0.9,Smiley,a
 Training,A3,1,0.9,Smiley,a
@@ -19,5 +20,6 @@ Training,B7,1,0.9,Smiley,l
 Training,B8,1,0.9,Smiley,l
 Training,B9,1,0.9,Smiley,l
 Training,B10,1,0.9,Smiley,l
-Testing,A0,5,0,,a
-Testing,B0,5,0,,l
+Testing,A0,5,0,,
+Testing,B0,5,0,,
+End,End,1,,,<space>

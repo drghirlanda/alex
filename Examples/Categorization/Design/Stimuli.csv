@@ -1,6 +1,6 @@
 Name,Type,Parameters,Color,XOffset,YOffset,Duration
-StartText,textfile,Start.txt,,,,
-EndText,textfile,End.txt,,,,
+Start,textfile,Start.txt,,,,600000
+End,textfile,End.txt,,,,600000
 Smiley,image,smile-o-white.png+.33,,0,-150,
 A0,image,A0.gif+10,,0,0,
 A1,image,A1.gif+10,,0,0,
