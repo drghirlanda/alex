@@ -36,6 +36,7 @@ done
 
 # create R package and install it
 cd R
+R -e 'setwd("alex"); library(devtools); document()'
 R CMD build alex
 R CMD INSTALL alex_*.tar.gz
 cd -
