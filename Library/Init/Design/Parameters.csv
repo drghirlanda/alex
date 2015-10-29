@@ -12,5 +12,8 @@ BackgroundColor,black,Background screen color
 ForegroundColor,white,"Color of text, unless specified in Stimuli.csv"
 FontName,Vera,Text font
 FontSize,24,Text size
-Test,0,Demographics questions are skipped if this is 1
+AskID,1,Ask a subject's study ID
+AskAge,1,Ask subject's age
+AskSex,1,Ask subject sex
+AskRace,0,Ask subject “race” (NIH classification)
 Log,1,Logging feature disabled if this is 0
