@@ -36,6 +36,8 @@ Toward a release
 
 - Document configurable timing tolerance and explain why it's there
 
+- README: installation instructions (inc. assumed PEBL locations)
+
 
 Future
 ======
