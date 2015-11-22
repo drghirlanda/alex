@@ -21,8 +21,6 @@ Toward a release
 - Example suite: reaction time, discrimination task, causal rating,
   categorization.
 
-- OS X installation scripts.
-
 - Add to troubleshooting section that on Windows you don't get error
   messages on console. If no log file, it means that alex cannot read
   subject information or create the log file itself.

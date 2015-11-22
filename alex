@@ -38,8 +38,8 @@ define Start( par ) {
   gAlexDir <- "Library/Materials/"
   dirs <- [ "",                       # Current folder takes precedence
             "/usr/share/alex/",       # Linux
-                                      # ADD OS X
-            "C:\Program Files\alex\\" # Windows
+            "/usr/local/share/alex/", # OS X
+            "C:\Program Files\alex\"  # Windows
           ]
   loop( d, dirs ) {
     if( IsDirectory( d + gAlexDir ) ) {
