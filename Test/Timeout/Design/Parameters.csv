@@ -11,6 +11,9 @@ MaxResponses,100,Maximum number of responses allowed in a trial
 BackgroundColor,black,Background screen color
 ForegroundColor,white,"Color of text, unless specified in Stimuli.csv"
 FontName,Vera,Text font
-FontSize,48,Text size
-Test,1,Demographics questions are skipped if this is 1
+FontSize,24,Text size
+AskID,0,
+AskAge,0,
+AskSex,0,
+AskRace,0,
 Log,1,Logging feature disabled if this is 0

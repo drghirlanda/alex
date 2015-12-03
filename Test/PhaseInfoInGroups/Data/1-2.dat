@@ -1,0 +1,2 @@
+Hostname,Group,Subject,Phase1Trials,Phase2Trials,Sex,Age,Phase,Trial,Stimulus,Duration,Response,RewardPr,Key,RT,ResponseCount,Reward
+helix,1,2,1,,NA,NA,Phase1,1,ITI,1514.83,NA,NA,<timeout>,1514,NA,NA

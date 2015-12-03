@@ -4,7 +4,7 @@
 \alias{response.rates}
 \title{Calculate mean response rates per S1, Group, Presentation, and Phase}
 \usage{
-response.rates(d)
+response.rates(d, by.subject = FALSE)
 }
 \arguments{
 \item{d}{An alex data frame}
@@ -18,6 +18,6 @@ Calculate mean response rates per S1, Group, Presentation, and Phase
 }
 \examples{
 d <- read.alex()
-r <- mean.response.dates( d )
+r <- mean.response.rates( d )
 }
 

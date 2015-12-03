@@ -1,0 +1,7 @@
+Hostname,Group,Subject,Phase1Trials,Phase2Trials,Sex,Age,Phase,Trial,Stimulus,Duration,Response,RewardPr,Key,RT,ResponseCount,Reward
+helix,1,6,1,2,NA,NA,Phase1,1,ITI,1618.55,NA,NA,<timeout>,1618,NA,NA
+helix,1,6,1,2,NA,NA,Phase1,1,A,1000,space,1,<timeout>,1003,NA,NA
+helix,1,6,1,2,NA,NA,Phase2,1,ITI,1841.67,NA,NA,<timeout>,1841,NA,NA
+helix,1,6,1,2,NA,NA,Phase2,1,A+B,1000,space,0,<timeout>,1003,NA,NA
+helix,1,6,1,2,NA,NA,Phase2,2,ITI,1322.32,NA,NA,<timeout>,1322,NA,NA
+helix,1,6,1,2,NA,NA,Phase2,2,A+B,1000,space,0,<timeout>,1003,NA,NA
