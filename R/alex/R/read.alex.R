@@ -12,27 +12,25 @@
 #' my.data <- read.alex( "Some/Directory" )
 #' @export
 read.alex <- function( data.dir=getwd() ) {
-    data <- NULL
-    filenames <- dir( paste(data.dir,"/Data",sep=""), full.names=TRUE)
-    for( i in grep( "\\.csv$", filenames ) ) {
-      message( paste("alex: reading", filenames[i] ) )
-      subject.data <- read.csv( filenames[i] )
-      subject.frame <- data.frame( subject.data )
-      pk <- presentation.and.keynum( subject.frame )
-      subject.frame$Presentation <- pk$Presentation
-      subject.frame$KeyNum <- pk$KeyNum
-      data <- rbind( data, subject.frame )
-    }
-    data <- data.frame( data )
-    ## make sure phase factor is ordered as it appears in the data,
-    ## rather than alphabetically:
-    data$Phase <- factor( data$Phase,
-                         levels=unique(as.character(data$Phase)),
-                         ordered=TRUE )
-    ## add a global subject identifier merging group and subject:
-    data$GSubject <- with( data, paste( Group, Subject, sep="." ) )
-    ## correct sex factor (R tends to read "F" as "FALSE"):
-    data$Sex[ data$Sex != "M" ] <- "F"
-    data$Sex <- factor( data$Sex, ordered=FALSE )
-    data
+  filenames <- dir( paste(data.dir,"/Data",sep=""), full.names=TRUE)
+  data <- foreach( i = grep( "\\.csv$", filenames ), .combine=rbind ) {
+    subject.data <- read.csv( filenames[i] )
+    subject.table <- data.table( subject.data )
+    pk <- presentation.and.keynum( subject.table )
+    subject.table[ , Presentation := pk$Presentation ]
+    subject.table[ , KeyNum := pk$KeyNum ]
+    data <- rbind( data, subject.table )
+  }
+  data <- data.table( data )
+  ## make sure phase factor is ordered as it appears in the data,
+  ## rather than alphabetically:
+  data$Phase <- factor( data$Phase,
+                       levels=unique(as.character(data$Phase)),
+                       ordered=TRUE )
+  ## add a global subject identifier merging group and subject:
+  data[ , GSubject := paste(Group, Subject, sep=".") ]
+  ## correct sex factor (R tends to read "F" as "FALSE"):
+  data[ Sex!="M", Sex := "F" ]
+  data[ , Sex := factor( Sex, ordered=FALSE ) ]
+  data
 }

@@ -27,9 +27,8 @@ presentation.and.keynum <- function( data ) {
       my.trials <- data$Trial[ my.phase & my.stimulus ]
       ## presentation counter:
       count <- 1
-      ## loop through all trials. we cannot use simply 1:max(
-      ## my.trials ) because this s1 is not, generally, presented on
-      ## all trials:
+      ## loop through all trials. we cannot use simply
+      ## 1:max(my.trials) because an S1 might not occur on all trials:
       for( t in sort( unique(my.trials) ) ) { 
         ## data line selector for this trial:
         cases <- my.phase & my.stimulus & data$Trial==t
@@ -55,5 +54,6 @@ presentation.and.keynum <- function( data ) {
   ## is preceeded by an ITIs:
   iti <- which( data$S1 == "ITI" )
   pres[ iti ] <- pres[ iti+1 ]
+  ## ok, we're done:
   list( Presentation=pres, KeyNum=keynum )
 }

@@ -8,8 +8,8 @@
 #' @return A copy of the original data frame after dropping the relevant rows 
 #' @export
 drop.too.fast <- function( d, threshold=100 ) {
-  accept <- with( d, is.na(RT) | RT>=threshold )
-  message( paste("alex: dropping", sum(!accept),
-                 "responses with RT <", threshold, "ms" ) )
-  subset( d, accept )
+  d2 <- d[ is.na(RT) | RT>=threshold ]
+  message(npaste("alex: dropping", nrow(d)-nrow(d2),                 
+                 "responses with RT <", threshold, "ms"))
+  d2
 }
