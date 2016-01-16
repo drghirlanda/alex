@@ -39,7 +39,7 @@ define Start( par ) {
   dirs <- [ "",                       # Current folder takes precedence
             "/usr/share/alex/",       # Linux
             "/usr/local/share/alex/", # OS X
-            "C:\Program Files\alex\"  # Windows
+            "C:\Program Files\alex\\"  # Windows
           ]
   loop( d, dirs ) {
     if( IsDirectory( d + gAlexDir ) ) {
