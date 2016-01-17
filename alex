@@ -202,7 +202,7 @@ define ReadSubject() {
   LockFile( subjectsFile )
   subjects <- ReadCSV( subjectsFile )
   gSubjectHeader <- Nth( subjects, 1 )
-  SetElement( gSubjectHeader, 2, "Subject")
+  SetElement( gSubjectHeader, 2, "Subject" )
   found <- 0
   ## From a random group, pick a subject that has not yet been run
   loop( e, Shuffle( Rest(subjects) ) ) {
@@ -218,6 +218,14 @@ define ReadSubject() {
       break
     }
   }
+
+  ## Set up log file (before potential Messages)
+  gLogging <- ToNumber( Parameter("Log") )
+  if( gLogging == 1 ) {  
+    logFilename <- gWD + "Logs/" + Nth(e,1) + "-" + s + ".log"
+    gLogFile <- FileOpenWrite( logFilename )
+  }
+
   ## Open data file before releasing lock, to prevent race conditions
   if( found ) {
     gSubjectInfo <- e
@@ -226,12 +234,6 @@ define ReadSubject() {
   } else {
     UnlockFile( subjectsFile )
     Message( "It looks like all subjects have been run!", 1 )
-  }
-
-  gLogging <- ToNumber( Parameter("Log") )
-  if( gLogging == 1 ) {  
-    logFilename <- gWD + "Logs/" + Nth(e,1) + "-" + s + ".log"
-    gLogFile <- FileOpenWrite( logFilename )
   }
 
   ## This is at the end because Message uses logging:

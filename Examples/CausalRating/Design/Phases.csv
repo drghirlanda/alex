@@ -1,0 +1,9 @@
+Phase,S1,Trials,S2Prob,S2,Response
+Start,Start,1,,,
+Pretrain,W+Wtxt+RXN?,8,1,No,
+Pretrain,X+Xtxt+RXN?,8,1,Yes,
+Pretrain,Y+Ytxt+RXN?,8,1,Yes,
+Pretrain,Z+Ztxt+RXN?,8,1,No,
+Pretrain,W+Wtxt+Z+Ztxt+RXN?,8,1,No,
+Pretrain,X+Xtxt+Y+Ytxt+RXN?,8,1,Yes,
+End,End,1,,,

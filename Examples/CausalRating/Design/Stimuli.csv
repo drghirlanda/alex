@@ -1,0 +1,14 @@
+Name,Type,Parameters,Color,XOffset,YOffset,Duration
+Start,textfile,Start.txt,,,,600000
+End,textfile,End.txt,,,,600000
+W,image,wine.png+.5,,-128,-64,
+Wtxt,text,wine,,-128,128,
+X,image,chocolate.png+.5,,-128,-64,
+Xtxt,text,chocolate,,-128,128,
+Y,image,strawberry.png+.5,,128,-64,
+Ytxt,text,strawberry,,128,128,
+Z,image,spaghetti.png+.5,,128,-64,
+Ztxt,text,spaghetti,,128,128,
+RXN?,text,Allergic reaction? y / n,,,192,
+Yes,text,Outcome: allergic reaction,,,,
+No,text,Outcome: no allergic reaction,,,,
