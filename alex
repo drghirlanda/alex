@@ -1108,3 +1108,4 @@ define Message( text, fatal ) {
     SignalFatalError( "alex: " + text )
   }
 }    
+

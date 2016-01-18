@@ -57,15 +57,10 @@ Stimulus sequences
 ------------------
 
 It should be possible to display sequences of stimuli, rather than
-single stimuli, in each trial. For example a sequence of two stimuli A
-and B, lasting 1 and 2 seconds, respectively, could be described in
-Phases.csv as:
+single stimuli, in each trial. It seems that the easiest way to do
+this would be to add an onset variable alongside the duration
+variable.
 
-    Phase Stimulus Durations Trials Rewards USs
-    1     A|B      1000|2000 10     1       Smiley
-
-But we need a clean syntax to specify onset and offset of all stimuli
-in the sequence...
 
 
 Phase sequences
