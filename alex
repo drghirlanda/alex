@@ -558,13 +558,13 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       if( rt>=rtMin and (rt<=rtMax or rtMax==0) and key==response ) {
         valid <- 1
         responseCount <- responseCount + 1
-	MyLog( "RunTrial: valid response on key '"+key+"'" )
+	MyLog( "RunTrial: valid response on key '"+key+"' at rt="+rt )
       } else {
         valid <- 0
+	MyLog( "RunTrial: invalid response on key '"+key+"' at rt="+rt )
         rt <- "NA"
-	MyLog( "RunTrial: invalid response on key '"+key+"'" )
       }
-      if( not classical and valid ) { # Schedule S2 (possibly)
+      if( (not classical) and valid ) { # Schedule S2 (possibly)
         if( Random() < rewardProb and key == response ) {
           s2Pres <- "T"
           if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
