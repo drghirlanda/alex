@@ -6,6 +6,9 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
+- Document "Onset" stimulus parameter and explain how it makes
+  possible to show arbitrary sequences of stimuli as S1 and S2.
+
 - Document the feature displaying the subject number and group and
   explain why it is there. Perhaps a section on "Running alex" with
   the RunExperiment stuff plus this info.
@@ -51,21 +54,6 @@ that could be made. Because the experiment does not change, a lot of
 things that now are looked up dynamically (e.g., whether a phase has a
 defined background stimulus or not) could be determined once for all
 and cached in suitable lists.
-
-
-Stimulus sequences
-------------------
-
-It should be possible to display sequences of stimuli, rather than
-single stimuli, in each trial. For example a sequence of two stimuli A
-and B, lasting 1 and 2 seconds, respectively, could be described in
-Phases.csv as:
-
-    Phase Stimulus Durations Trials Rewards USs
-    1     A|B      1000|2000 10     1       Smiley
-
-But we need a clean syntax to specify onset and offset of all stimuli
-in the sequence...
 
 
 Phase sequences

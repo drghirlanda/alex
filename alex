@@ -39,7 +39,7 @@ define Start( par ) {
   dirs <- [ "",                       # Current folder takes precedence
             "/usr/share/alex/",       # Linux
             "/usr/local/share/alex/", # OS X
-            "C:\Program Files\alex\"  # Windows
+            "C:\Program Files\alex\\"  # Windows
           ]
   loop( d, dirs ) {
     if( IsDirectory( d + gAlexDir ) ) {
@@ -482,37 +482,26 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
                  maxResponses ) {
   MyLog( "RunTrial: starting trial: " + 
     [phase, trial, s1, rewardProb, s2, response, maxResponses ] )
-  # Determine S1 and S2 duration:
-  s1Duration <- ToNumber( ResolveDuration( s1, "S1" ) )
-  if( rewardProb>0 ) {
-    s2Duration <- ToNumber( ResolveDuration( s2, "S2" ) )
-  } elseif( s2 == "NA" ) {
-    s2Duration <- "NA"
+  # No reward if S2 not defined:
+  if( s2 == "NA" ) {
     rewardProb <- "NA"
   }
-  # Determine some other parameters:
+  s2Duration <- "NA" # Reset later if s2 scheduled
+  # Determine some parameters:
   s1s2Interval <- Parameter("S1S2Interval")
   if( s1s2Interval == "NA" ) {
     s1s2Interval <- 0
   } else {
     s1s2Interval <- ToNumber( s1s2Interval )
   }
-  rtMin <- Parameter("ReactionTimeMin")
-  if( rtMin == "NA" ) {
-    rtMin <- 0
-  } else {
-    rtMin <- ToNumber( rtMin )
-  }
-  rtMax <- Parameter("ReactionTimeMax")
-  if( rtMax == "NA" ) {
-    rtMax <- s1Duration
-  } else {
-    rtMax <- ToNumber( rtMax )
-  }
+  rtMin <- ToNumber( Parameter("ReactionTimeMin") ) # NA -> 0
+  rtMax <- ToNumber( Parameter("ReactionTimeMax") )
   # Initialize some trial-level variables:
   responseCount <- 0
-  startTime     <- SetTimer( GetTime(), s1Duration, s1 )
-  endTime       <- startTime + s1Duration # could be longer, see next
+  times         <- SetTimer( GetTime(), s1 )
+  startTime     <- Nth( times, 1 ) 
+  endTime       <- Nth( times, 2 ) # could be longer, see next
+  s1Duration    <- endtime - startTime
   # Now we handle the <classical> specification. If the trial is
   # 'classical', we decide whether to show S2 or not. If S2 is showed,
   # we lengthen trial duration accordingly
@@ -521,8 +510,9 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     classical <- 1
     if( Random() < rewardProb ) {
       s2Pres <- "T"
-      SetTimer( endTime + s1s2Interval, s2Duration, s2 ) # Schedule S2
-      endTime <- endTime + s1s2Interval + s2Duration     # Lengthen trial
+      times <- SetTimer( endTime + s1s2Interval, s2 ) # Schedule S2
+      endTime <- Nth(times, 2) # Lengthen trial
+      s2Duration <- endTime - Nth(times, 1)
       MyLog( "RunTrial: lengthening classical trial to show S2 completely" )
     } else {
       s2Pres <- "F"
@@ -564,7 +554,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       s2Pres <- "F"
     } else {
       rt <- GetTime() - startTime # Time since trial start
-      if( rt>=rtMin and rt<=rtMax and key==response ) { # Valid?
+      # Next line figures out whether response is valid:
+      if( rt>=rtMin and (rt<=rtMax or rtMax==0) and key==response ) {
         responseCount <- responseCount + 1
 	MyLog( "RunTrial: valid response on key '"+key+"'" )
       } else {
@@ -575,11 +566,14 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         if( Random() < rewardProb and key == response ) {
           s2Pres <- "T"
           if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
-	    onTime <- SetTimer( GetTime() + s1s2Interval, s2Duration, s2 )
+	    times <- SetTimer( GetTime() + s1s2Interval, s2 )
+	    onTime <- Nth(times, 1)
+	    offTime <- Nth(times, 2)
+	    s2Duration <- offTime - onTime
 	    # Lengthen trial if necessary, but only if it has not been
 	    # lengthened already:
-	    if( onTime + s2Duration > endTime and notLengthened ) {
-              endTime <- onTime + s2Duration
+	    if( offTime > endTime and notLengthened ) {
+              endTime <- offTime
 	      notLengthened <- 0
 	      MyLog( "RunTrial: lengthening instrumental trial to show S2 completely" )
 	    }
@@ -710,40 +704,6 @@ define LookupStimulus( sName, field ) {
   return result
 }
 
-# Determines the duration of stimuli. Note: the way we can get "NA" below
-# is as follows: if LookupStimulus() does not find anyting specific, it
-# calls Parameter(). If this does not find anything, it returns "NA",
-# which is returned back by LookupStimulus(). Because Resolve() does not
-# modify "NA", we can get it back and detect that no specific stimulus
-# duration has been specified, so we can look up S1Duration or S2Duration
-# (as specified by 'role'). Sorry for the complication.
-define ResolveDuration( stimulus, role ) {
-  durations <- []
-  loop( s, SplitString(stimulus,"+") ) {
-    d <- First(Resolve( s, "Duration", LookupStimulus(s,"Duration") ))
-    if( d == "NA" ) { # See Note above
-      d <- Parameter( role + "Duration")
-    }
-    d <- ToNumber( d ) # NA becomes 0
-    if( d == 0 ) {
-      MyLog( "ResolveDuration: no duration for one or more stimuli:" )
-      MyLog( "  Stimuli: "+SplitString(stimulus,"+") )
-      MyLog( "  Durations: "+durations )
-      MyLog( "  Role: "+role )
-      Message( "Could not determine duration of " + s, 1 )
-    }
-    PushOnEnd( durations, d )
-  }
-  ## The duration information is valid if all durations are equal
-  d <- First( durations )
-  loop( d2, Rest( durations ) ) {
-    if( d != d2 ) {
-      Message( "Some stimuli have different durations in "+stimulus, 1 )
-    }
-  } 
-  return d
-}
-
 # Returns the value of a parameter given by name.
 define Parameter( name ) {
   value <- Lookup( name, gParameterNames, gParameterValues )
@@ -866,7 +826,9 @@ define MakeColorRGBString( color ) {
 define Display( stimulus ) {
   # The 'stimulus' may actually be a compound, like "A+B", so we split
   # it into individual stimuli and then display each of them. We look
-  # up the stimulus objects in the gStimuli list.
+  # up the stimulus objects in the gStimuli list. NOTE: This is
+  # actually used only for compound background stimuli, which are
+  # untimed. For timed stimuli
   n <- Length( gStimNames )
   loop( stimName, SplitString(stimulus, "+") ) {
     i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
@@ -934,18 +896,44 @@ define UndisplayBackground( phaseName ) {
 # construct StartTime( GetTime(), ... ) to avoid the ticker elapsing
 # between the time tOn is calculated and the time tOn is actually used
 # to create the timer structure.
-define SetTimer( tOn, duration, stimulus ) {
+#
+# A timer's duration is figured out as follows. First we call
+# LookupStimulus(). If this does not find anyting specific, it calls
+# Parameter(). If this does not find anything, it returns "NA", which
+# is returned back by LookupStimulus() to the Resolve() call wrapped
+# around it. Sorry for the complication.
+define SetTimer( tOn, stimulus ) {
   if( tOn < GetTime() ) {
     x <- stimulus+" start time is in the past: "+tOn
     MyLog( "SetTimer: " + x )
   }
-  if( duration < 0 ) {
-    Message( stimulus+" has negative duration: "+duration, 1 )
+  tOff <- tOn
+  ## We loop over stimuli looking for Duration and Onset settings:
+  loop( s, SplitString(stimulus,"+") ) {
+    ## Figure out duration:
+    dur <- First(Resolve( s, "Duration", LookUpStimulus(s,"Duration") ))
+    if( dur == "NA" ) {
+      MyLog( "SetTimer: no duration found for stimulus " + s )
+      Message( "Could not determine duration of " + s, 1 )
+    }
+    dur <- ToNumber( dur )
+    if( dur < 0 ) {
+      MyLog( "SetTimer: negative duration found for stimulus " + s )
+      Message( s + " has negative duration: " + dur, 1 )
+    }
+    ## Figure out onset:
+    ons <- First(Resolve( s, "Onset", LookupStimulus(s,"Onset") ))
+    ons <- ToNumber( ons ) # NA becomes 0, which is a valid onset
+    ## Schedule timer:
+    newTimer <- [ tOn + ons, dur, s, 0 ]
+    PushOnEnd( gTimers, newTimer )
+    MyLog( "SetTimer: new timer: " + newTimer )
+    ## Update tOff if needed:
+    if( tOn + ons + dur > tOff ) {
+      tOff <- tOn + ons + dur
+    }
   }
-  newTimer <- [ tOn, duration, stimulus, 0 ]
-  PushOnEnd( gTimers, newTimer )
-  MyLog( "SetTimer: new timer: " + newTimer )
-  return tOn
+  return [tOn, tOff]
 }
 
 # Goes through all existing timers, turning on those that are due
@@ -985,12 +973,21 @@ define ExpireTimers() {
   gTimers <- []
 }
 
-# Returns T if a stimulus is currently displayed, F otherwise.
+# Returns T if a stimulus is currently displayed, F otherwise. We have
+# to take care of the fact that 'stimulus' may be a compound, one or
+# more parts of which may be displayed.
 define TimerOn( stimulus ) {
   result <- "F"
+  components <- SplitString( stimulus, "+" )
   loop( timer, gTimers ) {
-    if( Nth(timer, 3) == stimulus and Nth(timer, 4) ) {
-      result <- "T"
+    loop( s, components ) {
+      if( Nth(timer, 3) == s and Nth(timer, 4) ) {
+        result <- "T"
+        break
+      }
+    }
+    if( result == "T" ) {
+      break
     }
   }
   return result        
@@ -1110,3 +1107,4 @@ define Message( text, fatal ) {
     SignalFatalError( "alex: " + text )
   }
 }    
+
