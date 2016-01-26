@@ -520,6 +520,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   } else { # Instrumental trial
     MyLog( "RunTrial: instrumental trial" )
     classical <- 0
+  } else {
+    s2Pres <- "F" # changed later if S2 schedulued
   }
   # This variable keeps track of whether an instrumental trial has
   # been lengthened or not because the US had to be shown near the end
@@ -551,7 +553,6 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     if( IsList(key) ) {   # Keep in mind: the Wait...() timed out,
       key <- "<timeout>"  # but not necessarily the whole trial
       rt <- "NA"
-      s2Pres <- "F"
     } else {
       rt <- GetTime() - startTime # Time since trial start
       # Next line figures out whether response is valid:
@@ -580,8 +581,6 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
 	      MyLog( "RunTrial: lengthening instrumental trial to show S2 completely" )
 	    }
           }
-        } else {
-	  s2Pres <- "F"
         }
       }
     }
