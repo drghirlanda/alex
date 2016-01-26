@@ -520,7 +520,6 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   } else { # Instrumental trial
     MyLog( "RunTrial: instrumental trial" )
     classical <- 0
-  } else {
     s2Pres <- "F" # changed later if S2 schedulued
   }
   # This variable keeps track of whether an instrumental trial has
