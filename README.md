@@ -5,38 +5,25 @@ Alex is a program to help running experiments on associative
 learning. Rather than writing an experiment program, you write a bunch
 a configuration files that describe the experiment. Alex reads these
 files and, if everything goes well, runs the experiment and collects
-data. A Manual.md file is provided with the distribution. 
+data. An AlexManual.md is provided with the distribution.
 
 Alex is written using PEBL (Psychology Experiment Building Language),
 which you can find at http://pebl.sourceforge.net. We are indebted to
 Shane Muller, PEBL's creator and maintainer, for making alex possible.
 
-So far, alex is tested only on Linux. While PEBL works on Windows an OS
-X, we have not tested alex on these systems.
+Alex is tested on most extensively on Linux, but Windows and OS X are
+also tested from time to time.
 
 Scope
 -----
 
-Alex can display squares, circles, text, and images, and play sound
-files. All of these can serve as conditioned stimuli (CSs) or as
-unconditioned stimuli (USs), or, in other terms, as cues and
-outcomes. Multiple CSs and USs can be presented at the same
-time. Currently, alex's biggest limitations are:
-
-- There is only one reinforcement schedule, Variable Ratio. That is,
-  each response to a CS has a fixed probability of being
-  reinforced. Of course, probability of 0 is extinction, and
-  probability of 1 full reinforcement, or a Fixed Ratio 1 schedule.
-
-- All CSs have the same duration. Although many CSs can be presented
-  in each trial, they are all presented simultaneously and there is no
-  possibility of enforcing a given temporal structure.
-
-These limitations mean that, for example, one cannot present
-*sequences* of CSs before a reward is scheduled. Also, judgments such
-as "How likely do you think it is this that outcome will follow this
-stimulus?" cannot be collected. There are plans to address all of
-these limitations, see the Roadmap.md file.
+Alex can display squares, circles, text, and arbitrary images, and
+play sound files. All of these can serve as conditioned stimuli (CSs)
+or as unconditioned stimuli (USs), or, in other terms, as cues and
+outcomes. Multiple CSs and USs can be presented at the same time and
+CSs can be composed of arbitrary sequences or compounds of simpler
+stimuli. Please refer to the manual for a full description of Alex's
+capabilities.
 
 Contacts
 --------
