@@ -1,0 +1,5 @@
+You can write your initial instructions here. Delete this text, but
+keep the following line (you can modify it if necessary) so that the
+subject knows how to start the experiment.
+
+Please press the space bar to start the experiment.
