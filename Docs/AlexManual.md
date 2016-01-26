@@ -195,12 +195,12 @@ How does alex know that `Red`, `White`, and `Pink` mentioned in the
 red, white, and pink squares, and that `Smiley` is a smiley face? This
 information is contained in the `Stimuli.csv` file, see Table \ref{stimuli}.
 
-Name   Type   Parameters        Color       XOffset YOffset
-----   ----   ----------        -----       ------- -------
-Red    square 50                red         0       0
-White  square 50                white       0       0
-Pink   square 50                255-128-128 0       0
-Smiley image  smile-o-white.png             0       -150
+Name   Type   Parameters        Color       XOffset YOffset Duration
+----   ----   ----------        -----       ------- ------- --------
+Red    square 50                red         0       0       1000
+White  square 50                white       0       0       1000 
+Pink   square 50                255-128-128 0       0       1000
+Smiley image  smile-o-white.png             0       -150    1000
 
 Table: A `Stimuli.csv` file instructing alex that stimuli Red, White,
 and Pink are differently colored 50x50 pixel squares, and that Smiley
@@ -271,6 +271,13 @@ is a detailed explanation:
   center (negative Y values place stimuli above center, negative X
   values place them left of center).
 
+- **Duration**: Stimulus duration, in milliseconds.
+
+- **Onset**: Stimulus onset, in milliseconds. An onset of 0 means that
+    the stimulus is diplayed immediately at the beginning of a
+    trial. Positive onsets delay stimulus display. Negative onsets are
+    not allowed. **Note:** By using onsets, you can use stimulus
+    sequences as either S1 or S2.
 
 \phantomsection \addcontentsline{toc}{subsection}{The \texttt{Groups.csv} file}
 \subsection*{The \texttt{Groups.csv} file}
@@ -297,12 +304,12 @@ Table: A `Groups.csv` file instructing alex to run 10
 subjects. \label{subjects}
 
 
-Name   Type   Parameters         Color XOffset YOffset
-----   ----   ----------         ----- ------- -------
-Red    square 50                 red   0       0
-White  square 50                 white 0       0
-Pink   square 50                 *     0       0
-Smiley image  smile-o-white.png        0       -150
+Name   Type   Parameters         Color XOffset YOffset Duration
+----   ----   ----------         ----- ------- ------- --------
+Red    square 50                 red   0       0       1000
+White  square 50                 white 0       0       1000
+Pink   square 50                 *     0       0       1000
+Smiley image  smile-o-white.png        0       -150    500 
 
 Table: A `Stimuli.csv` file instructing alex to look up the Color of
 the Pink stimulus in the `Groups.csv` file (see Table \ref{subjects-color}).
@@ -319,12 +326,12 @@ in two treatment groups with different Color attributes for the Pink
 stimulus (see Table \ref{stimuli-color}). \label{subjects-color}
 
 
-Name   Type   Parameters         Color XOffset YOffset
-----   ----   ----------         ----- ------- -------
-Red    square *                  red   0       0
-White  square 50                 white 0       0
-Pink   square 50                 *     0       0
-Smiley image  smile-o-white.png        0       -150
+Name   Type   Parameters         Color XOffset YOffset Duration
+----   ----   ----------         ----- ------- ------- --------
+Red    square *                  red   0       0       1000
+White  square 50                 white 0       0       1000
+Pink   square 50                 *     0       0       1000
+Smiley image  smile-o-white.png        0       -150    500
 
 Table: A `Stimuli.csv` file instructing alex to look up in the
 `Groups.csv` file both the Color of stimulus Pink and the Parameters
@@ -353,9 +360,7 @@ whole experiment. Here is a sample file:
 
 Parameter       Value
 ---------       -----
-S1Duration      4000
 S1S2Interval    0
-S2Duration      400
 ResponseTimeMin 0
 ResponseTimeMax 4000
 MinITI          1000
@@ -372,22 +377,10 @@ Log             1
 Table: A sample `Parameters.csv` file with default values.
 
 
-- **S1Duration** is the default duration of all S1 stimuli,
-  while **S2Duration** is the default duration of all S2 stimuli. All
-  durations are in milliseconds. Note that you can set different
-  durations for different stimuli by including a `Duration` column in the
-  `Stimuli.csv` file (see \hyperref[textfiles]{here} for an example). When
-  using compound stimuli, all components must have the same duration.
+- **S1S2Interval** is the interval between S1 offset and S2 onset. (It
+    can be modified per-S2 by defining S2's with different onset
+    time.)
 
-- **S1S2Interval** is the interval between S1 offset and S2 onset.
-
-- **ResponseTimeMin** and **ResponseTimeMax** define at what times
-  within a trial subjects can respond. Responses made outside this time
-  window do not contribute to the per-trial response count, and
-  do not result in S2 presentation. If not specified, `ResponseTimeMin`
-  is set to 0 and `ResponseTimeMax` to `S1Duration`, thus allowing responses
-  at any time during the trial.
-  
 - **MinITI** and **MaxITI** are the minimum and maximum values of the
   intertrial interval. Each intertrial interval will be drawn between
   these values with uniform distribution.
@@ -410,13 +403,21 @@ Table: A sample `Parameters.csv` file with default values.
   the `MaxResponses` value in `Parameters.csv` will be looked up.
   If `MaxResponses` is not set there, it is given a default value of 1.
 
-The next few parameters control the screen background color while the
-experiment is running and the color, font, and size of text used for
-instructions and other messages.
+- The next few parameters control the screen background color while
+  the experiment is running and the color, font, and size of text used
+  for instructions and other messages.
 
-- The **Test** parameter, if set to `1`, skips instructions and
-  acquisition of demographic information. It is meant to quickly start
-  the experiment during development.
+- **AskID** determines whether the subject is asked to provide an ID
+    code. (This can be useful to give credit.)
+
+- **AskAge** and **AskSex** do what you think they do.
+
+- **AskRace** asks subjects to check their own 'race or ethnicity'
+    according to U.S. National Insitutes of Health
+    classification. (This is not fully NIH compliament, however,
+    because PEBL does not have a dialog box where you can check
+    multiple items, as NIH would require to list more than one 'race
+    or ethnicity.')
 
 - **Log** is a toggle for the logging feature, which records runtime
   messages for each subject, in files named the same as corresponding
@@ -442,12 +443,12 @@ notation for the `Parameters` field. This has two advantages: it makes
 explicit our intention of having three squares of equal size, and it
 reduces the possibility of typing errors.
 
-Name   Type   Parameters         Color XOffset YOffset
-----   ----   ----------         ----- ------- -------
-Red    square 50                 red   0       0
-White  square :Red               white 0       0
-Pink   square :Red               *     0       0
-Smiley image  smile-o-white.png        0       -150
+Name   Type   Parameters         Color XOffset YOffset Duration
+----   ----   ----------         ----- ------- ------- --------
+Red    square 50                 red   0       0       1000
+White  square :Red               white 0       0       1000 
+Pink   square :Red               *     0       0       1000
+Smiley image  smile-o-white.png        0       -150    1000
 
 Table: A `Stimuli.csv` file demonstrating the `*` and `:` special
 notations for stimuli. \label{stimuli-special}
@@ -469,11 +470,11 @@ Table: A `Phases.csv` file with a compound stimulus in
 Phase 2. \label{phases-plus}
 
 
-Name   Type   Parameters         Color XOffset YOffset
-----   ----   ----------         ----- ------- -------
-Red    square 50                 red   0       0
-White  :Red   :Red               white 60      :Red
-Smiley image  smile-o-white.png        0       150
+Name   Type   Parameters         Color XOffset YOffset Duration
+----   ----   ----------         ----- ------- ------- --------
+Red    square 50                 red   0       0       1000
+White  :Red   :Red               white 60      :Red    1000
+Smiley image  smile-o-white.png        0       150     1000
 
 Table: A `Stimuli.csv` file to go with the `Phases.csv` file in Table
 \ref{phases-plus}. Note that we need to offset the white square,
