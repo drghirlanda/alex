@@ -361,12 +361,13 @@ whole experiment. Here is a sample file:
 Parameter       Value
 ---------       -----
 S1S2Interval    0
-ResponseTimeMin 0
-ResponseTimeMax 4000
 MinITI          1000
 MaxITI          3000
 Response        \<space\>
+ResponseTimeMin 0
+ResponseTimeMax 4000
 MaxResponses    100
+MaxInvalid      0
 BackgroundColor gray95
 ForegroundColor black
 FontName        Vera
@@ -389,6 +390,11 @@ Table: A sample `Parameters.csv` file with default values.
   to respond. Note that this can also be set on a per-trial basis,
   see \hyperref[responses]{here}.
 
+- **ResponseTimeMin** and **ResponseTimeMax** indicate when, within a
+    trial a response is considered *valid*. Valid responses are
+    processed to possibly trigger the presentation of S2. Invalid
+    responses cannot trigger S2.  
+
 - \phantomsection \label{maxresponses}
   **MaxResponses** is the maximum number of response a subject is
   allowed to make in one trial. There are essentially two useful
@@ -402,6 +408,10 @@ Table: A sample `Parameters.csv` file with default values.
   `MaxResponses` column exists, but the value is empty for some stimuli,
   the `MaxResponses` value in `Parameters.csv` will be looked up.
   If `MaxResponses` is not set there, it is given a default value of 1.
+
+- **MaxInvalid** is the maximum number of *invalid* responses a
+    subject is allowed to make in one trial. If you set this to 0 or
+    1, an invalid response terminates the trial (this is the default).
 
 - The next few parameters control the screen background color while
   the experiment is running and the color, font, and size of text used

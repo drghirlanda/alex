@@ -416,6 +416,7 @@ define RunPhase( phaseName ) {
   uss          <- LookupPhase(phaseName, "S2")
   responses    <- LookupPhase(phaseName, "Response")
   maxResponses <- LookupPhase(phaseName, "MaxResponses")
+  maxInvalid   <- LookupPhase(phaseName, "MaxInvalid")
 
   ## We build lists trialStimuli and trialRewards to contain stimuli
   ## and rewards repeated as many times as given in 'trials'. The
@@ -471,7 +472,7 @@ define RunPhase( phaseName ) {
     RunITI( phaseName, trial )
     ## Run trial and get response times and rewards collected:
     RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
-              maxResponses )
+              maxResponses, maxInvalid )
     ## Advance to next trial
     trial <- trial + 1
   }
@@ -479,25 +480,27 @@ define RunPhase( phaseName ) {
 }
 
 define RunTrial( phase, trial, s1, rewardProb, s2, response,
-                 maxResponses ) {
+                 maxResponses, maxInvalid ) {
   MyLog( "RunTrial: starting trial: " + 
     [phase, trial, s1, rewardProb, s2, response, maxResponses ] )
   # No reward if S2 not defined:
   if( s2 == "NA" ) {
     rewardProb <- "NA"
   }
-  s2Duration <- "NA" # Reset later if s2 scheduled
-  # Determine some parameters:
+  s2Duration <- "NA" # Reset later if s2 scheduled 
+  # Determine some parameters. In ToNumber conversions, NA becomes 0:
   s1s2Interval <- Parameter("S1S2Interval")
   if( s1s2Interval == "NA" ) {
     s1s2Interval <- 0
   } else {
     s1s2Interval <- ToNumber( s1s2Interval )
   }
-  rtMin <- ToNumber( Parameter("ReactionTimeMin") ) # NA -> 0
-  rtMax <- ToNumber( Parameter("ReactionTimeMax") )
+  rtMin <- ToNumber( Parameter("ResponseTimeMin") )
+  rtMax <- ToNumber( Parameter("ResponseTimeMax") )
+  MyLog( "RunTrial: accepting responses between "+rtMin+" and "+rtMax )
   # Initialize some trial-level variables:
-  responseCount <- 0
+  validCount    <- 0
+  invalidCount  <- 0
   times         <- SetTimer( GetTime(), s1 )
   startTime     <- Nth( times, 1 ) 
   endTime       <- Nth( times, 2 ) # could be longer, see next
@@ -557,10 +560,11 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       # Next line figures out whether response is valid:
       if( rt>=rtMin and (rt<=rtMax or rtMax==0) and key==response ) {
         valid <- 1
-        responseCount <- responseCount + 1
+        validCount <- validCount + 1
 	MyLog( "RunTrial: valid response on key '"+key+"' at rt="+rt )
       } else {
         valid <- 0
+	invalidCount <- invalidCount + 1
 	MyLog( "RunTrial: invalid response on key '"+key+"' at rt="+rt )
         rt <- "NA"
       }
@@ -591,7 +595,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     } else {
       trialTimeout <- 0
     }
-    if( key!="<timeout>" or (responseCount==0 and trialTimeout) ) {
+    totalResponses <- validCount + invalidCount
+    if( key!="<timeout>" or (totalResponses==0 and trialTimeout) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
@@ -606,8 +611,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     ## next can check meaningfully whether s2 is on or not
     UpdateTimers()
 
-    ## End trial if s2 is off and max responses reached
-    if( responseCount >= maxResponses and TimerOn(s2)=="F" ) {
+    ## End trial if s2 is off and valid or invalid max responses reached
+    if( (validCount >= maxResponses or invalidCount >= maxInvalid) and TimerOn(s2)=="F" ) {
       MyLog( "RunTrial: maximum responses reached: endindg trial" )
       MyLog( "          and expiring all timers" )
       ExpireTimers()
