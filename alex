@@ -418,6 +418,16 @@ define RunPhase( phaseName ) {
   maxResponses <- LookupPhase(phaseName, "MaxResponses")
   maxInvalid   <- LookupPhase(phaseName, "MaxInvalid")
 
+  # Enforce sane defaults:
+  if( maxResponses <= 0 ) {
+    MyLog( "RunPhase: Invalid MaxResponses="+maxResponses+", setting to 1")
+    maxRepsonses <- 1
+  }
+  if( maxInvalid <= 1 ) {
+    MyLog( "RunPhase: Invalid MaxInvalid="+maxInvalid+", setting to 1")
+    maxInvalid <- 1
+  }
+
   ## We build lists trialStimuli and trialRewards to contain stimuli
   ## and rewards repeated as many times as given in 'trials'. The
   ## order of presentation is then randomized by picking stimuli from

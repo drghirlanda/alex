@@ -1,5 +1,4 @@
 Name,Type,Parameters,Color,XOffset,YOffset,Duration,Onset
 A,square,50,blue,0,0,1000,
-B,square,50,yellow,0,0,1000,2000
-C,square,50,green,0,100,4000,
-D,square,50,white,0,-100,1000,
+B,square,50,yellow,0,0,1000,1000
+Smiley,image,smile-o-white.png+.33,,0,-100,500,

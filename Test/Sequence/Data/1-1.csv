@@ -1,0 +1,4 @@
+Hostname,Group,Subject,ID,Sex,Age,Race,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,S2Pres,Key
+helix,1,1,NA,NA,NA,NA,4977,1,1,ITI,1999.81,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,NA,NA,NA,NA,5427,1,1,A+B+C,4000,T,D+A,NA,T,1,<space>,448,T,<space>
+helix,1,1,NA,NA,NA,NA,5818,1,1,A+B+C,4000,T,D+A,NA,T,1,<space>,838,T,<space>
