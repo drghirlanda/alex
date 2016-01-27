@@ -418,15 +418,7 @@ define RunPhase( phaseName ) {
   maxResponses <- LookupPhase(phaseName, "MaxResponses")
   maxInvalid   <- LookupPhase(phaseName, "MaxInvalid")
 
-  # Enforce sane defaults:
-  if( maxResponses <= 0 ) {
-    MyLog( "RunPhase: Invalid MaxResponses="+maxResponses+", setting to 1")
-    maxRepsonses <- 1
-  }
-  if( maxInvalid <= 1 ) {
-    MyLog( "RunPhase: Invalid MaxInvalid="+maxInvalid+", setting to 1")
-    maxInvalid <- 1
-  }
+  MyLog( "RunPhase: accepting "+maxResponses+" valid and "+maxInvalid+" invalid responses per trial" )
 
   ## We build lists trialStimuli and trialRewards to contain stimuli
   ## and rewards repeated as many times as given in 'trials'. The
@@ -437,6 +429,7 @@ define RunPhase( phaseName ) {
   trialUSs          <- []
   trialResponses    <- []
   trialMaxResponses <- []
+  trialMaxInvalid   <- []
   loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
     n <- ToNumber( Nth(numTrials, i) )
     s <- Nth(stimuli, i )
@@ -446,12 +439,14 @@ define RunPhase( phaseName ) {
     PushOnEnd( trialUSs,          Repeat( Nth(uss,          i), n ) )
     PushOnEnd( trialResponses,    Repeat( Nth(responses,    i), n ) )
     PushOnEnd( trialMaxResponses, Repeat( Nth(maxResponses, i), n ) )
+    PushOnEnd( trialMaxInvalid,   Repeat( Nth(maxInvalid,   i), n ) )
   }
   trialStimuli      <- Flatten( trialStimuli ) # Nesting is undesired
   trialRewards      <- Flatten( trialRewards )
   trialUSs          <- Flatten( trialUSs )
   trialResponses    <- Flatten( trialResponses )
   trialMaxResponses <- Flatten( trialMaxResponses )
+  trialMaxInvalid   <- Flatten( trialMaxInvalid )
   MyLog( "RunPhase: constructed trial list: " + trialStimuli )
 
   ## We define a random order for the trials, taking into account that
@@ -475,9 +470,7 @@ define RunPhase( phaseName ) {
     uss          <- Nth( trialUSs, thisTrial )
     response     <- Nth( trialResponses, thisTrial )
     maxResponses <- ToNumber( Nth( trialMaxResponses, thisTrial ) )
-    if( maxResponses <= 0 ) {
-      maxResponses <- 1
-    }
+    maxInvalid   <- ToNumber( Nth( trialMaxInvalid, thisTrial ) )
     ## Collect responses during pre-trial ITI:
     RunITI( phaseName, trial )
     ## Run trial and get response times and rewards collected:
@@ -505,8 +498,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   } else {
     s1s2Interval <- ToNumber( s1s2Interval )
   }
-  rtMin <- ToNumber( Parameter("ResponseTimeMin") )
-  rtMax <- ToNumber( Parameter("ResponseTimeMax") )
+  rtMin <- ToNumber( First(LookupPhase(phase, "ResponseTimeMin")) )
+  rtMax <- ToNumber( First(LookupPhase(phase, "ResponseTimeMax")) )
   MyLog( "RunTrial: accepting responses between "+rtMin+" and "+rtMax )
   # Initialize some trial-level variables:
   validCount    <- 0
@@ -622,11 +615,17 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     UpdateTimers()
 
     ## End trial if s2 is off and valid or invalid max responses reached
-    if( (validCount >= maxResponses or invalidCount >= maxInvalid) and TimerOn(s2)=="F" ) {
-      MyLog( "RunTrial: maximum responses reached: endindg trial" )
-      MyLog( "          and expiring all timers" )
-      ExpireTimers()
-      continue <- 0
+    if( TimerOn(s2)=="F" ) {
+      if( validCount >= maxResponses ) {
+        MyLog( "RunTrial: maximum valid responses reached: endindg trial" )
+        ExpireTimers()
+        continue <- 0
+      }
+      if( invalidCount >= maxInvalid ) {
+        MyLog( "RunTrial: maximum invalid responses reached: endindg trial" )
+        ExpireTimers()
+        continue <- 0
+      }
     }
   }
   ExpireTimers() # Turn off everything
