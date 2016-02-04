@@ -5,7 +5,7 @@ define Start( par ) {
   ## Skip directory search, paths were hardcoded anyway
 
   if( GetSystemType() == "WINDOWS" ) {
-    manualDir <- gQuote+"C:\Program Files\alex\Docs\AlexManual.pdf"+gQuote
+    manualDir <- gQuote+"C:\Program Files\alex\AlexManual.pdf"+gQuote
     SystemCall( "start "+gQuote+gQuote+" "+manualDir )
   } elseif ( GetSystemType() == "OSX" ) {
     manualDir <- "/usr/local/share/alex/AlexManual.pdf"
