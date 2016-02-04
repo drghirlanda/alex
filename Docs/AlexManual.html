@@ -35,7 +35,7 @@
 <p>Alex has been designed so that multiple instances of an experiment can be run simultaneously. This feature is useful when the experiment folder is shared among multiple computers, as it may occur in a lab. All instances of alex will read the same design files, and in particular the same <code>Groups.csv</code> file which describes how to run subjects. Different instances, however, will run different subjects and will not overwrite each other's data files.</p>
 <p>The fact that a subject has been run is signaled by the existence of the corresponding data file. If the experiment is interrupted before it completes, alex will still consider that subject as having been run. It is up to you to check that data files are complete (e.g., that they have the appropriate number of lines). Although this may be inconvenient, it is hard to improve upon this situation because there is no way for alex to decide whether important data would be overwritten by re-running a subject. If you decide a data file is worthless, either remove it or rename it (e.g., with an <code>incomplete-</code> prefix) and alex will automatically re-run that subject.</p>
 <p>To interrupt a running experiment, you can use the interrupt key combination for PEBL: <code>Ctrl+Alt+Shift+\</code>.</p>
-<p>  </p>
+<p> </p>
 <p>All configuration files are in the Design folder:</p>
 <ul>
 <li><p><code>Phases.csv</code> describes the experimental design proper. It defines experimental phases in terms of the stimuli, desired responses, possible outcomes, and number of trials in each.</p></li>
@@ -44,7 +44,7 @@
 <li><p><code>Parameters.csv</code> defines some global parameters such as screen background color, text color, font, and size, the duration of intertrial intervals, and so on. It can also be used to define parameters that are the same for all stimuli, such as a default key used for responses.</p></li>
 </ul>
 <p> </p>
-<p>Suppose we want to teach subjects to discriminate a red square from a white square. We then want to know how subjects respond to, say, a pink square. Table  shows how a suitable <code>Phases.csv</code> file might look.<sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup> The file describes an experiment with two phases, with each line defining one type of trial that occurs in a phase. Here, there are two kinds of trials in <code>Phase 1</code>, specifying 20 presentations of each of two stimuli (S1s) called <code>Red</code> and <code>White</code>. <code>Red</code> will be rewarded 90% of the time, <code>White</code> only 10% (specified by <code>S2Prob</code>). On these trials, stimulus <code>Smiley</code> will be presented as the reward (<code>S2</code>). In <code>Phase 2</code>, stimulus <code>Pink</code> is presented five times and never rewarded.</p>
+<p>Suppose we want to teach subjects to discriminate a red square from a white square. We then want to know how subjects respond to, say, a pink square. Table  shows how a suitable <code>Phases.csv</code> file might look.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> The file describes an experiment with two phases, with each line defining one type of trial that occurs in a phase. Here, there are two kinds of trials in <code>Phase 1</code>, specifying 20 presentations of each of two stimuli (S1s) called <code>Red</code> and <code>White</code>. <code>Red</code> will be rewarded 90% of the time, <code>White</code> only 10% (specified by <code>S2Prob</code>). On these trials, stimulus <code>Smiley</code> will be presented as the reward (<code>S2</code>). In <code>Phase 2</code>, stimulus <code>Pink</code> is presented five times and never rewarded.</p>
 <p>When the experiment is run, <code>Red</code> and <code>White</code> trials will be intermixed randomly because they all pertain to <code>Phase 1</code>. <code>Pink</code> trials, on the other hand, will be performed in <code>Phase 2</code> after all <code>Phase 1</code> trials have been run.</p>
 <table>
 <caption>A simple <code>Phases.csv</code> to teach a discrimination between stimuli Red and White, and then test responding to Pink. Note that the S2 field can be left empty if probability of S2 presentation is 0. </caption>
@@ -413,7 +413,7 @@
 </tr>
 </tbody>
 </table>
-<p>  </p>
+<p> </p>
 <p>The <code>Parameters.csv</code> file contains some parameters that affect the whole experiment. Here is a sample file:</p>
 <table>
 <caption>A sample <code>Parameters.csv</code> file with default values.</caption>
@@ -429,14 +429,6 @@
 <td align="left">0</td>
 </tr>
 <tr class="even">
-<td align="left">ResponseTimeMin</td>
-<td align="left">0</td>
-</tr>
-<tr class="odd">
-<td align="left">ResponseTimeMax</td>
-<td align="left">4000</td>
-</tr>
-<tr class="even">
 <td align="left">MinITI</td>
 <td align="left">1000</td>
 </tr>
@@ -449,30 +441,42 @@
 <td align="left">&lt;space&gt;</td>
 </tr>
 <tr class="odd">
+<td align="left">ResponseTimeMin</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
+<td align="left">ResponseTimeMax</td>
+<td align="left">4000</td>
+</tr>
+<tr class="odd">
 <td align="left">MaxResponses</td>
 <td align="left">100</td>
 </tr>
 <tr class="even">
-<td align="left">BackgroundColor</td>
-<td align="left">gray95</td>
-</tr>
-<tr class="odd">
-<td align="left">ForegroundColor</td>
-<td align="left">black</td>
-</tr>
-<tr class="even">
-<td align="left">FontName</td>
-<td align="left">Vera</td>
-</tr>
-<tr class="odd">
-<td align="left">FontSize</td>
-<td align="left">36</td>
-</tr>
-<tr class="even">
-<td align="left">Test</td>
+<td align="left">MaxInvalid</td>
 <td align="left">0</td>
 </tr>
 <tr class="odd">
+<td align="left">BackgroundColor</td>
+<td align="left">gray95</td>
+</tr>
+<tr class="even">
+<td align="left">ForegroundColor</td>
+<td align="left">black</td>
+</tr>
+<tr class="odd">
+<td align="left">FontName</td>
+<td align="left">Vera</td>
+</tr>
+<tr class="even">
+<td align="left">FontSize</td>
+<td align="left">36</td>
+</tr>
+<tr class="odd">
+<td align="left">Test</td>
+<td align="left">0</td>
+</tr>
+<tr class="even">
 <td align="left">Log</td>
 <td align="left">1</td>
 </tr>
@@ -482,7 +486,9 @@
 <li><p><strong>S1S2Interval</strong> is the interval between S1 offset and S2 onset. (It can be modified per-S2 by defining S2's with different onset time.)</p></li>
 <li><p><strong>MinITI</strong> and <strong>MaxITI</strong> are the minimum and maximum values of the intertrial interval. Each intertrial interval will be drawn between these values with uniform distribution.</p></li>
 <li><p><strong>Response</strong> is the key subjects are instructed to press if they want to respond. Note that this can also be set on a per-trial basis, see .</p></li>
+<li><p><strong>ResponseTimeMin</strong> and <strong>ResponseTimeMax</strong> indicate when, within a trial a response is considered <em>valid</em>. Valid responses are processed to possibly trigger the presentation of S2. Invalid responses cannot trigger S2.</p></li>
 <li><p> <strong>MaxResponses</strong> is the maximum number of response a subject is allowed to make in one trial. There are essentially two useful settings. If you set this to <code>1</code>, the trial ends with the first response (the S2 is presented if appropriate, of course). If you set it to an unrealistically large value, say <code>1000</code>, you can record any number of responses per trial, each of which may result in an S2 being presented. Note that you can set <code>MaxReponses</code> to a different value for different trial types, by including a <code>MaxResponses</code> column in <code>Phases.csv</code> (see the  for an example). If a <code>MaxResponses</code> column exists, but the value is empty for some stimuli, the <code>MaxResponses</code> value in <code>Parameters.csv</code> will be looked up. If <code>MaxResponses</code> is not set there, it is given a default value of 1.</p></li>
+<li><p><strong>MaxInvalid</strong> is the maximum number of <em>invalid</em> responses a subject is allowed to make in one trial. If you set this to 0 or 1, an invalid response terminates the trial (this is the default).</p></li>
 <li><p>The next few parameters control the screen background color while the experiment is running and the color, font, and size of text used for instructions and other messages.</p></li>
 <li><p><strong>AskID</strong> determines whether the subject is asked to provide an ID code. (This can be useful to give credit.)</p></li>
 <li><p><strong>AskAge</strong> and <strong>AskSex</strong> do what you think they do.</p></li>
@@ -624,7 +630,7 @@
 </tbody>
 </table>
 <p><strong>Note:</strong> The <code>+</code> notation is also valid for S2s. This can be used to implement S2s of different &quot;magnitude.&quot; For example, one can instruct subjects that each smiley face represents a point earned, and have multiple smileys appear for more valuable stimuli (this requires defining several smiley stimuli offset from each other, so that they do not overlap when displayed simultaneously). Compounding of S2s may also be used to present a combination of visual and auditory stimuli.</p>
-<p>  </p>
+<p> </p>
 <p>Visual stimuli are added to the screen in the order they appear in the <code>Stimuli.csv</code> file. This means that, should some stimuli overlap on the screen, those defined <em>later</em> will be displayed <em>on top</em> of those defined earlier, obscuring them partly or wholly.</p>
 <p> </p>
 <p>It is sometimes desirable to have a stimulus or combination of stimuli present at all times during a phase, including interstimulus intervals, for example as a background on which others are superimposed. A stimulus whose name starts with <code>Background</code> followed by the name of a phase will be displayed for the entire duration of that phase. You can define many such stimuli, e.g., <code>BackgroundPhase1-1</code> and <code>BackgroundPhase1-2</code>.</p>
@@ -682,7 +688,7 @@
 </tbody>
 </table>
 <p>Note that the name of the corresponding column in <code>Groups.csv</code> is <code>TrainingAS2Prob</code>, or, more generally, (<code>phase name</code>)(<code>S1 name</code>)(<code>parameter</code>). Thus the column name specifies two things: the phase and the S1 to which the column value refers (in employing the same notation for stimuli, we had to worry only about the stimulus name). This works also to set phase parameters for a compound stimulus. For example, if you want to set the <code>S2Prob</code> value for S1 <code>A+B</code>, you would use the column <code>TrainingA+BS2Prob</code>.</p>
-<p>  </p>
+<p> </p>
 <p>The default <code>Response</code> key for all S1s can be specified in <code>Parameters.csv</code>. We can also, however, specify different responses for different S1s by adding a Response column to the <code>Phases.csv</code> file. For example, to specify that the left arrow key is the correct response for the S1 <code>Red</code> in <code>Phase 1</code>, but that the right arrow is correct for <code>White</code>, you would write as in Table .</p>
 <table>
 <caption>A <code>Phases.csv</code> specifying different responses for S1s Red and White in Phase 1. </caption>
@@ -747,7 +753,7 @@
 </tbody>
 </table>
 <p>Note also that on classical trials, the <code>ResponseTimeMin</code>/<code>Max</code> features are disabled (see ). The S2 (if any) is presented only once at the end of the trial, so it is irrelevant when a subject responds.</p>
-<p>  </p>
+<p> </p>
 <p>Instructions or other longish text can be displayed with the textfile stimulus type. For example, to include both a start and an end message (say a 'thank you' or similar) you can use <code>Phases.csv</code> and <code>Stimuli.csv</code> file like those in Tables  and  to include the presentation of text files that are displayed until the subject responds once. As you see in these tables, the display of instructions is construed simply as a stimulus that stays on for a long time (here 10 minutes), unless the subject performs the required response (which, by default, is the space bar). The Start.txt and End.txt files will be looked for in the Materials folder of the experiment. Note the column MaxResponses in <code>Phases.csv</code>, which makes sure the user only has to press the space bar (the default response) once to move on, even if a larger number of responses is allowed for actual experimental trials.</p>
 <table>
 <caption>A <code>Phases.csv</code> file for displaying to subjects instructions and a final message (see also Table ). </caption>
@@ -809,7 +815,7 @@
 </tbody>
 </table>
 <p></p>
-<p>  </p>
+<p> </p>
 <p>When you run an experiment with alex, data are saved in the Data folder (which alex creates if it is not found) in CSV files named with group names and subject numbers, e.g., <code>Data/Training-1.csv</code> for the first subject of group <code>Training</code>. These files have a header followed by one data line per response. This is so that each line identifies all variables it pertains to (so called &quot;long format&quot; in statistical software) and can be loaded easily into statistical software without having to manually add data.</p>
 <p>The first few columns of each data line consist of the hostname, followed by the group, subject number, and pertinent treatments as specified in the <code>Groups.csv</code> line for the particular subject. The remaining columns are as follows:</p>
 <ul>
@@ -836,7 +842,7 @@
 <p>In addition to double quotes in CSV design files (see the footnote below Table ), alex requires final line endings in these files. If a design file lacks a newline at the very end, alex will exclude the last row when reading in this file, resulting in obvious errors. Most spreadsheet software saves CSV files with this final newline, but be sure to check for this if you encounter any problems with running your experiment.</p>
 <p>There is another error that will appear mysterious to the uninitiated: the screen remains black and alex hangs forever. The reason is that alex uses a lock system on the <code>Groups.csv</code> file to prevent concurrent instances of alex from running the same subject. The lock is held for as little as possible, but if you interrupt alex at a critical time, or if alex crashes for any reason before the lock is released, subsequent instances of alex will wait forever for the lock to be released. In these cases, you can simply delete the lock file, which is <code>Groups.csv.lck</code> in the Design folder.</p>
 <p>Presently, alex performs some checks at startup, but some errors are caught only as they occur while running the experiment. We advise to always run the experiment a few times before putting it into production. If you think errors are due to bugs in alex, please write us at the address . Also do contact us if you think that your design files are correct but the experiment does not run as you expect.</p>
-<p>  </p>
+<p> </p>
 <p>Please send suggestions to improve alex or this manual to Stefano Ghirlanda, drghirlanda@gmail.com.</p>
 <div class="footnotes">
 <hr />

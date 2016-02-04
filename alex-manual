@@ -1,33 +1,18 @@
 #!/usr/local/bin/pebl-language
 
 define Start( par ) {
-
-  ## AlexManual can be in a number of places:
-  dirs <- [ "/usr/share/alex/",       # Linux
-            "/usr/local/share/alex/", # OS X
-            "C:\Program Files\alex\"  # Windows
-          ]
-  ## Here we find out where:
-  found <- 0
-  loop( gD, dirs ) {
-    gAlexDir <- gD
-    if( IsDirectory( gD ) ) {
-      found <- 1
-      Print( gAlexDir + " found!" )
-      break
-    } else {
-      Print( gAlexDir + " not found, moving on" )
-    }
-  }
-  if( not found ) {
-    SignalFatalError( "Cannot find "+gAlexDir+" anywhere" )
-  }
+  
+  ## Skip directory search, paths were hardcoded anyway
 
   if( GetSystemType() == "WINDOWS" ) {
-    SystemCall( "start "+gAlexDir+"/AlexManual.pdf" )
+    manualDir <- gQuote+"C:\Program Files\alex\Docs\AlexManual.pdf"+gQuote
+    SystemCall( "start "+gQuote+gQuote+" "+manualDir )
   } elseif ( GetSystemType() == "OSX" ) {
-    SystemCall( "open "+gAlexDir+"/AlexManual.pdf &" )
+    manualDir <- "/usr/local/share/alex/AlexManual.pdf"
+    SystemCall( "open "+manualDir+" &" )
   } else { # Linux
-    SystemCall( "xdg-open "+gAlexDir+"/AlexManual.pdf &" )
+    manualDir <- "/usr/share/alex/AlexManual.pdf"
+    SystemCall( "xdg-open "+manualDir+" &" )
   }
+
 }
