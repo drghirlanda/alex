@@ -167,19 +167,9 @@ define Start( par ) {
     "ID","Sex","Age","Race","Time","Phase","Trial","S1","S1Duration","S1On",
     "S2","S2Duration","S2On","S2Prob","Response","RT","S2Pres","Key"] ) )
 
-  ## Run experimental phases. We loop through all elements of the
-  ## Phase column in Phases.csv. Phase p is run with RunPhase( p ),
-  ## and we keep track of the phases already run in the alreadyRun
-  ## list. The reason is that each phase name appears multiple times
-  ## in the Phase column when the phase features multiple
-  ## stimuli. RunPhase() looks for all stimuli pertaining to a phase,
-  ## so we have to call it only once per phase.
-  alreadyRun <- []
-  loop( p, Lookup("Phase",gPhaseHeader,gPhases)  ){
-    if( not Sum( Match( alreadyRun, p ) ) ) {
+  ## Run experimental phases:
+  loop( p, FindPhaseOrder()  ){
       RunPhase( p )
-      PushOnEnd( alreadyRun, p )
-    }
   }
 
   FileClose( gDataFile )
@@ -189,6 +179,31 @@ define Start( par ) {
   ShowCursor( 1 )
 }
 
+# Determine the order of phases for the current subject. If no
+# PhaseOrder is found in Groups.csv (loaded as gSubject and
+# gSubjectHeader), the order of phases in Phases.csv is used.
+define FindPhaseOrder() {
+  knownPhases <- Lookup("Phase",gPhaseHeader,gPhases)
+  phaseOrder <- Lookup("PhaseOrder",gSubjectHeader,gSubject)
+  if( Length(phaseOrder)==0 ) { # not found
+    phaseOrder <- []
+    loop( p, knownPhases ) {
+      if( not Sum( Match( phaseOrder, p ) ) ) {
+        PushOnEnd( phaseOrder, p )
+      }
+    }
+  } else { # found, as a string to split at '+' characters
+    phaseOrderString <- Nth( phaseOrder, 2 )
+    phaseOrder <- SplitString( phaseOrderString, "+" )
+    # Check that all phases exist:
+    loop( p, phaseOrder ) {
+      if( not Sum( Match( knownPhases, p ) ) ) {
+        Message( "Phase "+p+" requested in Groups.csv but absent from Phases.csv" )
+      }
+    }
+  }
+  return phaseOrder
+}
 
 ########################################################################
 #                                                                      #
