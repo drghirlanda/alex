@@ -5,7 +5,8 @@ Version: 0.1
 Authors@R: c(person("Stefano", "Ghirlanda", role = c("aut","cre"),
                     email = "drghirlanda@gmail.com") )
 Description: Functions to read data from the alex software.
-Depends: R (>= 2.2.0)
+Depends:
+    R (>= 2.2.0)
 LazyLoad: yes
 LazyData: yes
 License: GPL-2
@@ -13,3 +14,4 @@ Author: Stefano Ghirlanda [aut, cre]
 Maintainer: Stefano.Ghirlanda <drghirlanda@gmail.com>
 NeedsCompilation: no
 Packaged: 2015-07-02 17:16:12 UTC; stefano
+RoxygenNote: 5.0.1
