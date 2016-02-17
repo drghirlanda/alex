@@ -405,7 +405,6 @@ define ReadParameters() {
 
 define RunPhase( phaseName ) {
   MyLog( "RunPhase: starting phase "+phaseName )
-  DisplayBackground( phaseName )
 
   # Get stimulus settings for this phase. Each line in Phases.csv
   # contains a stimulus entry for a specific phase. Using
@@ -458,6 +457,8 @@ define RunPhase( phaseName ) {
     trialOrder <- []
   }
   MyLog( "RunPhase: constructed trial order: " + trialOrder )
+
+  DisplayBackground( phaseName )
 
   ## Now we are ready to run all trials:
   maxTrial <- Length( trialStimuli )
