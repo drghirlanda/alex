@@ -36,8 +36,7 @@ done
 
 # create R package and install it
 cd R
-R -e 'if("devtools" %in% rownames(installed.packages()) == FALSE)
-     {install.packages("devtools", repos="http://cran.rstudio.com")}'
+R -e 'if("devtools" %in% rownames(installed.packages()) == FALSE) { install.packages("devtools", repos="http://cran.rstudio.com") }'
 R -e 'setwd("alex"); library(devtools); document()'
 R CMD build alex
 R CMD INSTALL alex_*.tar.gz

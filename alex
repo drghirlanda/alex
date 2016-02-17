@@ -73,10 +73,15 @@ define Start( par ) {
 
   ## Read other Design files. These must come after the basic
   ## initializations above to be able to display error messages if
-  ## needed.
+  ## needed. The message is displayed after ReadSubject() because the
+  ## log file is created there.
   ReadSubject()
+  msg <- Message( "Preparing the experiment...", -1 )  
   ReadPhases()     
   ReadStimuli()    
+  RemoveObject( msg, gWindow )
+  Draw()
+  Message( "Running subject "+Nth(gSubjectInfo,2)+" in group "+Nth(gSubjectInfo,1), 0 )
 
   # We can use logging only after ReadSubject() and ReadParameters():
   MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
@@ -180,12 +185,12 @@ define Start( par ) {
 }
 
 # Determine the order of phases for the current subject. If no
-# PhaseOrder is found in Groups.csv (loaded as gSubject and
+# PhaseOrder is found in Groups.csv (loaded as gSubjectInfo and
 # gSubjectHeader), the order of phases in Phases.csv is used.
 define FindPhaseOrder() {
   knownPhases <- Lookup("Phase",gPhaseHeader,gPhases)
-  phaseOrder <- Lookup("PhaseOrder",gSubjectHeader,gSubject)
-  if( Length(phaseOrder)==0 ) { # not found
+  phaseOrder <- Lookup("PhaseOrder",gSubjectHeader,gSubjectInfo)
+  if( IsList(phaseOrder) ) { # not found
     phaseOrder <- []
     loop( p, knownPhases ) {
       if( not Sum( Match( phaseOrder, p ) ) ) {
@@ -193,8 +198,7 @@ define FindPhaseOrder() {
       }
     }
   } else { # found, as a string to split at '+' characters
-    phaseOrderString <- Nth( phaseOrder, 2 )
-    phaseOrder <- SplitString( phaseOrderString, "+" )
+    phaseOrder <- SplitString( phaseOrder, "+" )
     # Check that all phases exist:
     loop( p, phaseOrder ) {
       if( not Sum( Match( knownPhases, p ) ) ) {
@@ -250,9 +254,6 @@ define ReadSubject() {
     UnlockFile( subjectsFile )
     Message( "It looks like all subjects have been run!", 1 )
   }
-
-  ## This is at the end because Message uses logging:
-  Message( "Running subject "+Nth(gSubjectInfo,2)+" in group "+Nth(gSubjectInfo,1), 0 )
 }
 
 define ReadStimuli() {
@@ -1118,8 +1119,10 @@ define MyLog( logline ) {
 }
 
 define Message( text, fatal ) {
-  if( fatal ) {
+  if( fatal == 1 ) {
     instr <- " (press space to quit)"
+  } elseif( fatal == -1 ) {
+    instr <- " (please stand by)"
   } else {
     instr <- " (press space to continue)"
   }
@@ -1128,13 +1131,16 @@ define Message( text, fatal ) {
   AddObject( box, gWindow )
   Move( box, .05*gVideoWidth, .05*gVideoHeight )
   Draw()
-  WaitForKeyDown(" ")
-  RemoveObject( box, gWindow )
-  Draw()
   MyLog( "Message: "+ text )
-  if( fatal ) {
+  if( fatal != -1 ) {
+    WaitForKeyDown(" ")
+    RemoveObject( box, gWindow )
+    Draw()
+  }
+  if( fatal == 1 ) {
   MyLog( "Message: terminating" )
     SignalFatalError( "alex: " + text )
   }
+  return box
 }    
 
