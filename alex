@@ -81,7 +81,7 @@ define Start( par ) {
   ReadStimuli()    
   RemoveObject( msg, gWindow )
   Draw()
-  Message( "Ready to run subject "+Nth(gSubjectInfo,2)+" in group "+Nth(gSubjectInfo,1), 0 )
+  Message( "Ready to run subject "+Nth(gSubjectInfo,1)+"-"+Nth(gSubjectInfo,2), 0 )
 
   # We can use logging only after ReadSubject() and ReadParameters():
   MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
