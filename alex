@@ -545,6 +545,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     classical <- 0
     s2Pres <- "F" # changed later if S2 schedulued
   }
+  # Now we split 'response' on '+' to get a list of valid responses:
+  responseList <- SplitString( response, "+" )
   # This variable keeps track of whether an instrumental trial has
   # been lengthened or not because the US had to be shown near the end
   # of the trial. It is checked later on before deciding to lengthen a
@@ -577,8 +579,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       rt <- "NA"
     } else {
       rt <- GetTime() - startTime # Time since trial start
-      # Next line figures out whether response is valid:
-      if( rt>=rtMin and (rt<=rtMax or rtMax==0) and key==response ) {
+      # Next we figure out whether response is valid:
+      if( rt>=rtMin and (rt<=rtMax or rtMax==0) and IsMember(key,responseList) ) {
         valid <- 1
         validCount <- validCount + 1
 	MyLog( "RunTrial: valid response on key '"+key+"' at rt="+rt )
@@ -589,7 +591,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         rt <- "NA"
       }
       if( (not classical) and valid ) { # Schedule S2 (possibly)
-        if( Random() < rewardProb and key == response ) {
+        if( Random() < rewardProb and IsMember(key,responseList) ) {
           s2Pres <- "T"
           if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
 	    times <- SetTimer( GetTime() + s1s2Interval, s2 )
