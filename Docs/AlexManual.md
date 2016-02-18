@@ -351,6 +351,31 @@ groups, each receiving a unique combination of PinkColor and
 RedParameters (see Table
 \ref{stimuli-color-parameters}). \label{subjects-color-parameters}
 
+A `Groups.csv` file can also contain a `PhaseOrder` columns. This
+mechanism provides the most flexible allocation of phases to groups,
+include leaving some phases out or rearranging the order of phases for
+different groups. The syntax is simple: `PhaseOrder` should contain a
+`+`-separated list of phases, each of which has been defined in
+`Phases.csv`. Table \ref{groups-phaseorder} provides an example. Note
+that using the `PhaseOrder` mechanism makes it possible to list phases
+in `Phases.csv` in any order. Which phases are run, and in which
+order, is determined entirely by the `PhaseOrder` parameter. (It is
+possible to leave `PhaseOrder` empty for one or more groups, in which
+case pahses are run in the order they appear in `Phases.csv`, see
+above.)
+
+
+Group Size PhaseOrder
+----- ---- ----------
+1     10   Task1+Task2
+2     10   Task2+Task1
+3     10   Task1
+
+Table: A `Groups.csv` illustrating the `PhaseOrder` parameter. Three
+experimental groups are defined. Groups 1 and 2 differ in the order in
+which tasks 1 and 2 are administered; group 3 is administered only
+task 1. (Phases containing startup or end messages do not appear in
+the table, but must be included if desired.) \labe{groups-pahseorder}
 
 \phantomsection \addcontentsline{toc}{subsection}{The \texttt{Parameters.csv} file}
 \subsection*{The \texttt{Parameters.csv} file} \label{global}

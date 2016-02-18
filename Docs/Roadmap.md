@@ -56,13 +56,6 @@ defined background stimulus or not) could be determined once for all
 and cached in suitable lists.
 
 
-Phase sequences
----------------
-
-We could have a PhaseOrder column in Groups.csv that allows for
-alternate phase sequences as a type of group treatment.
-
-
 Multiple responses
 ------------------
 
