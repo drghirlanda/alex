@@ -6,6 +6,8 @@ This file describes some features that are planned for alex.
 Toward a release
 ----------------
 
+- Implement a rating widget? Rating scale and/or clickable numbers? 
+
 - Document "Onset" stimulus parameter and explain how it makes
   possible to show arbitrary sequences of stimuli as S1 and S2.
 

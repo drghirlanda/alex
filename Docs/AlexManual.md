@@ -375,7 +375,7 @@ Table: A `Groups.csv` illustrating the `PhaseOrder` parameter. Three
 experimental groups are defined. Groups 1 and 2 differ in the order in
 which tasks 1 and 2 are administered; group 3 is administered only
 task 1. (Phases containing startup or end messages do not appear in
-the table, but must be included if desired.) \labe{groups-pahseorder}
+the table, but must be included if desired.) \label{groups-phaseorder}
 
 \phantomsection \addcontentsline{toc}{subsection}{The \texttt{Parameters.csv} file}
 \subsection*{The \texttt{Parameters.csv} file} \label{global}
