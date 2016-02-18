@@ -202,7 +202,7 @@ define FindPhaseOrder() {
     # Check that all phases exist:
     loop( p, phaseOrder ) {
       if( not Sum( Match( knownPhases, p ) ) ) {
-        Message( "Phase "+p+" requested in Groups.csv but absent from Phases.csv" )
+        Message( "Phase "+p+" requested in Groups.csv but absent from Phases.csv", 1 )
       }
     }
   }
