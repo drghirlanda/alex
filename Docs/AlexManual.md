@@ -361,7 +361,7 @@ that using the `PhaseOrder` mechanism makes it possible to list phases
 in `Phases.csv` in any order. Which phases are run, and in which
 order, is determined entirely by the `PhaseOrder` parameter. (It is
 possible to leave `PhaseOrder` empty for one or more groups, in which
-case pahses are run in the order they appear in `Phases.csv`, see
+case phases are run in the order they appear in `Phases.csv`, see
 above.)
 
 
