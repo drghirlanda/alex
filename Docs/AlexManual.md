@@ -411,9 +411,13 @@ Table: A sample `Parameters.csv` file with default values.
   intertrial interval. Each intertrial interval will be drawn between
   these values with uniform distribution.
 
-- **Response** is the key subjects are instructed to press if they want
-  to respond. Note that this can also be set on a per-trial basis,
-  see \hyperref[responses]{here}.
+- **Response** is the key subjects are instructed to press if they
+  want to respond. Note that this can also be set on a per-trial
+  basis, see \hyperref[responses]{here}. It is also possible to
+  specifiy a *list* of admissible responses, separated by '+'
+  signs. For example, to consturct a seven-point rating scale one can
+  use '1+2+3+4+5+6+7' as Response parameter. Again, this can be set on
+  a per-trial basis.
 
 - **ResponseTimeMin** and **ResponseTimeMax** indicate when, within a
     trial a response is considered *valid*. Valid responses are
@@ -552,6 +556,56 @@ other stimuli, you have to define the stimulus before all those that are
 intended to appear on top of it. If the order is incorrect, the intended
 backdrop will instead obscure the other stimuli.
 
+\phantomsection \addcontentsline{toc}{subsection}{Sequences of stimuli}
+\subsection*{Sequences of stimuli}
+
+It is possible to present *sequences* of stimuli as both S1 and
+S2. The way to do this is to use the 'Onset' stimulus parameter. The
+onset of a stimulus specifies when the stimulus is displayed, counting
+from the beginning of the trial. If no onset is given, it is
+automatically set to 0, i.e., the stimulus appears immediately at the
+beginning of a trial. Using an onset greater than 0, however, enables
+us to display the stimulus at a later time. For example, if we want a
+sequence of a red and white square, each lasting 1 second, we can use:
+
+Name   Type   Parameters Color XOffset YOffset Duration Onset
+----   ----   ---------- ----- ------- ------- -------- -----
+Red    square 50         red   0       0       1000
+White  square 50         white 0       0       1000     1000
+
+Table: How to set up a sequence of stimuli Red+White.
+
+We would then use a compound stimulus `Red+White` in the `Phases.csv`
+file. This will cause alex to display Red immediately at the start of
+the trial, then turn it off after one second. The turning off of Red
+coincides with the turning on of White one second into the trial.
+
+We can also insert a gap between the two stimuli by specifying a
+larger onset for the second one. For example, an onset for White of
+1500 would result in a half-second gap between Red and White.
+
+Note that, with onsets, stimuli become specific to a position on the
+screen *and* to a position in time. Therefore, to use both a red-white
+and a white-red sequence requires defining two versions of each
+stimulus with different onsets:
+
+Name   Type   Parameters Color XOffset YOffset Duration Onset
+----   ----   ---------- ----- ------- ------- -------- -----
+Red1   square 50         red   0       0       1000
+White1 square 50         white 0       0       1000     
+Red2   square 50         red   0       0       1000     1000
+White2 square 50         white 0       0       1000     1000
+
+Table: How to set up stimuli to construct both red-white and white-red
+sequences.
+
+In `Phases.csv` we would then use `Red1+White2` for the red-white
+sequence and `White1+Red2` for white-red. Note that the `+` operation
+in `Phases.csv` is insensitive to time. That is, both `White1+Red2`
+and `Red2+White1` result in a white-red sequence, because the temporal
+parameters of the stimuli are set exclusively in `Stimuli.csv`. (Of
+course, writing `White1+Red2` is preferable as it displays clearly to
+us humans what we want to do.)
 
 \phantomsection \addcontentsline{toc}{section}{More about phases}
 \section*{More about phases}

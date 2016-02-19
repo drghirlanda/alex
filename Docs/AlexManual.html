@@ -513,7 +513,7 @@
 <ul>
 <li><p><strong>S1S2Interval</strong> is the interval between S1 offset and S2 onset. (It can be modified per-S2 by defining S2's with different onset time.)</p></li>
 <li><p><strong>MinITI</strong> and <strong>MaxITI</strong> are the minimum and maximum values of the intertrial interval. Each intertrial interval will be drawn between these values with uniform distribution.</p></li>
-<li><p><strong>Response</strong> is the key subjects are instructed to press if they want to respond. Note that this can also be set on a per-trial basis, see .</p></li>
+<li><p><strong>Response</strong> is the key subjects are instructed to press if they want to respond. Note that this can also be set on a per-trial basis, see . It is also possible to specifiy a <em>list</em> of admissible responses, separated by '+' signs. For example, to consturct a seven-point rating scale one can use '1+2+3+4+5+6+7' as Response parameter. Again, this can be set on a per-trial basis.</p></li>
 <li><p><strong>ResponseTimeMin</strong> and <strong>ResponseTimeMax</strong> indicate when, within a trial a response is considered <em>valid</em>. Valid responses are processed to possibly trigger the presentation of S2. Invalid responses cannot trigger S2.</p></li>
 <li><p> <strong>MaxResponses</strong> is the maximum number of response a subject is allowed to make in one trial. There are essentially two useful settings. If you set this to <code>1</code>, the trial ends with the first response (the S2 is presented if appropriate, of course). If you set it to an unrealistically large value, say <code>1000</code>, you can record any number of responses per trial, each of which may result in an S2 being presented. Note that you can set <code>MaxReponses</code> to a different value for different trial types, by including a <code>MaxResponses</code> column in <code>Phases.csv</code> (see the  for an example). If a <code>MaxResponses</code> column exists, but the value is empty for some stimuli, the <code>MaxResponses</code> value in <code>Parameters.csv</code> will be looked up. If <code>MaxResponses</code> is not set there, it is given a default value of 1.</p></li>
 <li><p><strong>MaxInvalid</strong> is the maximum number of <em>invalid</em> responses a subject is allowed to make in one trial. If you set this to 0 or 1, an invalid response terminates the trial (this is the default).</p></li>
@@ -663,6 +663,106 @@
 <p> </p>
 <p>It is sometimes desirable to have a stimulus or combination of stimuli present at all times during a phase, including interstimulus intervals, for example as a background on which others are superimposed. A stimulus whose name starts with <code>Background</code> followed by the name of a phase will be displayed for the entire duration of that phase. You can define many such stimuli, e.g., <code>BackgroundPhase1-1</code> and <code>BackgroundPhase1-2</code>.</p>
 <p><strong>Note:</strong> The rules for stimulus superposition of always-present stimuli are the same as for other stimuli, see . This means that if you want to use a stimulus as a backdrop for other stimuli, you have to define the stimulus before all those that are intended to appear on top of it. If the order is incorrect, the intended backdrop will instead obscure the other stimuli.</p>
+<p> </p>
+<p>It is possible to present <em>sequences</em> of stimuli as both S1 and S2. The way to do this is to use the 'Onset' stimulus parameter. The onset of a stimulus specifies when the stimulus is displayed, counting from the beginning of the trial. If no onset is given, it is automatically set to 0, i.e., the stimulus appears immediately at the beginning of a trial. Using an onset greater than 0, however, enables us to display the stimulus at a later time. For example, if we want a sequence of a red and white square, each lasting 1 second, we can use:</p>
+<table>
+<caption>How to set up a sequence of stimuli Red+White.</caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Type</th>
+<th align="left">Parameters</th>
+<th align="left">Color</th>
+<th align="left">XOffset</th>
+<th align="left">YOffset</th>
+<th align="left">Duration</th>
+<th align="left">Onset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Red</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">red</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1000</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">White</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">white</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1000</td>
+<td align="left">1000</td>
+</tr>
+</tbody>
+</table>
+<p>We would then use a compound stimulus <code>Red+White</code> in the <code>Phases.csv</code> file. This will cause alex to display Red immediately at the start of the trial, then turn it off after one second. The turning off of Red coincides with the turning on of White one second into the trial.</p>
+<p>We can also insert a gap between the two stimuli by specifying a larger onset for the second one. For example, an onset for White of 1500 would result in a half-second gap between Red and White.</p>
+<p>Note that, with onsets, stimuli become specific to a position on the screen <em>and</em> to a position in time. Therefore, to use both a red-white and a white-red sequence requires defining two versions of each stimulus with different onsets:</p>
+<table>
+<caption>How to set up stimuli to construct both red-white and white-red sequences.</caption>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Type</th>
+<th align="left">Parameters</th>
+<th align="left">Color</th>
+<th align="left">XOffset</th>
+<th align="left">YOffset</th>
+<th align="left">Duration</th>
+<th align="left">Onset</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Red1</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">red</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1000</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">White1</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">white</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1000</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Red2</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">red</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1000</td>
+<td align="left">1000</td>
+</tr>
+<tr class="even">
+<td align="left">White2</td>
+<td align="left">square</td>
+<td align="left">50</td>
+<td align="left">white</td>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">1000</td>
+<td align="left">1000</td>
+</tr>
+</tbody>
+</table>
+<p>In <code>Phases.csv</code> we would then use <code>Red1+White2</code> for the red-white sequence and <code>White1+Red2</code> for white-red. Note that the <code>+</code> operation in <code>Phases.csv</code> is insensitive to time. That is, both <code>White1+Red2</code> and <code>Red2+White1</code> result in a white-red sequence, because the temporal parameters of the stimuli are set exclusively in <code>Stimuli.csv</code>. (Of course, writing <code>White1+Red2</code> is preferable as it displays clearly to us humans what we want to do.)</p>
 <p> </p>
 <p>As with stimuli, phase parameters can be set to differ across groups by using <code>*</code> notation. For example, let's suppose we want to investigate how discrimination learning varies with reward probability. We could use the <code>Phases.csv</code> file in Table , which employs <code>*</code> notation for the <code>S2Prob</code> variable, and the <code>Groups.csv</code> file in Table , which provides the information that is &quot;starred&quot; in <code>Phases.csv</code>.</p>
 <table>
