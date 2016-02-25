@@ -209,6 +209,7 @@ define FindPhaseOrder() {
   return phaseOrder
 }
 
+
 ########################################################################
 #                                                                      #
 # This section contains the functions that read files in the Design    #
@@ -295,7 +296,7 @@ define ReadStimuli() {
         c1 <- gColor
       }
       if( Length(colors) == 2 ) {
-        c2name <- Rest( colors )
+        c2name <- Last( colors )
         if( StringLength( c2name ) ) {
           c2 <- MakeColorRGBString( c2name )
         } else {
@@ -416,6 +417,8 @@ define ReadParameters() {
 # The following two functions set the experiment in motion, with       #
 # RunPhase responsible for coordinating trials within a phase, and     #
 # RunTrial for coordinating the events within a single trial.          #
+# (RunITI provides intertrial intervals, recording any subject         #
+# responses during these.)                                             #
 #                                                                      #
 ########################################################################
 
@@ -583,28 +586,28 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       if( rt>=rtMin and (rt<=rtMax or rtMax==0) and IsMember(key,responseList) ) {
         valid <- 1
         validCount <- validCount + 1
-	MyLog( "RunTrial: valid response on key '"+key+"' at rt="+rt )
+        MyLog( "RunTrial: valid response on key '"+key+"' at rt="+rt )
       } else {
         valid <- 0
-	invalidCount <- invalidCount + 1
-	MyLog( "RunTrial: invalid response on key '"+key+"' at rt="+rt )
+        invalidCount <- invalidCount + 1
+        MyLog( "RunTrial: invalid response on key '"+key+"' at rt="+rt )
         rt <- "NA"
       }
       if( (not classical) and valid ) { # Schedule S2 (possibly)
         if( Random() < rewardProb and IsMember(key,responseList) ) {
           s2Pres <- "T"
           if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
-	    times <- SetTimer( GetTime() + s1s2Interval, s2 )
-	    onTime <- Nth(times, 1)
-	    offTime <- Nth(times, 2)
-	    s2Duration <- offTime - onTime
-	    # Lengthen trial if necessary, but only if it has not been
-	    # lengthened already:
-	    if( offTime > endTime and notLengthened ) {
+            times <- SetTimer( GetTime() + s1s2Interval, s2 )
+            onTime <- Nth(times, 1)
+            offTime <- Nth(times, 2)
+            s2Duration <- offTime - onTime
+            # Lengthen trial if necessary, but only if it has not been
+            # lengthened already:
+            if( offTime > endTime and notLengthened ) {
               endTime <- offTime
-	      notLengthened <- 0
-	      MyLog( "RunTrial: lengthening instrumental trial to show S2 completely" )
-	    }
+              notLengthened <- 0
+              MyLog( "RunTrial: lengthening instrumental trial to show S2 completely" )
+            }
           }
         }
       }
@@ -623,10 +626,9 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
         response, rt, s2Pres, key] ) )
-	# "Hostname", gSubjectHeader, "ID", "Sex", "Age", "Race",
-	# "Time", "Phase", "Trial", "S1", "S1Duration", "S1On", "S2",
-	# "S2Duration", "S2On", "S2Prob", "Response", "RT", "S2Pres",
-	# "Key"
+      # "Hostname", gSubjectHeader, "ID", "Sex", "Age", "Race", "Time",
+      # "Phase", "Trial", "S1", "S1Duration", "S1On", "S2", "S2Duration",
+      # "S2On", "S2Prob", "Response", "RT", "S2Pres", "Key"
     }
 
     ## We need to UpdateTimers() now so that the if block that comes
@@ -636,7 +638,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     ## End trial if s2 is off and valid or invalid max responses reached
     if( TimerOn(s2)=="F" ) {
       if( validCount >= maxResponses ) {
-        MyLog( "RunTrial: maximum valid responses reached: endindg trial" )
+        MyLog( "RunTrial: maximum valid responses reached: ending trial" )
         ExpireTimers()
         continue <- 0
       }
@@ -682,6 +684,7 @@ define RunITI( phaseName, trial ) {
       "NA", "NA", "F", "NA", "NA", "NA", "F", "<timeout>"] ) ) 
   }
 }
+
 
 ########################################################################
 #                                                                      #
@@ -788,11 +791,14 @@ define Resolve( stimulus, field, value ) {
       # This is the stimulus to be looked up:
       s <- SubString( v, 2, StringLength(v)-1 )
       v2 <- LookUpStimulus( s, field )
-      # We are sure we are passing only one field to Resolve so we
-      # take First to get rid of a nested list that would mess up the
-      # returned data:
-      r <- First( Resolve( s, field, v2 ) )
-      PushOnEnd( results, r )
+      # Since v2 may itself be multiple things separated by '+',
+      # we loop over the resolved values in order not to ignore any.
+      # (e.g., a ':'-referenced text stimulus that specifies foreground
+      # and background color with a '+')
+      rList <- Resolve( s, field, v2 )
+      loop( r, rList ) {
+        PushOnEnd( results, r )
+      }
     } elseif( v == "*" ) {
       r <- Lookup( stimulus+field, gSubjectHeader, gSubjectInfo )
       if( IsList(r) ) { # Nothing found
@@ -931,7 +937,7 @@ define UndisplayBackground( phaseName ) {
 # to create the timer structure.
 #
 # A timer's duration is figured out as follows. First we call
-# LookupStimulus(). If this does not find anyting specific, it calls
+# LookupStimulus(). If this does not find anything specific, it calls
 # Parameter(). If this does not find anything, it returns "NA", which
 # is returned back by LookupStimulus() to the Resolve() call wrapped
 # around it. Sorry for the complication.
@@ -1144,5 +1150,4 @@ define Message( text, fatal ) {
     SignalFatalError( "alex: " + text )
   }
   return box
-}    
-
+}
