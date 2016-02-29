@@ -896,7 +896,7 @@ define Display( stimulus ) {
     ## Figure out whether the stimulus has already been created. If
     ## not (due to the JustInTime parameter), do it now:
     if( Parameter("JustInTime") == "1" ) {
-      Makestimulus( stimulus )
+      Makestimulus( stimName )
     }
     s <- Nth( gStimuli, i )
     if( IsAudioOut(s) ) {

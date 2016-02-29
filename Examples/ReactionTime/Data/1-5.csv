@@ -1,0 +1,10 @@
+Hostname,Group,Subject,ID,Sex,Age,Race,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,S2Pres,Key
+helix,1,5,NA,NA,NA,NA,3852,Start,1,ITI,1144.42,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,4894,Start,1,Start,600000,T,NA,NA,F,NA,<space>,NA,F,<space>
+helix,1,5,NA,NA,NA,NA,6770,Test,1,ITI,1821.48,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,7773,Test,1,Circle,1000,T,NA,NA,F,NA,<space>,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,8065,Test,2,ITI,738.714,T,NA,NA,F,NA,NA,270,F,<space>
+helix,1,5,NA,NA,NA,NA,8775,Test,2,Circle,1000,T,NA,NA,F,NA,<space>,240,F,<space>
+helix,1,5,NA,NA,NA,NA,9665,Test,3,ITI,1571.19,T,NA,NA,F,NA,NA,863,F,<lctrl>
+helix,1,5,NA,NA,NA,NA,10067,Test,3,ITI,1571.19,T,NA,NA,F,NA,NA,1265,F,<lalt>
+helix,1,5,NA,NA,NA,NA,10209,Test,3,ITI,1571.19,T,NA,NA,F,NA,NA,1407,F,<rshift>
