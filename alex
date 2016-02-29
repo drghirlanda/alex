@@ -280,10 +280,21 @@ define ReadStimuli() {
     Message("Duplicate in stimulus names: "+gStimNames, 1)
   }
   ## Now we are ready to create the stimulus objects
-  gStimuli <- []
   n <- Length( gStimNames )
-  loop( i, Sequence(1,n,1) ) {
-    stimulus <- Nth( gStimNames, i )
+  if( ToNumber(Parameter("JustInTime")) == 0 ) {
+    gStimuli <- []
+    loop( i, Sequence(1,n,1) ) {
+      MakeStimulus( Nth( gStimNames, i ) )
+    }
+  } else {
+    gStimuli <- Repeat( "NA", n )
+  }
+}
+
+define MakeStimulus( stimulus ) {
+    n <- Length(gStimNames)
+    # Stimulus index in gStimuli:
+    i <- Lookup( stimulus, gStimNames, Sequence(1,n,1) )
     type <- Nth( gStimTypes, i )
     if( StringLength( Nth( gStimColors, i ) ) ) {
       ## Determine colors:
@@ -378,6 +389,7 @@ define ReadStimuli() {
     }
   }
 }
+
 
 define ReadPhases() {
   filename <- gWD + "Design/Phases.csv"
@@ -868,6 +880,11 @@ define Display( stimulus ) {
     if( IsList(i) ) {
       Message( "Cannot find stimulus: '" + stimName + "'", 1 )
     }
+    ## Figure out whether the stimulus has already been created. If
+    ## not (due to the JustInTime parameter), do it now:
+    if( ToNumber(Parameter("JustInTime")) == 1 ) {
+      Makestimulus( stimulus )
+    }
     s <- Nth( gStimuli, i )
     if( IsAudioOut(s) ) {
       Playbackground( s )
@@ -888,6 +905,10 @@ define Undisplay( stimulus ) {
     } else {
       Hide( s )
     }
+    ## If we are doing just-in-time loading, we remove the object:
+    if( ToNumber(Parameter("JustInTime")) == 1 ) {
+      RemoveObject( s )
+    }   
   }
   Draw()
 }

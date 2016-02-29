@@ -18,9 +18,11 @@ read.alex <- function( data.dir=getwd() ) {
   for( i in grep( "\\.csv$", filenames ) ) {
     message( paste("alex: reading", filenames[i] ) )
     subject.dt <- data.table( read.csv( filenames[i] ) )
+    print( names(subject.dt) )
     presentation.and.keynum( subject.dt )
     dt <- rbind( dt, subject.dt )
   }
+  dt <- as.data.table( dt )
   ## make sure phase factor is ordered as it appears in the data,
   ## rather than alphabetically:
   dt$Phase <- factor( dt$Phase,

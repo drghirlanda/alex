@@ -6,10 +6,12 @@
 #' @return A list with Presentation and KeyNum members
 #' @examples
 #' This function is meant for internal use
+#' @export
 presentation.and.keynum <- function( dt ) {
   require(data.table)
   for( p in unique(dt$Phase) ) {
-    for( s in unique(dt[ Phase==p, S1 ]) ) {
+    print( p )
+    for( s in setdiff(unique(dt[ Phase==p, S1 ]), "ITI") ) {
       dt[ Phase==p & S1==s, Presentation := .GRP, by=Trial ]
       dt[ Phase==p & S1==s, KeyNum := 1:.N, by=Trial ]
     }
