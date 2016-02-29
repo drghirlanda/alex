@@ -388,7 +388,6 @@ define MakeStimulus( stimulus ) {
       AddObject( s, gWindow )
       Hide( s )
     }
-  }
 }
 
 
