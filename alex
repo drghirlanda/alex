@@ -282,12 +282,14 @@ define ReadStimuli() {
   }
   ## Now we are ready to create the stimulus objects
   n <- Length( gStimNames )
-  if( ToNumber(Parameter("JustInTime")) == 0 ) {
+  if( Parameter("JustInTime") != "1" ) {
     gStimuli <- []
+    MyLog( "ReadStimuli: Creating stimuli" )
     loop( i, Sequence(1,n,1) ) {
       MakeStimulus( Nth( gStimNames, i ) )
     }
   } else {
+    MyLog( "ReadStimuli: Deferring stimulus creation" )
     gStimuli <- Repeat( "NA", n )
   }
 }
@@ -329,9 +331,11 @@ define MakeStimulus( stimulus ) {
     y <- y + gVideoHeight/2
     if(  type == "circle" ) {
       r <- ToNumber( First(Resolve(stimulus,"Parameters",Nth(gStimParams,i))) )
+      MyLog( "MakeStimulus: Creating circle with parameters: " + [x,y,r,c1name] )
       s <- Circle( x, y, r, c1, 1 )
     } elseif( type == "square" ) {
       l <- ToNumber( First(Resolve(stimulus,"Parameters",Nth(gStimParams,i))) )
+      MyLog( "MakeStimulus: Creating square with parameters: " + [x,y,l,c1name] )
       s <- Square( x, y, l, c1, 1 )
     } elseif( type == "image" ) {
       p <- Resolve( stimulus, "Parameters", Nth(gStimParams,i) )
@@ -356,20 +360,23 @@ define MakeStimulus( stimulus ) {
       } else {
         Message( "Cannot find image file " + file, 1 )
       }
+      MyLog( "MakeStimulus: Creating image with parameters: " + [file, zoom] )
       s.ZOOMX <- zoom
       s.ZOOMY <- zoom
       Move( s, x, y )
    } elseif( type == "text" ) {
       w <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
       s <- MakeLabel( w, font )
+      MyLog( "MakeStimulus: Creating text with parameters: " + [x, y, w] )
       Move( s, x, y )
-    } elseif( type == "textfile" ) {
+   } elseif( type == "textfile" ) {
       fileName <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
       fileName <- gWD + "Materials/" + fileName
       if( not FileExists( fileName ) ) {
         Message( "Cannot find file: "+fileName, 1 )
       }
       text <- FileReadText( fileName )
+      MyLog( "MakeStimulus: Creating text from file " + fileName )
       s <- MakeTextBox( text, font, .9*gVideoWidth, .9*gVideoHeight )
       Move( s, .05*gVideoWidth, .05*gVideoHeight )
     } elseif( type == "sound" ) {
@@ -380,10 +387,11 @@ define MakeStimulus( stimulus ) {
        } else { # Attempt to load PEBL-provided audio file
          s <- LoadSound( fileName )
        }
+      MyLog( "MakeStimulus: Creating sound from file " + fileName )
     } else {
        Message( "Unsupported stimulus type: "+type, 1 )
     }
-    PushOnEnd( gStimuli, s )
+    SetElement( gStimuli, i, s )
     if( type != "sound" ) { # Sounds don't have to be added to the screen 
       AddObject( s, gWindow )
       Hide( s )
@@ -887,7 +895,7 @@ define Display( stimulus ) {
     }
     ## Figure out whether the stimulus has already been created. If
     ## not (due to the JustInTime parameter), do it now:
-    if( ToNumber(Parameter("JustInTime")) == 1 ) {
+    if( Parameter("JustInTime") == "1" ) {
       Makestimulus( stimulus )
     }
     s <- Nth( gStimuli, i )
@@ -911,8 +919,9 @@ define Undisplay( stimulus ) {
       Hide( s )
     }
     ## If we are doing just-in-time loading, we remove the object:
-    if( ToNumber(Parameter("JustInTime")) == 1 ) {
-      RemoveObject( s )
+    if( Parameter("JustInTime") == "1" ) {
+      MyLog( "Unloading stimulus " + stimulus )
+      RemoveObject( s, gWindow )
     }   
   }
   Draw()
