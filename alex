@@ -283,7 +283,7 @@ define ReadStimuli() {
   ## Now we are ready to create the stimulus objects
   n <- Length( gStimNames )
   if( Parameter("JustInTime") != "1" ) {
-    gStimuli <- []
+    gStimuli <- Repeat( "NA", n )
     MyLog( "ReadStimuli: Creating stimuli" )
     loop( i, Sequence(1,n,1) ) {
       MakeStimulus( Nth( gStimNames, i ) )
@@ -295,109 +295,108 @@ define ReadStimuli() {
 }
 
 define MakeStimulus( stimulus ) {
-    n <- Length(gStimNames)
-    # Stimulus index in gStimuli:
-    i <- Lookup( stimulus, gStimNames, Sequence(1,n,1) )
-    type <- Nth( gStimTypes, i )
-    if( StringLength( Nth( gStimColors, i ) ) ) {
-      ## Determine colors:
-      colors <- Resolve( stimulus, "Color", Nth(gStimColors, i) )
-      c1name <- First( colors )
-      if( StringLength(c1name) ) {
-        c1 <- MakeColorRGBString( c1name )
-      } else {
-        c1 <- gColor
-      }
-      if( Length(colors) == 2 ) {
-        c2name <- Last( colors )
-        if( StringLength( c2name ) ) {
-          c2 <- MakeColorRGBString( c2name )
-        } else {
-          c2 <- gBackgroundColor
-        }
-      } else {
-        c2 <- gBackgroundColor
-      }    
+  n <- Length(gStimNames)
+  # Stimulus index in gStimuli:
+  i <- Lookup( stimulus, gStimNames, Sequence(1,n,1) )
+  type <- Nth( gStimTypes, i )
+  if( StringLength( Nth( gStimColors, i ) ) ) {
+    ## Determine colors:
+    colors <- Resolve( stimulus, "Color", Nth(gStimColors, i) )
+    c1name <- First( colors )
+    if( StringLength(c1name) ) {
+      c1 <- MakeColorRGBString( c1name )
     } else {
       c1 <- gColor
-      c2 <- gBackgroundColor
     }
-    ## Create a font for text stimuli    
-    font <- MakeFont( Parameter("FontName")+".ttf", 0, 
-                      ToNumber(Parameter("FontSize")), c1, c2, 1 )
-    x <- ToNumber( First(Resolve(stimulus,"XOffset",Nth(gStimXOffsets, i))) )
-    y <- ToNumber( First(Resolve(stimulus,"YOffset",Nth(gStimYOffsets, i))) )
-    x <- x + gVideoWidth/2
-    y <- y + gVideoHeight/2
-    if(  type == "circle" ) {
-      r <- ToNumber( First(Resolve(stimulus,"Parameters",Nth(gStimParams,i))) )
-      MyLog( "MakeStimulus: Creating circle with parameters: " + [x,y,r,c1name] )
-      s <- Circle( x, y, r, c1, 1 )
-    } elseif( type == "square" ) {
-      l <- ToNumber( First(Resolve(stimulus,"Parameters",Nth(gStimParams,i))) )
-      MyLog( "MakeStimulus: Creating square with parameters: " + [x,y,l,c1name] )
-      s <- Square( x, y, l, c1, 1 )
-    } elseif( type == "image" ) {
-      p <- Resolve( stimulus, "Parameters", Nth(gStimParams,i) )
-      file <- First( p )
-      if( Length(p) == 2 ) { # Optional 2nd parameter is zoom factor
-        zoom <- ToNumber( Nth( p, 2 ) )
+    if( Length(colors) == 2 ) {
+      c2name <- Last( colors )
+      if( StringLength( c2name ) ) {
+        c2 <- MakeColorRGBString( c2name )
       } else {
-        zoom <- 1
+        c2 <- gBackgroundColor
       }
-      # We look up the file in 4 dirs: this experiment's Materials,
-      # the system-wide Materials, PEBL's image files, and the current
-      # directory (the latter is undocumented, that's just how PEBL's
-      # MakeImage works).
-      fileLocal <- gWD + "Materials/" + file
-      fileAlex <- gAlexDir + file
-      if( FileExists( fileLocal ) ) {
-        s <- MakeImage( fileLocal )
-      } elseif( FileExists( fileAlex ) ) {
-        s <- MakeImage( fileAlex )
-      } elseif( FileExists( file ) ) {
-        s <- MakeImage( file )
-      } else {
-        Message( "Cannot find image file " + file, 1 )
-      }
-      MyLog( "MakeStimulus: Creating image with parameters: " + [file, zoom] )
-      s.ZOOMX <- zoom
-      s.ZOOMY <- zoom
-      Move( s, x, y )
-   } elseif( type == "text" ) {
-      w <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
-      s <- MakeLabel( w, font )
-      MyLog( "MakeStimulus: Creating text with parameters: " + [x, y, w] )
-      Move( s, x, y )
-   } elseif( type == "textfile" ) {
-      fileName <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
-      fileName <- gWD + "Materials/" + fileName
-      if( not FileExists( fileName ) ) {
-        Message( "Cannot find file: "+fileName, 1 )
-      }
-      text <- FileReadText( fileName )
-      MyLog( "MakeStimulus: Creating text from file " + fileName )
-      s <- MakeTextBox( text, font, .9*gVideoWidth, .9*gVideoHeight )
-      Move( s, .05*gVideoWidth, .05*gVideoHeight )
-    } elseif( type == "sound" ) {
-       fileName <- First( Resolve(stimulus, "Parameters", Nth(gStimParams,i)) )
-       dirfileName <- gWD + "Materials/" + fileName
-       if( FileExists( dirfileName ) ) {
-         s <- LoadSound( dirfilename )
-       } else { # Attempt to load PEBL-provided audio file
-         s <- LoadSound( fileName )
-       }
-      MyLog( "MakeStimulus: Creating sound from file " + fileName )
     } else {
-       Message( "Unsupported stimulus type: "+type, 1 )
+      c2 <- gBackgroundColor
+    }    
+  } else {
+    c1 <- gColor
+    c2 <- gBackgroundColor
+  }
+  ## Create a font for text stimuli    
+  font <- MakeFont( Parameter("FontName")+".ttf", 0, 
+                    ToNumber(Parameter("FontSize")), c1, c2, 1 )
+  x <- ToNumber( First(Resolve(stimulus,"XOffset",Nth(gStimXOffsets, i))) )
+  y <- ToNumber( First(Resolve(stimulus,"YOffset",Nth(gStimYOffsets, i))) )
+  x <- x + gVideoWidth/2
+  y <- y + gVideoHeight/2
+  if(  type == "circle" ) {
+    r <- ToNumber( First(Resolve(stimulus,"Parameters",Nth(gStimParams,i))) )
+    MyLog( "MakeStimulus: Creating circle with parameters: " + [x,y,r,c1name] )
+    s <- Circle( x, y, r, c1, 1 )
+  } elseif( type == "square" ) {
+    l <- ToNumber( First(Resolve(stimulus,"Parameters",Nth(gStimParams,i))) )
+    MyLog( "MakeStimulus: Creating square with parameters: " + [x,y,l,c1name] )
+    s <- Square( x, y, l, c1, 1 )
+  } elseif( type == "image" ) {
+    p <- Resolve( stimulus, "Parameters", Nth(gStimParams,i) )
+    file <- First( p )
+    if( Length(p) == 2 ) { # Optional 2nd parameter is zoom factor
+      zoom <- ToNumber( Nth( p, 2 ) )
+    } else {
+      zoom <- 1
     }
-    SetElement( gStimuli, i, s )
-    if( type != "sound" ) { # Sounds don't have to be added to the screen 
-      AddObject( s, gWindow )
-      Hide( s )
+    # We look up the file in 4 dirs: this experiment's Materials,
+    # the system-wide Materials, PEBL's image files, and the current
+    # directory (the latter is undocumented, that's just how PEBL's
+    # MakeImage works).
+    fileLocal <- gWD + "Materials/" + file
+    fileAlex <- gAlexDir + file
+    if( FileExists( fileLocal ) ) {
+      s <- MakeImage( fileLocal )
+    } elseif( FileExists( fileAlex ) ) {
+      s <- MakeImage( fileAlex )
+    } elseif( FileExists( file ) ) {
+      s <- MakeImage( file )
+    } else {
+      Message( "Cannot find image file " + file, 1 )
     }
+    MyLog( "MakeStimulus: Creating image with parameters: " + [file, zoom] )
+    s.ZOOMX <- zoom
+    s.ZOOMY <- zoom
+    Move( s, x, y )
+  } elseif( type == "text" ) {
+    w <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
+    s <- MakeLabel( w, font )
+    MyLog( "MakeStimulus: Creating text with parameters: " + [x, y, w] )
+    Move( s, x, y )
+  } elseif( type == "textfile" ) {
+    fileName <- First( Resolve( stimulus, "Parameters", Nth(gStimParams,i) ) )
+    fileName <- gWD + "Materials/" + fileName
+    if( not FileExists( fileName ) ) {
+      Message( "Cannot find file: "+fileName, 1 )
+    }
+    text <- FileReadText( fileName )
+    MyLog( "MakeStimulus: Creating text from file " + fileName )
+    s <- MakeTextBox( text, font, .9*gVideoWidth, .9*gVideoHeight )
+    Move( s, .05*gVideoWidth, .05*gVideoHeight )
+  } elseif( type == "sound" ) {
+    fileName <- First( Resolve(stimulus, "Parameters", Nth(gStimParams,i)) )
+    dirfileName <- gWD + "Materials/" + fileName
+    if( FileExists( dirfileName ) ) {
+     s <- LoadSound( dirfilename )
+    } else { # Attempt to load PEBL-provided audio file
+     s <- LoadSound( fileName )
+    }
+    MyLog( "MakeStimulus: Creating sound from file " + fileName )
+  } else {
+    Message( "Unsupported stimulus type: "+type, 1 )
+  }
+  SetElement( gStimuli, i, s )
+  if( type != "sound" ) { # Sounds don't have to be added to the screen 
+    AddObject( s, gWindow )
+    Hide( s )
+  }
 }
-
 
 define ReadPhases() {
   filename <- gWD + "Design/Phases.csv"
@@ -644,7 +643,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
         TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
-        response, rt, s2Pres, key] ) )
+        response, rt, s2Pres, key ] ) )
       # "Hostname", gSubjectHeader, "ID", "Sex", "Age", "Race", "Time",
       # "Phase", "Trial", "S1", "S1Duration", "S1On", "S2", "S2Duration",
       # "S2On", "S2Prob", "Response", "RT", "S2Pres", "Key"
@@ -970,6 +969,7 @@ define UndisplayBackground( phaseName ) {
 # Parameter(). If this does not find anything, it returns "NA", which
 # is returned back by LookupStimulus() to the Resolve() call wrapped
 # around it. Sorry for the complication.
+
 define SetTimer( tOn, stimulus ) {
   if( tOn < GetTime() ) {
     x <- stimulus+" start time is in the past: "+tOn
