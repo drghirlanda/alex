@@ -415,7 +415,7 @@ Table: A sample `Parameters.csv` file with default values.
   want to respond. Note that this can also be set on a per-trial
   basis, see \hyperref[responses]{here}. It is also possible to
   specifiy a *list* of admissible responses, separated by '+'
-  signs. For example, to consturct a seven-point rating scale one can
+  signs. For example, to construct a seven-point rating scale one can
   use '1+2+3+4+5+6+7' as Response parameter. Again, this can be set on
   a per-trial basis.
 
