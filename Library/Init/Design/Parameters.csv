@@ -16,3 +16,4 @@ AskAge,1,Ask subject's age
 AskSex,1,Ask subject's sex
 AskRace,0,Ask subject's race (NIH classification)
 Log,1,Logging feature disabled if this is 0
+JustInTime,0,"If 0, load all stimuli before starting the experiment, if 1 load when needed"
