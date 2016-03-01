@@ -1180,3 +1180,23 @@ define Message( text, fatal ) {
   }
   return box
 }
+
+
+define RandomMultinomial( frequencies ) {
+  sumFrequencies <- Sum( frequencies )
+  x <- sumFrequencies * Random()
+  n <- Length( frequencies )
+  runningSum <- 0
+  loop( i, Sequence(1,n,1) ) {
+    f <- Nth(frequencies, i)
+    if( f<0 ) {
+      Message( "Asked for trial negative number!", 1 )
+    }
+    runningSum <- runningSum + f
+    if( x < runningSum ) {
+      break
+    }
+  }
+  SetElement( frequencies, i, f - 1 )
+  return List( i, frequencies )
+}

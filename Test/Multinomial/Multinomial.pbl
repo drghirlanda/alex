@@ -1,0 +1,30 @@
+define Start( parameters ) {
+  frequencies <- [1, 1, 3]
+  iteration <- 1
+  while( Sum(frequencies) ) {
+    ifrequencies <- RandomMultinomial( frequencies )
+    i <- First( ifrequencies )
+    frequencies <- Nth( ifrequencies, 2 )
+    Print( iteration + ". " + i + " " + frequencies )
+    iteration <- iteration + 1
+  }      
+}
+
+define RandomMultinomial( frequencies ) {
+  sumFrequencies <- Sum( frequencies )
+  x <- sumFrequencies * Random()
+  n <- Length( frequencies )
+  runningSum <- 0
+  loop( i, Sequence(1,n,1) ) {
+    f <- Nth(frequencies, i)
+    if( f<0 ) {
+      SignalFatalError( "Negative element in "+frequencies )
+    }
+    runningSum <- runningSum + f
+    if( x < runningSum ) {
+      break
+    }
+  }
+  SetElement( frequencies, i, f - 1 )
+  return List( i, frequencies )
+}
