@@ -1,4 +1,0 @@
-Hostname,Group,Subject,Sex,Age,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,Valid,Key
-helix,Participants,3,NA,NA,3775,Start,1,Start,600000,T,NA,NA,F,0,<space>,1334,T,<lctrl>
-helix,Participants,3,NA,NA,3850,Training,1,ITI,1113.3,T,NA,NA,NA,NA,NA,53,F,<lalt>
-helix,Participants,3,NA,NA,4055,Training,1,ITI,1113.3,T,NA,NA,NA,NA,NA,258,F,<rshift>
