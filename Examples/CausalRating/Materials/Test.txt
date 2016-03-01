@@ -7,7 +7,7 @@ press '2' to indicate a 0.2 probability of an allergic reaction,
 etc.
 
 For probabilities of 0 or 1, press 'N' or 'Y', respectively. That is,
-press 'N' if there definitely WILL NOT be an allergic reaction (probability = 0);
-press 'Y' if there definitely WILL be an allergic reaction (probability = 1).
+press 'N' if there definitely WILL NOT be an allergic reaction (0% probability);
+press 'Y' if there definitely WILL be an allergic reaction (100% probability).
 
 Please press the space bar to continue.
