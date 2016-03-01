@@ -1,5 +1,10 @@
-You can write your initial instructions here. Delete this text, but
-keep the following line (you can modify it if necessary) so that the
-subject knows how to start the experiment.
+In the following experiment, your task is to ascertain which food or pairing of
+foods causes an allergic reaction when consumed by a hypothetical patient.
+For each food or pairing of foods, respond by pressing:
+the 'Y' key -- if you believe the food(s) WILL cause an allergic reaction, or
+the 'N' key -- if you believe the food(s) WILL NOT cause an allergic reaction.
 
-Please press the space bar to start the experiment.
+You will have two seconds to respond to each. After you select
+your response, the actual outcome will be presented on the screen.
+
+If you understand the instructions, please press the space bar to begin the experiment.

@@ -1,0 +1,13 @@
+For the final portion of this experiment, you are asked to judge the probability
+that the presented food or pairing of foods will cause the patient to have an
+allergic reaction. Use the number keys to indicate probabilities between 0 and 1,
+in the following manner:
+press '1' to indicate a 0.1 probability of an allergic reaction,
+press '2' to indicate a 0.2 probability of an allergic reaction,
+etc.
+
+For probabilities of 0 or 1, press 'N' or 'Y', respectively. That is,
+press 'N' if there definitely WILL NOT be an allergic reaction (probability = 0);
+press 'Y' if there definitely WILL be an allergic reaction (probability = 1).
+
+Please press the space bar to continue.
