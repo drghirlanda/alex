@@ -3,22 +3,23 @@
 #' for the current stimulus (as opposed to Trial, which spans across stimuli). The second is
 #' the number of the current response in the current trial. See the alex manual (look for
 #' AlexManual.pdf in your alex installation, or use the command alex-manual, or look online
-#' at http://github.com/drghirlanda/alex).
+#' at http://github.com/drghirlanda/alex). A GSubject (global subject) identified is also added
+#' by merging group and subject identifiers.
 #'
-#' @param data.dir The directory where Data is found (default: the working directory)
-#' @return a data table containing all read data
+#' @param data.dir The directory where the alex Data folder resides (default: the working directory)
+#' @return a data.table containing all read data
 #' @examples
 #' my.data <- read.alex()
 #' my.data <- read.alex( "Some/Directory" )
+#' @import data.table
 #' @export
 read.alex <- function( data.dir=getwd() ) {
-  require(data.table)
   dt <- NULL
   filenames <- dir( paste(data.dir,"/Data",sep=""), full.names=TRUE)
   for( i in grep( "\\.csv$", filenames ) ) {
-    message( paste("alex: reading", filenames[i] ) )
+    message( paste("alex: reading", basename(filenames[i]) ) )
     subject.dt <- data.table( read.csv( filenames[i] ) )
-    print( names(subject.dt) )
+    attr( subject.dt, "alex" ) <- TRUE
     presentation.and.keynum( subject.dt )
     dt <- rbind( dt, subject.dt )
   }
@@ -33,6 +34,7 @@ read.alex <- function( data.dir=getwd() ) {
     if( length(unique(dt$PhaseOrder)) > 1 ) {
       warning( "alex: different subjects have different phase orders:" )
       warning( "alex: phases cannot be uniquely ordered" )
+      warning( "alex: (this is fine if intended!)" )
     }
   }
   ## add a global subject identifier merging group and subject:

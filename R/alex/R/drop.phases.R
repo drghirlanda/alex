@@ -9,9 +9,9 @@
 #' @return A copy of the original data frame after dropping the relevant rows 
 #' @export
 drop.phases <- function( d, unwanted ) {
-  accept <- with( d, ! Phase %in% unwanted )
+  accept <- d[ , ! Phase %in% unwanted ]
   message( paste("alex: dropping", sum(!accept),
                  "data lines in phases:" ) )
   message( paste("  ", unwanted, collapse="") )
-  droplevels( subset( d, accept ) )
+  droplevels( d[accept] )
 }

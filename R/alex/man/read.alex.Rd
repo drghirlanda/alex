@@ -7,15 +7,16 @@ and KeyNum variables are added. The first is the number of the current presentat
 for the current stimulus (as opposed to Trial, which spans across stimuli). The second is
 the number of the current response in the current trial. See the alex manual (look for
 AlexManual.pdf in your alex installation, or use the command alex-manual, or look online
-at http://github.com/drghirlanda/alex).}
+at http://github.com/drghirlanda/alex). A GSubject (global subject) identified is also added
+by merging group and subject identifiers.}
 \usage{
 read.alex(data.dir = getwd())
 }
 \arguments{
-\item{data.dir}{The directory where Data is found (default: the working directory)}
+\item{data.dir}{The directory where the alex Data folder resides (default: the working directory)}
 }
 \value{
-a data table containing all read data
+a data.table containing all read data
 }
 \description{
 Read alex data residing in a Data directory under \code{data.dir}. Presentation
@@ -23,7 +24,8 @@ and KeyNum variables are added. The first is the number of the current presentat
 for the current stimulus (as opposed to Trial, which spans across stimuli). The second is
 the number of the current response in the current trial. See the alex manual (look for
 AlexManual.pdf in your alex installation, or use the command alex-manual, or look online
-at http://github.com/drghirlanda/alex).
+at http://github.com/drghirlanda/alex). A GSubject (global subject) identified is also added
+by merging group and subject identifiers.
 }
 \examples{
 my.data <- read.alex()

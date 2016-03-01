@@ -1,3 +1,11 @@
+#' Remove participants responding too often during inter-trial
+#' intervals (ITIs), whih potentially signals lack of attention
+#' to the experiment).
+#'
+#' @param d An alex data.table
+#' @param threshold Fraction of ITI trials above which a participant is flagged for removal
+#' @param drop If TRUE, the flagged participants are removed, if FALSE they are not
+#' @return With drop=TRUE, return the data.table after removing all rows pertaining to the flagged participants. When drop=FALSE, return the original data.table
 #' @export
 drop.ITI.responders <- function( d, threshold, drop=TRUE ) {
   temp <- d

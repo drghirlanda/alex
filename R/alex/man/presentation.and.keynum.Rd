@@ -12,7 +12,7 @@ presentation.and.keynum(dt)
 \item{data}{An alex data.table}
 }
 \value{
-A list with Presentation and KeyNum members
+Nothing, the original data.table is modified in place to have KeyNum and Presentation variables
 }
 \description{
 Build 'Presentation' and 'KeyNum' variables for alex data. The

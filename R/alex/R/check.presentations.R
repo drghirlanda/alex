@@ -1,6 +1,6 @@
-## this function checks that all subjects has seen all stimuli the
-## same number of times. if this is supposed to be true, it helps
-## catch aborted experiments.
+## This function checks that subjects have seen all stimuli the same
+## number of times. If this is supposed to be true, it helps catch
+## aborted experiments.
 #' @export
 check.presentations <- function( d ) {
   ## get max number of presentations per stimulus, phase, and subject:
