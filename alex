@@ -438,8 +438,9 @@ define ReadParameters() {
 # RunPhase responsible for coordinating trials within a phase, and     #
 # RunTrial for coordinating the events within a single trial.          #
 # (RunITI provides intertrial intervals, recording any subject         #
-# responses during these.)                                             #
-#                                                                      #
+# responses during these.) NOTE: RunTrial does not do any Resolve()ing #
+# of stimulus parameters! Everything has to be passed in its actual    #
+# and final form.                                                      #
 ########################################################################
 
 define RunPhase( phaseName ) {
@@ -475,9 +476,14 @@ define RunPhase( phaseName ) {
     ## Collect responses during pre-trial ITI:
     RunITI( phaseName, trial )
     ## Run trial and get response times and rewards collected:
-    RunTrial( phaseName, trial, Nth(stimuli,i), Nth(rewards,i), 
-              Nth(uss,i), Nth(responses,i), Nth(maxResponses,i), 
-	      Nth(maxInvalid,i) )
+    RunTrial( phaseName, 
+              trial, 
+	      Nth(stimuli,i), 
+	      ToNumber( Nth(rewards,i) ), 
+              Nth(uss,i), 
+	      Nth(responses,i), 
+	      ToNumber( Nth(maxResponses,i) ), 
+	      ToNumber( Nth(maxInvalid,i) ) )
     MyLog( "RunPhase: Phase "+phaseName+" trials left: "+numTrials )
     trial <- trial + 1
   }
@@ -487,7 +493,7 @@ define RunPhase( phaseName ) {
 define RunTrial( phase, trial, s1, rewardProb, s2, response,
                  maxResponses, maxInvalid ) {
   MyLog( "RunTrial: Starting trial: " + 
-    [phase, trial, s1, rewardProb, s2, response, maxResponses ] )
+    [phase, trial, s1, rewardProb, s2, response, maxResponses, maxInvalid ] )
   # No reward if S2 not defined:
   if( s2 == "NA" ) {
     rewardProb <- "NA"
@@ -568,15 +574,17 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       if( rt>=rtMin and (rt<=rtMax or rtMax==0) and IsMember(key,responseList) ) {
         valid <- 1
         validCount <- validCount + 1
-        MyLog( "RunTrial: Valid response on key '"+key+"' at rt="+rt )
+        MyLog( "RunTrial: Valid response on key '"+key+"' at rt="+rt+"; validCount="+validCount )
       } else {
         valid <- 0
         invalidCount <- invalidCount + 1
-        MyLog( "RunTrial: Invalid response on key '"+key+"' at rt="+rt )
+        MyLog( "RunTrial: Invalid response on key '"+key+"' at rt="+rt+"; invalidCount="+invalidCount )
         rt <- "NA"
       }
       if( (not classical) and valid ) { # Schedule S2 (possibly)
-        if( Random() < rewardProb and IsMember(key,responseList) ) {
+        r <- Random()
+        if( r < rewardProb and IsMember(key,responseList) ) {
+	  MyLog( "RunTrial: Scheduling S2 on valid response ("+r+"<"+rewardProb+")" )
           s2Pres <- "T"
           if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
             times <- SetTimer( GetTime() + s1s2Interval, s2 )
@@ -591,6 +599,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
               MyLog( "RunTrial: Lengthening instrumental trial to show S2 completely" )
             }
           }
+        } else {
+	  MyLog( "RunTrial: Not scheduling S2 on valid response ("+r+">="+rewardProb+")" )
         }
       }
     }
@@ -620,12 +630,11 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     ## End trial if s2 is off and valid or invalid max responses reached
     if( TimerOn(s2)=="F" ) {
       if( validCount >= maxResponses ) {
-        MyLog( "RunTrial: Maximum valid responses reached: ending trial" )
+        MyLog( "RunTrial: Maximum valid responses reached: ending trial (validCount="+validCount+")" )
         ExpireTimers()
         continue <- 0
-      }
-      if( invalidCount >= maxInvalid ) {
-        MyLog( "RunTrial: Maximum invalid responses reached: endindg trial" )
+      } elseif ( invalidCount >= maxInvalid ) {
+        MyLog( "RunTrial: Maximum invalid responses reached: endindg trial (invalidCount="+invalidCount+")" )
         ExpireTimers()
         continue <- 0
       }
