@@ -84,10 +84,10 @@ define Start( par ) {
   Message( "Ready to run subject "+Nth(gSubjectInfo,1)+"-"+Nth(gSubjectInfo,2), 0 )
 
   # We can use logging only after ReadSubject() and ReadParameters():
-  MyLog( "Start: found alex folder in '" + gAlexDir + "'" )
-  MyLog( "Start: set working directory to '" + gWD + "'" ) 
+  MyLog( "Start: Found alex folder in '" + gAlexDir + "'" )
+  MyLog( "Start: Set working directory to '" + gWD + "'" ) 
   # Log parameter, phases, and stimuli:
-  MyLog( "Start: using these parameters:" )
+  MyLog( "Start: Using these parameters:" )
   loop( i, Sequence(1,Length(gParameterNames),1) ) {
     MyLog( "  "+Nth(gParameterNames,i)+" = "+Nth(gParameterValues,i) ) 
   }
@@ -95,7 +95,7 @@ define Start( par ) {
   loop( phase, gPhases  ) {
     MyLog( "  "+ Flatten(phase) )
   }
-  MyLog( "Start: using these stimuli:" )
+  MyLog( "Start: Using these stimuli:" )
   loop( s, gStimulusInfo ) {
     MyLog( "  " + s )
   }
@@ -109,7 +109,7 @@ define Start( par ) {
   FileClose( hostream )
   DeleteFile( hostxt )
   UnlockFile( hostxt )
-  MyLog( "Start: determined hostname as '"+gHostname+"'" )
+  MyLog( "Start: Determined hostname as '"+gHostname+"'" )
   
   askID <- Parameter("AskID")
   if( askID != "NA" and ToNumber(askID) == 1 ) {
@@ -161,7 +161,7 @@ define Start( par ) {
   loop( c, Flatten(kc) ) {
     PushOnEnd( gKeys, TranslateKeyCode(c) )
   }
-  MyLog( "Start: accepting these response keys: " + gKeys ) 
+  MyLog( "Start: Accepting these response keys: " + gKeys ) 
 
   ## Print data file header. gDataFile has been opened by
   ## ReadSubject() to avoid race conditions with acquiring and
@@ -258,6 +258,7 @@ define ReadSubject() {
 }
 
 define ReadStimuli() {
+  MyLog( "ReadStimuli: Reading stimuli" )
   filename <- gWD + "Design/Stimuli.csv"   
   csv <- ReadCSV( filename )
   gStimulusHeader <- First( csv )
@@ -399,6 +400,7 @@ define MakeStimulus( stimulus ) {
 }
 
 define ReadPhases() {
+  MyLog( "ReadPhases: Reading phases" )
   filename <- gWD + "Design/Phases.csv"
   csv <- ReadCSV( filename )
   gPhaseHeader <- First( csv )
@@ -441,80 +443,42 @@ define ReadParameters() {
 ########################################################################
 
 define RunPhase( phaseName ) {
-  MyLog( "RunPhase: starting phase "+phaseName )
+  MyLog( "RunPhase: Starting phase "+phaseName )
 
   # Get stimulus settings for this phase. Each line in Phases.csv
   # contains a stimulus entry for a specific phase. Using
   # LookupPhase() we look up which stimuli enter this phase:
   stimuli      <- LookupPhase(phaseName, "S1")
+  MyLog( "RunPhase: Phase "+phaseName+" stimuli: "+stimuli )
   numTrials    <- LookupPhase(phaseName, "Trials")
+  loop( i, Sequence(1,Length(numTrials),1) ) {
+    SetElement( numTrials, i, ToNumber(Nth(numTrials,i) ) )
+  }
+  MyLog( "RunPhase: Phase "+phaseName+" trials: "+numTrials )
+  MyLog( "RunPhase: Phase "+phaseName+" total trials: "+Sum(numTrials) )
   rewards      <- LookupPhase(phaseName, "S2Prob")
   uss          <- LookupPhase(phaseName, "S2")
   responses    <- LookupPhase(phaseName, "Response")
   maxResponses <- LookupPhase(phaseName, "MaxResponses")
   maxInvalid   <- LookupPhase(phaseName, "MaxInvalid")
-
-  MyLog( "RunPhase: accepting "+maxResponses+" valid and "+maxInvalid+" invalid responses per trial" )
-
-  ## We build lists trialStimuli and trialRewards to contain stimuli
-  ## and rewards repeated as many times as given in 'trials'. The
-  ## order of presentation is then randomized by picking stimuli from
-  ## a shuffled list 'trialOrder', see end of block
-  trialStimuli      <- []
-  trialRewards      <- []
-  trialUSs          <- []
-  trialResponses    <- []
-  trialMaxResponses <- []
-  trialMaxInvalid   <- []
-  loop( i, Sequence( 1, Length(stimuli), 1 ) ) {
-    n <- ToNumber( Nth(numTrials, i) )
-    s <- Nth(stimuli, i )
-    MyLog( "RunPhase: scheduling "+n+" trials with stimulus "+s )
-    PushOnEnd( trialStimuli,      Repeat( s                   , n ) )
-    PushOnEnd( trialRewards,      Repeat( Nth(rewards,      i), n ) )
-    PushOnEnd( trialUSs,          Repeat( Nth(uss,          i), n ) )
-    PushOnEnd( trialResponses,    Repeat( Nth(responses,    i), n ) )
-    PushOnEnd( trialMaxResponses, Repeat( Nth(maxResponses, i), n ) )
-    PushOnEnd( trialMaxInvalid,   Repeat( Nth(maxInvalid,   i), n ) )
-  }
-  trialStimuli      <- Flatten( trialStimuli ) # Nesting is undesired
-  trialRewards      <- Flatten( trialRewards )
-  trialUSs          <- Flatten( trialUSs )
-  trialResponses    <- Flatten( trialResponses )
-  trialMaxResponses <- Flatten( trialMaxResponses )
-  trialMaxInvalid   <- Flatten( trialMaxInvalid )
-  MyLog( "RunPhase: constructed trial list: " + trialStimuli )
-
-  ## We define a random order for the trials, taking into account that
-  ## the number of trials could be zero (in some experimental designs
-  ## some phases might be excluded for some groups of subjects).
-  if( Length(trialStimuli) ) {
-    trialOrder <- Shuffle( Sequence(1, Length(trialStimuli), 1) )
-  } else {
-    trialOrder <- []
-  }
-  MyLog( "RunPhase: constructed trial order: " + trialOrder )
+  MyLog( "RunPhase: Accepting "+maxResponses+" valid and "+maxInvalid+" invalid responses per trial" )
 
   DisplayBackground( phaseName )
 
   ## Now we are ready to run all trials:
-  maxTrial <- Length( trialStimuli )
   trial    <- 1
-  while( trial <= maxTrial ) {
-    ## Get stimulus and RewardPr for this trial:
-    thisTrial    <- Nth(trialOrder, trial)
-    stimulus     <- Nth( trialStimuli, thisTrial )
-    rewardPr     <- ToNumber( Nth( trialRewards, thisTrial ) )
-    uss          <- Nth( trialUSs, thisTrial )
-    response     <- Nth( trialResponses, thisTrial )
-    maxResponses <- ToNumber( Nth( trialMaxResponses, thisTrial ) )
-    maxInvalid   <- ToNumber( Nth( trialMaxInvalid, thisTrial ) )
+  while( Sum( numTrials ) > 0 ) {
+    ## Select a stimulus and update numTrials:
+    inumTrials <- RandomMultinomial( numTrials )
+    i <- First( inumTrials )
+    numTrials <- Nth( inumTrials, 2 )
     ## Collect responses during pre-trial ITI:
     RunITI( phaseName, trial )
     ## Run trial and get response times and rewards collected:
-    RunTrial( phaseName, trial, stimulus, rewardPr, uss, response, 
-              maxResponses, maxInvalid )
-    ## Advance to next trial
+    RunTrial( phaseName, trial, Nth(stimuli,i), Nth(rewards,i), 
+              Nth(uss,i), Nth(responses,i), Nth(maxResponses,i), 
+	      Nth(maxInvalid,i) )
+    MyLog( "RunPhase: Phase "+phaseName+" trials left: "+numTrials )
     trial <- trial + 1
   }
   UndisplayBackground( phaseName )
@@ -522,7 +486,7 @@ define RunPhase( phaseName ) {
 
 define RunTrial( phase, trial, s1, rewardProb, s2, response,
                  maxResponses, maxInvalid ) {
-  MyLog( "RunTrial: starting trial: " + 
+  MyLog( "RunTrial: Starting trial: " + 
     [phase, trial, s1, rewardProb, s2, response, maxResponses ] )
   # No reward if S2 not defined:
   if( s2 == "NA" ) {
@@ -538,7 +502,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   }
   rtMin <- ToNumber( First(LookupPhase(phase, "ResponseTimeMin")) )
   rtMax <- ToNumber( First(LookupPhase(phase, "ResponseTimeMax")) )
-  MyLog( "RunTrial: accepting responses between "+rtMin+" and "+rtMax )
+  MyLog( "RunTrial: Accepting responses between "+rtMin+" and "+rtMax )
   # Initialize some trial-level variables:
   validCount    <- 0
   invalidCount  <- 0
@@ -557,12 +521,12 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       times <- SetTimer( endTime + s1s2Interval, s2 ) # Schedule S2
       endTime <- Nth(times, 2) # Lengthen trial
       s2Duration <- endTime - Nth(times, 1)
-      MyLog( "RunTrial: lengthening classical trial to show S2 completely" )
+      MyLog( "RunTrial: Lengthening classical trial to show S2 completely" )
     } else {
       s2Pres <- "F"
     }
   } else { # Instrumental trial
-    MyLog( "RunTrial: instrumental trial" )
+    MyLog( "RunTrial: Instrumental trial" )
     classical <- 0
     s2Pres <- "F" # changed later if S2 schedulued
   }
@@ -580,7 +544,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   # 'continue' variabel because PEBL does not have a break statement
   # for while loops (as of version 0.14).
   continue <- 1
-  MyLog( "RunTrial: trial scheduled to end at "+endTime )
+  MyLog( "RunTrial: Trial scheduled to end at "+endTime )
   while( GetTime() < endTime and continue ) {
 
     UpdateTimers()
@@ -604,11 +568,11 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       if( rt>=rtMin and (rt<=rtMax or rtMax==0) and IsMember(key,responseList) ) {
         valid <- 1
         validCount <- validCount + 1
-        MyLog( "RunTrial: valid response on key '"+key+"' at rt="+rt )
+        MyLog( "RunTrial: Valid response on key '"+key+"' at rt="+rt )
       } else {
         valid <- 0
         invalidCount <- invalidCount + 1
-        MyLog( "RunTrial: invalid response on key '"+key+"' at rt="+rt )
+        MyLog( "RunTrial: Invalid response on key '"+key+"' at rt="+rt )
         rt <- "NA"
       }
       if( (not classical) and valid ) { # Schedule S2 (possibly)
@@ -624,7 +588,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
             if( offTime > endTime and notLengthened ) {
               endTime <- offTime
               notLengthened <- 0
-              MyLog( "RunTrial: lengthening instrumental trial to show S2 completely" )
+              MyLog( "RunTrial: Lengthening instrumental trial to show S2 completely" )
             }
           }
         }
@@ -656,19 +620,19 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     ## End trial if s2 is off and valid or invalid max responses reached
     if( TimerOn(s2)=="F" ) {
       if( validCount >= maxResponses ) {
-        MyLog( "RunTrial: maximum valid responses reached: ending trial" )
+        MyLog( "RunTrial: Maximum valid responses reached: ending trial" )
         ExpireTimers()
         continue <- 0
       }
       if( invalidCount >= maxInvalid ) {
-        MyLog( "RunTrial: maximum invalid responses reached: endindg trial" )
+        MyLog( "RunTrial: Maximum invalid responses reached: endindg trial" )
         ExpireTimers()
         continue <- 0
       }
     }
   }
   ExpireTimers() # Turn off everything
-  MyLog( "RunTrial: trial completed" )
+  MyLog( "RunTrial: Trial completed" )
 }
 
 ## This is a simplified event loop that runs during ITIs, when by
@@ -827,7 +791,7 @@ define Resolve( stimulus, field, value ) {
       PushOnEnd( results, v )
     }
   }
-  MyLog( "Resolve: mapped "+[stimulus, field, value]+" to "+results )
+  MyLog( "Resolve: Mapped "+[stimulus, field, value]+" to "+results )
   return results
 }
 
@@ -839,13 +803,13 @@ define ResolvePhase( phase, stimulus, field, value ) {
     # Under construction...
     # p <- SubString( value, 2, StringLength(value)-1 )
     # result <- ResolvePhase( p, stimulus, field, value )
-    # MyLog( "ResolvePhase: resolved '"+value+"' to '"+result+"'" )
+    # MyLog( "ResolvePhase: Resolved '"+value+"' to '"+result+"'" )
   } elseif( value == "*" ) {
     result <- Lookup( phase+stimulus+field, gSubjectHeader, gSubjectInfo )
     if( IsList(result) ) { # Nothing found
       Message( "Cannot find "+phase+stimulus+field+" in Groups.csv", 1 )
     } 
-    MyLog( "ResolvePhase: resolved '"+value+"' to '"+result+"'" )
+    MyLog( "ResolvePhase: Resolved '"+value+"' to '"+result+"'" )
   } else {
     result <- value
   }
@@ -860,12 +824,12 @@ define MakeColorRGBString( color ) {
   components <- SplitString( color, "-" )
   if( Length(components) != 3 ) { # treat as color name
     c <- MakeColor( color )
-    MyLog( "MakeColorRGBString: creating color '"+color+"'" )
+    MyLog( "MakeColorRGBString: Creating color '"+color+"'" )
   } else {
     cred <- ToNumber( Nth(components, 1) )
     cgreen <- ToNumber( Nth(components, 2) )
     cblue <- ToNumber( Nth(components, 3) )
-    MyLog( "MakeColorRGBString: creating color "+components )
+    MyLog( "MakeColorRGBString: Creating color "+components )
     c <- MakeColorRGB( cred, cgreen, cblue )
   }
   return c
@@ -919,7 +883,7 @@ define Undisplay( stimulus ) {
     }
     ## If we are doing just-in-time loading, we remove the object:
     if( Parameter("JustInTime") == "1" ) {
-      MyLog( "Unloading stimulus " + stimulus )
+      MyLog( "Undisplay: Unloading stimulus " + stimulus )
       RemoveObject( s, gWindow )
     }   
   }
@@ -929,10 +893,10 @@ define Undisplay( stimulus ) {
 define DisplayBackground( phaseName ) {
   bg <- FindBackground( phaseName )
   if( StringLength( bg ) ) {
-    MyLog( "DisplayBackground: found "+bg+" as background" )
+    MyLog( "DisplayBackground: Found "+bg+" as background" )
     Display( bg )
   } else {
-    MyLog( "DisplayBackground: no background found" )
+    MyLog( "DisplayBackground: No background found" )
   }
 }
 
@@ -981,12 +945,12 @@ define SetTimer( tOn, stimulus ) {
     ## Figure out duration:
     dur <- First(Resolve( s, "Duration", LookUpStimulus(s,"Duration") ))
     if( dur == "NA" ) {
-      MyLog( "SetTimer: no duration found for stimulus " + s )
+      MyLog( "SetTimer: No duration found for stimulus " + s )
       Message( "Could not determine duration of " + s, 1 )
     }
     dur <- ToNumber( dur )
     if( dur < 0 ) {
-      MyLog( "SetTimer: negative duration found for stimulus " + s )
+      MyLog( "SetTimer: Negative duration found for stimulus " + s )
       Message( s + " has negative duration: " + dur, 1 )
     }
     ## Figure out onset:
@@ -995,7 +959,7 @@ define SetTimer( tOn, stimulus ) {
     ## Schedule timer:
     newTimer <- [ tOn + ons, dur, s, 0 ]
     PushOnEnd( gTimers, newTimer )
-    MyLog( "SetTimer: new timer: " + newTimer )
+    MyLog( "SetTimer: New timer: " + newTimer )
     ## Update tOff if needed:
     if( tOn + ons + dur > tOff ) {
       tOff <- tOn + ons + dur
@@ -1019,11 +983,11 @@ define UpdateTimers() {
     if( t >= tOn and not isOn ) { # We need to turn this on
       Display( stimulus )
       SetElement( timer, 4, 1 ) # Mark timer as being on
-      MyLog( "UpdateTimers: turning on timer: " + timer )
+      MyLog( "UpdateTimers: Turning on timer: " + timer )
     } elseif( t >= tOn + duration ) {
       Undisplay( stimulus )
       PushOnEnd( expired, i ) 
-      MyLog( "UpdateTimers: removing timer: " + timer )
+      MyLog( "UpdateTimers: Removing timer: " + timer )
     }
     i <- i + 1
   }
@@ -1035,7 +999,7 @@ define UpdateTimers() {
 define ExpireTimers() {
   loop( timer, gTimers ) {
     Undisplay( Nth( timer, 3 ) )
-    MyLog( "ExpireTimers: expired "+timer )
+    MyLog( "ExpireTimers: Expired "+timer )
   }
   Draw()
   gTimers <- []
@@ -1079,7 +1043,7 @@ define NextTimer() {
   if( tMin == tMagic ) {
      tMin <- "NA"
   }
-  MyLog( "NextTimer: next event: "+tMin )  
+  MyLog( "NextTimer: Next event: "+tMin )  
   return tMin
 }
 
@@ -1175,13 +1139,23 @@ define Message( text, fatal ) {
     Draw()
   }
   if( fatal == 1 ) {
-  MyLog( "Message: terminating" )
+  MyLog( "Message: Terminating" )
     SignalFatalError( "alex: " + text )
   }
   return box
 }
 
+###################################
+##                               ## 
+## Miscellaneous functions below ##
+##                               ##
+###################################
 
+## This function implements a choice between many items, constrained
+## by the fact that, in the end, element i will be chosen
+## Nth(frequencies,i) times. It returns a list with two components:
+## the index of the chosen item and an updated list of relative
+## probabilities in which the i-th element has been decreased by 1.
 define RandomMultinomial( frequencies ) {
   sumFrequencies <- Sum( frequencies )
   x <- sumFrequencies * Random()

@@ -1,4 +1,6 @@
 Phase,S1,Trials
 Start,Start,1
-Test,Circle,10
+Test,White,5
+Test,Red,5
+Test,Gray,5
 End,End,1
