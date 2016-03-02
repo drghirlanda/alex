@@ -476,14 +476,10 @@ define RunPhase( phaseName ) {
     ## Collect responses during pre-trial ITI:
     RunITI( phaseName, trial )
     ## Run trial and get response times and rewards collected:
-    RunTrial( phaseName, 
-              trial, 
-	      Nth(stimuli,i), 
-	      ToNumber( Nth(rewards,i) ), 
-              Nth(uss,i), 
-	      Nth(responses,i), 
-	      ToNumber( Nth(maxResponses,i) ), 
-	      ToNumber( Nth(maxInvalid,i) ) )
+    RunTrial( phaseName, trial, 
+	      Nth(stimuli,i), Nth(rewards,i), 
+              Nth(uss,i), Nth(responses,i), 
+	      Nth(maxResponses,i), Nth(maxInvalid,i) )
     MyLog( "RunPhase: Phase "+phaseName+" trials left: "+numTrials )
     trial <- trial + 1
   }
@@ -492,13 +488,18 @@ define RunPhase( phaseName ) {
 
 define RunTrial( phase, trial, s1, rewardProb, s2, response,
                  maxResponses, maxInvalid ) {
+  # These are read as strings, we need them to be numbers:
+  rewardProb   <- ToNumber( rewardProb )
+  maxResponses <- ToNumber( maxResponses )
+  maxInvalid   <- ToNumber( maxInvalid )
+
   MyLog( "RunTrial: Starting trial: " + 
     [phase, trial, s1, rewardProb, s2, response, maxResponses, maxInvalid ] )
   # No reward if S2 not defined:
   if( s2 == "NA" ) {
-    rewardProb <- "NA"
+    rewardProb <- 0
   }
-  s2Duration <- "NA" # Reset later if s2 scheduled 
+  s2Duration <- 0 # Reset later if s2 scheduled 
   # Determine some parameters. In ToNumber conversions, NA becomes 0:
   s1s2Interval <- Parameter("S1S2Interval")
   if( s1s2Interval == "NA" ) {
