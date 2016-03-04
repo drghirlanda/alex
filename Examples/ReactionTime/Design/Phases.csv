@@ -1,4 +1,4 @@
-Phase,S1,Trials
-Start,Start,1
-Test,White,10
-End,End,1
+Phase,S1,Trials,Duration
+Start,Start,1,Inf
+Test,White,10,1000
+End,End,1,Inf

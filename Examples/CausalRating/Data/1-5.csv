@@ -1,0 +1,15 @@
+Hostname,Group,Subject,ID,Sex,Age,Race,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,S2Pres,Key
+helix,1,5,NA,NA,NA,NA,3540,Start,1,ITI,934.854,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,6933,Start,1,Start,600000,T,NA,0,F,0,<space>,3388,F,<space>
+helix,1,5,NA,NA,NA,NA,7752,Pretrain,1,ITI,780.252,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,9756,Pretrain,1,W+RXN?,2000,T,No+W2,0,F,1,y+n,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,10454,Pretrain,2,ITI,681.979,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,12461,Pretrain,2,Z+RXN?,2000,T,No+Z2,0,F,1,y+n,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,13013,Pretrain,3,ITI,537.871,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,15017,Pretrain,3,X+RXN?,2000,T,Yes+X2,0,F,1,y+n,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,15721,Pretrain,4,ITI,689.362,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,17727,Pretrain,4,X+Y+RXN?,2000,T,Yes+X2+Y2,0,F,1,y+n,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,18488,Pretrain,5,ITI,740.917,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,5,NA,NA,NA,NA,18644,Pretrain,5,W+Z+RXN?,2000,T,No+W2+Z2,0,F,1,y+n,NA,F,<lalt>
+helix,1,5,NA,NA,NA,NA,18671,Pretrain,5,W+Z+RXN?,2000,T,No+W2+Z2,0,F,1,y+n,NA,F,<lctrl>
+helix,1,5,NA,NA,NA,NA,18873,Pretrain,5,W+Z+RXN?,2000,T,No+W2+Z2,0,F,1,y+n,NA,F,<rshift>

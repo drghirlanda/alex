@@ -957,6 +957,8 @@ define SetTimer( tOn, stimulus ) {
     if( dur == "NA" ) {
       MyLog( "SetTimer: No duration found for stimulus " + s )
       Message( "Could not determine duration of " + s, 1 )
+    } else if( dur == "Inf" ) {
+      dur <- "36000000"
     }
     dur <- ToNumber( dur )
     if( dur < 0 ) {
