@@ -509,6 +509,9 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   }
   rtMin <- ToNumber( First(LookupPhase(phase, "ResponseTimeMin")) )
   rtMax <- ToNumber( First(LookupPhase(phase, "ResponseTimeMax")) )
+  if( rtMax==0 ) {
+    rtMax <- 3600000
+  }
   MyLog( "RunTrial: Accepting responses between "+rtMin+" and "+rtMax )
   # Initialize some trial-level variables:
   validCount    <- 0
@@ -572,7 +575,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     } else {
       rt <- GetTime() - startTime # Time since trial start
       # Next we figure out whether response is valid:
-      if( rt>=rtMin and (rt<=rtMax or rtMax==0) and IsMember(key,responseList) ) {
+      if( rt>=rtMin and rt<=rtMax and IsMember(key,responseList) ) {
         valid <- 1
         validCount <- validCount + 1
         MyLog( "RunTrial: Valid response on key '"+key+"' at rt="+rt+"; validCount="+validCount )
