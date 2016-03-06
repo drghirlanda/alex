@@ -9,7 +9,7 @@ Toward a release
 - For consistency with other lists, use + to delimit RGB colors rather
   than -
 
-- Document inf?
+- Document Inf duration parameter?
 
 - Document that "NA" is not a valid stimulus name because it is used
   as "not available" to indicate lack of S2
