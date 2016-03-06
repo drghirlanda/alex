@@ -1,10 +1,11 @@
-In the following experiment, your task is to ascertain which food or pairing of
-foods causes an allergic reaction when consumed by a hypothetical patient.
-For each food or pairing of foods, respond by pressing:
-the 'Y' key -- if you believe the food(s) WILL cause an allergic reaction, or
-the 'N' key -- if you believe the food(s) WILL NOT cause an allergic reaction.
+Little Alice sometimes has an allergic reaction to food. Her parents bring her to the doctor to find out what Alice is allergic to. You are the doctor. Your task is to observe what Alice eats to find out which food or foods she is allergic to. You will first see on screen what Alice is about to eat, and then you will be able to guess whether she has a reaction or not.
 
-You will have two seconds to respond to each. After you select
-your response, the actual outcome will be presented on the screen.
+Press the 'Y' key if you guess that Alice WILL show an allergic reaction.
 
-If you understand the instructions, please press the space bar to begin the experiment.
+Press the 'N' key if you guess that Alice WILL NOT show an allergic reaction.
+
+After you guess, the actual outcome will be presented on the screen, so that you may learn which food(s) Alice is allergic to. 
+
+The food will be shown for a few seconds only. If you do not respond fast enough, the experiment will move on and you will not know Alice's reaction.
+
+If you understand the instructions, please press the space bar to begin.

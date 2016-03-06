@@ -1,52 +1,14 @@
-Name,Type,Parameters,Color,XOffset,YOffset,Duration,Onset
-Start,textfile,Start.txt,,,,600000,
-End,textfile,End.txt,,,,600000,
-TestInfo,textfile,Test.txt,,,,600000,
-A,image,apple.png+.5,,-160,-64,2000,
-A2,image,apple.png+.5,,-160,-64,2000,
-B,image,banana.png+.5,,160,-64,2000,
-B2,image,banana.png+.5,,160,-64,2000,
-B3,image,banana.png+.5,,160,-64,3500,
-C,image,cheese.png+.5,,-160,-64,2000,
-C2,image,cheese.png+.5,,-160,-64,2000,
-C3,image,cheese.png+.5,,-160,-64,3500,
-D,image,bread.png+.5,,160,-64,2000,
-D2,image,bread.png+.5,,160,-64,2000,
-D3,image,bread.png+.5,,160,-64,3500,
-E,image,eggplant.png+.5,,-160,-64,2000,
-E2,image,eggplant.png+.5,,-160,-64,2000,
-E3,image,eggplant.png+.5,,-160,-64,3500,
-F,image,sushi.png+.5,,160,-64,2000,
-F2,image,sushi.png+.5,,160,-64,2000,
-F3,image,sushi.png+.5,,160,-64,3500,
-F4,image,sushi.png+.5,,-160,-64,3500,
-G,image,grapes.png+.5,,-160,-64,2000,
-G2,image,grapes.png+.5,,-160,-64,2000,
-H,image,honey.png+.5,,160,-64,2000,
-H2,image,honey.png+.5,,160,-64,2000,
-H3,image,honey.png+.5,,160,-64,3500,
-I,image,icecream.png+.5,,-160,-64,2000,
-I2,image,icecream.png+.5,,-160,-64,2000,
-J,image,coffee.png+.5,,160,-64,2000,
-J2,image,coffee.png+.5,,160,-64,2000,
-K,image,custard.png+.5,,-160,-64,2000,
-K2,image,custard.png+.5,,-160,-64,2000,
-L,image,lemon.png+.5,,160,-64,2000,
-L2,image,lemon.png+.5,,160,-64,2000,
-L3,image,lemon.png+.5,,160,-64,3500,
-M,image,meat.png+.5,,160,-64,2000,
-M2,image,meat.png+.5,,160,-64,2000,
-M3,image,meat.png+.5,,160,-64,3500,
-W,image,wine.png+.5,,-160,-64,2000,
-W2,image,wine.png+.5,,-160,-64,2000,
-X,image,chocolate.png+.5,,-160,-64,2000,
-X2,image,chocolate.png+.5,,-160,-64,2000,
-Y,image,strawberry.png+.5,,160,-64,2000,
-Y2,image,strawberry.png+.5,,160,-64,2000,
-Z,image,spaghetti.png+.5,,160,-64,2000,
-Z2,image,spaghetti.png+.5,,160,-64,2000,
-RXN?,text,Allergic reaction? ( Y / N ),,,192,2000,
-Yes,text,Outcome: ALLERGIC REACTION,black+white,,192,2000,
-No,text,Outcome: no allergic reaction,:Yes,,192,2000,
-ProbScale,text,Probability of allergic reaction? ( N / 1 / 2 / 3 / 4 / 5 / 6 / 7 / 8 / 9 / Y ),,,192,3500,
-ProbOK,text,Probability recorded.,,,240,500,
+Name,Type,Parameters,Color,XOffset,YOffset,Duration
+Start,textfile,Start.txt,,,,Inf
+End,textfile,End.txt,,,,Inf
+RateInfo,textfile,RateInfo.txt,,,,Inf
+A,image,*,,-160,-64,5000
+B,image,*,,160,-64,5000
+X,image,*,,-160,-64,5000
+Y,image,*,,160,-64,5000
+G,image,grapes.png,,0,-64,5000
+Question,text,Allergic reaction? ( Y / N ),,,192,5000
+Yes,text,!!! ALLERGIC REACTION !!!,black+white,,240,1000
+No,text,No allergic reaction,:Yes,,240,1000
+Rating,text,Likelihood of allergic reaction? (1 / 2 / 3 / 4 / 5 / 6 / 7),,,192,5000
+RatingOK,text,Answer recorded,,,240,1000

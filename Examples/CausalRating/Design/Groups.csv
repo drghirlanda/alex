@@ -1,2 +1,5 @@
-Group,Size
-1,10
+Group,Size,AParameters,BParameters,XParameters,YParameters
+1,10,apple.png,bread.png,banana.png,spaghetti.png
+2,10,bread.png,apple.png,spaghetti.png,banana.png
+3,10,banana.png,spaghetti.png,apple.png,bread.png
+4,10,spaghetti.png,banana.png,bread.png,apple.png

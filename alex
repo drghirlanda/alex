@@ -587,13 +587,15 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       }
       if( (not classical) and valid ) { # Schedule S2 (possibly)
         r <- Random()
-        if( r < rewardProb and IsMember(key,responseList) ) {
-	  MyLog( "RunTrial: Scheduling S2 on valid response ("+r+"<"+rewardProb+")" )
+        if( r < rewardProb ) {
+	  MyLog( "RunTrial: Scheduling S2 '"+s2+"' on valid response ("+r+"<"+rewardProb+")" )
           s2Pres <- "T"
           if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
             times <- SetTimer( GetTime() + s1s2Interval, s2 )
             onTime <- Nth(times, 1)
             offTime <- Nth(times, 2)
+	    ExtendTimer( s1, offTime ) # prevent S1 from disappearing before S2
+	    MyLog( "RunTrial: s2 scheduled between "+onTime+" and "+offTime )
             s2Duration <- offTime - onTime
             # Lengthen trial if necessary, but only if it has not been
             # lengthened already:
@@ -602,6 +604,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
               notLengthened <- 0
               MyLog( "RunTrial: Lengthening instrumental trial to show S2 completely" )
             }
+          } else {
+	    MyLog( "RunTrial: Not scheduling S2 because already on" )
           }
         } else {
 	  MyLog( "RunTrial: Not scheduling S2 on valid response ("+r+">="+rewardProb+")" )
@@ -635,11 +639,9 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     if( TimerOn(s2)=="F" ) {
       if( validCount >= maxResponses ) {
         MyLog( "RunTrial: Maximum valid responses reached: ending trial (validCount="+validCount+")" )
-        ExpireTimers()
         continue <- 0
       } elseif ( invalidCount >= maxInvalid ) {
         MyLog( "RunTrial: Maximum invalid responses reached: endindg trial (invalidCount="+invalidCount+")" )
-        ExpireTimers()
         continue <- 0
       }
     }
@@ -875,6 +877,7 @@ define Display( stimulus ) {
       Makestimulus( stimName )
     }
     s <- Nth( gStimuli, i )
+    MyLog( "Display: dysplaing stimulus '"+stimName+"'")
     if( IsAudioOut(s) ) {
       Playbackground( s )
     } else {
@@ -889,6 +892,7 @@ define Undisplay( stimulus ) {
   loop( stimName, SplitString(stimulus, "+") ) {
     i <- Lookup( stimName, gStimNames, Sequence(1,n,1) )
     s <- Nth( gStimuli, i )
+    MyLog( "Undisplay: undisplaying stimulus '"+stimName+"'")
     if( IsAudioOut(s) ) {
       Stop( s )
     } else {
@@ -960,7 +964,7 @@ define SetTimer( tOn, stimulus ) {
     if( dur == "NA" ) {
       MyLog( "SetTimer: No duration found for stimulus " + s )
       Message( "Could not determine duration of " + s, 1 )
-    } else if( dur == "Inf" ) {
+    } elseif( dur == "Inf" ) {
       dur <- "36000000"
     }
     dur <- ToNumber( dur )
@@ -1022,29 +1026,35 @@ define ExpireTimers() {
 
 # Returns T if a stimulus is currently displayed, F otherwise. We have
 # to take care of the fact that 'stimulus' may be a compound, one or
-# more parts of which may be displayed.
+# more parts of which may be displayed. In this case, we return T only
+# if all parts are displayed.
 define TimerOn( stimulus ) {
-  result <- "F"
   components <- SplitString( stimulus, "+" )
-  loop( timer, gTimers ) {
-    loop( s, components ) {
+  result <- "F"
+  on <- 0
+  loop( s, components ) {
+    loop( timer, gTimers ) {
       if( Nth(timer, 3) == s and Nth(timer, 4) ) {
-        result <- "T"
-        break
+        on <- on + 1
+	break
       }
     }
-    if( result == "T" ) {
-      break
-    }
   }
-  return result        
+  if( on == Length(components) ) {
+    on <- "T"
+    MyLog( "TimerOn: Stimulus '"+stimulus+"' is on" )
+  } else {
+    on <- "F"
+    MyLog( "TimerOn: Stimulus '"+stimulus+"' is off" )
+  }
+  return on        
 }
 
 # Goes through all timers and returns the time of the next event,
 # i.e., the next time a stimulus has to be turned either on or off.
 # Used when deciding how long to wait for responses in RunTrial.
 define NextTimer() {
-  tMagic <- 123456789
+  tMagic <- 987654321
   tMin <- tMagic
   loop( timer, gTimers ) {
     tOn <- Nth( timer, 1 )
@@ -1062,6 +1072,29 @@ define NextTimer() {
   return tMin
 }
 
+## Resets a timer to expire at a later time, but does not change
+## anything if the expiration time is already later than offTime
+define ExtendTimer( s1, offTime ) {
+  found <- 0
+  loop( s, SplitString( s1, "+" ) ) {
+    loop( timer, gTimers ) {
+      if( Nth(timer, 3) == s ) {
+        found <- 1
+	newDuration <- offTime - Nth(timer,1)
+	if( newDuration > Nth(timer, 2) ) {
+          SetElement(timer, 2, offTime - Nth(timer, 1) )
+          MyLog("ExtendTimer: Extended "+s+" to end at "+offTime )
+        } else {
+	  MyLog("ExtendTimer: "+s+" does not need extension" )
+        }
+        break
+      }
+    }
+    if( found == 0 ) {
+      MyLog( "ExtendTimer: Could not find timer "+s1+", ignoring request to extend" )
+    }
+  }
+}
 
 ########################################################################
 #                                                                      #

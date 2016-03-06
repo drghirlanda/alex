@@ -9,7 +9,8 @@ Toward a release
 - For consistency with other lists, use + to delimit RGB colors rather
   than -
 
-- Implement a rating widget? Rating scale and/or clickable - numbers?
+- Document that "NA" is not a valid stimulus name because it is used
+  as "not available" to indicate lack of S2
 
 - Document "Onset" stimulus parameter and explain how it makes
   possible to show arbitrary sequences of stimuli as S1 and S2.
@@ -26,8 +27,7 @@ Toward a release
   can be more lenient and determine the order of fields from the
   header line of Stimuli.csv (as is done in other Read*() functions)
 
-- Example suite: reaction time, discrimination task, causal rating,
-  categorization.
+- Example suite: reaction time, causal rating, categorization.
 
 - Add to troubleshooting section that on Windows you don't get error
   messages on console. If no log file, it means that alex cannot read
@@ -68,7 +68,7 @@ It should be possible to make rewards specific to stimulus/key
 combinations. Possible syntax:
 
     Phase Stimulus Trials Rewards   USs
-    1     A        10     a:1,l:0.5 a:Smiley,l:Smiley
+    1     A        10     a:1+l:0.5 a:Smiley+l:Smiley
 
 Indicating a 100% probability of reward when 'a' is pressed and a 50%
 probability when 'b' is pressed. It would also be possible to have

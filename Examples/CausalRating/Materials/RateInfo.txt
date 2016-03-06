@@ -1,0 +1,7 @@
+The first part of the experiment is completed. You are almost done.
+
+Now you will be asked to evaluate, based on what you have learned so far, the likelihood that each food  causes Alice to have an allergic reaction. Use number keys 1 to 7 do indicate this likelihood, with 1 meaning a very unlikely reaction and 7 a very likely reaction.
+
+Again, you will have a few seconds to enter your response.
+
+Please press the space bar to start this last part of the experiment.

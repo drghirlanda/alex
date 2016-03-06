@@ -1,0 +1,16 @@
+Hostname,Group,Subject,ID,Sex,Age,Race,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,S2Pres,Key
+helix,1,1,NA,NA,NA,NA,3538,Start,1,ITI,1550.7,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,NA,NA,NA,NA,5487,Start,1,Start,600000,T,NA,0,F,0,<space>,1945,F,<space>
+helix,1,1,NA,NA,NA,NA,7216,Test,1,ITI,1701.84,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,NA,NA,NA,NA,7437,Test,1,White,1000,T,GoodJob,1000,F,1,<space>,217,T,<space>
+helix,1,1,NA,NA,NA,NA,10287,Test,2,ITI,1841.93,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,NA,NA,NA,NA,10512,Test,2,White,1000,T,GoodJob,1000,F,1,<space>,222,T,<space>
+helix,1,1,NA,NA,NA,NA,12575,Test,3,ITI,1053.94,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,NA,NA,NA,NA,12806,Test,3,White,1000,T,GoodJob,1000,F,1,<space>,227,T,<space>
+helix,1,1,NA,NA,NA,NA,14216,Test,4,ITI,401.599,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,NA,NA,NA,NA,14530,Test,4,White,1000,T,GoodJob,1000,F,1,<space>,310,T,<space>
+helix,1,1,NA,NA,NA,NA,17378,Test,5,ITI,1838.91,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,NA,NA,NA,NA,17637,Test,5,White,1000,T,GoodJob,1000,F,1,<space>,255,T,<space>
+helix,1,1,NA,NA,NA,NA,19213,Test,6,ITI,1132,T,NA,NA,F,NA,NA,567,F,<lctrl>
+helix,1,1,NA,NA,NA,NA,19536,Test,6,ITI,1132,T,NA,NA,F,NA,NA,890,F,<lalt>
+helix,1,1,NA,NA,NA,NA,19742,Test,6,ITI,1132,T,NA,NA,F,NA,NA,1096,F,<rshift>

@@ -3,7 +3,7 @@ S1Duration,1000,"Duration of CSs, unless specified in Stimuli.csv"
 S1S2Interval,0,Interval between CS offset and US onset
 S2Duration,250,"Duration of USs, unless specified in Stimuli.csv"
 ResponseTimeMin,0,Earliest time for valid responses within a trial
-ResponseTimeMax,1000,Latest time for valid responses within a trial
+ResponseTimeMax,Inf,Latest time for valid responses within a trial
 MinITI,200,Minimum intertrial interval
 MaxITI,2000,Maximum intertrial interval
 Response,<space>,"What key constitutes a correct response, unless specified in Phases.csv"

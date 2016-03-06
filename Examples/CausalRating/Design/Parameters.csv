@@ -6,7 +6,7 @@ MinITI,500,Minimum intertrial interval
 MaxITI,1000,Maximum intertrial interval
 Response,<space>,"What key constitutes a correct response, unless specified in Phases.csv"
 MaxResponses,1,Maximum number of valid responses allowed in a trial
-MaxInvalid,100,Maximum number of invalid responses allowed in a trial
+MaxInvalid,1000,Maximum number of invalid responses allowed in a trial
 BackgroundColor,black,Background screen color
 ForegroundColor,white,"Color of text, unless specified in Stimuli.csv"
 FontName,FreeSans,Text font
