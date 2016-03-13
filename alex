@@ -296,6 +296,7 @@ define ReadStimuli() {
 }
 
 define MakeStimulus( stimulus ) {
+  MyLog( "MakeStimulus: creating stimulus "+stimulus )
   n <- Length(gStimNames)
   # Stimulus index in gStimuli:
   i <- Lookup( stimulus, gStimNames, Sequence(1,n,1) )
