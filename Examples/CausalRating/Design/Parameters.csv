@@ -1,7 +1,7 @@
 Parameter,Value,Description
 S1S2Interval,0,Interval between S1 offset and S2 onset
 ResponseTimeMin,0,Earliest time for valid responses within a trial
-ResponseTimeMax,,Latest time for valid responses within a trial
+ResponseTimeMax,Inf,Latest time for valid responses within a trial
 MinITI,500,Minimum intertrial interval
 MaxITI,1000,Maximum intertrial interval
 Response,<space>,"What key constitutes a correct response, unless specified in Phases.csv"

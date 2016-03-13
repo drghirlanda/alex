@@ -1081,12 +1081,12 @@ define ExtendTimer( s1, offTime ) {
     loop( timer, gTimers ) {
       if( Nth(timer, 3) == s ) {
         found <- 1
-	newDuration <- offTime - Nth(timer,1)
-	if( newDuration > Nth(timer, 2) ) {
+		newDuration <- offTime - Nth(timer,1)
+		if( newDuration > Nth(timer, 2) ) {
           SetElement(timer, 2, offTime - Nth(timer, 1) )
-          MyLog("ExtendTimer: Extended "+s+" to end at "+offTime )
+          MyLog( "ExtendTimer: Extended "+s+" to end at "+offTime )
         } else {
-	  MyLog("ExtendTimer: "+s+" does not need extension" )
+	  	  MyLog( "ExtendTimer: "+s+" does not need extension" )
         }
         break
       }
