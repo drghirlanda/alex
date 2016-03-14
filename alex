@@ -788,6 +788,9 @@ define Resolve( stimulus, field, value ) {
     if( SubString(v,1,1) == ":" ) {
       # This is the stimulus to be looked up:
       s <- SubString( v, 2, StringLength(v)-1 )
+      if( s == stimulus ) {
+        Message("Stimulus "+stimulus+" defined in terms of itself!", 1)
+      }
       v2 <- LookUpStimulus( s, field )
       # Since v2 may itself be multiple things separated by '+',
       # we loop over the resolved values in order not to ignore any.
@@ -1171,6 +1174,7 @@ define MyLog( logline ) {
 define Message( text, fatal ) {
   if( fatal == 1 ) {
     instr <- " (press space to quit)"
+    text <- "Error: " + text
   } elseif( fatal == -1 ) {
     instr <- " (please stand by)"
   } else {
