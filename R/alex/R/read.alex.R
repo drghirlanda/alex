@@ -19,7 +19,12 @@ read.alex <- function( data.dir=getwd() ) {
   for( i in grep( "\\.csv$", filenames ) ) {
     message( paste("alex: reading", basename(filenames[i]) ) )
     subject.dt <- data.table( read.csv( filenames[i] ) )
-    attr( subject.dt, "alex" ) <- TRUE
+    ## R reads F as FALSE but we mean 'female'
+    if( is.logical( subject.dt$Sex ) ) {
+      subject.dt[ , Sex := NULL ]
+      subject.dt[ , Sex := "F" ]
+    }
+    setattr( subject.dt, "alex", TRUE )
     presentation.and.keynum( subject.dt )
     dt <- rbind( dt, subject.dt )
   }
@@ -39,8 +44,5 @@ read.alex <- function( data.dir=getwd() ) {
   }
   ## add a global subject identifier merging group and subject:
   dt[ , GSubject := paste( Group, Subject, sep="." ) ]
-  ## correct sex factor (R reads "F" as "FALSE"):
-  dt[ Sex != "M", Sex := "F" ]
-  dt$Sex <- factor( dt$Sex, ordered=FALSE )
   dt
 }
