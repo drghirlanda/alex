@@ -7,6 +7,7 @@
 #' regroup( d, list( Training=c("Training1", "Training2") ) )
 #' @export
 regroup <- function( d, gList ) {
+  check.alex( d )
   d$Group <- as.character( d$Group )
   for( g in names(gList) ) {
     d[ Group %in% gList[[g]], Group := g ]

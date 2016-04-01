@@ -24,7 +24,6 @@ read.alex <- function( data.dir=getwd() ) {
       subject.dt[ , Sex := NULL ]
       subject.dt[ , Sex := "F" ]
     }
-    setattr( subject.dt, "alex", TRUE )
     presentation.and.keynum( subject.dt )
     dt <- rbind( dt, subject.dt )
   }
@@ -38,8 +37,7 @@ read.alex <- function( data.dir=getwd() ) {
   if( "PhaseOrder" %in% names(dt) ) {
     if( length(unique(dt$PhaseOrder)) > 1 ) {
       warning( "alex: different subjects have different phase orders:" )
-      warning( "alex: phases cannot be uniquely ordered" )
-      warning( "alex: (this is fine if intended!)" )
+      warning( "alex: phases cannot be uniquely ordered (may be fine)" )
     }
   }
   ## add a global subject identifier merging group and subject:

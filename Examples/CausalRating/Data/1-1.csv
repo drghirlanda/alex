@@ -1,0 +1,9 @@
+Hostname,Group,Subject,AParameters,BParameters,XParameters,YParameters,ID,Sex,Age,Race,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,S2Pres,Key
+helix,1,1,apple.png,bread.png,banana.png,spaghetti.png,NA,NA,NA,NA,3655,Start,1,ITI,737.84,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,apple.png,bread.png,banana.png,spaghetti.png,NA,NA,NA,NA,4743,Start,1,Start,36000000,T,NA,0,F,0,<space>,1085,F,<space>
+helix,1,1,apple.png,bread.png,banana.png,spaghetti.png,NA,NA,NA,NA,5384,Train1,1,ITI,612.555,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,apple.png,bread.png,banana.png,spaghetti.png,NA,NA,NA,NA,10387,Train1,1,A+Question,5000,T,Yes,0,F,1,y+n,NA,F,<timeout>
+helix,1,1,apple.png,bread.png,banana.png,spaghetti.png,NA,NA,NA,NA,11156,Train1,2,ITI,754.115,T,NA,NA,F,NA,NA,NA,F,<timeout>
+helix,1,1,apple.png,bread.png,banana.png,spaghetti.png,NA,NA,NA,NA,14020,Train1,2,X+Y+Question,5000,T,Yes,0,F,1,y+n,NA,F,<lctrl>
+helix,1,1,apple.png,bread.png,banana.png,spaghetti.png,NA,NA,NA,NA,14071,Train1,2,X+Y+Question,5000,T,Yes,0,F,1,y+n,NA,F,<lalt>
+helix,1,1,apple.png,bread.png,banana.png,spaghetti.png,NA,NA,NA,NA,14292,Train1,2,X+Y+Question,5000,T,Yes,0,F,1,y+n,NA,F,<rshift>
