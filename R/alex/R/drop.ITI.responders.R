@@ -10,7 +10,7 @@
 drop.ITI.responders <- function( d, threshold, drop=TRUE ) {
   temp <- d
   if( ! require(car) ) {
-    stop( "alex: drop.ITI.responders requires the car package" )
+    stop( "alex: drop.ITI.responders requires the 'car' package" )
   }
   temp$S1 <- recode( temp$S1, "'ITI'='ITI'; else='S'" )
   print( iti.table )

@@ -18,7 +18,7 @@ read.alex <- function( data.dir=getwd() ) {
   filenames <- dir( paste(data.dir,"/Data",sep=""), full.names=TRUE)
   for( i in grep( "\\.csv$", filenames ) ) {
     message( paste("alex: reading", basename(filenames[i]) ) )
-    subject.dt <- data.table( read.csv( filenames[i] ) )
+    subject.dt <- fread( filenames[i] )
     ## R reads F as FALSE but we mean 'female'
     if( is.logical( subject.dt$Sex ) ) {
       subject.dt[ , Sex := NULL ]
@@ -27,7 +27,6 @@ read.alex <- function( data.dir=getwd() ) {
     presentation.and.keynum( subject.dt )
     dt <- rbind( dt, subject.dt )
   }
-  dt <- as.data.table( dt )
   ## make sure phase factor is ordered as it appears in the data,
   ## rather than alphabetically:
   dt$Phase <- factor( dt$Phase,

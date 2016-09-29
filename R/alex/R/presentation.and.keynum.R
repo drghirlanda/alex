@@ -9,9 +9,6 @@
 #' @export
 presentation.and.keynum <- function( dt ) {
   require(data.table)
-  if( !is.alex( dt ) ) {
-    stop("alex: argument does not seem to be an alex data.table")
-  }
   for( p in unique(dt$Phase) ) {
     for( s in setdiff(unique(dt[ Phase==p, S1 ]), "ITI") ) {
       dt[ Phase==p & S1==s, Presentation := .GRP, by=Trial ]
