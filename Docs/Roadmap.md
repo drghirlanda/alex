@@ -9,7 +9,7 @@ Toward a release
 - For consistency with other lists, use + to delimit RGB colors rather
   than -
 
-- Document Inf duration parameter?
+- Is the Inf duration parameter documented?
 
 - Document that "NA" is not a valid stimulus name because it is used
   as "not available" to indicate lack of S2
@@ -48,6 +48,8 @@ Toward a release
 
 - README: installation instructions (inc. assumed PEBL locations)
 
+- (?) Graphical launcher giving the option to run alex-init, open the
+  manual, or run alex
 
 Future
 ======
