@@ -696,7 +696,7 @@ define RunITI( phaseName, trial ) {
 # (if that fails, we get NAs, which we return).
 define LookupPhase( phaseName, field ) {
   fields <- Lookup( field, gPhaseHeader, gPhases )
-  if( not Length( fields ) ) { 
+  if( not Length( fields ) )  { 
     stimuli <- LookupPhase( phaseName, "S1" )
     result <- Repeat( Parameter( field ), Length( stimuli ) )
   } else {
@@ -710,6 +710,7 @@ define LookupPhase( phaseName, field ) {
       PushOnEnd( result, r )
     }
   }
+  MyLog( "LookupPhase: Resolved "+field+" in phase " + phaseName + " as " + result )
   return result
 }
 
@@ -821,21 +822,22 @@ define Resolve( stimulus, field, value ) {
 # Similar to Resolve(), but for phases. Does not support + notation,
 # only : and *.
 define ResolvePhase( phase, stimulus, field, value ) {
-  if( SubString( value, 1, 1 ) == ":" ) {
-    Message( "Invalid notation for phase parameters (:)", 1 )
-    # Under construction...
-    # p <- SubString( value, 2, StringLength(value)-1 )
-    # result <- ResolvePhase( p, stimulus, field, value )
-    # MyLog( "ResolvePhase: Resolved '"+value+"' to '"+result+"'" )
-  } elseif( value == "*" ) {
-    result <- Lookup( phase+stimulus+field, gSubjectHeader, gSubjectInfo )
-    if( IsList(result) ) { # Nothing found
-      Message( "Cannot find "+phase+stimulus+field+" in Groups.csv", 1 )
-    } 
-    MyLog( "ResolvePhase: Resolved '"+value+"' to '"+result+"'" )
-  } else {
-    result <- value
-  }
+  result <- value
+  if( StringLength( value ) > 0 ) {
+    if( SubString( value, 1, 1 ) == ":" ) {
+      Message( "Invalid notation for phase parameters (:)", 1 )
+      # Under construction...
+      # p <- SubString( value, 2, StringLength(value)-1 )
+      # result <- ResolvePhase( p, stimulus, field, value )
+      # MyLog( "ResolvePhase: Resolved '"+value+"' to '"+result+"'" )
+    } elseif( value == "*" ) {
+      result <- Lookup( phase+stimulus+field, gSubjectHeader, gSubjectInfo )
+      if( IsList(result) ) { # Nothing found
+        Message( "Cannot find "+phase+stimulus+field+" in Groups.csv", 1 )
+      } 
+      MyLog( "ResolvePhase: Resolved '"+value+"' to '"+result+"'" )
+    }
+  }  
   return result
 }
 
