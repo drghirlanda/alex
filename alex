@@ -396,7 +396,6 @@ define MakeStimulus( stimulus ) {
   SetElement( gStimuli, i, s )
   if( type != "sound" ) { # Sounds don't have to be added to the screen 
     AddObject( s, gWindow )
-    Draw( s )
     Show( s )
     Hide( s )
   }
