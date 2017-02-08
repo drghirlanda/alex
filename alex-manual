@@ -3,13 +3,14 @@
 define Start( par ) {
 
   if( GetSystemType() == "WINDOWS" ) {
-    progFiles <- ["C:\Program Files\alex\\", "C:\Program Files (x86)\alex\\"]
-    if( IsDirectory( First(progFiles) ) ) {
-      pf = First(progFiles)
+    manuals <- ["C:\Program Files\alex\AlexManual.pdf",
+                "C:\Program Files (x86)\alex\AlexManual.pdf"]
+    if( FileExists( First(manuals) ) ) {
+      man <- First(manuals)
     } else {
-      pf = Last(progFiles)
+      man <- Last(manuals)
     }
-    manualDir <- gQuote+pf+"AlexManual.pdf"+gQuote
+    manualDir <- gQuote+man+gQuote
     SystemCall( "start "+gQuote+gQuote+" "+manualDir )
   } elseif ( GetSystemType() == "OSX" ) {
     manualDir <- "/usr/local/share/alex/AlexManual.pdf"
