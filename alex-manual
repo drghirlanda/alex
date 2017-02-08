@@ -9,7 +9,7 @@ define Start( par ) {
     } else {
       pf = Last(progFiles)
     }
-    manualDir <- gQuote+progFiles+"AlexManual.pdf"+gQuote
+    manualDir <- gQuote+pf+"AlexManual.pdf"+gQuote
     SystemCall( "start "+gQuote+gQuote+" "+manualDir )
   } elseif ( GetSystemType() == "OSX" ) {
     manualDir <- "/usr/local/share/alex/AlexManual.pdf"
