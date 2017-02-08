@@ -1,11 +1,15 @@
 #!/usr/local/bin/pebl-language
 
 define Start( par ) {
-  
-  ## Skip directory search, paths were hardcoded anyway
 
   if( GetSystemType() == "WINDOWS" ) {
-    manualDir <- gQuote+"C:\Program Files\alex\AlexManual.pdf"+gQuote
+    progFiles <- ["C:\Program Files\alex\\", "C:\Program Files (x86)\alex\\"]
+    if( IsDirectory( First(progFiles) ) ) {
+      pf = First(progFiles)
+    } else {
+      pf = Last(progFiles)
+    }
+    manualDir <- gQuote+progFiles+"AlexManual.pdf"+gQuote
     SystemCall( "start "+gQuote+gQuote+" "+manualDir )
   } elseif ( GetSystemType() == "OSX" ) {
     manualDir <- "/usr/local/share/alex/AlexManual.pdf"

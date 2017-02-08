@@ -36,10 +36,11 @@ define Start( par ) {
   ## anything is not an error. We look through a number of likely
   ## system directories anyway, stopping as soon as we find one.
   gAlexDir <- "Library/Materials/"
-  dirs <- [ "",                       # Current folder takes precedence
-            "/usr/share/alex/",       # Linux
-            "/usr/local/share/alex/", # OS X
-            "C:\Program Files\alex\\"  # Windows
+  dirs <- [ "",                             # Current folder takes precedence
+            "/usr/share/alex/",             # Linux
+            "/usr/local/share/alex/",       # OS X
+            "C:\Program Files\alex\\",      # Windows
+            "C:\Program Files (x86)\alex\\" # Windows (64-bit)
           ]
   loop( d, dirs ) {
     if( IsDirectory( d + gAlexDir ) ) {
