@@ -11,8 +11,10 @@ Toward a release
 
 - Is the Inf duration parameter documented?
 
+- Add custom text for AskID field if Materials/AskID.txt is found
+
 - Document that "NA" is not a valid stimulus name because it is used
-  as "not available" to indicate lack of S2
+  as "not available" in data files, to indicate lack of S2
 
 - Document "Onset" stimulus parameter and explain how it makes
   possible to show arbitrary sequences of stimuli as S1 and S2.

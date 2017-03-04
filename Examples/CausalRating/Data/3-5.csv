@@ -1,6 +1,0 @@
-Hostname,Group,Subject,AParameters,BParameters,XParameters,YParameters,ID,Sex,Age,Race,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,S2Pres,Key
-helix,3,5,banana.png,spaghetti.png,apple.png,bread.png,NA,NA,NA,NA,2926,Start,1,ITI,818.065,T,NA,NA,F,NA,NA,NA,F,<timeout>
-helix,3,5,banana.png,spaghetti.png,apple.png,bread.png,NA,NA,NA,NA,4404,Start,1,Start,36000000,T,NA,0,F,0,<space>,NA,F,y
-helix,3,5,banana.png,spaghetti.png,apple.png,bread.png,NA,NA,NA,NA,78182,Start,1,Start,36000000,T,NA,0,F,0,<space>,NA,F,<lalt>
-helix,3,5,banana.png,spaghetti.png,apple.png,bread.png,NA,NA,NA,NA,78249,Start,1,Start,36000000,T,NA,0,F,0,<space>,NA,F,<lctrl>
-helix,3,5,banana.png,spaghetti.png,apple.png,bread.png,NA,NA,NA,NA,78404,Start,1,Start,36000000,T,NA,0,F,0,<space>,NA,F,<rshift>

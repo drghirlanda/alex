@@ -1,0 +1,4 @@
+Hostname,Group,Subject,ID,Sex,Age,Race,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,S2Pres,Key
+x1yoga,1,2,NA,NA,NA,NA,3869,Start,1,ITI,1550.55,T,NA,NA,F,NA,NA,NA,F,<timeout>
+x1yoga,1,2,NA,NA,NA,NA,7509,Start,1,Start,600000,T,NA,0,F,0,<space>,NA,F,<space>
+x1yoga,1,2,NA,NA,NA,NA,9541,Training,1,ITI,1986.37,T,NA,NA,F,NA,NA,NA,F,<timeout>
