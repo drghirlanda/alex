@@ -117,9 +117,11 @@ define Start( par ) {
   
   askID <- Parameter("AskID")
   if( askID != "NA" and ToNumber(askID) == 1 ) {
-    gID <- GetEasyInput( "Please enter participant id, "+
-      "then press enter:", gWindow )
-    gID <- ToInteger( gID )
+    idText <- Parameter("IDText")
+    if( idText == "NA" ) {
+      idText <- "Please enter your participant id, then press enter:"
+    }
+    gID <- ToInteger( MyInput( idText ) )
   } else {
     gID <- "NA"
   }
@@ -134,8 +136,7 @@ define Start( par ) {
 
   askAge <- Parameter("AskAge")
   if( askAge != "NA" and ToNumber(askAge) == 1 ) {
-    gAge <- GetEasyInput( "Please enter your age in years, "+
-      "then press enter:", gWindow )
+    gAge <- MyInput( "Please enter your age in years, then press enter:" )
     gAge <- ToInteger( gAge )
   } else {
     gAge <- "NA"
@@ -147,7 +148,7 @@ define Start( par ) {
                  "Hispanic or Latino", "Native Hawaiian or other Pacific Islander", 
                  "White", "Other", "Decline to answer"]
     raceCodes <- ["AIAN", "A", "BAA", "HL", "NHPI", "W", "O", "NA"]
-    gRace <- GetEasyChoice( "Please select your race or ethnicity",
+    gRace <- GetEasyChoice( "Please select your race or ethnicity (check all that apply)",
       raceNIH, raceCodes, gWindow )
   } else {
     gRace <- "NA"
@@ -1244,3 +1245,19 @@ define RandomMultinomial( frequencies ) {
   SetElement( frequencies, i, f - 1 )
   return List( i, frequencies )
 }
+
+## This is slightly customized from Utility.pbl in the PEBL
+## distribution, to allow custom background.
+define MyInput( text )
+{
+   query <- MakeLabel( text, gFont )
+   AddObject( query, gWindow )
+   Move( query, gVideoWidth/2, 80 )
+   box <- EasyTextBox("", gVideoWidth/2 - 150, 120, gWindow, 30, 300, 200 )
+   Draw()
+   input <- GetInput( box, "<return>" )
+   RemoveObject( query, gWindow )
+   RemoveObject( box, gWindow )
+   return input
+}
+
