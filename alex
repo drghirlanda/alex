@@ -119,9 +119,9 @@ define Start( par ) {
   if( askID != "NA" and ToNumber(askID) == 1 ) {
     idText <- Parameter("IDText")
     if( idText == "NA" ) {
-      idText <- "Please enter your participant id, then press enter:"
+      idText <- "Please enter your participant id"
     }
-    gID <- ToInteger( MyInput( idText ) )
+    gID <- ToInteger( MyInput( idText + ", then press enter:" ) )
   } else {
     gID <- "NA"
   }

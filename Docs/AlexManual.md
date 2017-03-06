@@ -449,6 +449,10 @@ Table: A sample `Parameters.csv` file with default values.
 - **AskID** determines whether the subject is asked to provide an ID
     code. (This can be useful to give credit.)
 
+- **IDText** Text used to ask for ID. Default is "Please enter your
+    participant ID". The string ", then press enter:" is added to this
+    text.
+
 - **AskAge** and **AskSex** do what you think they do.
 
 - **AskRace** asks subjects to check their own 'race or ethnicity'
