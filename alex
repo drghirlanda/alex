@@ -77,8 +77,11 @@ define Start( par ) {
   ## needed. The message is displayed after ReadSubject() because the
   ## log file is created there.
   ReadSubject()
-  msg <- Message( "Preparing the experiment...", -1 )  
+  msg <- Message( "Reading phase information...", -1 )  
   ReadPhases()     
+  RemoveObject( msg, gWindow )
+  Draw()
+  msg <- Message( "Reading stimulus information...", -1 )  
   ReadStimuli()    
   RemoveObject( msg, gWindow )
   Draw()
@@ -294,6 +297,11 @@ define ReadStimuli() {
     MyLog( "ReadStimuli: Deferring stimulus creation" )
     gStimuli <- Repeat( "NA", n )
   }
+  ## The stimuli have been drawn on screen by MakeStimulus, and then
+  ## hidden, but no Draw() has been issued after hiding (to avoid
+  ## annoying flashing and slowness). We Draw() here to hide all
+  ## stimuli:
+  Draw() 
 }
 
 define MakeStimulus( stimulus ) {
@@ -398,6 +406,7 @@ define MakeStimulus( stimulus ) {
   if( type != "sound" ) { # Sounds don't have to be added to the screen 
     AddObject( s, gWindow )
     Show( s )
+    Draw()
     Hide( s )
   }
 }
