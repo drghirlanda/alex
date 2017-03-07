@@ -1,0 +1,279 @@
+[623] Message: Preparing the experiment...
+[669] Resolve: mapped [Start, XOffset, ] to []
+[669] Resolve: mapped [Start, YOffset, ] to []
+[669] Resolve: mapped [Start, Parameters, Start.txt] to [Start.txt]
+[676] Resolve: mapped [End, XOffset, ] to []
+[676] Resolve: mapped [End, YOffset, ] to []
+[677] Resolve: mapped [End, Parameters, End.txt] to [End.txt]
+[683] Resolve: mapped [W, XOffset, -128] to [-128]
+[684] Resolve: mapped [W, YOffset, -64] to [-64]
+[684] Resolve: mapped [W, Parameters, wine.png+.5] to [wine.png, .5]
+[691] Resolve: mapped [Wtxt, XOffset, -128] to [-128]
+[691] Resolve: mapped [Wtxt, YOffset, 128] to [128]
+[691] Resolve: mapped [Wtxt, Parameters, wine] to [wine]
+[692] Resolve: mapped [X, XOffset, -128] to [-128]
+[692] Resolve: mapped [X, YOffset, -64] to [-64]
+[692] Resolve: mapped [X, Parameters, chocolate.png+.5] to [chocolate.png, .5]
+[699] Resolve: mapped [Xtxt, XOffset, -128] to [-128]
+[699] Resolve: mapped [Xtxt, YOffset, 128] to [128]
+[699] Resolve: mapped [Xtxt, Parameters, chocolate] to [chocolate]
+[700] Resolve: mapped [Y, XOffset, 128] to [128]
+[700] Resolve: mapped [Y, YOffset, -64] to [-64]
+[700] Resolve: mapped [Y, Parameters, strawberry.png+.5] to [strawberry.png, .5]
+[706] Resolve: mapped [Ytxt, XOffset, 128] to [128]
+[706] Resolve: mapped [Ytxt, YOffset, 128] to [128]
+[706] Resolve: mapped [Ytxt, Parameters, strawberry] to [strawberry]
+[707] Resolve: mapped [Z, XOffset, 128] to [128]
+[707] Resolve: mapped [Z, YOffset, -64] to [-64]
+[707] Resolve: mapped [Z, Parameters, spaghetti.png+.5] to [spaghetti.png, .5]
+[715] Resolve: mapped [Ztxt, XOffset, 128] to [128]
+[715] Resolve: mapped [Ztxt, YOffset, 128] to [128]
+[715] Resolve: mapped [Ztxt, Parameters, spaghetti] to [spaghetti]
+[716] Resolve: mapped [RXN?, XOffset, ] to []
+[716] Resolve: mapped [RXN?, YOffset, 192] to [192]
+[716] Resolve: mapped [RXN?, Parameters, Allergic reaction? y / n] to [Allergic reaction? y / n]
+[717] Resolve: mapped [Yes, XOffset, ] to []
+[717] Resolve: mapped [Yes, YOffset, ] to []
+[717] Resolve: mapped [Yes, Parameters, Outcome: allergic reaction] to [Outcome: allergic reaction]
+[735] Message: Ready to run subject 1-1
+[2158] Start: found alex folder in '/usr/share/alex/Library/Materials/'
+[2158] Start: set working directory to ''
+[2158] Start: using these parameters:
+[2159]   S1S2Interval = 0
+[2159]   ResponseTimeMin = 0
+[2159]   ResponseTimeMax = 
+[2159]   MinITI = 1000
+[2159]   MaxITI = 1000
+[2159]   Response = <space>
+[2159]   MaxResponses = 1
+[2159]   MaxInvalid = 0
+[2159]   BackgroundColor = black
+[2159]   ForegroundColor = white
+[2159]   FontName = Vera
+[2159]   FontSize = 24
+[2159]   AskID = 0
+[2159]   AskAge = 0
+[2159]   AskSex = 0
+[2159]   AskRace = 0
+[2159]   Log = 1
+[2159] Start: using these phases:
+[2159]   [Start, Pretrain, Pretrain, Pretrain, Pretrain, Pretrain, Pretrain, End]
+[2159]   [Start, W+Wtxt+RXN?, X+Xtxt+RXN?, Y+Ytxt+RXN?, Z+Ztxt+RXN?, W+Wtxt+Z+Ztxt+RXN?, X+Xtxt+Y+Ytxt+RXN?, End]
+[2160]   [1, 8, 8, 8, 8, 8, 8, 1]
+[2160]   [, 1, 1, 1, 1, 1, 1, ]
+[2160]   [, No, Yes, Yes, No, No, Yes, ]
+[2160]   [, , , , , , , ]
+[2160] Start: using these stimuli:
+[2160]   [Start, textfile, Start.txt, , , , 600000, ]
+[2160]   [End, textfile, End.txt, , , , 600000, ]
+[2160]   [W, image, wine.png+.5, , -128, -64, 5000, ]
+[2160]   [Wtxt, text, wine, , -128, 128, 5000, ]
+[2160]   [X, image, chocolate.png+.5, , -128, -64, 5000, ]
+[2160]   [Xtxt, text, chocolate, , -128, 128, 5000, ]
+[2160]   [Y, image, strawberry.png+.5, , 128, -64, 5000, ]
+[2160]   [Ytxt, text, strawberry, , 128, 128, 5000, ]
+[2160]   [Z, image, spaghetti.png+.5, , 128, -64, 5000, ]
+[2160]   [Ztxt, text, spaghetti, , 128, 128, 5000, ]
+[2160]   [RXN?, text, Allergic reaction? y / n, , , 192, 5000, ]
+[2160]   [Yes, text, Outcome: allergic reaction, , , , 5000, ]
+[2693] Start: determined hostname as 'pollo'
+[2699] Start: accepting these response keys: [<backspace>, <tab>, <clear>, <return>, <esc>,  , !, ", #, $, <ERROR>, &, ', (, ), *, +, ,, -, ., /, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, :, ;, <, =, >, ?, @, [, \, ], ^, _, `, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, <ERROR>, <ERROR>, <ERROR>, <ERROR>, <delete>, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ., /, *, -, +, <kp_enter>, =, <up>, <down>, <right>, <left>, <insert>, <home>, <end>, <pageup>, <pagedown>, <f1>, <f2>, <f3>, <f4>, <f5>, <f6>, <f7>, <f8>, <f9>, <f10>, <f11>, <f12>, <f13>, <f14>, <f15>, <ERROR>, <ERROR>, <ERROR>, <numlock>, <capslock>, <scrollock>, <rshift>, <lshift>, <rctrl>, <lctrl>, <ralt>, <lalt>, <rmeta>, <lmeta>]
+[2701] RunPhase: starting phase Start
+[2705] RunPhase: accepting [1] valid and [0] invalid responses per trial
+[2705] RunPhase: scheduling 1 trials with stimulus Start
+[2706] RunPhase: constructed trial list: [Start]
+[2706] RunPhase: constructed trial order: [1]
+[2706] DisplayBackground: no background found
+[3707] RunTrial: starting trial: [Start, 1, Start, 0, NA, <space>, 1]
+[3708] RunTrial: accepting responses between 0 and 0
+[3709] Resolve: mapped [Start, Duration, 600000] to [600000]
+[3709] Resolve: mapped [Start, Onset, NA] to [NA]
+[3709] SetTimer: new timer: [3708, 600000, Start, 0]
+[3709] RunTrial: instrumental trial
+[3709] RunTrial: trial scheduled to end at 603708
+[3722] UpdateTimers: turning on timer: [3708, 600000, Start, 1]
+[3735] NextTimer: next event: 603708
+[6029] RunTrial: valid response on key '<space>' at rt=2321
+[6043] RunTrial: maximum valid responses reached: endindg trial
+[6045] ExpireTimers: expired [3708, 600000, Start, 1]
+[6046] RunTrial: maximum invalid responses reached: endindg trial
+[6049] RunTrial: trial completed
+[6049] RunPhase: starting phase Pretrain
+[6054] RunPhase: accepting [1, 1, 1, 1, 1, 1] valid and [0, 0, 0, 0, 0, 0] invalid responses per trial
+[6054] RunPhase: scheduling 8 trials with stimulus W+Wtxt+RXN?
+[6054] RunPhase: scheduling 8 trials with stimulus X+Xtxt+RXN?
+[6054] RunPhase: scheduling 8 trials with stimulus Y+Ytxt+RXN?
+[6054] RunPhase: scheduling 8 trials with stimulus Z+Ztxt+RXN?
+[6055] RunPhase: scheduling 8 trials with stimulus W+Wtxt+Z+Ztxt+RXN?
+[6055] RunPhase: scheduling 8 trials with stimulus X+Xtxt+Y+Ytxt+RXN?
+[6060] RunPhase: constructed trial list: [W+Wtxt+RXN?, W+Wtxt+RXN?, W+Wtxt+RXN?, W+Wtxt+RXN?, W+Wtxt+RXN?, W+Wtxt+RXN?, W+Wtxt+RXN?, W+Wtxt+RXN?, X+Xtxt+RXN?, X+Xtxt+RXN?, X+Xtxt+RXN?, X+Xtxt+RXN?, X+Xtxt+RXN?, X+Xtxt+RXN?, X+Xtxt+RXN?, X+Xtxt+RXN?, Y+Ytxt+RXN?, Y+Ytxt+RXN?, Y+Ytxt+RXN?, Y+Ytxt+RXN?, Y+Ytxt+RXN?, Y+Ytxt+RXN?, Y+Ytxt+RXN?, Y+Ytxt+RXN?, Z+Ztxt+RXN?, Z+Ztxt+RXN?, Z+Ztxt+RXN?, Z+Ztxt+RXN?, Z+Ztxt+RXN?, Z+Ztxt+RXN?, Z+Ztxt+RXN?, Z+Ztxt+RXN?, W+Wtxt+Z+Ztxt+RXN?, W+Wtxt+Z+Ztxt+RXN?, W+Wtxt+Z+Ztxt+RXN?, W+Wtxt+Z+Ztxt+RXN?, W+Wtxt+Z+Ztxt+RXN?, W+Wtxt+Z+Ztxt+RXN?, W+Wtxt+Z+Ztxt+RXN?, W+Wtxt+Z+Ztxt+RXN?, X+Xtxt+Y+Ytxt+RXN?, X+Xtxt+Y+Ytxt+RXN?, X+Xtxt+Y+Ytxt+RXN?, X+Xtxt+Y+Ytxt+RXN?, X+Xtxt+Y+Ytxt+RXN?, X+Xtxt+Y+Ytxt+RXN?, X+Xtxt+Y+Ytxt+RXN?, X+Xtxt+Y+Ytxt+RXN?]
+[6060] RunPhase: constructed trial order: [27, 19, 2, 4, 40, 7, 1, 36, 26, 11, 45, 23, 6, 21, 8, 24, 9, 29, 18, 47, 44, 14, 34, 30, 39, 46, 41, 32, 33, 15, 28, 5, 35, 17, 31, 20, 10, 42, 22, 37, 3, 38, 12, 25, 13, 48, 43, 16]
+[6060] DisplayBackground: no background found
+[7062] RunTrial: starting trial: [Pretrain, 1, Z+Ztxt+RXN?, 1, No, <space>, 1]
+[7063] RunTrial: accepting responses between 0 and 0
+[7064] Resolve: mapped [Z, Duration, 5000] to [5000]
+[7064] Resolve: mapped [Z, Onset, NA] to [NA]
+[7064] SetTimer: new timer: [7063, 5000, Z, 0]
+[7065] Resolve: mapped [Ztxt, Duration, 5000] to [5000]
+[7065] Resolve: mapped [Ztxt, Onset, NA] to [NA]
+[7065] SetTimer: new timer: [7063, 5000, Ztxt, 0]
+[7066] Resolve: mapped [RXN?, Duration, 5000] to [5000]
+[7066] Resolve: mapped [RXN?, Onset, NA] to [NA]
+[7066] SetTimer: new timer: [7063, 5000, RXN?, 0]
+[7066] RunTrial: instrumental trial
+[7066] RunTrial: trial scheduled to end at 12063
+[7070] UpdateTimers: turning on timer: [7063, 5000, Z, 1]
+[7073] UpdateTimers: turning on timer: [7063, 5000, Ztxt, 1]
+[7076] UpdateTimers: turning on timer: [7063, 5000, RXN?, 1]
+[7080] NextTimer: next event: 12063
+[8830] RunTrial: invalid response on key '<lctrl>' at rt=1767
+[8835] RunTrial: maximum invalid responses reached: endindg trial
+[8836] ExpireTimers: expired [7063, 5000, Z, 1]
+[8838] ExpireTimers: expired [7063, 5000, Ztxt, 1]
+[8840] ExpireTimers: expired [7063, 5000, RXN?, 1]
+[8842] RunTrial: trial completed
+[9844] RunTrial: starting trial: [Pretrain, 2, Y+Ytxt+RXN?, 1, Yes, <space>, 1]
+[9845] RunTrial: accepting responses between 0 and 0
+[9846] Resolve: mapped [Y, Duration, 5000] to [5000]
+[9846] Resolve: mapped [Y, Onset, NA] to [NA]
+[9846] SetTimer: new timer: [9845, 5000, Y, 0]
+[9847] Resolve: mapped [Ytxt, Duration, 5000] to [5000]
+[9847] Resolve: mapped [Ytxt, Onset, NA] to [NA]
+[9847] SetTimer: new timer: [9845, 5000, Ytxt, 0]
+[9848] Resolve: mapped [RXN?, Duration, 5000] to [5000]
+[9848] Resolve: mapped [RXN?, Onset, NA] to [NA]
+[9848] SetTimer: new timer: [9845, 5000, RXN?, 0]
+[9848] RunTrial: instrumental trial
+[9848] RunTrial: trial scheduled to end at 14845
+[9852] UpdateTimers: turning on timer: [9845, 5000, Y, 1]
+[9855] UpdateTimers: turning on timer: [9845, 5000, Ytxt, 1]
+[9859] UpdateTimers: turning on timer: [9845, 5000, RXN?, 1]
+[9862] NextTimer: next event: 14845
+[12750] RunTrial: invalid response on key 'y' at rt=2905
+[12755] RunTrial: maximum invalid responses reached: endindg trial
+[12756] ExpireTimers: expired [9845, 5000, Y, 1]
+[12758] ExpireTimers: expired [9845, 5000, Ytxt, 1]
+[12759] ExpireTimers: expired [9845, 5000, RXN?, 1]
+[12762] RunTrial: trial completed
+[13764] RunTrial: starting trial: [Pretrain, 3, W+Wtxt+RXN?, 1, No, <space>, 1]
+[13765] RunTrial: accepting responses between 0 and 0
+[13766] Resolve: mapped [W, Duration, 5000] to [5000]
+[13766] Resolve: mapped [W, Onset, NA] to [NA]
+[13766] SetTimer: new timer: [13765, 5000, W, 0]
+[13767] Resolve: mapped [Wtxt, Duration, 5000] to [5000]
+[13767] Resolve: mapped [Wtxt, Onset, NA] to [NA]
+[13767] SetTimer: new timer: [13765, 5000, Wtxt, 0]
+[13768] Resolve: mapped [RXN?, Duration, 5000] to [5000]
+[13768] Resolve: mapped [RXN?, Onset, NA] to [NA]
+[13768] SetTimer: new timer: [13765, 5000, RXN?, 0]
+[13768] RunTrial: instrumental trial
+[13768] RunTrial: trial scheduled to end at 18765
+[13771] UpdateTimers: turning on timer: [13765, 5000, W, 1]
+[13775] UpdateTimers: turning on timer: [13765, 5000, Wtxt, 1]
+[13778] UpdateTimers: turning on timer: [13765, 5000, RXN?, 1]
+[13781] NextTimer: next event: 18765
+[14669] RunTrial: invalid response on key 'y' at rt=904
+[14674] RunTrial: maximum invalid responses reached: endindg trial
+[14675] ExpireTimers: expired [13765, 5000, W, 1]
+[14677] ExpireTimers: expired [13765, 5000, Wtxt, 1]
+[14678] ExpireTimers: expired [13765, 5000, RXN?, 1]
+[14681] RunTrial: trial completed
+[15682] RunTrial: starting trial: [Pretrain, 4, W+Wtxt+RXN?, 1, No, <space>, 1]
+[15683] RunTrial: accepting responses between 0 and 0
+[15684] Resolve: mapped [W, Duration, 5000] to [5000]
+[15684] Resolve: mapped [W, Onset, NA] to [NA]
+[15684] SetTimer: new timer: [15683, 5000, W, 0]
+[15685] Resolve: mapped [Wtxt, Duration, 5000] to [5000]
+[15685] Resolve: mapped [Wtxt, Onset, NA] to [NA]
+[15685] SetTimer: new timer: [15683, 5000, Wtxt, 0]
+[15687] Resolve: mapped [RXN?, Duration, 5000] to [5000]
+[15687] Resolve: mapped [RXN?, Onset, NA] to [NA]
+[15687] SetTimer: new timer: [15683, 5000, RXN?, 0]
+[15687] RunTrial: instrumental trial
+[15687] RunTrial: trial scheduled to end at 20683
+[15690] UpdateTimers: turning on timer: [15683, 5000, W, 1]
+[15694] UpdateTimers: turning on timer: [15683, 5000, Wtxt, 1]
+[15697] UpdateTimers: turning on timer: [15683, 5000, RXN?, 1]
+[15700] NextTimer: next event: 20683
+[16734] RunTrial: invalid response on key 'y' at rt=1051
+[16739] RunTrial: maximum invalid responses reached: endindg trial
+[16740] ExpireTimers: expired [15683, 5000, W, 1]
+[16742] ExpireTimers: expired [15683, 5000, Wtxt, 1]
+[16743] ExpireTimers: expired [15683, 5000, RXN?, 1]
+[16746] RunTrial: trial completed
+[17747] RunTrial: starting trial: [Pretrain, 5, W+Wtxt+Z+Ztxt+RXN?, 1, No, <space>, 1]
+[17748] RunTrial: accepting responses between 0 and 0
+[17749] Resolve: mapped [W, Duration, 5000] to [5000]
+[17749] Resolve: mapped [W, Onset, NA] to [NA]
+[17749] SetTimer: new timer: [17748, 5000, W, 0]
+[17750] Resolve: mapped [Wtxt, Duration, 5000] to [5000]
+[17750] Resolve: mapped [Wtxt, Onset, NA] to [NA]
+[17750] SetTimer: new timer: [17748, 5000, Wtxt, 0]
+[17751] Resolve: mapped [Z, Duration, 5000] to [5000]
+[17751] Resolve: mapped [Z, Onset, NA] to [NA]
+[17751] SetTimer: new timer: [17748, 5000, Z, 0]
+[17752] Resolve: mapped [Ztxt, Duration, 5000] to [5000]
+[17752] Resolve: mapped [Ztxt, Onset, NA] to [NA]
+[17752] SetTimer: new timer: [17748, 5000, Ztxt, 0]
+[17752] Resolve: mapped [RXN?, Duration, 5000] to [5000]
+[17753] Resolve: mapped [RXN?, Onset, NA] to [NA]
+[17753] SetTimer: new timer: [17748, 5000, RXN?, 0]
+[17753] RunTrial: instrumental trial
+[17753] RunTrial: trial scheduled to end at 22748
+[17756] UpdateTimers: turning on timer: [17748, 5000, W, 1]
+[17760] UpdateTimers: turning on timer: [17748, 5000, Wtxt, 1]
+[17765] UpdateTimers: turning on timer: [17748, 5000, Z, 1]
+[17769] UpdateTimers: turning on timer: [17748, 5000, Ztxt, 1]
+[17774] UpdateTimers: turning on timer: [17748, 5000, RXN?, 1]
+[17779] NextTimer: next event: 22748
+[19005] RunTrial: invalid response on key 'y' at rt=1257
+[19011] RunTrial: maximum invalid responses reached: endindg trial
+[19015] ExpireTimers: expired [17748, 5000, W, 1]
+[19018] ExpireTimers: expired [17748, 5000, Wtxt, 1]
+[19020] ExpireTimers: expired [17748, 5000, Z, 1]
+[19021] ExpireTimers: expired [17748, 5000, Ztxt, 1]
+[19023] ExpireTimers: expired [17748, 5000, RXN?, 1]
+[19025] RunTrial: trial completed
+[20027] RunTrial: starting trial: [Pretrain, 6, W+Wtxt+RXN?, 1, No, <space>, 1]
+[20028] RunTrial: accepting responses between 0 and 0
+[20029] Resolve: mapped [W, Duration, 5000] to [5000]
+[20029] Resolve: mapped [W, Onset, NA] to [NA]
+[20029] SetTimer: new timer: [20028, 5000, W, 0]
+[20030] Resolve: mapped [Wtxt, Duration, 5000] to [5000]
+[20030] Resolve: mapped [Wtxt, Onset, NA] to [NA]
+[20030] SetTimer: new timer: [20028, 5000, Wtxt, 0]
+[20031] Resolve: mapped [RXN?, Duration, 5000] to [5000]
+[20031] Resolve: mapped [RXN?, Onset, NA] to [NA]
+[20031] SetTimer: new timer: [20028, 5000, RXN?, 0]
+[20031] RunTrial: instrumental trial
+[20031] RunTrial: trial scheduled to end at 25028
+[20034] UpdateTimers: turning on timer: [20028, 5000, W, 1]
+[20038] UpdateTimers: turning on timer: [20028, 5000, Wtxt, 1]
+[20041] UpdateTimers: turning on timer: [20028, 5000, RXN?, 1]
+[20044] NextTimer: next event: 25028
+[21037] RunTrial: invalid response on key 'y' at rt=1009
+[21042] RunTrial: maximum invalid responses reached: endindg trial
+[21043] ExpireTimers: expired [20028, 5000, W, 1]
+[21045] ExpireTimers: expired [20028, 5000, Wtxt, 1]
+[21046] ExpireTimers: expired [20028, 5000, RXN?, 1]
+[21049] RunTrial: trial completed
+[22050] RunTrial: starting trial: [Pretrain, 7, W+Wtxt+RXN?, 1, No, <space>, 1]
+[22051] RunTrial: accepting responses between 0 and 0
+[22052] Resolve: mapped [W, Duration, 5000] to [5000]
+[22052] Resolve: mapped [W, Onset, NA] to [NA]
+[22052] SetTimer: new timer: [22051, 5000, W, 0]
+[22053] Resolve: mapped [Wtxt, Duration, 5000] to [5000]
+[22053] Resolve: mapped [Wtxt, Onset, NA] to [NA]
+[22053] SetTimer: new timer: [22051, 5000, Wtxt, 0]
+[22054] Resolve: mapped [RXN?, Duration, 5000] to [5000]
+[22054] Resolve: mapped [RXN?, Onset, NA] to [NA]
+[22054] SetTimer: new timer: [22051, 5000, RXN?, 0]
+[22054] RunTrial: instrumental trial
+[22054] RunTrial: trial scheduled to end at 27051
+[22057] UpdateTimers: turning on timer: [22051, 5000, W, 1]
+[22061] UpdateTimers: turning on timer: [22051, 5000, Wtxt, 1]
+[22064] UpdateTimers: turning on timer: [22051, 5000, RXN?, 1]
+[22067] NextTimer: next event: 27051
+[22766] RunTrial: valid response on key '<space>' at rt=715
+[22783] Message: Cannot look up 'Duration' for undefined stimulus No
+[22786] Message: terminating

@@ -1,0 +1,4 @@
+Hostname,Group,Subject,ID,Sex,Age,Race,Time,Phase,Trial,S1,S1Duration,S1On,S2,S2Duration,S2On,S2Prob,Response,RT,S2Pres,Key
+pane,1,1,NA,NA,NA,NA,5120,Start,1,ITI,1861.14,T,NA,NA,F,NA,NA,NA,F,<timeout>
+pane,1,1,NA,NA,NA,NA,6757,Start,1,Start,600000,T,NA,NA,F,NA,<space>,1623,F,<space>
+pane,1,1,NA,NA,NA,NA,7958,Training,1,ITI,1034.61,T,NA,NA,F,NA,NA,NA,F,<timeout>
