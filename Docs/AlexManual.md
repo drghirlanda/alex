@@ -482,13 +482,13 @@ Table: A sample `Parameters.csv` file with default values.
 
 - **FlashStimuli**: Like JustInTime, this parameter facilitates use on
     relatively low-end machines such as the RaspberryPi. If
-    FlashStimuli is set to 1, then visual stimuli are briefly
-    displayed on screen as they are loaded, before the experiment
-    starts (clearly, you should not let participants see this). This
-    causes the stimulus to be drawn to screen before its first
-    use. Without this option, there may be a time lag when stimuli are
-    displayed the first time during an experiment, which can be
-    noticeable when multiple stimuli have to be displayed.
+    FlashStimuli is set to a number x greater than 0, then each visual
+    stimulus (apart from text files) is displayed on screen for x
+    milliseconds when it is loaded, before the experiment starts
+    (clearly, you should not let participants see this). Without this
+    option, there may be a time lag when stimuli are displayed the
+    first time during the experiment, which can be noticeable when
+    multiple stimuli have to be displayed.
 
 \phantomsection \addcontentsline{toc}{section}{More about stimuli}
 \section*{More about stimuli}

@@ -307,6 +307,12 @@ define ReadStimuli() {
 
 define MakeStimulus( stimulus ) {
   MyLog( "MakeStimulus: creating stimulus "+stimulus )
+  # Used later to flash stimuli on screen (or not, if 0):
+  flashTime <- ToNumber( Parameter( "FlashStimuli" ) ) 
+  ## However, flashTime is overridden if JustInTime is 1:
+  if( ToNumber( Parameter( "JustInTime" ) ) ) {
+    flashTime <- 0
+  }
   n <- Length(gStimNames)
   # Stimulus index in gStimuli:
   i <- Lookup( stimulus, gStimNames, Sequence(1,n,1) )
@@ -406,11 +412,15 @@ define MakeStimulus( stimulus ) {
   SetElement( gStimuli, i, s )
   if( type != "sound" ) { # Sounds don't have to be added to the screen 
     AddObject( s, gWindow )
-    if( ToNumber( Parameter( "FlashStimuli" ) ) == 1 ) {
+    Hide( s )
+    Draw()
+    if( type != "textfile" and flashTime > 0 ) {
+      MyLog( "MakeStimulus: flashing " + stimulus + " for " + flashTime + " ms" )
       Show( s )
       Draw()
+      Wait( flashTime )
       Hide( s )
-    }
+    }  
   }
 }
 
