@@ -12,7 +12,7 @@ BackgroundColor,black,Background screen color
 ForegroundColor,white,"Color of text, unless specified in Stimuli.csv"
 FontName,Vera,Text font
 FontSize,24,Text size
-AskID,0,
+AskID,1,
 AskAge,0,
 AskSex,0,
 AskRace,0,

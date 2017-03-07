@@ -298,10 +298,10 @@ define ReadStimuli() {
     MyLog( "ReadStimuli: Deferring stimulus creation" )
     gStimuli <- Repeat( "NA", n )
   }
-  ## The stimuli have been drawn on screen by MakeStimulus, and then
-  ## hidden, but no Draw() has been issued after hiding (to avoid
-  ## annoying flashing and slowness). We Draw() here to hide all
-  ## stimuli:
+  ## The stimuli may have been drawn on screen by MakeStimulus, and
+  ## then hidden, but no Draw() has been issued after hiding (to avoid
+  ## annoying flashing and slowness). We Draw() here to be sure that
+  ## all stimuli are hidden:
   Draw() 
 }
 
@@ -406,9 +406,11 @@ define MakeStimulus( stimulus ) {
   SetElement( gStimuli, i, s )
   if( type != "sound" ) { # Sounds don't have to be added to the screen 
     AddObject( s, gWindow )
-    Show( s )
-    Draw()
-    Hide( s )
+    if( ToNumber( Parameter( "FlashStimuli" ) ) == 1 ) {
+      Show( s )
+      Draw()
+      Hide( s )
+    }
   }
 }
 

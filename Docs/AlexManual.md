@@ -398,7 +398,13 @@ ForegroundColor black
 FontName        Vera
 FontSize        36
 Test            0
+AskID		0
+AskRace		0
+AskSex		0
+AskAge		0
 Log             1
+JustInTime	0
+FlashStimuli	0
 
 Table: A sample `Parameters.csv` file with default values.
 
@@ -466,6 +472,23 @@ Table: A sample `Parameters.csv` file with default values.
   messages for each subject, in files named the same as corresponding
   data files except with a `.log` suffix. Disabled by setting to `0`.
 
+- **JustInTime**: An experiment may have very many stimuli and/or be
+    run on a relatively low-end machine such as a RaspberryPi. Alex
+    usually pre-loads all stimuli at the beginning of the experiment,
+    but in some cases pre-loading may take too much time and/or
+    memory. Setting the JustInTime parameter to 1 causes alex to load
+    each stimulus as it is needed, unloading it after it has been
+    displayed.
+
+- **FlashStimuli**: Like JustInTime, this parameter facilitates use on
+    relatively low-end machines such as the RaspberryPi. If
+    FlashStimuli is set to 1, then visual stimuli are briefly
+    displayed on screen as they are loaded, before the experiment
+    starts (clearly, you should not let participants see this). This
+    causes the stimulus to be drawn to screen before its first
+    use. Without this option, there may be a time lag when stimuli are
+    displayed the first time during an experiment, which can be
+    noticeable when multiple stimuli have to be displayed.
 
 \phantomsection \addcontentsline{toc}{section}{More about stimuli}
 \section*{More about stimuli}
