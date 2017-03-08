@@ -1,0 +1,2 @@
+Phase,S1,Trials,S2Prob,S2,Response,MaxResponses
+Train,A,2,1,a:X|l:Y,a+l,

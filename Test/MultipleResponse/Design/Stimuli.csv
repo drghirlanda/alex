@@ -1,0 +1,4 @@
+Name,Type,Parameters,Color,XOffset,YOffset,Duration
+A,circle,100,white,,,2000
+X,circle,100,red,,-100,500
+Y,circle,100,green,,-100,500

@@ -567,6 +567,29 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
   }
   # Now we split 'response' on '+' to get a list of valid responses:
   responseList <- SplitString( response, "+" )
+  # We also split s2 into s2Responses and s2Stimuli. In fact s2 can be
+  # a string of the form a:X+b:Y, meaning that response a should
+  # receive stimulus X and response B stimulus Y:
+  s2List <- SplitString( s2, "|" )
+  s2Responses <- []
+  s2Stimuli <- []
+  # If s2List has only one element, it is a stimulus, and all
+  # responses in responseList are valid responses:
+  if( Length( s2List ) == 1 ) {
+    PushOnEnd( s2Stimuli, s2 )
+    PushOnEnd( s2Responses, responseList )
+  } else {
+    loop( listElement, s2List ) {
+      rsList <- SplitString( listElement, ":" )
+      PushOnEnd( s2Responses, SplitString( Nth( rsList, 1 ), "+" ) )
+      PushOnEnd( s2Stimuli, Nth( rsList, 2 ) )
+    }
+  }
+  MyLog( "RunTrial: s2Stimuli is " + s2Stimuli )
+  MyLog( "RunTrial: s2Responses is " + s2Responses )
+  # We initialize the S2 to display on this trial to use NA as an
+  # error flag in case no stimulus is found:
+  s2ThisTrial <- "NA"
   # This variable keeps track of whether an instrumental trial has
   # been lengthened or not because the US had to be shown near the end
   # of the trial. It is checked later on before deciding to lengthen a
@@ -613,14 +636,25 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
       if( (not classical) and valid ) { # Schedule S2 (possibly)
         r <- Random()
         if( r < rewardProb ) {
-	  MyLog( "RunTrial: Scheduling S2 '"+s2+"' on valid response ("+r+"<"+rewardProb+")" )
+	  i <- 1
+          while( i <= Length( s2Stimuli ) ) {
+	    if( IsMember( key, Nth( s2Responses, i ) ) ) {
+	      s2ThisTrial <- Nth( s2Stimuli, i )
+	      i <- Length( s2Stimuli )
+	    }
+	    i <- i + 1
+	  }
+	  if( s2ThisTrial == "NA" ) {
+	    Message( "RunTrial: cannot find stimulus for response " + key, 1 )
+	  }
+          MyLog( "RunTrial: Scheduling S2 '"+s2ThisTrial+"' on valid response ("+r+"<"+rewardProb+")" )
           s2Pres <- "T"
-          if( TimerOn( s2 ) == "F" ) { # Schedule S2 if not already on
-            times <- SetTimer( GetTime() + s1s2Interval, s2 )
+          if( TimerOn( s2ThisTrial ) == "F" ) { # Schedule S2 if not already on
+            times <- SetTimer( GetTime() + s1s2Interval, s2ThisTrial )
             onTime <- Nth(times, 1)
             offTime <- Nth(times, 2)
 	    ExtendTimer( s1, offTime ) # prevent S1 from disappearing before S2
-	    MyLog( "RunTrial: s2 scheduled between "+onTime+" and "+offTime )
+	    MyLog( "RunTrial: S2 scheduled between "+onTime+" and "+offTime )
             s2Duration <- offTime - onTime
             # Lengthen trial if necessary, but only if it has not been
             # lengthened already:
@@ -634,6 +668,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
           }
         } else {
 	  MyLog( "RunTrial: Not scheduling S2 on valid response ("+r+">="+rewardProb+")" )
+	  s2ThisTrial <- "NA"
         }
       }
     }
@@ -649,8 +684,8 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     if( key!="<timeout>" or (totalResponses==0 and trialTimeout) ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
         gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
-        TimerOn(s1), s2, s2Duration, TimerOn(s2), rewardProb, 
-        response, rt, s2Pres, key ] ) )
+        TimerOn(s1), s2ThisTrial, s2Duration, TimerOn(s2ThisTrial),
+	rewardProb, response, rt, s2Pres, key ] ) )
       # "Hostname", gSubjectHeader, "ID", "Sex", "Age", "Race", "Time",
       # "Phase", "Trial", "S1", "S1Duration", "S1On", "S2", "S2Duration",
       # "S2On", "S2Prob", "Response", "RT", "S2Pres", "Key"
@@ -661,7 +696,7 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     UpdateTimers()
 
     ## End trial if s2 is off and valid or invalid max responses reached
-    if( TimerOn(s2)=="F" ) {
+    if( TimerOn(s2ThisTrial)=="F" ) {
       if( validCount >= maxResponses ) {
         MyLog( "RunTrial: Maximum valid responses reached: ending trial (validCount="+validCount+")" )
         continue <- 0
