@@ -76,6 +76,7 @@ define Start( par ) {
   ## initializations above to be able to display error messages if
   ## needed. The message is displayed after ReadSubject() because the
   ## log file is created there.
+  SanitizeDesignFiles()
   ReadSubject()
   msg <- Message( "Reading phase information...", -1 )  
   ReadPhases()     
@@ -783,8 +784,9 @@ define LookupStimulus( sName, field ) {
   nStim <- Length( gStimNames )
   sIndex <- Lookup( sName, gStimNames, Sequence(1,nStim,1) )
   if( IsList(sIndex) ) {
-    Message( "Cannot look up '"+field+"' for undefined stimulus "+sName, 1 )
-  }  
+    MyLog( "LookupStimulus: Looking up '"+sName+"' in "+gStimNames+" returned '"+sIndex+"'" )
+    Message( "LookupStimulus: Cannot look up '"+field+"' for undefined stimulus '"+sName+"'", 1 )
+  } 
   nFields <- Length( gStimulusHeader )
   fIndex <- Lookup(field, gStimulusHeader, Sequence(1,nFields,1) )
   if( IsList(fIndex) ) { # Did not find field, try global parameters
@@ -1308,3 +1310,14 @@ define MyInput( text )
    return input
 }
 
+## Run Design files through dos2unix on linux
+define SanitizeDesignFiles()
+{
+  if( GetSystemType() == "LINUX" ) {
+      Print( "SanitizeDesignFiles: converting Design files to UNIX (for safety)" )
+      files <- ["Parameters.csv", "Groups.csv", "Stimuli.csv", "Phases.csv"]
+      loop( f, files ) {
+        SystemCall( "dos2unix " + gWD + "/Design/" + f )
+      }
+  }
+}
