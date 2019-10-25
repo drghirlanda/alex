@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 BIN_DIR=/usr/local/bin
 SHARE_DIR=/usr/local/share
-PEBL_OSX=/Applications/pebl.app/Contents/MacOS/pebl
+PEBL_OSX=/Applications/PEBL2.app/Contents/MacOS/PEBL2
 USER=$(whoami)
 GROUP=wheel
 SRC=$(pwd)
