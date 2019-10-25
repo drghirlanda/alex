@@ -1,0 +1,11 @@
+## Test the Square() function
+
+define Start( par ) {
+       w <- MakeWindow( "black" )
+       c <- Square( 200, 200, 100, MakeColor("white"), 1 )
+       AddObject( c, w )
+       Show( c )
+       Draw()
+       WaitForKeyDown( " " ) 
+}
+
