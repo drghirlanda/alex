@@ -22,4 +22,3 @@ second numbers responses within presentations.
 \examples{
 This function is meant for internal use
 }
-

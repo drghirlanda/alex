@@ -21,4 +21,3 @@ Drop responses with fast reaction times. All occurring before
 \code{threshold} ms (default: 100 ms) following trial start are
 dropped.
 }
-

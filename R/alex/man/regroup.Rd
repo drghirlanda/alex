@@ -20,4 +20,3 @@ Rename experimantal groups in an alex data.table
 \examples{
 regroup( d, list( Training=c("Training1", "Training2") ) )
 }
-

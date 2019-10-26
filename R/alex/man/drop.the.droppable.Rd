@@ -23,4 +23,3 @@ A copy of the original data frame after dropping the relevant rows
 Combines \code{drop.phases}, \code{drop.S2.responses},
 \code{drop.ITI}, and \code{drop.too.fast}
 }
-

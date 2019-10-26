@@ -15,4 +15,3 @@ A copy of the original data frame after dropping the relevant rows
 \description{
 Drop responses that occurred during the S2
 }
-

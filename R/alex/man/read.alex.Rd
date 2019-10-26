@@ -31,4 +31,3 @@ by merging group and subject identifiers.
 my.data <- read.alex()
 my.data <- read.alex( "Some/Directory" )
 }
-

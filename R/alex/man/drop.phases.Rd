@@ -23,4 +23,3 @@ Remove data that come from one or more experimental phases
 my.data <- drop.phases( d, c("Instructions") )
 
 }
-

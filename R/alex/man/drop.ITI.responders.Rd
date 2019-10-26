@@ -23,4 +23,3 @@ Remove participants responding too often during inter-trial
 intervals (ITIs), whih potentially signals lack of attention
 to the experiment).
 }
-

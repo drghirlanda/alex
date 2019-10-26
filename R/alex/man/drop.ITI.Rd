@@ -15,4 +15,3 @@ An alex data.table with ITI rows removed
 \description{
 Drop ITI trials from an alex data.table
 }
-
