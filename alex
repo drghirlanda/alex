@@ -1313,7 +1313,9 @@ define MyInput( text )
 ## Run Design files through dos2unix on linux
 define SanitizeDesignFiles()
 {
-  if( GetSystemType() == "LINUX" ) {
+  systemType <- GetSystemType()
+  Print( "Running on a " + systemType + " system" )
+  if( systemType == "LINUX" ) {
       Print( "SanitizeDesignFiles: converting Design files to UNIX (for safety)" )
       files <- ["Parameters.csv", "Groups.csv", "Stimuli.csv", "Phases.csv"]
       loop( f, files ) {
