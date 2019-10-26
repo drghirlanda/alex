@@ -8,3 +8,5 @@ Data/*.csv
 *.tex
 *.toc
 *.out
+*.bbl
+*.blg
