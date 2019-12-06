@@ -17,27 +17,33 @@ read.alex <- function( data.dir=getwd() ) {
   dt <- NULL
   filenames <- dir( paste(data.dir,"/Data",sep=""), full.names=TRUE)
   for( i in grep( "\\.csv$", filenames ) ) {
-    message( paste("alex: reading", basename(filenames[i]) ) )
-    subject.dt <- fread( filenames[i] )
-    ## R reads F as FALSE but we mean 'female'
-    if( is.logical( subject.dt$Sex ) ) {
-      subject.dt[ , Sex := NULL ]
-      subject.dt[ , Sex := "F" ]
-    }
-    presentation.and.keynum( subject.dt )
-    dt <- rbind( dt, subject.dt )
+      if( file.info( filenames[i] )$size == 0 ) {
+          message( paste( "alex: skipping empty file", basename(filenames[i]) ) )
+          next
+      }
+      message( paste("alex: reading", basename(filenames[i]) ) )
+      subject.dt <- fread( filenames[i] )
+      ## R reads F as FALSE but we mean 'female'
+      if( is.logical( subject.dt$Sex ) ) {
+          subject.dt[ , Sex := NULL ]
+          subject.dt[ , Sex := "F" ]
+      }
+      presentation.and.keynum( subject.dt )
+      dt <- rbind( dt, subject.dt )
   }
   ## make sure phase factor is ordered as it appears in the data,
   ## rather than alphabetically:
-  dt$Phase <- factor( dt$Phase,
-                     levels=unique(as.character(dt$Phase)),
-                     ordered=TRUE )
+  dt$Phase <- factor(
+      dt$Phase,
+      levels=unique(as.character(dt$Phase)),
+      ordered=TRUE
+  )
   ## but issue a warning if different subjects have different orders:
   if( "PhaseOrder" %in% names(dt) ) {
-    if( length(unique(dt$PhaseOrder)) > 1 ) {
-      warning( "alex: different subjects have different phase orders:" )
-      warning( "alex: phases cannot be uniquely ordered (may be fine)" )
-    }
+      if( length(unique(dt$PhaseOrder)) > 1 ) {
+          warning( "alex: different subjects have different phase orders:" )
+          warning( "alex: phases cannot be uniquely ordered (may be fine)" )
+      }
   }
   ## add a global subject identifier merging group and subject:
   dt[ , GSubject := paste( Group, Subject, sep="." ) ]
