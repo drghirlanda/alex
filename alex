@@ -124,7 +124,7 @@ define Start( par ) {
   # Ask participant whether they meet eligibility criteria:
   askEligible <- Parameter("AskEligible")
   if( askEligible != "NA" and askEligible != "No" ) {
-    eligible <- GetEasyChoice( "Please confirm that you meet these criteria: " + askEligible,
+    eligible <- GetEasyChoice( "Please state whether you meet these criteria: " + askEligible,
     	     ["Yes","No"], ["Yes","No"], gWindow )
     if( eligible == "No" ) {
       Message( "Sorry, you are not eligible to continue this study. Please see a research assistant in the laboratory", 1 )

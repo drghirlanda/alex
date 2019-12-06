@@ -87,7 +87,6 @@ lab. All instances of alex will read the same design files. Different
 instances, however, will run different subjects and will not overwrite
 each other's data files.
 
-
 * Configuration files
 
 All configuration files are in the Design folder:
@@ -108,7 +107,7 @@ All configuration files are in the Design folder:
   parameters that are the same for all stimuli, such as a default
   key used for responses.
 
-* The Phases.csv file
+** The Phases.csv file
 
 Suppose we want to teach subjects to discriminate a red square from a
 white square. We then want to know how subjects respond to, say, a
@@ -398,6 +397,7 @@ experiment. A sample file is in Table [[tab:parameters]].
 | Log             |                                 1 |
 | JustInTime      |                                 0 |
 | FlashStimuli    |                                 0 |
+| AskEligible     |                                 0 |
 
 The meaning of parameters is as follows:
 
@@ -476,6 +476,17 @@ The meaning of parameters is as follows:
   time lag when stimuli are displayed the first time during the
   experiment, which can be noticeable when multiple stimuli have to be
   displayed.
+
+- *AskEligible*: If this parameter is not 0, alex will ask
+  participants to confirm eligibility criteria. The value of the
+  parameter is appended to the sentence "Please state whether or not
+  you meet these criteria:" and the participant is offered a choice
+  between "Yes" and "No". If "Yes" is clicked, the experiment
+  continues, if "No" is clicked the screen displays the message
+  "Sorry, you are not eligible to continue this study. Please see a
+  research assistant in the laboratory" and the experiment can be
+  terminated by pressing the space bar. This question is asked first,
+  before any other question.
 
 * More about stimuli
 
