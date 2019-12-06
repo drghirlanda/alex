@@ -623,10 +623,12 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
     if( key == " " ) { # Special notation for spacebar
       key <- "<space>"
     }
-    if( IsList(key) ) {   # Keep in mind: the Wait...() timed out,
-      key <- "<timeout>"  # but not necessarily the whole trial
+    # The Wait...() returns the special code "<timeout>" on time out,
+    # but note that Wait...() timing out does not necessarily mean
+    # that the trial is over. This is determined later on.
+    if( key=="<timeout>" ) {  
       rt <- "NA"
-    } else {
+    } else { # Wait...() did not time out, i.e., we have a response
       rt <- GetTime() - startTime # Time since trial start
       # Next we figure out whether response is valid:
       if( rt>=rtMin and rt<=rtMax and IsMember(key,responseList) ) {
@@ -637,7 +639,6 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         valid <- 0
         invalidCount <- invalidCount + 1
         MyLog( "RunTrial: Invalid response on key '"+key+"' at rt="+rt+"; invalidCount="+invalidCount )
-        rt <- "NA"
       }
       if( (not classical) and valid ) { # Schedule S2 (possibly)
         r <- Random()
@@ -678,20 +679,12 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         }
       }
     }
-    ## Save data line to file if there was a response, or if there was
-    ## no response and the trial timed out (so that we have a record
-    ## of what stimuli appeared in the trial)
-    if( key=="<timeout>" and GetTime() >= endTime ) {
-      trialTimeout <- 1
-    } else {
-      trialTimeout <- 0
-    }
-    totalResponses <- validCount + invalidCount
-    if( key!="<timeout>" or (totalResponses==0 and trialTimeout) ) {
+    ## Save data line to file if there was a response:
+    if( key!="<timeout>" ) {
       FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
-        gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
-        TimerOn(s1), s2ThisTrial, s2Duration, TimerOn(s2ThisTrial),
-	rewardProb, response, rt, s2Pres, key ] ) )
+      gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
+      TimerOn(s1), s2ThisTrial, s2Duration, TimerOn(s2ThisTrial),
+      rewardProb, response, rt, s2Pres, key ] ) )
       # "Hostname", gSubjectHeader, "ID", "Sex", "Age", "Race", "Time",
       # "Phase", "Trial", "S1", "S1Duration", "S1On", "S2", "S2Duration",
       # "S2On", "S2Prob", "Response", "RT", "S2Pres", "Key"
@@ -711,6 +704,19 @@ define RunTrial( phase, trial, s1, rewardProb, s2, response,
         continue <- 0
       }
     }
+  }
+  # Write a data line if there was no response during the trial. This
+  # is necessary, later during data analysis, to know what stimuli
+  # appeared on the trial.
+  totalResponses <- validCount + invalidCount
+  if( totalResponses==0 ) {
+    FilePrintCSV( gDataFile, Flatten( [ gHostname, gSubjectInfo, 
+      gID, gSex, gAge, gRace, GetTime(), phase, trial, s1, s1Duration,
+      TimerOn(s1), s2ThisTrial, s2Duration, TimerOn(s2ThisTrial),
+      rewardProb, response, rt, s2Pres, key ] ) )
+      # "Hostname", gSubjectHeader, "ID", "Sex", "Age", "Race", "Time",
+      # "Phase", "Trial", "S1", "S1Duration", "S1On", "S2", "S2Duration",
+      # "S2On", "S2Prob", "Response", "RT", "S2Pres", "Key"
   }
   ExpireTimers() # Turn off everything
   MyLog( "RunTrial: Trial completed" )
