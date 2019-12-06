@@ -1,4 +1,4 @@
-#!/usr/local/bin/pebl-language --fullscreen
+#!/usr/bin/pebl2 --fullscreen
 
 define Start( par ) {
 
@@ -86,9 +86,8 @@ define Start( par ) {
   ReadStimuli()    
   RemoveObject( msg, gWindow )
   Draw()
-  Message( "Ready to run subject "+Nth(gSubjectInfo,1)+"-"+Nth(gSubjectInfo,2), 0 )
 
-  # We can use logging only after ReadSubject() and ReadParameters():
+# We can use logging only after ReadSubject() and ReadParameters():
   MyLog( "Start: Found alex folder in '" + gAlexDir + "'" )
   MyLog( "Start: Set working directory to '" + gWD + "'" ) 
   # Log parameter, phases, and stimuli:
@@ -115,7 +114,13 @@ define Start( par ) {
   DeleteFile( hostxt )
   UnlockFile( hostxt )
   MyLog( "Start: Determined hostname as '"+gHostname+"'" )
-  
+
+  # Now that we have written the hostname on the log file, we can
+  # display the "ready" message - waiting until the hostname is known
+  # means that one can look at a logfile and see whether the
+  # experiment is hanging in the "ready" state, and on which computer.
+  Message( "Ready to run subject "+Nth(gSubjectInfo,1)+"-"+Nth(gSubjectInfo,2), 0 )
+
   askID <- Parameter("AskID")
   if( askID != "NA" and ToNumber(askID) == 1 ) {
     idText <- Parameter("IDText")
