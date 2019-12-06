@@ -121,6 +121,16 @@ define Start( par ) {
   # experiment is hanging in the "ready" state, and on which computer.
   Message( "Ready to run subject "+Nth(gSubjectInfo,1)+"-"+Nth(gSubjectInfo,2), 0 )
 
+  # Ask participant whether they meet eligibility criteria:
+  askEligible <- Parameter("AskEligible")
+  if( askEligible != "NA" and askEligible != "No" ) {
+    eligible <- GetEasyChoice( "Please confirm that you meet these criteria: " + askEligible,
+    	     ["Yes","No"], ["Yes","No"], gWindow )
+    if( eligible == "No" ) {
+      Message( "Sorry, you are not eligible to continue this study. Please see a research assistant in the laboratory", 1 )
+    }
+  }
+
   askID <- Parameter("AskID")
   if( askID != "NA" and ToNumber(askID) == 1 ) {
     idText <- Parameter("IDText")
@@ -1270,8 +1280,8 @@ define Message( text, fatal ) {
     Draw()
   }
   if( fatal == 1 ) {
-  MyLog( "Message: Terminating" )
-    SignalFatalError( "alex: " + text )
+    MyLog( "Message: Terminating on error: " + text )
+    ExitQuietly( "alex: " + text )
   }
   return box
 }

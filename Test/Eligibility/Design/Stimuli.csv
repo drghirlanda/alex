@@ -1,0 +1,3 @@
+Name,Type,Parameters,Color,XOffset,YOffset,Duration
+StartText,textfile,"Start.txt",,,,
+EndText,textfile,"End.txt",,,,

@@ -1,0 +1,20 @@
+Parameter,Value,Description
+S1S2Interval,0,Interval between S1 offset and S2 onset
+ResponseTimeMin,0,Earliest time for valid responses within a trial
+ResponseTimeMax,Inf,Latest time for valid responses within a trial
+MinITI,5000,Minimum intertrial interval
+MaxITI,5000,Maximum intertrial interval
+Response,<space>,"What key constitutes a correct response, unless specified in Phases.csv"
+MaxResponses,1,Maximum number of valid responses allowed in a trial
+MaxInvalid,0,Maximum number of invalid responses allowed in a trial
+BackgroundColor,black,Background screen color
+ForegroundColor,white,"Color of text, unless specified in Stimuli.csv"
+FontName,Vera,Text font
+FontSize,24,Text size
+AskID,0,Ask subject's study ID
+AskAge,0,Ask subject's age
+AskSex,0,Ask subject's sex
+AskRace,0,Ask subject's race (NIH classification)
+Log,1,Logging feature disabled if this is 0
+JustInTime,0,"If 0, load all stimuli before starting the experiment, if 1 load when needed"
+AskEligible,CUNY student or employee between 18 and 65 years of age,
